@@ -111,7 +111,11 @@ Formular = SpatialMap.Class ({
                         var className = node.attr('class');
                         switch(this.config[i].nodeName) {
                             case 'address':
-                            	jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+	                            var value = this.getParam(urlparam);
+                                if (value == null) {
+                                    value = node.attr('defaultvalue');
+                                }
+                            	jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
                                 var options = {
                                     apikey: node.attr('apikey'),
                                     area: node.attr('filter'),
@@ -129,6 +133,34 @@ Formular = SpatialMap.Class ({
                                         id: id+'_wkt'
                                     };
                                 }
+                                
+                                if (value) {
+                                	var o = {};
+                                	for (var name in options) {
+                                		o[name] = options[name];
+                                	}
+                                	i.limit = 1;
+
+                                    jQuery.ajax( {
+                                        scriptCharset: 'UTF-8',
+                                        url : 'http://find.spatialsuite.com/service/locations/2/detect/json/'+ encodeURIComponent(value),
+                                        dataType : "jsonp",
+                                        data : o,
+                                        success : SpatialMap.Function.bind(function(options,result) {
+                                        	var a = result.data[0];
+                                        	jQuery('input#'+options.id).val(a.presentationString);
+                                        	var ui = {
+                                        		item: {
+                                        			data: a
+                                        		}
+                                        	};
+                                       	    var calculateDistanceFunctionString = options.geometrySelect || null;
+                                        	var disablemapValue = options.disablemap || null;
+                                        	this.addressSelected (calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
+                                        },this,options)
+                                    });
+                                }
+                                
                             break;
                             case 'maptools':
                                 //jQuery('#content > tbody:last').append('<tr><td colspan="2" align="right"><div id="button1" class="button button1"></div><div id="button2" class="button button2"></div></td></tr>');

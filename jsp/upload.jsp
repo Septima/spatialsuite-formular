@@ -87,7 +87,7 @@
    if(fileUpload != null)
    {
        Random rand = new Random(System.currentTimeMillis()) ;
-       long n = -rand.nextLong() % 1000000;
+       long n = Math.abs(rand.nextLong() % 1000000);
        orgFileName = uploadedFilename;
        filename = formular+"_" + n +"_"+uploadedFilename;
        uploadedFilename = tmpDir + File.separator + filename;

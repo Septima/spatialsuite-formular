@@ -658,12 +658,13 @@ Formular = SpatialMap.Class ({
                     var pdf = jQuery(data).find('col[name="url"]');
                     if (pdf.length) {
 						jQuery.ajax( {
-							url : '/modules/formular/jsp/final.jsp',
+							url : '/jsp/modules/formular/final.jsp',
 							dataType : 'json',
 							type: 'POST',
 							async: true,
 							data : {
 								file: pdf.text().replace(/\/tmp\//,''),
+								formular: this.name,
 								sessionid: this.sessionid
 							},
 							success: function (data) {

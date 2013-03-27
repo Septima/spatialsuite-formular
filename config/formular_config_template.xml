@@ -7,7 +7,7 @@
         <submitpage>formular.send.soe</submitpage>
         <reportprofile>demo01_classic</reportprofile>
         <reportlayers>default</reportlayers>
-        <reportxsl>kvitering</reportxsl>
+        <reportxsl>kvitering</reportxsl> 
         <content>
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0730"></address>

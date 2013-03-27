@@ -7,7 +7,7 @@
         <submitpage>formular.send.soe</submitpage>
         <reportprofile>demo01_classic</reportprofile>
         <reportlayers>default</reportlayers>
-        <reportxsl>kvitering</reportxsl>
+        <reportxsl>kvitering</reportxsl> 
         <content>
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0730"></address>
@@ -19,7 +19,7 @@
                 <maptool displayname="Tegn en linie" name="line"/>
                 <maptool displayname="Tegn en cirkel" name="circle"/>
             </maptools>
-            <map>
+            <map class="my_map_class">
                 <extent>539430.4,6237856,591859.2,6290284.8</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>

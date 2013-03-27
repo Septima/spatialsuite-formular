@@ -59,8 +59,8 @@ td {
 }
 
 .map {
-    width:400px;
-    height:300px;
+    width:600px;
+    height:600px;
     z-index: 1;
 }
 .header {
@@ -75,10 +75,10 @@ td {
     padding-bottom: 10px;
 }
 .labeldiv {
-	width: 100px;
+	width: 150px;
 }
 .valuediv {
-	width: 300px;
+	width: 450px;
 }
 .input1, .textarea1, .select1 {
 	/*position: relative;*/

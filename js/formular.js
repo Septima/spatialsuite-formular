@@ -302,7 +302,7 @@ Formular = SpatialMap.Class ({
                                     
                                     jQuery('#'+id).datepicker(options);
                                 } else if (type=='file') {
-                                    jQuery('#content > tbody:last').append('<tr><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
+                                    jQuery('#content > tbody:last').append('<tr><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
                                     jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
                                         jQuery('#form_'+id).submit();
                                     },this,id));
@@ -603,13 +603,15 @@ Formular = SpatialMap.Class ({
             		val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
             		textVal = val;
             	}
+            	if (this.postparams[name].type && this.postparams[name].type == 'file') {
+            		textVal = jQuery('#'+this.postparams[name].id+'_org').val();
+            	}
                 params[name] = encodeURIComponent(val);
                 
                 var t = jQuery('#'+this.postparams[name].id+'_displayname').text ();
                 if (t && val) {
                     confirmtext+='<br/>'+t+' '+textVal;
                 }
-
             }
             jQuery('#content').hide();
             jQuery('#message').show();
@@ -689,8 +691,9 @@ Formular = SpatialMap.Class ({
         });
     },
     
-    fileupload: function (filename,id) {
+    fileupload: function (filename,id,orgfilename) {
         jQuery('#'+id).val(filename);
+        jQuery('#'+id+'_org').val(orgfilename);
     },
     
     start: function () {

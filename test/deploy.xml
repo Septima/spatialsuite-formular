@@ -21,5 +21,7 @@
 
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/test"/>
    <copyfile fromfile="[module:formular-test.dir]/html/Formular_Soe.html"     tofile="[cbinfo.wwwroot.dir]/modules/formular/test/Formular_Soe.html"/>
+   <copyfile fromfile="[module:formular-test.dir]/html/custom.css"     tofile="[cbinfo.wwwroot.dir]/modules/formular/test/custom.css"/>
+   <copyfile fromfile="[module:formular-test.dir]/html/custom.js"     tofile="[cbinfo.wwwroot.dir]/modules/formular/test/custom.js"/>
 
 </deploy>

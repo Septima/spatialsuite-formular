@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<presentation>
+    <text name="overskrift" plural="Matrikelkort" value="Matrikelkort"/>
+    <columns>
+        <column name="">
+            <label>'Matrikelnummer '+matrikelnummer+' '+ejerlavsnavn</label>
+            <value></value>
+        </column>
+        <column name="">
+            <label>'Ejendomsnr: '+toString(ESR_Ejendomsnummer)</label>
+            <value></value>
+        </column>
+    </columns>
+</presentation>

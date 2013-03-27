@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spatialqueries>
+    
+    <!--   
+    ===============================================================
+    CBkort version 2.x, copyright Carl Bro GIS&IT, 2009
+    ===============================================================
+    $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/test/queries/targetsets.xml $  
+    $Date: 22-10-12 11:49 $
+    $Revision: 2 $   
+    $Author: Nsm $
+    =============================================================== 
+    -->
+
+
+    <targetset name="ejendom">
+        <target
+            name="jordstykke" 
+            presentation="[module:formular-test.dir]/presentations/pres_jordstykke.xml" 
+            maxresult="5"
+            displayname="Matrikler">
+            <datasource name="ds_matrikelskel"/>
+        </target>
+    </targetset>
+
+    <targetset name="ejendom_KMS">
+        <target
+            name="jordstykke" presentation="[module:formular-test.dir]/presentations/pres_jordstykke.xml" displayname="Matrikler">
+            <datasource name="kms_matrikelregister"/>
+        </target>
+    </targetset>
+
+    <targetset name="markblokkort">
+        <target
+            name="markblokkort2012" presentation="[module:formular.dir]/presentations/pres-markblokkort.xml" displayname="Markblokkort juli 2012">
+            <datasource name="ds_markblokkort2012"/>
+        </target>
+    </targetset>
+
+    <targetset name="konflikt">
+        <target 
+            extentbuffer="10"
+            method="isWithinDistance(target.shape_wkt, selector.shape_wkt, 10)"
+            name="fredskov" presentation="[module:formular.dir]/presentations/pres_fredskov.xml" displayname="Fredskov">
+            <datasource name="ds_fredskov"/>
+        </target>
+    </targetset>
+
+</spatialqueries>

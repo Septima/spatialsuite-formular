@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages>
+
+   <!-- 
+   ===============================================================
+   CBkort version 2.x, copyright Carl Bro GIS&IT, 2006
+   ===============================================================
+   $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/pages/pages.xml $ 
+   $Date: 22-10-12 11:49 $
+   $Revision: 2 $ 
+   $Author: Nsm $
+   ===============================================================   
+   --> 
+
+    <!-- REQUIRED -->
+    <include src="[module:formular.dir]/pages/pages-includes.xml" nodes="/pages/*" mustexist="true"/>
+
+</pages>

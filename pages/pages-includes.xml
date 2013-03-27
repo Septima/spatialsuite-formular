@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages>
+    
+   <!-- 
+   ===============================================================
+   CBkort version 2.x, copyright Carl Bro GIS&IT, 2006
+   ===============================================================
+   $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/pages/pages-includes.xml $ 
+   $Date: 22-10-12 11:49 $
+   $Revision: 2 $ 
+   $Author: Nsm $
+   ===============================================================   
+   --> 
+
+    <page name="formular" contenttype="text/html">
+        <stylesheet>[module:formular.dir]/xsl/formular.xsl</stylesheet>
+        <file filename="[module.formular.config]"/>
+    </page>
+
+    <page name="formular.config" contenttype="text/xml">
+        <stylesheet>[module:formular.dir]/xsl/formular-config.xsl</stylesheet>
+        <file filename="[module.formular.config]"/>
+    </page>
+
+    <page name="formular-query" contenttype="text/xml">
+        <data handler="spatialquery2" operation="execute-query">
+            <url-parameters>
+                <url-parameter name="query" value="formular-wkt"/>
+                <url-parameter name="queryfile" value="[module:formular.dir]/queries/spatialqueries.xml"/>
+                <url-parameter name="targetsetfile">if IsDefined(targetsetfile) then targetsetfile else '[module.formular.targetsetfile]' endif</url-parameter>
+<!--                 <url-parameter name="targetsetfile" value="[module.formular.targetsetfile]"/> -->
+                <url-parameter name="targetset">if IsDefined(targetset) then targetset else 'formular' endif</url-parameter>
+<!--                 <url-parameter name="targetset" value="[module.formular.targetset]"/> -->
+                <url-parameter name="saveresult" value="true"/>
+                <url-parameter name="savename" value="formular_result"/>
+            </url-parameters>
+        </data>
+    </page>
+
+    <page name="formular.send" contenttype="text/xml" resultpassing="pass-all">
+        <data handler="session" operation="add-dynamiclayer-from-columns">
+            <url-parameters>
+                <url-parameter name="append" value="true"/>
+                <url-parameter name="shape_wkt">wkt</url-parameter>
+                <url-parameter name="dynamiclayer" value="user*"/>
+                <url-parameter name="geometrycolumn" value="shape_wkt"/>
+            </url-parameters>
+        </data>
+        <data handler="session" operation="create-dynamicdatasource">
+            <url-parameters>
+                <url-parameter name="datasource" value="userdatasource"/>
+                <url-parameter name="endpointtype" value="memory"/>
+                <url-parameter name="remove" value="false"/> 
+            </url-parameters>
+        </data>
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="userdatasource"/>
+                <url-parameter name="command" value="write"/>
+                <url-parameter name="shape_wkt">wkt</url-parameter>
+                <url-parameter name="dynamiclayer" value="user*"/>
+                <url-parameter name="geometrycolumn" value="shape_wkt"/>
+            </url-parameters>
+        </data>
+        <data handler="session" operation="show-all-dynamiclayers"/>
+        <data handler="map" operation="get-map-data">
+            <url-parameters>
+                <url-parameter name="geometrycolumn" value="shape_wkt"/>
+                <url-parameter name="mapwidth" value="1496"/>
+                <url-parameter name="mapheight" value="1181"/>
+                <url-parameter name="ppi" value="200"/>
+                <url-parameter name="date">formatDecimal(DayInMonth(Systemtime ()), "00")+'.'+formatDecimal(Month(Systemtime ()), "00")+'.'+Year(Systemtime ())</url-parameter>
+                <url-parameter name="mapext" value="lastcreatedlayer"/>
+                <url-parameter name="displaybuffer">if IsDefined(buffer) then buffer else "25+pct!400+minimum" endif</url-parameter>
+                <url-parameter name="map_size">mapwidth+' '+mapheight</url-parameter>
+                <url-parameter name="imgxy">mapwidth/2+' '+mapheight/2</url-parameter>
+                <url-parameter name="scalebarname" value="standard"/>
+                <url-parameter name="map_imagetype" value="jpeg24"/>
+            </url-parameters>
+        </data>
+        <data handler="PDFFormatter" operation="format-pdf">
+            <url-parameters>
+                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module.formular.xsl.dir]/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/kvitering.xsl" endif</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+
+</pages>

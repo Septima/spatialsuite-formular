@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<presentation>
+    <text name="overskrift" plural="Markblokker" value="Markblok"/>
+    <columns>
+        <column name="">
+            <label>'Bloknr: '+bloknr</label>
+            <value></value>
+        </column>
+<!--
+        <column name="">
+            <label>'Ortofoto år:'</label>
+            <value>ortofotoaa</value>
+        </column>
+        <column name="">
+            <label>'Areal:'</label>
+            <value>areal+' m2'</value>
+        </column>
+        <column name="">
+            <label>'Årsag:'</label>
+            <value>aarsag</value>
+        </column>
+        <column name="">
+            <label>'nulblok'</label>
+            <value>nulblok</value>
+        </column>
+        <column name="">
+            <label>'frablok'</label>
+            <value>frablok</value>
+        </column>
+        <column name="">
+            <label>'status_1'</label>
+            <value>status_1</value>
+        </column>
+        <column name="">
+            <label>'status_2'</label>
+            <value>status_2</value>
+        </column>
+        <column name="">
+            <label>'status_3'</label>
+            <value>status_3</value>
+        </column>
+        <column name="">
+            <label>'form'</label>
+            <value>form</value>
+        </column>
+        <column name="">
+            <label>'mvj_blok'</label>
+            <value>mvj_blok</value>
+        </column>
+        <column name="">
+            <label>'blok_dffe'</label>
+            <value>blok_dffe</value>
+        </column>
+        <column name="">
+            <label>'skov'</label>
+            <value>skov</value>
+        </column>
+        <column name="">
+            <label>'etapenr'</label>
+            <value>etapenr</value>
+        </column>
+        <column name="">
+            <label>'dato_1'</label>
+            <value>dato_1</value>
+        </column>
+        <column name="">
+            <label>'dato_2'</label>
+            <value>dato_2</value>
+        </column>
+        <column name="">
+            <label>'dato_3'</label>
+            <value>dato_3</value>
+        </column>
+        <column name="">
+            <label>'status'</label>
+            <value>status</value>
+        </column>
+        <column name="">
+            <label>'blok_dato'</label>
+            <value>blok_dato</value>
+        </column>
+        <column name="">
+            <label>'blok_af'</label>
+            <value>blok_af</value>
+        </column>
+        <column name="">
+            <label>'af'</label>
+            <value>af</value>
+        </column>
+        <column name="">
+            <label>'dto'</label>
+            <value>dto</value>
+        </column>
+        <column name="">
+            <label>'perm_graes'</label>
+            <value>perm_graes</value>
+        </column>
+        <column name="">
+            <label>'udtag'</label>
+            <value>udtag</value>
+        </column>
+        <column name="">
+            <label>'opdat_type'</label>
+            <value>opdat_type</value>
+        </column>
+        <column name="">
+            <label>'geometrisk'</label>
+            <value>geometrisk</value>
+        </column>
+        <column name="">
+            <label>'mi_prinx'</label>
+            <value>mi_prinx</value>
+        </column>
+        <column name="">
+            <label>'ortofoto'</label>
+            <value>ortofoto</value>
+        </column>
+        <column name="">
+            <label>'id'</label>
+            <value>id</value>
+        </column>
+        <column format="org-pcolid">
+            <label>if IsDefined(shape_wkt) then GeometryType(shape_wkt) else "GEOMETRY UNDEFINED" endif</label>
+            <value>pcolid</value>
+        </column>
+-->
+    </columns>
+</presentation>

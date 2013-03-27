@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy>
+   <!--
+   ===============================================================
+   CBkort version 2.x, copyright Grontmij GIS&IT, 2011
+   ===============================================================
+   $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/test/deploy.xml $
+   $Date: 22-10-12 11:49 $
+   $Revision: 2 $
+   $Author: Nsm $
+   ===============================================================
+   -->
+   <version>2.7.2</version>  
+
+   <stoponerror>false</stoponerror>
+   
+   <param name="module.formular.config">[module:formular-test.dir]/config/formular_config.xml</param>
+   <param name="module.formular.upload.dir">[cbinfo.wwwroot.dir]/formular_upload</param> 
+   <param name="module.formular.xsl.dir">[module:formular-test.dir]/xsl</param>
+   <param name="module.formular.targetsetfile">[module:formular-test.dir]/queries/targetsets.xml</param>
+
+   <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/test"/>
+   <copyfile fromfile="[module:formular-test.dir]/html/Formular_Soe.html"     tofile="[cbinfo.wwwroot.dir]/modules/formular/test/Formular_Soe.html"/>
+
+</deploy>

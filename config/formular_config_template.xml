@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <formular name="soe-test">
+        <title>Ansøgningsskema til vandhuller</title>
+        <header>Ansøgningsskema til &lt;br/&gt;vandhuller</header>
+        <subheader>Ansøgning efter &lt;br/&gt;naturbeskyttelsesloven</subheader>
+        <submitpage>formular.send.soe</submitpage>
+        <reportprofile>demo01_classic</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>kvitering</reportxsl>
+        <content>
+            <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
+            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0730"></address>
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+            </maptools>
+            <map>
+                <extent>539430.4,6237856,591859.2,6290284.8</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>
+                </themes>
+            </map>
+            <area urlparam="areal" displayname="Areal:"/>
+            <conflicts urlparam="konflikttekst1" displayname="Det ansøgte vandhul vedrører følgende ejendom(e):" targerset="ejendom"/>
+            <input type="dropdown" displayname="Hvad &lt;br/&gt;søges:" urlparam="hvad">
+                <option value="ny sø" name="Ny sø"/>
+                <option value="oprensning af sø" name="Oprensning af sø"/>
+                <option value="udvidelse af sø" name="Udvidelse af sø"/>
+            </input>
+            <input type="text" displayname="Dette er en over skrift der kan være meget lang eller hvad man nu har lyst til at skrive"/>
+            <input type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="udnyttelse">
+                <option value="mark i omdrift" name="Mark i omdrift"/>
+                <option value="braklagt mark" name="Braklagt mark"/>
+                <option value="udyrket areal" name="Udyrket areal"/>
+                <option value="græsning" name="Græsning"/>
+            </input>
+            <input type="dropdown" displayname="Drænet:" urlparam="draenet">
+                <option value="drænet" name="Ja"/>
+                <option value="ikke drænet" name="Nej"/>
+                <option value="delvis drænet" name="Delvis"/>
+            </input>
+            <input type="input" displayname="Navn:" urlparam="navn"/>
+            <input type="input" displayname="E-mail:" urlparam="email"/>
+            <input type="input" displayname="Tlf. nr.:" urlparam="tlf"/>
+            <input type="input" displayname="Træffetid:" urlparam="traeffetid"/>
+            <input type="file"  displayname="Vedlæg tegning:" urlparam="filnavn" extensions="pdf,gif"/>
+            <input type="date" displayname="Opsættelses dato:" urlparam="date1"/>
+            <input type="date" displayname="Nedtagnings dato:" urlparam="date2"/>
+            <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targerset="konflikt"/>
+            <input type="textarea" urlparam="begrundelse" displayname="Begrundelse for ansøgning:"/>
+        </content>
+    </formular>
+</config>
+<!--
+-->

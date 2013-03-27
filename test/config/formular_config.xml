@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <formular name="kpo">
+        <header>Ansøgningsskema til vandhuller</header>
+        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader>
+        <datasource></datasource>
+        <profile></profile>
+        <content>
+            <maptools>
+                <maptool name="polygon"/>
+                <maptool name="pan"/>
+            </maptools>
+            <map>
+                <extent>539430.4,6237856,591859.2,6290284.8</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>
+                </themes>
+            </map>
+        </content>
+    </formular>
+    <formular name="soe-test">
+        <title>Ansøgningsskema til vandhuller</title>
+        <header>Ansøgningsskema til &lt;br/&gt;vandhuller</header>
+        <subheader>Ansøgning efter &lt;br/&gt;naturbeskyttelsesloven</subheader>
+        <help displayname="Hjælp"><![CDATA[<b>Hjælp</b><br/>Her står der hvordan du kan bruge siden. Man kan skrive HTML ind i hjælpeteksten. Det kunne også være billeder og <a href="http://spatialmap.com">links</a>]]></help>
+        <submitpage>formular.send.soe-test</submitpage>
+        <reportprofile>demo01_classic</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>kvitering</reportxsl>
+        <reportmapscale>1000</reportmapscale>
+        <css>/css/custom/my.css</css>
+        <js>/js/custom/my.js</js>
+        <content>
+            <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
+            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+            </maptools>
+            <map>
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
+                    <theme name="theme-matrikel-skel" host="/wms?servicename=demo01_classic"/>
+                </themes>
+            </map>
+            <area urlparam="areal" displayname="Areal:"/>
+            <conflicts urlparam="konflikttekst1" displayname="Det ansøgte vandhul vedrører følgende ejendom(e):" targerset="ejendom"/>
+            <input type="dropdown" displayname="Hvad &lt;br/&gt;søges:" urlparam="hvad">
+                <option value="ny sø" name="Ny sø"/>
+                <option value="oprensning af sø" name="Oprensning af sø"/>
+                <option value="udvidelse af sø" name="Udvidelse af sø"/>
+            </input>
+            <input type="text" displayname="Dette er en over skrift der kan være meget lang eller hvad man nu har lyst til at skrive"/>
+            <input type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="udnyttelse">
+                <option value="mark i omdrift" name="Mark i omdrift"/>
+                <option value="braklagt mark" name="Braklagt mark"/>
+                <option value="udyrket areal" name="Udyrket areal"/>
+                <option value="græsning" name="Græsning"/>
+            </input>
+            <input type="dropdown" displayname="Drænet:" urlparam="draenet">
+                <option value="drænet" name="Ja"/>
+                <option value="ikke drænet" name="Nej"/>
+                <option value="delvis drænet" name="Delvis"/>
+            </input>
+            <input type="input" displayname="Navn:" urlparam="navn" defaultvalue="Karsten Pihl"/>
+            <input id="karsten" type="input" displayname="E-mail:" urlparam="email" regexp=".+" validate="Der skal indtastes et tal selvom det ikke giver mening her!"/>
+            <input type="input" displayname="Tlf. nr.:" id="tlf1" urlparam="tlf"/>
+            <input type="input" displayname="Tlf. nr.:" id="tlf2" urlparam="tlf" onkeyup="formular.compare('tlf1','tlf2','De to skal være ens')"/>
+            <!-- input type="input" displayname="Træffetid:" urlparam="traeffetid" id="trtid" onkeyup="if (jQuery('#trtid').val() == 'a') {jQuery('#tlfnr').val('abc')} else {jQuery('#tlfnr').val('123')}"/-->
+            <input type="input" displayname="XTræffetid:" urlparam="traeffetid" id="trtid" onkeyup="jQuery('#tlf1').val((jQuery('#trtid').val()-0)*127)" regexp="[0-9]" validate="Det skal være et tal!"/> 
+            <input type="file"  displayname="Vedlæg tegning:" urlparam="filnavn" extensions="pdf,gif"/>
+            <input type="date" displayname="Opsættelses dato:" urlparam="date1"/>
+            <input type="date" displayname="Nedtagnings dato:" urlparam="date2"/>
+            <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targerset="konflikt"/>
+            <input type="textarea" urlparam="begrundelse" displayname="Begrundelse for ansøgning:"/>
+            <input type="textarea" displayname="Yderligere kommentarer:" urlparam="kommentar" defaultvalue="ikke udfyldt"/>
+
+            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
+            <submitbutton displayname="Opret ny" function="formular.start();"/>
+            <submitbutton displayname="Betal" function="formular.load('http://betalingssideforranders.dk/adsfsafd?alksdf=34&amp;sdfsdf=344&amp;ref=');"/>
+        </content>
+    </formular>
+    <formular name="test2">
+        <title>Ansøgningsskema til vandhuller</title>
+        <header>Ansøgningsskema til vandhuller</header>
+        <help displayname="Hjælp"><![CDATA[<b>Hjælp</b><br/>Her står der hvordan du kan bruge siden. Man kan skrive HTML ind i hjælpeteksten. Det kunne også være billeder og <a href="http://spatialmap.com">links</a>]]></help>
+        <submitpage>formular.config-test2</submitpage>
+        <reportxsl>kvitering-test2</reportxsl>
+        <content>
+            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
+            <input type="input" displayname="Navn:" urlparam="navn"/>
+        </content>
+    </formular>
+</config>

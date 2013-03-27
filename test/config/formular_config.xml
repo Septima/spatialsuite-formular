@@ -64,7 +64,12 @@
                 <option value="udyrket areal" name="Udyrket areal"/>
                 <option value="græsning" name="Græsning"/>
             </input>
-            <input type="dropdown" displayname="Drænet:" urlparam="draenet">
+            <input type="dropdown" displayname="Drænet:" urlparam="draenet" defaultvalue="delvis drænet">
+                <option value="drænet" name="Ja"/>
+                <option value="ikke drænet" name="Nej"/>
+                <option value="delvis drænet" name="Delvis"/>
+            </input>
+            <input type="radiobutton" displayname="Drænet:" urlparam="draenet2" defaultvalue="ikke drænet">
                 <option value="drænet" name="Ja"/>
                 <option value="ikke drænet" name="Nej"/>
                 <option value="delvis drænet" name="Delvis"/>

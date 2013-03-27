@@ -241,8 +241,17 @@ Formular = SpatialMap.Class ({
                                     jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
                                     var option = node.find('option');
                                     for (var j=0;j<option.length;j++) {
-                                        $('#'+id).append('<option value="'+jQuery(option[j]).attr('value')+'">'+jQuery(option[j]).attr('name')+'</option>');
+                                    	var checked = (jQuery(option[j]).attr('value') == value ? ' selected="selected"' : '');
+                                        $('#'+id).append('<option value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</option>');
                                     }
+                                } else if (type=='radiobutton') {
+                                    var option = node.find('option');
+                                    var str = '';
+                                    for (var j=0;j<option.length;j++) {
+                                    	var checked = (jQuery(option[j]).attr('value') == value ? ' checked="checked"' : '');
+                                    	str += '<div><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                                    }
+                                    jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
                                 } else if (type=='textarea') {
                                     jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
                                 } else if (type=='hidden') {
@@ -589,6 +598,10 @@ Formular = SpatialMap.Class ({
             	if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
             		val = jQuery('#'+this.postparams[name].id).is(':checked');
             		textVal = (val ? 'ja' : 'nej');
+            	}
+            	if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+            		val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
+            		textVal = val;
             	}
                 params[name] = encodeURIComponent(val);
                 

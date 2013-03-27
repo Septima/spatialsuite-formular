@@ -62,8 +62,17 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurati
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
             
             <!-- input - type="dropdown" -->
-            <!-- Vil populere en dropdown, som brugeren kan vælge fra. -->
-            <input type="dropdown" displayname="Hvad søges:" urlparam="hvad">
+            <!-- Vil populere en dropdown, som brugeren kan vælge fra.
+                 Defaultvalue kan angives med samme værdi som value for den options som skal vælges fra start. -->
+            <input type="dropdown" displayname="Hvad søges:" urlparam="hvad" defaultvalue="oprensning af sø">
+                <option value="ny sø" name="Ny sø"/>
+                <option value="oprensning af sø" name="Oprensning af sø"/>
+                <option value="udvidelse af sø" name="Udvidelse af sø"/>
+            </input>
+            
+            <!-- input - type="radiobutton" -->
+            <!-- Det samme som i dropdown -->
+            <input type="radiobutton" displayname="Hvad søges:" urlparam="hvad">
                 <option value="ny sø" name="Ny sø"/>
                 <option value="oprensning af sø" name="Oprensning af sø"/>
                 <option value="udvidelse af sø" name="Udvidelse af sø"/>

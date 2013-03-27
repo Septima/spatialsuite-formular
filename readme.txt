@@ -95,6 +95,11 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurati
             <!-- Felt til at vedhæfte en fil -->
             <input type="file" displayname="Vedhæft tegning:" urlparam="filnavn"/>
 
+            <!-- input - type="checkbox" -->
+            <!-- En check boks hvor brugeren kan vælge til eller fra. Serveren modtager "true", hvis brugeren har valgt at klikke den til, ellers sendes "false".
+                 Defaultvale kan bruges til at bestemme om den check boksen skal være klikket til eller fra. Default er "true" -->
+            <input type="checkbox" displayname="Godkendt:" urlparam="godkendt" defaultvalue="true"/>
+
             <!-- area -->
             <!-- Et felt, der viser arealet af de tegnede. Brugeren har ikke mulighed for at skrive i dette. -->
             <area urlparam="areal" displayname="Areal:"/>

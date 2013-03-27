@@ -69,6 +69,7 @@
                 <option value="ikke drænet" name="Nej"/>
                 <option value="delvis drænet" name="Delvis"/>
             </input>
+            <input type="checkbox" displayname="Godkendt:" urlparam="godkendt" defaultvalue="true"/>
             <input type="input" displayname="Navn:" urlparam="navn" defaultvalue="Karsten Pihl"/>
             <input id="karsten" type="input" displayname="E-mail:" urlparam="email" regexp=".+" validate="Der skal indtastes et tal selvom det ikke giver mening her!"/>
             <input type="input" displayname="Tlf. nr.:" id="tlf1" urlparam="tlf"/>

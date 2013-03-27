@@ -297,6 +297,8 @@ Formular = SpatialMap.Class ({
                                     jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
                                         jQuery('#form_'+id).submit();
                                     },this,id));
+                                } else if (type=='checkbox') {
+                                    jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/></div></td></tr>');
                                 } else {
                                     type = 'input';
                                     jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
@@ -582,12 +584,17 @@ Formular = SpatialMap.Class ({
             
             var confirmtext = '';
             for (var name in this.postparams) {
-                var val = jQuery('#'+this.postparams[name].id).val()
+                var val = jQuery('#'+this.postparams[name].id).val();
+                var textVal = val;
+            	if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+            		val = jQuery('#'+this.postparams[name].id).is(':checked');
+            		textVal = (val ? 'ja' : 'nej');
+            	}
                 params[name] = encodeURIComponent(val);
                 
                 var t = jQuery('#'+this.postparams[name].id+'_displayname').text ();
                 if (t && val) {
-                    confirmtext+='<br/>'+t+' '+val;
+                    confirmtext+='<br/>'+t+' '+textVal;
                 }
 
             }

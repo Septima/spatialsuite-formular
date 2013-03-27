@@ -148,7 +148,7 @@ Formular = SpatialMap.Class ({
                                 }
                             break;
                             case 'map':
-                                jQuery('#content > tbody:last').append('<tr><td colspan="2"><div id="map_'+i+'" class="map"></div></td></tr>');
+                                jQuery('#content > tbody:last').append('<tr><td colspan="2"><div id="map_'+i+'" class="map'+(className ? ' '+className : '')+'"></div></td></tr>');
                                 var extent = node.find('extent').text();
                                 if (extent) {
                                     extent = extent.split(',');

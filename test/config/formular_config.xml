@@ -29,8 +29,8 @@
         <reportlayers>default</reportlayers>
         <reportxsl>kvitering</reportxsl>
         <reportmapscale>1000</reportmapscale>
-        <css>/css/custom/my.css</css>
-        <js>/js/custom/my.js</js>
+        <css>/modules/formular/test/custom.css</css>
+        <js>/modules/formular/test/custom.js</js>
         <content>
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
@@ -42,12 +42,12 @@
                 <maptool displayname="Tegn en linie" name="line"/>
                 <maptool displayname="Tegn en cirkel" name="circle"/>
             </maptools>
-            <map>
+            <map class="my_map_class">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
                     <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
-                    <theme name="theme-matrikel-skel" host="/wms?servicename=demo01_classic"/>
+<!--                     <theme name="theme-matrikel-skel" host="/wms?servicename=demo01_classic"/> -->
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal:"/>

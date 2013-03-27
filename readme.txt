@@ -1,10 +1,10 @@
 ===============================================================
 CBkort version 2.x, copyright Grontmij Carl Bro GIS&IT, 2009
 ===============================================================
-$Archive: /Products/CBKort2/development/2.8/custom/wwwroot/WEB-INF/config/modules/custom/formular/readme.txt $ 
-$Date: 22-10-12 9:13 $
-$Revision: 1 $ 
-$Author: Kpo $
+$Archive: /Products/CBKort2/development/2.6/standard/wwwroot/WEB-INF/config/modules/standard/multiselect2/readme.txt $ 
+$Date: 25-03-11 18:31 $
+$Revision: 21 $ 
+$Author: Nsm $
 =============================================================== 
 --------------------
 FORMULAR
@@ -33,6 +33,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurati
         <header>Ansøgningsskema til vandhuller</header>         <!-- OPTIONAL - Angiver den tekst, der står øverst på siden -->
         <subheader>Ansøgning efter naturbeskyttelsesloven</subheader> <!-- OPTIONAL - Angiver den tekst, der står under overskriften på siden -->
         <submitpage>formular.send.soe</submitpage>              <!-- Den page, der skal kaldes for at gemme og danne kvitering - Denne page vil være specifik for hver formular. Se senere i dette dokument. -->
+        <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
         <reportprofile>alt</reportprofile>                      <!-- OPTIONAL - Profil, der skal anvendes til at danne kortet i kviteringen (default er "alt") -->
         <reportlayers>default</reportlayers>                    <!-- OPTIONAL - Layers, der skal anvendes til at danne kortet i kviteringen. Det kan være en liste adskilt af mellemrum (default er "default", der gør at det er profilen default viste temaer, der vises) -->
         <reportxsl>kvitering</reportxsl>                        <!-- OPTIONAL - UDEN XSL EXTENSTION! Hvis der er behov for at have en specifik xsl til at danne PDF-kviteringen (default er kvitering og peget på filen kvitering.xsl under modulet) -->
@@ -84,8 +85,11 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurati
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
 
             <!-- input - type="date" -->
-            <!-- Datovælger felt hvor man kan skrive en dato eller vælge -->
-            <input type="date" displayname="Dato:" urlparam="date"/>
+            <!-- Datovælger felt hvor man kan skrive en dato eller vælge 
+                 Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
+                 Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
+                 en dato skal pt være f.eks. 22.01.2013 -->
+            <input type="date" displayname="Dato:" urlparam="date" limitfromdatasource="ds_formular_booking"/>
 
             <!-- input - type="file" -->
             <!-- Felt til at vedhæfte en fil -->

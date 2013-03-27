@@ -212,7 +212,7 @@ Formular = SpatialMap.Class ({
                                         $('#'+id).append('<option value="'+jQuery(option[j]).attr('value')+'">'+jQuery(option[j]).attr('name')+'</option>');
                                     }
                                 } else if (type=='textarea') {
-                                    jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                                    jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
                                 } else if (type=='hidden') {
                                     jQuery('#content > tbody:last').append('<tr style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
                                 } else if (type=='text') {

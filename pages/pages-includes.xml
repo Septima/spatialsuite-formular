@@ -5,9 +5,9 @@
    ===============================================================
    CBkort version 2.x, copyright Carl Bro GIS&IT, 2006
    ===============================================================
-   $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/pages/pages-includes.xml $ 
-   $Date: 22-10-12 11:49 $
-   $Revision: 2 $ 
+   $Archive: /Products/CBKort2/development/2.6/standard/wwwroot/WEB-INF/config/modules/standard/multiselect2/pages/pages.xml $ 
+   $Date: 18-08-10 16:01 $
+   $Revision: 11 $ 
    $Author: Nsm $
    ===============================================================   
    --> 
@@ -84,5 +84,15 @@
             </url-parameters>
         </data>
     </page>
+    
+    
+    <page name="formular.read.dates" contenttype="text/xml">
+        <data handler="datasource" operation="execute-command">
+           <url-parameters>
+                <url-parameter name="command" value="read-dates"/>
+            </url-parameters>
+        </data>
+    </page>
+
 
 </pages>

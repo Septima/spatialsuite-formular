@@ -4,9 +4,9 @@
    ===============================================================
    CBkort version 2.x, copyright Grontmij GIS&IT, 2011
    ===============================================================
-   $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/deploy.xml $
-   $Date: 22-10-12 11:49 $
-   $Revision: 2 $
+   $Archive: /Products/CBKort2/development/2.6/standard/wwwroot/WEB-INF/config/modules/standard/multiselect2/deploy.xml $
+   $Date: 27-09-11 12:09 $
+   $Revision: 14 $
    $Author: Nsm $
    ===============================================================
    -->
@@ -14,16 +14,19 @@
 
    <stoponerror>true</stoponerror>
    
-   <param name="module.formular.upload.dir">[cbinfo.wwwroot.dir]/formular_upload</param> 
+   <param name="module.formular.upload.dir">[cbinfo.wwwroot.dir]/formular/upload</param> 
+   <param name="module.formular.pdf.dir">[cbinfo.wwwroot.dir]/formular/pdf</param> 
+   
    <param name="module.formular.xsl.dir">[module:formular.dir]/xsl</param> 
    <param name="module.formular.targetsetfile">[module:formular.dir]/queries/spatialqueries.xml</param> 
 
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/css"/>
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/js"/>
    <makedir dir="[cbinfo.wwwroot.dir]/jsp/modules/formular"/>
-   <copyfile fromfile="[module:formular.dir]/css/formular.css"   tofile="[cbinfo.wwwroot.dir]/modules/formular/css/formular.css"/>
-   <copyfile fromfile="[module:formular.dir]/js/formular.js"     tofile="[cbinfo.wwwroot.dir]/modules/formular/js/formular.js"/>
-   <copyfile fromfile="[module:formular.dir]/js/jquery.valid8.js"     tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.valid8.js"/>
-   <copyfile fromfile="[module:formular.dir]/jsp/upload.jsp"     tofile="[cbinfo.wwwroot.dir]/jsp/modules/formular/upload.jsp"/>
+   <copyfile fromfile="[module:formular.dir]/jsp/upload.jsp"       tofile="[cbinfo.wwwroot.dir]/jsp/modules/formular/upload.jsp"/>
+   <copyfile fromfile="[module:formular.dir]/jsp/final.jsp"        tofile="[cbinfo.wwwroot.dir]/jsp/modules/formular/final.jsp"/>
+   <copyfile fromfile="[module:formular.dir]/css/formular.css"     tofile="[cbinfo.wwwroot.dir]/modules/formular/css/formular.css"/>
+   <copyfile fromfile="[module:formular.dir]/js/formular.js"       tofile="[cbinfo.wwwroot.dir]/modules/formular/js/formular.js"/>
+   <copyfile fromfile="[module:formular.dir]/js/jquery.valid8.js"  tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.valid8.js"/>
 
 </deploy>

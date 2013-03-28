@@ -27,11 +27,13 @@
     String filename = "";
     String callbackHandler = "";
     String callbackID = "";
+    String formular = "formular";
+    String orgFileName = "";
     FileItem fileUpload = null;
     
     ServletRequestContext src = new ServletRequestContext(request);
     boolean isMultipart = ServletFileUpload.isMultipartContent(src);
-
+    
    if (isMultipart)
    {
      //Create a factory for disk-based file items
@@ -73,9 +75,11 @@
          if (name.equalsIgnoreCase("id"))
         	 callbackID = value;
          if (name.equalsIgnoreCase("callbackhandler"))
-           callbackHandler = value;
+             callbackHandler = value;
          if (name.equalsIgnoreCase("sessionid"))
              sessionID = value;
+         if (name.equalsIgnoreCase("formular"))
+             formular = value;
        }
      }
    }
@@ -83,8 +87,9 @@
    if(fileUpload != null)
    {
        Random rand = new Random(System.currentTimeMillis()) ;
-       long n = rand.nextLong() % 1000000;
-       filename = "upload-" + n + "-" + uploadedFilename;
+       long n = Math.abs(rand.nextLong() % 1000000);
+       orgFileName = uploadedFilename;
+       filename = formular+"_" + n +"_"+uploadedFilename;
        uploadedFilename = tmpDir + File.separator + filename;
        File uploadedFile = new File(uploadedFilename);
        fileUpload.write(uploadedFile);  
@@ -95,8 +100,8 @@
    if (callbackHandler == null)
          callbackHandler = "parent.uploadFilename";
    
-   out.println("<body onload=\"" + callbackHandler + "('" + filename.replace('\\', '/') + "','"+callbackID+"');\">");
-   out.println("Fil uploadet og skrevet til: " + uploadedFilename);
+   out.println("<body onload=\"" + callbackHandler + "('" + filename.replace('\\', '/') + "','"+callbackID+"','"+orgFileName+"');\">");
+//    out.println("Fil uploadet og skrevet til: " + uploadedFilename);
    out.println("</body>");
 %>
 </html>

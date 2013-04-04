@@ -266,7 +266,12 @@ Formular = SpatialMap.Class ({
                                 } else if (type=='date') {
                                     jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
                                     var options = {
-                                        dateFormat: 'dd.mm.yy'
+                                        dateFormat: 'dd.mm.yy',
+                                        onSelect: SpatialMap.Function.bind( function (id) {
+                                        	if (this.inputValidation[id]) {
+                                        		jQuery('#'+id).isValid();
+                                        	}
+                                        },this,id)
                                     };
                                     
                                     if (node.attr('limitfromdatasource')) {

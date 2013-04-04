@@ -33,7 +33,7 @@
         <js>/modules/formular/test/custom.js</js>
         <content>
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
-            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
+            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153" regexp="[.*]" validate="Det skal være indtastet en adresse!"></address>
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
@@ -82,8 +82,8 @@
             <!-- input type="input" displayname="Træffetid:" urlparam="traeffetid" id="trtid" onkeyup="if (jQuery('#trtid').val() == 'a') {jQuery('#tlfnr').val('abc')} else {jQuery('#tlfnr').val('123')}"/-->
             <input type="input" displayname="XTræffetid:" urlparam="traeffetid" id="trtid" onkeyup="jQuery('#tlf1').val((jQuery('#trtid').val()-0)*127)" regexp="[0-9]" validate="Det skal være et tal!"/> 
             <input type="file"  displayname="Vedlæg tegning:" urlparam="filnavn" extensions="pdf,gif"/>
-            <input type="date" displayname="Opsættelses dato:" urlparam="date1"/>
-            <input type="date" displayname="Nedtagnings dato:" urlparam="date2"/>
+            <input type="date" displayname="Opsættelses dato:" urlparam="date1" defaultvalue="08.04.2013"/>
+            <input type="date" displayname="Nedtagnings dato:" urlparam="date2" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013"/>
             <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targerset="konflikt"/>
             <input type="textarea" urlparam="begrundelse" displayname="Begrundelse for ansøgning:"/>
             <input type="textarea" displayname="Yderligere kommentarer:" urlparam="kommentar" defaultvalue="ikke udfyldt"/>

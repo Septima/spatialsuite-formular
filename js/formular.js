@@ -321,7 +321,7 @@ Formular = SpatialMap.Class ({
                                         jQuery('#form_'+id).submit();
                                     },this,id));
                                 } else if (type=='checkbox') {
-                                    jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/></div></td></tr>');
+                                    jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
                                 } else {
                                     type = 'input';
                                     jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');

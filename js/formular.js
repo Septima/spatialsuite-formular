@@ -134,6 +134,15 @@ Formular = SpatialMap.Class ({
                                     };
                                 }
                                 
+                                if (node.attr('regexp')) {
+                                    this.inputValidation[id] = true;
+                                    jQuery('#'+id).valid8({
+                                        'regularExpressions': [
+                                             { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid vÃ¦rdi!'}
+                                         ]
+                                    });
+                                }
+                                
                                 if (value) {
                                 	var o = {};
                                 	for (var name in options) {
@@ -396,19 +405,18 @@ Formular = SpatialMap.Class ({
     },
     
     addressSelected: function (cdfs,disablemapValue,event,ui) {        
+        var id = jQuery(event.target).attr('id');
     	if (ui.item.data.type == 'street' && disablemapValue != 'true') {
             if (this.map) {
                 this.map.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
             }
             this.validAddress = false;
-            var id = jQuery(event.target).attr('id');
             jQuery('#'+id+'_wkt').val ('');
         } else {
         	if (this.map && disablemapValue != 'true') {
                 this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
             }
             this.validAddress = true;
-            var id = jQuery(event.target).attr('id');
             jQuery('#'+id+'_wkt').val (ui.item.data.wkt);
             if (jQuery('#'+id+'_wkt').attr('value') != '') {
         		if (cdfs) {

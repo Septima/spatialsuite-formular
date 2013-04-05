@@ -33,7 +33,7 @@
         <js>/modules/formular/test/custom.js</js>
         <content>
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
-            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153" regexp="[.*]" validate="Det skal være indtastet en adresse!"></address>
+            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153" regexp="[a-zæøå]" validate="Det skal være indtastet en adresse!"></address>
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>

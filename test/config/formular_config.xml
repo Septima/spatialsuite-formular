@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <formular name="kpo">
-        <header>Ansøgningsskema til vandhuller</header>
-        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader>
-        <datasource></datasource>
-        <profile></profile>
+    <formular name="encoding">
+        <header>Test enconding</header>
+        <submitpage>formular.send.config-test2</submitpage>
+        <reportprofile>demo01_classic</reportprofile>
         <content>
-            <maptools>
-                <maptool name="polygon"/>
-                <maptool name="pan"/>
-            </maptools>
-            <map>
-                <extent>539430.4,6237856,591859.2,6290284.8</extent>
-                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
-                <themes>
-                    <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>
-                </themes>
-            </map>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
     <formular name="soe-test">

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<datasources>
+
+    <endpoint name="formular-test" endpointtype="embedded" displayname="Formular test endpoint">
+        <srs>25832</srs>
+        <config version="1" requires="1">
+            CREATE TABLE formulartest(id varchar(40), formular varchar(255), created timestamp, val0 varchar(255), val1 varchar(255), val2 varchar(255), val3 varchar(255), val4 varchar(255), val5 varchar(255), val6 varchar(255), val7 varchar(255));
+        </config>
+        
+    </endpoint>
+
+    <datasource name="formular-test" endpoint="formular-test" displayname="Formular test data">
+    
+        <sql command="read">select * from formulartest;</sql>
+        
+        <sql command="write">insert into formulartest(id, formular, created, val0, val1, val2, val3, val4, val5, val6, val7) 
+                                                   values(
+                                                   [string: sessionid],
+                                                   [string: formular], 
+                                                   [timestamp: SystemTime()],
+                                                   [string: if IsDefined(val0)         then val0 else null endif], 
+                                                   [string: if IsDefined(val1)         then val1 else null endif], 
+                                                   [string: if IsDefined(val2)         then val2 else null endif], 
+                                                   [string: if IsDefined(val3)         then val3 else null endif], 
+                                                   [string: if IsDefined(val4)         then val4 else null endif], 
+                                                   [string: if IsDefined(val5)         then val5 else null endif], 
+                                                   [string: if IsDefined(val6)         then val6 else null endif], 
+                                                   [string: if IsDefined(val7)         then val7 else null endif]);</sql>
+        <debug>false</debug>
+    </datasource>
+
+</datasources>

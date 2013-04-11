@@ -8,6 +8,17 @@
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
+    <formular name="date">
+        <header>Test date</header>
+        <submitpage>formular.send.config-test2</submitpage>
+        <reportprofile>demo01_classic</reportprofile>
+        <content>
+            <input id="date1" type="date" displayname="Opsættelses dato:" urlparam="date1" onkeyup="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
+            <input id="date2" type="date" displayname="Nedtagelses dato:" urlparam="date2" onkeyup="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
+            <input id="days" type="input" displayname="Dage:" urlparam="days"/>
+        </content>
+    </formular>
+    
     <formular name="soe-test">
         <title>Ansøgningsskema til vandhuller</title>
         <header>Ansøgningsskema til &lt;br/&gt;vandhuller</header>

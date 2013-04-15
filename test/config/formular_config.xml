@@ -38,7 +38,7 @@
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
                 <maptool displayname="Tegn en polygon" name="polygon"/>
-                <maptool displayname="Tegn et punkt" name="point"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
                 <maptool displayname="Tegn en linie" name="line"/>
                 <maptool displayname="Tegn en cirkel" name="circle"/>
             </maptools>

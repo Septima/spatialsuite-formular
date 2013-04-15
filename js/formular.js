@@ -15,6 +15,8 @@ Formular = SpatialMap.Class ({
     feature: null,
     areaid: null,
     
+    defaultMapTool: 'pan',
+    
     inputValidation: {},
     
     reportprofile: 'alt',
@@ -186,6 +188,10 @@ Formular = SpatialMap.Class ({
                                     var id = 'mapbutton_'+i+'_'+j;
                                     jQuery('#'+id).addClass('button_'+name).click(SpatialMap.Function.bind(this.activateTool,this,name,maptools[j]));
                                     this.mapbuttons[name] = id;
+                                    
+                                    if (jQuery(maptools[j]).attr('default')=='true') {
+                                    	this.defaultMapTool = name;
+                                    }
                                 }
                             break;
                             case 'map':
@@ -367,7 +373,7 @@ Formular = SpatialMap.Class ({
                         }
                     }
                     if (this.map) {
-                        this.activateTool ('pan');
+                		this.activateTool (this.defaultMapTool);
                     }
                     //add submit button
                     jQuery('#content > tbody:last').append('<tr><td colspan="2" align="right"><div class="submitbuttondiv" id="submitdiv"><button id="sendbutton">Send</button></div></td></tr>');

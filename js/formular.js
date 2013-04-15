@@ -274,13 +274,21 @@ Formular = SpatialMap.Class ({
                                 	}
                                 } else if (type=='date') {
                                     jQuery('#content > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                                    var change = null;
+                                    if (node.attr('onchange')) {
+                                    	change = new Function (node.attr('onchange'));
+                                    }
                                     var options = {
                                         dateFormat: 'dd.mm.yy',
-                                        onSelect: SpatialMap.Function.bind( function (id) {
+                                        onSelect: SpatialMap.Function.bind( function (id,changehandler) {
                                         	if (this.inputValidation[id]) {
                                         		jQuery('#'+id).isValid();
                                         	}
-                                        },this,id)
+                                            if (changehandler) {
+                                            	changehandler (jQuery('#'+id));
+                                            }
+                                        },this,id, change),
+                                        onClose: change
                                     };
                                     
                                     if (node.attr('limitfromdatasource')) {

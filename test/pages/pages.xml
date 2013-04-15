@@ -27,7 +27,7 @@
     <page name="formular.send.config-test2" contenttype="text/xml" resultpassing="pass-all">
         <data handler="datasource" operation="execute-command">
             <url-parameters>
-                <url-parameter name="datasource" value="ds_formular_soe"/>
+                <url-parameter name="datasource" value="formular-test"/>
                 <url-parameter name="command" value="write"/>
             </url-parameters>
         </data>

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <formular name="kpo">
-        <header>Ansøgningsskema til vandhuller</header>
-        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader>
-        <datasource></datasource>
-        <profile></profile>
+    <formular name="encoding">
+        <header>Test enconding</header>
+        <submitpage>formular.send.config-test2</submitpage>
+        <reportprofile>demo01_classic</reportprofile>
         <content>
-            <maptools>
-                <maptool name="polygon"/>
-                <maptool name="pan"/>
-            </maptools>
-            <map>
-                <extent>539430.4,6237856,591859.2,6290284.8</extent>
-                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
-                <themes>
-                    <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>
-                </themes>
-            </map>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
+    <formular name="date">
+        <header>Test date</header>
+        <submitpage>formular.send.config-test2</submitpage>
+        <reportprofile>demo01_classic</reportprofile>
+        <content>
+            <input id="date1" type="date" displayname="Opsættelses dato:" urlparam="date1" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
+            <input id="date2" type="date" displayname="Nedtagelses dato:" urlparam="date2" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
+            <input id="days" type="input" displayname="Dage:" urlparam="days"/>
+        </content>
+    </formular>
+    
     <formular name="soe-test">
         <title>Ansøgningsskema til vandhuller</title>
         <header>Ansøgningsskema til &lt;br/&gt;vandhuller</header>

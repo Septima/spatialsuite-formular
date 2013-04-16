@@ -633,7 +633,7 @@ Formular = SpatialMap.Class ({
             	if (this.postparams[name].type && this.postparams[name].type == 'file') {
             		textVal = jQuery('#'+this.postparams[name].id+'_org').val();
             	}
-                params[name] = encodeURIComponent(val);
+                params[name] = this.encodeParam(name,val);
                 
                 var t = jQuery('#'+this.postparams[name].id+'_displayname').text ();
                 if (t && val) {
@@ -765,6 +765,10 @@ Formular = SpatialMap.Class ({
 	
 	getParam: function (name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+    },
+    
+    encodeParam: function (name,val) {
+    	return encodeURIComponent(val);
     }
 
 });

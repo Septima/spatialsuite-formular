@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy>
 
-   <version>3.0.0</version>  
+   <version>3.0.1</version>  
 
    <stoponerror>true</stoponerror>
    
@@ -19,5 +19,6 @@
    <copyfile fromfile="[module:formular.dir]/css/formular.css"     tofile="[cbinfo.wwwroot.dir]/modules/formular/css/formular.css"/>
    <copyfile fromfile="[module:formular.dir]/js/formular.js"       tofile="[cbinfo.wwwroot.dir]/modules/formular/js/formular.js"/>
    <copyfile fromfile="[module:formular.dir]/js/jquery.valid8.js"  tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.valid8.js"/>
+   <copyfile fromfile="[module:formular.dir]/js/encodeparam.js"    tofile="[cbinfo.wwwroot.dir]/modules/formular/js/encodeparam.js"/>
 
 </deploy>

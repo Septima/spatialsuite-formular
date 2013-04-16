@@ -8,6 +8,15 @@
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
+    <formular name="encoding-escape">
+        <header>Test enconding</header>
+        <submitpage>formular.send.config-test2</submitpage>
+        <reportprofile>demo01_classic</reportprofile>
+        <js>/modules/formular/js/encodeparam.js</js>
+        <content>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
+        </content>
+    </formular>
     <formular name="date">
         <header>Test date</header>
         <submitpage>formular.send.config-test2</submitpage>

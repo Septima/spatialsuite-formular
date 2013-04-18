@@ -96,7 +96,6 @@
                         <xsl:if test="help">
                         <div class="helpbutton"><xsl:value-of select="help/@displayname" disable-output-escaping="yes"/></div>
                         </xsl:if>
-                        <table id="content"><tbody></tbody></table>
                     </div>
                     <xsl:if test="help">
                     <div class="help">

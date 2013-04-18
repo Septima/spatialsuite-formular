@@ -33,7 +33,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <reportmapscale>500</reportmapscale>                    <!-- OPTIONAL - Den scale som kortet skal være i PDF-kviteringen (default er tilpasses til den tegnede feature plus 25+pct!400+minimum) -->
         <css>/css/custom/my.css</css>                           <!-- OPTIONAL - Hvis man gerne vil have sin egen css på siden -->
         <js>/js/custom/my.js</css>                              <!-- OPTIONAL - Hvis man gerne vil have sin egen js på siden. Kan bruges til at tilføje sine egne funktioner så det ikke er nødvendigt at skrive det hele i konfigurationen -->
-        <content>
+        <content>                                               <!-- Der kan tilføjes flere content elementer for at få flere sider i sin formular -->
             <!-- content, kan bestå af et vilkårligt antal elementer i en vilkårlig rækkefølge. I følgende er de enkelte typer elementer beskrevet.
                  Generelt indeholder alle elementer, der indeholder noget, der skal sendes til serveren, atributten "urlparam". Dette er navnet på 
                  den parameter i URL'en, der kan bruges i f.eks. datasourcen når data skal gemmes. 
@@ -113,8 +113,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <!-- maptools -->
             <!-- Maptool, er nogle knapper, som brugeren kan vælge imellem når der skal interageres med kortet. Nedenstående liste er dem, der pt. er implementeret. "pan" toolet vil altid default være slået til. -->
             <!-- På alle maptools kan man sætte displayname og herved få vist en tekst når musen føres over ikonet -->
+            <!-- Angiv hvilket tool, der skal være aktivt fra start. Det gøres ved at tilføje default="true" på et maptool -->
             <maptools>
-                <maptool displayname="" name="pan"/>
+                <maptool displayname="" name="pan" default="true"/>
                 <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE"/>   <!-- Select udpager fra en datasource, der skal angives som attribut -->
                 <maptool displayname="" name="polygon"/>
                 <maptool displayname="" name="line"/>
@@ -200,4 +201,10 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
     </page>
 ```
 
+
+Nyheder:
+2013.04.18 - Paging - Flere sider i sin formular, så siden ikke bliver så lang
+2013.04.18 - Default maptool - Angiv hvilket maptool, der skal være aktivt fra start
+2013.04.10 - Checkbox - Ny input type
+2013.04.10 - Radiobutton - Ny input type
 

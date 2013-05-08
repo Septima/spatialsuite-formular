@@ -19,6 +19,8 @@ Formular = SpatialMap.Class ({
     
     inputValidation: {},
     
+    inputOptions: {},
+    
     reportprofile: 'alt',
     reportlayers: 'default',
     reportxsl: 'kvitering',
@@ -323,6 +325,8 @@ Formular = SpatialMap.Class ({
 	                                        for (var coli=0;coli<cols.length;coli++) {
 	                                            disabledDays.push(jQuery(cols[coli]).text());
 	                                        }
+	                                        
+	                                        this.inputOptions[id].disabledDays = disabledDays;
 	                                    
 	                                        options.constrainInput = true;
 	                                        options.beforeShowDay = SpatialMap.Function.bind( function (disabledDays, date) {
@@ -795,6 +799,53 @@ Formular = SpatialMap.Class ({
         } else {
             jQuery('#'+resultElement).val('');
         }
+    },
+    
+    setDatepickerLimit: function (id,options) {
+//    	options = {
+//    		start: text,
+//    		end: text,
+//    		days: array of text
+//    	}
+    	options = options || {};
+    	options.days = options.days || []; 
+
+    	if (this.inputOptions[id] && this.inputOptions[id].disabledDays) {
+    		options.days = options.days.concat(this.inputOptions[id].disabledDays);
+    	}
+    	
+    	jQuery('#'+id).datepicker('option', 'constrainInput', true );
+
+    	jQuery('#'+id).datepicker('option', 'beforeShowDay', SpatialMap.Function.bind( function (options, date) {
+            var m = date.getMonth()+1, d = date.getDate(), y = date.getFullYear();
+            m = (m<10?'0'+m:m);
+            d = (d<10?'0'+d:d);
+            if(jQuery.inArray(d + '.' + m + '.' + y,options.days) != -1) {
+                return [false];
+            }
+            if(options.start) {
+            	var startdate = options.start.split('.');
+            	var start_d = startdate[0]-0;
+            	var start_m = startdate[1]-0;
+            	var start_y = startdate[2]-0;
+            	if (date.getDate() <= start_d && date.getMonth()+1 <= start_m && date.getFullYear() <= start_y) {
+                    return [false];
+            	}
+            }
+            if(options.end) {
+            	var enddate = options.end.split('.');
+            	var end_d = enddate[0]-0;
+            	var end_m = enddate[1]-0;
+            	var end_y = enddate[2]-0;
+            	if (date.getDate() >= end_d && date.getMonth()+1 >= end_m && date.getFullYear() >= end_y) {
+                    return [false];
+            	}
+            }
+            
+            return [true];
+        }, this, options) );
+    	
+    	
     },
 	
 	getParam: function (name) {

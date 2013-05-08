@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="areachange">
+        <header>Test areachange</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Tegn en polygon" name="polygon" default="true"/>
+                <maptool displayname="Tegn et punkt" name="point"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
+                </themes>
+            </map>
+            <area urlparam="areal" displayname="Areal:" onchange="alert(jQuery(this).val())"/>
+        </content>
+    </formular>
     <formular name="checkbox">
         <header>Test checkbox</header>
         <submitpage>formular.send.general.nomap</submitpage>

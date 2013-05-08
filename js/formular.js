@@ -237,6 +237,9 @@ Formular = SpatialMap.Class ({
 	                            case 'area':
 	                                this.areaid = id;
 	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
+	                                if (node.attr('onchange')) {
+	                                    jQuery('#'+id).change(new Function (node.attr('onchange')));
+	                                }
 	                            break;
 	                            case 'conflicts':
 	                                var html = '<tr><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
@@ -523,6 +526,7 @@ Formular = SpatialMap.Class ({
             var area = parseInt(event.wkt.getArea());
             jQuery('#areaspan_'+this.areaid).html(area);
             jQuery('#'+this.areaid).val(area);
+            jQuery('#'+this.areaid).change();
         }
         
         this.query (event.wkt);

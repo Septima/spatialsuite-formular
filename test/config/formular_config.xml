@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="distance">
+        <header>Beregning af afstand i kategorier</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <address id="addressa" urlparam="addressa" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
+            <address id="addressb" urlparam="addressb" displayname="Til Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
+            <input id="distance" type="text" displayname="Afstand (fugleflugt): " displayresult="0 m" urlparam="fugleflugt" onchange="var d = jQuery(this).val();if (d>5000) {jQuery('#zone').html('Zone 5')} else {jQuery('#zone').html('Zone 1')}"/>
+            <input id="zone" type="text" displayname="" urlparam="zone"/>
+        </content>
+    </formular>
     <formular name="areachange">
-        <header>Test areachange</header>
+        <header>Beregning af pris ud fra tegnet areal (change event på areal)</header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <content>
@@ -19,11 +30,12 @@
                     <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
                 </themes>
             </map>
-            <area urlparam="areal" displayname="Areal:" onchange="alert(jQuery(this).val())"/>
+            <area urlparam="areal" displayname="Areal:" onchange="jQuery('#pris').val('Prisen er: '+jQuery(this).val())"/>
+            <input id="pris" urlparam="pris" type="input" displayname=""/>
         </content>
     </formular>
     <formular name="checkbox">
-        <header>Test checkbox</header>
+        <header>Checkbokse som input</header>
         <submitpage>formular.send.general.nomap</submitpage>
         <reportxsl>kvitering-nomap</reportxsl>
         <reportprofile>kbh_themestore</reportprofile>
@@ -42,7 +54,7 @@
         </content>
     </formular>
     <formular name="encoding-escape">
-        <header>Test enconding</header>
+        <header>Test enconding med escape (afhjælper en fejl i nogle tilfælde i CBKort 2.6)</header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <js>/modules/formular/js/encodeparam.js</js>
@@ -51,7 +63,7 @@
         </content>
     </formular>
     <formular name="datechange">
-        <header>Test date</header>
+        <header>Dato med begrænsning af input datoer ud fra hvad der er valgt i andet adresse felt</header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <content>
@@ -60,7 +72,7 @@
         </content>
     </formular>
     <formular name="date">
-        <header>Test date</header>
+        <header>Dato (tæl antal dage)</header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <content>
@@ -70,7 +82,7 @@
         </content>
     </formular>
     <formular name="paging">
-        <header>Test paging</header>
+        <header>Formular over flere sider</header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <content>

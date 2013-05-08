@@ -284,9 +284,12 @@ Formular = SpatialMap.Class ({
 	                                } else if (type=='text') {
 	                                	if (node.attr('displayresult')) {
 	                                		var displayresult = node.attr('displayresult');
-	                                		jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span>'+'</div></td></tr>'); 
+	                                		jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
+		                                    if (node.attr('onchange')) {
+			                                    jQuery('#distanceresult_hidden').change(new Function (node.attr('onchange')));
+		                                    }
 	                                	} else { 
-	                                		jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</div></td></tr>');
+	                                		jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
 	                                	}
 	                                } else if (type=='date') {
 	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
@@ -885,6 +888,7 @@ function calculateDistance (a,b) {
 			type: 'POST',
 			success: function (data) {
 				var StringDist = jQuery(data).find('col').text();  // m
+				jQuery('#distanceresult_hidden').val(StringDist).change();
 				if (StringDist > 1000) {
 					StringDist = StringDist/1000; // km
 					var NumericDist = parseFloat(StringDist);

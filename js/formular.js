@@ -96,6 +96,7 @@ Formular = SpatialMap.Class ({
                 }
 
                 this.config = jQuery(data).find('content');
+				var counter = 0;
                 if (this.config.length) {
                 	for (var k=0;k<this.config.length;k++) {
                         jQuery('div#content').append('<table class="tablecontent" id="content'+k+'"><tbody></tbody></table>');
@@ -104,7 +105,8 @@ Formular = SpatialMap.Class ({
 	                    for (var i=0; i<config.length; i++) {
 	                        var node = jQuery(config[i]);
 	                        var urlparam = node.attr('urlparam');
-	                        var id = 'input_'+i;
+	                        var id = 'input_'+counter;
+							counter++;
 	                        if (node.attr('id')) {
 	                            id = node.attr('id');
 	                        }
@@ -153,7 +155,7 @@ Formular = SpatialMap.Class ({
 	                                	for (var name in options) {
 	                                		o[name] = options[name];
 	                                	}
-	                                	i.limit = 1;
+	                                	o.limit = 1;
 	
 	                                    jQuery.ajax( {
 	                                        scriptCharset: 'UTF-8',
@@ -178,7 +180,7 @@ Formular = SpatialMap.Class ({
 	                            break;
 	                            case 'maptools':
 	                                //jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="button1" class="button button1"></div><div id="button2" class="button button2"></div></td></tr>');
-	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="mapbuttons_'+i+'"></div></td></tr>');
+	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="mapbuttons_'+counter+'"></div></td></tr>');
 	                                var maptools = node.find('maptool');
 	                                for (var j=0;j<maptools.length;j++) {
 	                                    var name = jQuery(maptools[j]).attr('name').toString().toLowerCase();
@@ -187,8 +189,8 @@ Formular = SpatialMap.Class ({
 	                                    if (displayname) {
 	                                        title = displayname.toString();
 	                                    }
-	                                    $('#mapbuttons_'+i).append('<div id="mapbutton_'+i+'_'+j+'" class="button" title="'+title+'"></div>');
-	                                    var id = 'mapbutton_'+i+'_'+j;
+	                                    $('#mapbuttons_'+counter).append('<div id="mapbutton_'+counter+'_'+j+'" class="button" title="'+title+'"></div>');
+	                                    var id = 'mapbutton_'+counter+'_'+j;
 	                                    jQuery('#'+id).addClass('button_'+name).click(SpatialMap.Function.bind(this.activateTool,this,name,maptools[j]));
 	                                    this.mapbuttons[name] = id;
 	                                    
@@ -198,7 +200,7 @@ Formular = SpatialMap.Class ({
 	                                }
 	                            break;
 	                            case 'map':
-	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div id="map_'+i+'" class="map'+(className ? ' '+className : '')+'"></div></td></tr>');
+	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div></td></tr>');
 	                                var extent = node.find('extent').text();
 	                                if (extent) {
 	                                    extent = extent.split(',');
@@ -230,7 +232,7 @@ Formular = SpatialMap.Class ({
 	                                    resolutions: resolutions,
 	                                    layers: layers
 	                                }
-	                                this.map = new SpatialMap.Map ('map_'+i,mapoptions);
+	                                this.map = new SpatialMap.Map ('map_'+counter,mapoptions);
 	                            break;
 	                            case 'area':
 	                                this.areaid = id;
@@ -244,7 +246,7 @@ Formular = SpatialMap.Class ({
 	                                html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
 	                                jQuery('#content'+k+' > tbody:last').append(html);
 	                                this.spatialqueries.push({
-	                                    id: id, //'conflictdiv_'+i,
+	                                    id: id, //'conflictdiv_'+counter,
 	                                    targetsetfile: node.attr('targetsetfile'),
 	                                    targerset: node.attr('targerset')
 	                                });

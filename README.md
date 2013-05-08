@@ -203,8 +203,9 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
-2013.04.18 - Paging - Flere sider i sin formular, så siden ikke bliver så lang
-2013.04.18 - Default maptool - Angiv hvilket maptool, der skal være aktivt fra start
-2013.04.10 - Checkbox - Ny input type
-2013.04.10 - Radiobutton - Ny input type
+* 2013.05.08 - Change events på "area". Kan f.eks. bruges til at beregne priser ud fra tegnet areal
+* 2013.04.18 - Paging - Flere sider i sin formular, så siden ikke bliver så lang
+* 2013.04.18 - Default maptool - Angiv hvilket maptool, der skal være aktivt fra start
+* 2013.04.10 - Checkbox - Ny input type
+* 2013.04.10 - Radiobutton - Ny input type
 

@@ -19,6 +19,8 @@ Formular = SpatialMap.Class ({
     
     inputValidation: {},
     
+    inputOptions: {},
+    
     reportprofile: 'alt',
     reportlayers: 'default',
     reportxsl: 'kvitering',
@@ -96,6 +98,7 @@ Formular = SpatialMap.Class ({
                 }
 
                 this.config = jQuery(data).find('content');
+				var counter = 0;
                 if (this.config.length) {
                 	for (var k=0;k<this.config.length;k++) {
                         jQuery('div#content').append('<table class="tablecontent" id="content'+k+'"><tbody></tbody></table>');
@@ -104,7 +107,8 @@ Formular = SpatialMap.Class ({
 	                    for (var i=0; i<config.length; i++) {
 	                        var node = jQuery(config[i]);
 	                        var urlparam = node.attr('urlparam');
-	                        var id = 'input_'+i;
+	                        var id = 'input_'+counter;
+							counter++;
 	                        if (node.attr('id')) {
 	                            id = node.attr('id');
 	                        }
@@ -153,7 +157,7 @@ Formular = SpatialMap.Class ({
 	                                	for (var name in options) {
 	                                		o[name] = options[name];
 	                                	}
-	                                	i.limit = 1;
+	                                	o.limit = 1;
 	
 	                                    jQuery.ajax( {
 	                                        scriptCharset: 'UTF-8',
@@ -178,7 +182,7 @@ Formular = SpatialMap.Class ({
 	                            break;
 	                            case 'maptools':
 	                                //jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="button1" class="button button1"></div><div id="button2" class="button button2"></div></td></tr>');
-	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="mapbuttons_'+i+'"></div></td></tr>');
+	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="mapbuttons_'+counter+'"></div></td></tr>');
 	                                var maptools = node.find('maptool');
 	                                for (var j=0;j<maptools.length;j++) {
 	                                    var name = jQuery(maptools[j]).attr('name').toString().toLowerCase();
@@ -187,8 +191,8 @@ Formular = SpatialMap.Class ({
 	                                    if (displayname) {
 	                                        title = displayname.toString();
 	                                    }
-	                                    $('#mapbuttons_'+i).append('<div id="mapbutton_'+i+'_'+j+'" class="button" title="'+title+'"></div>');
-	                                    var id = 'mapbutton_'+i+'_'+j;
+	                                    $('#mapbuttons_'+counter).append('<div id="mapbutton_'+counter+'_'+j+'" class="button" title="'+title+'"></div>');
+	                                    var id = 'mapbutton_'+counter+'_'+j;
 	                                    jQuery('#'+id).addClass('button_'+name).click(SpatialMap.Function.bind(this.activateTool,this,name,maptools[j]));
 	                                    this.mapbuttons[name] = id;
 	                                    
@@ -198,7 +202,7 @@ Formular = SpatialMap.Class ({
 	                                }
 	                            break;
 	                            case 'map':
-	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div id="map_'+i+'" class="map'+(className ? ' '+className : '')+'"></div></td></tr>');
+	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div></td></tr>');
 	                                var extent = node.find('extent').text();
 	                                if (extent) {
 	                                    extent = extent.split(',');
@@ -230,11 +234,14 @@ Formular = SpatialMap.Class ({
 	                                    resolutions: resolutions,
 	                                    layers: layers
 	                                }
-	                                this.map = new SpatialMap.Map ('map_'+i,mapoptions);
+	                                this.map = new SpatialMap.Map ('map_'+counter,mapoptions);
 	                            break;
 	                            case 'area':
 	                                this.areaid = id;
 	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
+	                                if (node.attr('onchange')) {
+	                                    jQuery('#'+id).change(new Function (node.attr('onchange')));
+	                                }
 	                            break;
 	                            case 'conflicts':
 	                                var html = '<tr><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
@@ -244,7 +251,7 @@ Formular = SpatialMap.Class ({
 	                                html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
 	                                jQuery('#content'+k+' > tbody:last').append(html);
 	                                this.spatialqueries.push({
-	                                    id: id, //'conflictdiv_'+i,
+	                                    id: id, //'conflictdiv_'+counter,
 	                                    targetsetfile: node.attr('targetsetfile'),
 	                                    targerset: node.attr('targerset')
 	                                });
@@ -318,6 +325,8 @@ Formular = SpatialMap.Class ({
 	                                        for (var coli=0;coli<cols.length;coli++) {
 	                                            disabledDays.push(jQuery(cols[coli]).text());
 	                                        }
+	                                        
+	                                        this.inputOptions[id].disabledDays = disabledDays;
 	                                    
 	                                        options.constrainInput = true;
 	                                        options.beforeShowDay = SpatialMap.Function.bind( function (disabledDays, date) {
@@ -521,6 +530,7 @@ Formular = SpatialMap.Class ({
             var area = parseInt(event.wkt.getArea());
             jQuery('#areaspan_'+this.areaid).html(area);
             jQuery('#'+this.areaid).val(area);
+            jQuery('#'+this.areaid).change();
         }
         
         this.query (event.wkt);
@@ -789,6 +799,53 @@ Formular = SpatialMap.Class ({
         } else {
             jQuery('#'+resultElement).val('');
         }
+    },
+    
+    setDatepickerLimit: function (id,options) {
+//    	options = {
+//    		start: text,
+//    		end: text,
+//    		days: array of text
+//    	}
+    	options = options || {};
+    	options.days = options.days || []; 
+
+    	if (this.inputOptions[id] && this.inputOptions[id].disabledDays) {
+    		options.days = options.days.concat(this.inputOptions[id].disabledDays);
+    	}
+    	
+    	jQuery('#'+id).datepicker('option', 'constrainInput', true );
+
+    	jQuery('#'+id).datepicker('option', 'beforeShowDay', SpatialMap.Function.bind( function (options, date) {
+            var m = date.getMonth()+1, d = date.getDate(), y = date.getFullYear();
+            m = (m<10?'0'+m:m);
+            d = (d<10?'0'+d:d);
+            if(jQuery.inArray(d + '.' + m + '.' + y,options.days) != -1) {
+                return [false];
+            }
+            if(options.start) {
+            	var startdate = options.start.split('.');
+            	var start_d = startdate[0]-0;
+            	var start_m = startdate[1]-0;
+            	var start_y = startdate[2]-0;
+            	if (date.getDate() <= start_d && date.getMonth()+1 <= start_m && date.getFullYear() <= start_y) {
+                    return [false];
+            	}
+            }
+            if(options.end) {
+            	var enddate = options.end.split('.');
+            	var end_d = enddate[0]-0;
+            	var end_m = enddate[1]-0;
+            	var end_y = enddate[2]-0;
+            	if (date.getDate() >= end_d && date.getMonth()+1 >= end_m && date.getFullYear() >= end_y) {
+                    return [false];
+            	}
+            }
+            
+            return [true];
+        }, this, options) );
+    	
+    	
     },
 	
 	getParam: function (name) {

@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pages>
 
-   <!-- 
-   ===============================================================
-   CBkort version 2.x, copyright Carl Bro GIS&IT, 2006
-   ===============================================================
-   $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/test/pages/pages.xml $ 
-   $Date: 22-10-12 11:49 $
-   $Revision: 2 $ 
-   $Author: Nsm $
-   ===============================================================   
-   --> 
-
     <page name="formular.send.soe-test" contenttype="text/xml" resultpassing="pass-all">
         <!--data handler="datasource" operation="execute-command">
             <url-parameters>
@@ -29,6 +18,33 @@
             <url-parameters>
                 <url-parameter name="datasource" value="formular-test"/>
                 <url-parameter name="command" value="write"/>
+            </url-parameters>
+        </data>
+    </page>
+
+    <page name="formular.send.general" contenttype="text/xml" resultpassing="pass-all">
+        <!--data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="ds_formular_soe"/>
+                <url-parameter name="command" value="write"/>
+            </url-parameters>
+        </data-->
+        
+        <!-- REQUIRED -->
+        <include src="[module:formular.dir]/pages/pages-includes.xml" nodes="/pages/page[@name='formular.send']/*" mustexist="true"/>
+    </page>
+
+    <page name="formular.send.general.nomap" contenttype="text/xml" resultpassing="pass-all">
+        <!--data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="ds_formular_soe"/>
+                <url-parameter name="command" value="write"/>
+            </url-parameters>
+        </data-->
+        
+        <data handler="PDFFormatter" operation="format-pdf">
+            <url-parameters>
+                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module.formular.xsl.dir]/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/kvitering.xsl" endif</url-parameter>
             </url-parameters>
         </data>
     </page>

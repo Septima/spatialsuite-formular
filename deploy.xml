@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy>
 
-   <version>3.0.1</version>  
+   <version>3.0.2</version>  
 
    <stoponerror>true</stoponerror>
    
    <param name="module.formular.upload.dir">[cbinfo.wwwroot.dir]/formular/upload</param> 
+   <makedir dir="[module.formular.upload.dir]"/>
    <param name="module.formular.pdf.dir">[cbinfo.wwwroot.dir]/formular/pdf</param> 
+   <makedir dir="[module.formular.pdf.dir]"/>
    
    <param name="module.formular.xsl.dir">[module:formular.dir]/xsl</param> 
    <param name="module.formular.targetsetfile">[module:formular.dir]/queries/spatialqueries.xml</param> 

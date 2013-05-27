@@ -30,6 +30,7 @@ Formular = SpatialMap.Class ({
     submitbuttons: [],
     
     showReport: true,
+    showTabs: false,
     
     style: {
         strokeColor: '#FF0000',
@@ -93,8 +94,16 @@ Formular = SpatialMap.Class ({
                     this.submitpage = page;
                 }
                 var showReport = jQuery(data).find('showreport').text();
-                if (page) {
+                if (showReport) {
                     this.showReport = showReport != 'false';
+                }
+                var showTabs = jQuery(data).find('tabs').text();
+                if (showTabs) {
+                    this.showTabs = (showTabs == 'true');
+                    var tabcontainer = jQuery('<div class="tabcontainer"></div>');
+                    var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
+                    tabcontainer.addClass(className);
+                    jQuery('div#content').append(tabcontainer);
                 }
 
                 this.config = jQuery(data).find('content');
@@ -102,6 +111,15 @@ Formular = SpatialMap.Class ({
                 if (this.config.length) {
                 	for (var k=0;k<this.config.length;k++) {
                         jQuery('div#content').append('<table class="tablecontent" id="content'+k+'"><tbody></tbody></table>');
+                        if(this.showTabs) {
+	                        var displayname = jQuery(this.config[k]).attr('displayname');
+	                        var item = jQuery('<div id="tab'+k+'" class="arrow_box">'+displayname+'</div>');
+	                        item.click(SpatialMap.Function.bind(this.showTab,this,k));
+	                        jQuery('.tabcontainer').append(item);
+	                        if (k < this.config.length-1) {
+	                        	jQuery('.tabcontainer').append('<div id="tabsep'+(k+1)+'" class="sep"/>');
+	                        }
+                        }
 
 	                    var config = jQuery(this.config[k]).children();
 	                    for (var i=0; i<config.length; i++) {
@@ -409,7 +427,18 @@ Formular = SpatialMap.Class ({
                     if (this.map) {
                 		this.activateTool (this.defaultMapTool);
                     }
-                    this.next(-1);
+                    if (this.showTabs) {
+                    	if (this.confirm) {
+	                    	var c = 'confirm';
+	                    	jQuery('.tabcontainer').append('<div id="tabsep'+c+'" class="sep"/>');
+		                    var item = jQuery('<div id="tab'+c+'">Godkend</div>');
+		                    //item.click(SpatialMap.Function.bind(this.showTab,this,k));
+		                    jQuery('.tabcontainer').append(item);
+                    	} else {
+                    		jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
+                    	}
+                    }
+                    this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
                 }
             },this)
@@ -417,13 +446,20 @@ Formular = SpatialMap.Class ({
     },
     
     next: function (current) {
-    	jQuery('table.tablecontent').hide();
-    	jQuery('table#content'+(current+1)).show();
+    	this.showTab(current+1);
     },
     
     previous: function (current) {
+    	this.showTab(current-1);
+    },
+    
+    showTab: function (i) {
     	jQuery('table.tablecontent').hide();
-    	jQuery('table#content'+(current-1)).show();
+    	jQuery('table#content'+i).show();
+    	
+    	jQuery('.tabcontainer div').removeClass('active');
+    	jQuery('.tabcontainer div#tab'+i).addClass('active');
+    	jQuery('.tabcontainer div#tabsep'+i).addClass('active');
     },
     
     setAddressSelect: function (options) {

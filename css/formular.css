@@ -208,3 +208,93 @@ div.helpbutton {
 
 .error { background-color: #EFD8D7; border: 3px solid #C8A5A5;}
 .error .input { border: 3px solid #C8A5A5; background: #fff; }
+
+
+
+.tabcontainer {
+    height: 40px;
+}
+.tabcontainer > div {
+	float: left;
+    margin: 0;
+    padding: 0 40px;   
+    height: 26px;
+    line-height: 26px;
+    cursor: pointer;
+    color: #333;
+    background-color: #fff;
+    border-top: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.tabcontainer > div:first-child {
+    border-left: 1px solid #EEE;
+	border-radius: 3px 0 0 3px;
+	-webkit-border-radius: 3px 0 0 3px;
+	-moz-border-radius: 3px 0 0 3px;
+	-ms-border-radius: 3px 0 0 3px;
+	-o-border-radius: 3px 0 0 3px;
+}
+.tabcontainer > div:last-child {
+    border-right: 1px solid #EEE;
+    border-radius: 0 3px 3px 0;
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    -ms-border-radius: 0 3px 3px 0;
+    -o-border-radius: 0 3px 3px 0;
+}
+
+.tabcontainer > div.sep {
+    float: left;
+    width: 13px;
+    height: 26px;
+    line-height: 26px;
+    cursor: pointer;
+    padding: 0;
+}
+.tabcontainer div.active {
+    background-color: #4f4f4f;
+    color: #fff;
+}
+
+.arrow_box {
+    position: relative;
+    background: #fff;
+}
+.arrow_box.active {
+    background: #4f4f4f;
+}
+
+.arrow_box:after,.arrow_box:before {
+	left: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow_box:after {
+	border-color: rgba(79, 79, 79, 0);
+	border-left-color: #fff;
+	border-width: 13px;
+	top: 50%;
+	margin-top: -13px;
+}
+.arrow_box.active:after {
+    border-left-color: #4f4f4f;
+}
+
+.arrow_box:before {
+	border-color: rgba(238, 238, 238, 0);
+	border-left-color: #eee;
+	border-width: 14px;
+	top: 50%;
+	margin-top: -14px;
+}

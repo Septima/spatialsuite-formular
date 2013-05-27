@@ -33,7 +33,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <reportmapscale>500</reportmapscale>                    <!-- OPTIONAL - Den scale som kortet skal være i PDF-kviteringen (default er tilpasses til den tegnede feature plus 25+pct!400+minimum) -->
         <css>/css/custom/my.css</css>                           <!-- OPTIONAL - Hvis man gerne vil have sin egen css på siden -->
         <js>/js/custom/my.js</css>                              <!-- OPTIONAL - Hvis man gerne vil have sin egen js på siden. Kan bruges til at tilføje sine egne funktioner så det ikke er nødvendigt at skrive det hele i konfigurationen -->
-        <content>                                               <!-- Der kan tilføjes flere content elementer for at få flere sider i sin formular -->
+        <tabs>true</css>                                        <!-- OPTIONAL - Har man flere steps, kan man få vist de enkelte steps øverst på siden -->
+        <content displayname="Første step">                     <!-- Der kan tilføjes flere content elementer for at få flere sider i sin formular -->
             <!-- content, kan bestå af et vilkårligt antal elementer i en vilkårlig rækkefølge. I følgende er de enkelte typer elementer beskrevet.
                  Generelt indeholder alle elementer, der indeholder noget, der skal sendes til serveren, atributten "urlparam". Dette er navnet på 
                  den parameter i URL'en, der kan bruges i f.eks. datasourcen når data skal gemmes. 

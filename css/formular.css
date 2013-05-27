@@ -232,6 +232,9 @@ div.helpbutton {
     -ms-user-select: none;
     user-select: none;
 }
+.smalltabs > div {
+    padding: 0 25px;
+}
 .tabcontainer > div:first-child {
     border-left: 1px solid #EEE;
 	border-radius: 3px 0 0 3px;

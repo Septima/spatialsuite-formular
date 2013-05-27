@@ -27,7 +27,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal:" onchange="jQuery('#pris').val('Prisen er: '+jQuery(this).val())"/>
@@ -81,6 +81,114 @@
             <input id="days" type="input" displayname="Dage:" urlparam="days"/>
         </content>
     </formular>
+    <formular name="condition">
+        <header>Betinget input</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportxsl>kvitering-nomap</reportxsl>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="udnyttelse">
+                <option value="mark i omdrift" name="Mark i omdrift"/>
+                <option value="braklagt mark" name="Braklagt mark"/>
+                <option value="udyrket areal" name="Udyrket areal"/>
+                <option value="græsning" name="Græsning"/>
+            </input>
+            <input id="navn" type="input" displayname="Navn:" urlparam="val0" defaultvalue="" condition="jQuery('#udnyttelse').val() == 'braklagt mark'"/>
+            <input class="warning" type="text" displayname="Udyrket areal valgt" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
+            <input id="val27" type="checkbox" displayname="Er du sikker:" urlparam="godkendt" defaultvalue="false"/>
+            <input type="checkbox" displayname="Send kvitering:" urlparam="sendkvitering" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
+            <input class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
+        </content>
+    </formular>
+    <formular name="tabs1">
+        <header>Formular med tabs</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs class="testtab">true</tabs>
+        <content displayname="Første side">
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
+            <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="input" displayname="Postnr:" urlparam="val2"/>
+        </content>
+        <content displayname="Kort">
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
+            <input type="input" displayname="Hest:" urlparam="val4"/>
+            <input type="input" displayname="Får:" urlparam="val5"/>
+        </content>
+        <content displayname="Sidste side">
+            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="Paging"/>
+            <input type="input" displayname="ABC:" urlparam="val7"/>
+            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
+        </content>
+    </formular>
+    <formular name="tabs2">
+        <header>Institutions blanket</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs class="smalltabs">true</tabs>
+        <content displayname="1. Hvem er du?">
+            <input id="institution" type="dropdown" displayname="Vælg institution:" urlparam="institution">
+                <option value="1" name="Kristrup Vuggestue"/>
+                <option value="2" name="Tjærbyvejens Vuggestue"/>
+                <option value="3" name="Vuggestuen Firkløveren"/>
+                <option value="4" name="Vuggestuen Grønnegade"/>
+            </input>
+        </content>
+        <content displayname="2. Hvad er opgaven?">
+            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="kategori">
+                <option value="1" name="Bygninger"/>
+                <option value="2" name="Veje &amp; stier"/>
+                <option value="3" name="Grønne områder"/>
+            </input>
+            <input id="bygninger_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="bygninger_hoved" condition="jQuery('#kategori').val() == '1'">
+                <option value="1" name="Tag &amp; facader"/>
+                <option value="2" name="Tekniske installationer"/>
+                <option value="3" name="Udvendige døre &amp; vinduer"/>
+            </input>
+            <input id="vejeogstier_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="vejeogstier_hoved" condition="jQuery('#kategori').val() == '2'">
+                <option value="1" name="aaa"/>
+                <option value="2" name="bbb"/>
+                <option value="3" name="ccc"/>
+            </input>
+            <input id="gronneomr_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="gronneomr_hoved" condition="jQuery('#kategori').val() == '3'">
+                <option value="1" name="111"/>
+                <option value="2" name="222"/>
+                <option value="3" name="333"/>
+            </input>
+            <input id="bygninger_tagogfacede_under" type="dropdown" displayname="Undergruppe:" urlparam="bygninger_tagogfacede_under" condition="jQuery('#kategori').val() == '1' &amp;&amp; jQuery('#bygninger_hoved').val() == '1'">
+                <option value="1" name="Fundament"/>
+                <option value="2" name="Tag &amp; Tilbehør"/>
+                <option value="3" name="Ydervæg"/>
+            </input>
+            <input type="date" displayname="Dato:" urlparam="date" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013"/>
+        </content>
+        <content displayname="Indsend opgave">
+            <input id="bygninger_tagogfacede_under" type="dropdown" displayname="Opgave:" urlparam="bygninger_tagogfacede_under" condition="jQuery('#kategori').val() == '1' &amp;&amp; jQuery('#bygninger_hoved').val() == '1'">
+                <option value="1" name="Fundament"/>
+                <option value="2" name="Tag &amp; Tilbehør"/>
+                <option value="3" name="Ydervæg"/>
+            </input>
+        </content>
+        <content displayname="Detaljer">
+            <input type="textarea" displayname="Tekst:" urlparam="tekst"/>
+            <input type="file" displayname="Billede:" urlparam="billede"/>
+        </content>
+    </formular>
     <formular name="paging">
         <header>Formular over flere sider</header>
         <submitpage>formular.send.general</submitpage>
@@ -103,8 +211,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
-<!--                     <theme name="theme-matrikel-skel" host="/wms?servicename=kbh_themestore"/> -->
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
@@ -144,8 +251,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
-<!--                     <theme name="theme-matrikel-skel" host="/wms?servicename=kbh_themestore"/> -->
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal:"/>

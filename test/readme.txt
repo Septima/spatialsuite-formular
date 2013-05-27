@@ -10,7 +10,7 @@ $Author: Kpo $
 FORMULAR - TEST
 --------------------
 
-Dette modul indeholder test opsætning til formular modulet
+Dette modul indeholder test opsÃ¦tning til formular modulet
 
 --------------------
 VEJLEDNING
@@ -18,7 +18,7 @@ VEJLEDNING
 
     <module name="formular-test" dir="custom/formular/test" permissionlevel="public"/>
 
-    Herefter kan funktionen ses under /test (ex: http://localhost:8080/test) 
+    Herefter kan funktionen ses under /test (ex: http://localhost:8080/cbkort?page=formular.list) 
 
 --------------------
 DEPENDENCIES

@@ -44,11 +44,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - displayname
                  - id
                  - class
-                 - onchange
+                 - onchange         - Function til at ændre andre elementer. Skrives som et JavaScript udtryk.
                  - onkeyup          - Funktion f.eks. til at lave beregninger. Brug "id"-atributten for at identificere specifikke inputfelter
                  - defaultvalue
                  - regexp           - Til validering på et felt. Skriv f.eks. "[0-9]" for at sikre at der altid bliver skrevet et tal
                  - validate         - Tekst til validering. Det skrives under feltet for at angive hvad der er gjort galt.
+                 - condition        - Skal feltet vises? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.
                   -->
 
             <!-- input - type="hidden" -->

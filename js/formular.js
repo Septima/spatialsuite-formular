@@ -39,6 +39,8 @@ Formular = SpatialMap.Class ({
     
     validAddress: false,
     
+    conditions: [],
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -135,6 +137,11 @@ Formular = SpatialMap.Class ({
 	                                id: id
 	                            };
 	                        }
+	                        
+	                        if (node.attr('condition')) {
+	                        	this.conditions.push({id: id, condition: node.attr('condition')});
+	                        }
+	                        
 	                        var className = node.attr('class');
 	                        switch(config[i].nodeName) {
 	                            case 'address':
@@ -142,7 +149,7 @@ Formular = SpatialMap.Class ({
 	                                if (value == null) {
 	                                    value = node.attr('defaultvalue');
 	                                }
-	                            	jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+	                            	jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
 	                                var options = {
 	                                    apikey: node.attr('apikey'),
 	                                    area: node.attr('filter'),
@@ -199,8 +206,8 @@ Formular = SpatialMap.Class ({
 	                                
 	                            break;
 	                            case 'maptools':
-	                                //jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="button1" class="button button1"></div><div id="button2" class="button button2"></div></td></tr>');
-	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div id="mapbuttons_'+counter+'"></div></td></tr>');
+	                                //jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td colspan="2" align="right"><div id="button1" class="button button1"></div><div id="button2" class="button button2"></div></td></tr>');
+	                                jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td colspan="2" align="right"><div id="mapbuttons_'+counter+'"></div></td></tr>');
 	                                var maptools = node.find('maptool');
 	                                for (var j=0;j<maptools.length;j++) {
 	                                    var name = jQuery(maptools[j]).attr('name').toString().toLowerCase();
@@ -220,7 +227,7 @@ Formular = SpatialMap.Class ({
 	                                }
 	                            break;
 	                            case 'map':
-	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div></td></tr>');
+	                                jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td colspan="2"><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div></td></tr>');
 	                                var extent = node.find('extent').text();
 	                                if (extent) {
 	                                    extent = extent.split(',');
@@ -256,13 +263,13 @@ Formular = SpatialMap.Class ({
 	                            break;
 	                            case 'area':
 	                                this.areaid = id;
-	                                jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
+	                                jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
 	                                if (node.attr('onchange')) {
 	                                    jQuery('#'+id).change(new Function (node.attr('onchange')));
 	                                }
 	                            break;
 	                            case 'conflicts':
-	                                var html = '<tr><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
+	                                var html = '<tr id="'+id+'_row"><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
 	                                if (node.attr('displayname')!='') {
 	                                    html += '<div class="doublelabeldiv">'+node.attr('displayname')+'</div>';
 	                                }
@@ -281,7 +288,7 @@ Formular = SpatialMap.Class ({
 	                                    value = node.attr('defaultvalue');
 	                                }
 	                                if (type=='dropdown') {
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
 	                                    var option = node.find('option');
 	                                    for (var j=0;j<option.length;j++) {
 	                                    	var checked = (jQuery(option[j]).attr('value') == value ? ' selected="selected"' : '');
@@ -294,23 +301,23 @@ Formular = SpatialMap.Class ({
 	                                    	var checked = (jQuery(option[j]).attr('value') == value ? ' checked="checked"' : '');
 	                                    	str += '<div><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
 	                                    }
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
 	                                } else if (type=='textarea') {
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
 	                                } else if (type=='hidden') {
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row" style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
 	                                } else if (type=='text') {
 	                                	if (node.attr('displayresult')) {
 	                                		var displayresult = node.attr('displayresult');
-	                                		jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
+	                                		jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
 		                                    if (node.attr('onchange')) {
 			                                    jQuery('#distanceresult_hidden').change(new Function (node.attr('onchange')));
 		                                    }
 	                                	} else { 
-	                                		jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+	                                		jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
 	                                	}
 	                                } else if (type=='date') {
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
 	                                    var change = null;
 	                                    if (node.attr('onchange')) {
 	                                    	change = new Function (node.attr('onchange'));
@@ -363,15 +370,15 @@ Formular = SpatialMap.Class ({
 	                                    
 	                                    jQuery('#'+id).datepicker(options);
 	                                } else if (type=='file') {
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
 	                                    jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
 	                                        jQuery('#form_'+id).submit();
 	                                    },this,id));
 	                                } else if (type=='checkbox') {
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
 	                                } else {
 	                                    type = 'input';
-	                                    jQuery('#content'+k+' > tbody:last').append('<tr><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
 	                                }
 	                                if (urlparam) {
 	                                    this.postparams[urlparam].type = type;
@@ -384,12 +391,31 @@ Formular = SpatialMap.Class ({
 	                                         ]
 	                                    });
 	                                }
+	                                var f = null;
 	                                if (node.attr('onchange')) {
-	                                    jQuery('#'+id).change(new Function (node.attr('onchange')));
+	                                	var f = new Function (node.attr('onchange'));
 	                                }
+                                    jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange) {
+                                    	if (onchange) {
+                                    		onchange();
+                                    	}
+                                    	this.inputChanged();
+                                    },this,f));
+                                    
+	                                var f = null;
 	                                if (node.attr('onkeyup')) {
-	                                    jQuery('#'+id).keyup(new Function (node.attr('onkeyup')));
+	                                	var f = new Function (node.attr('onkeyup'));
 	                                }
+                                    jQuery('#'+id).keyup(SpatialMap.Function.bind(function (onkeyup) {
+                                    	if (onkeyup) {
+                                    		onkeyup();
+                                    	}
+                                    	this.inputChanged();
+                                    },this,f));
+
+//                                    if (node.attr('onkeyup')) {
+//	                                    jQuery('#'+id).keyup(new Function (node.attr('onkeyup')));
+//	                                }
 	                                
 	                            break;
 	                            case 'submitbutton':
@@ -438,11 +464,31 @@ Formular = SpatialMap.Class ({
                     		jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
                     	}
                     }
+                    this.checkConditions();
                     this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
                 }
             },this)
         });
+    },
+    
+    inputChanged: function (id) {
+    	
+    	
+    	this.checkConditions();
+    },
+    
+    checkConditions: function () {
+    	for (var i=0;i<this.conditions.length;i++) {
+    		if (!(this.conditions[i].condition instanceof Function)) {
+    			this.conditions[i].condition = new Function ('return '+this.conditions[i].condition);
+    		}
+    		if (this.conditions[i].condition()) {
+    			jQuery('#'+this.conditions[i].id+'_row').show();
+    		} else {
+    			jQuery('#'+this.conditions[i].id+'_row').hide();
+    		}
+    	}
     },
     
     next: function (current) {

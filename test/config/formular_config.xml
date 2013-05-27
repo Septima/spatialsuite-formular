@@ -81,6 +81,25 @@
             <input id="days" type="input" displayname="Dage:" urlparam="days"/>
         </content>
     </formular>
+    <formular name="condition">
+        <header>Betinget input</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportxsl>kvitering-nomap</reportxsl>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="udnyttelse">
+                <option value="mark i omdrift" name="Mark i omdrift"/>
+                <option value="braklagt mark" name="Braklagt mark"/>
+                <option value="udyrket areal" name="Udyrket areal"/>
+                <option value="græsning" name="Græsning"/>
+            </input>
+            <input id="navn" type="input" displayname="Navn:" urlparam="val0" defaultvalue="" condition="jQuery('#udnyttelse').val() == 'braklagt mark'"/>
+            <input class="warning" type="text" displayname="Udyrket areal valgt" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
+            <input id="val27" type="checkbox" displayname="Er du sikker:" urlparam="godkendt" defaultvalue="false"/>
+            <input type="checkbox" displayname="Send kvitering:" urlparam="sendkvitering" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
+            <input class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
+        </content>
+    </formular>
     <formular name="tabs1">
         <header>Formular med tabs</header>
         <submitpage>formular.send.general</submitpage>

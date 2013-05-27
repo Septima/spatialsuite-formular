@@ -27,7 +27,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal:" onchange="jQuery('#pris').val('Prisen er: '+jQuery(this).val())"/>
@@ -81,6 +81,61 @@
             <input id="days" type="input" displayname="Dage:" urlparam="days"/>
         </content>
     </formular>
+    <formular name="condition">
+        <header>Betinget input</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportxsl>kvitering-nomap</reportxsl>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="udnyttelse">
+                <option value="mark i omdrift" name="Mark i omdrift"/>
+                <option value="braklagt mark" name="Braklagt mark"/>
+                <option value="udyrket areal" name="Udyrket areal"/>
+                <option value="græsning" name="Græsning"/>
+            </input>
+            <input id="navn" type="input" displayname="Navn:" urlparam="val0" defaultvalue="" condition="jQuery('#udnyttelse').val() == 'braklagt mark'"/>
+            <input class="warning" type="text" displayname="Udyrket areal valgt" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
+            <input id="val27" type="checkbox" displayname="Er du sikker:" urlparam="godkendt" defaultvalue="false"/>
+            <input type="checkbox" displayname="Send kvitering:" urlparam="sendkvitering" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
+            <input class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
+        </content>
+    </formular>
+    <formular name="tabs1">
+        <header>Formular med tabs</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs class="testtab">true</tabs>
+        <content displayname="Første side">
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
+            <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="input" displayname="Postnr:" urlparam="val2"/>
+        </content>
+        <content displayname="Kort">
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
+            <input type="input" displayname="Hest:" urlparam="val4"/>
+            <input type="input" displayname="Får:" urlparam="val5"/>
+        </content>
+        <content displayname="Sidste side">
+            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="Paging"/>
+            <input type="input" displayname="ABC:" urlparam="val7"/>
+            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
+        </content>
+    </formular>
     <formular name="paging">
         <header>Formular over flere sider</header>
         <submitpage>formular.send.general</submitpage>
@@ -103,8 +158,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
-<!--                     <theme name="theme-matrikel-skel" host="/wms?servicename=kbh_themestore"/> -->
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
@@ -144,8 +198,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="mq" host="http://osm.spatialsuite.com/tilecache"/>
-<!--                     <theme name="theme-matrikel-skel" host="/wms?servicename=kbh_themestore"/> -->
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal:"/>

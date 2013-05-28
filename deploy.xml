@@ -13,6 +13,9 @@
    <param name="module.formular.xsl.dir">[module:formular.dir]/xsl</param> 
    <param name="module.formular.targetsetfile">[module:formular.dir]/queries/spatialqueries.xml</param> 
 
+   <param name="module.formular.pdf.logo">[module:formular.dir]/images/septima.jpg</param> 
+   <param name="module.formular.pdf.header">Ansøgning</param> 
+
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/css"/>
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/js"/>
    <makedir dir="[cbinfo.wwwroot.dir]/jsp/modules/formular"/>

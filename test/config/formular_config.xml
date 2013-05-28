@@ -2,20 +2,22 @@
 <config>
     <formular name="distance">
         <header>Beregning af afstand i kategorier</header>
-        <submitpage>formular.send.general</submitpage>
-        <reportprofile>kbh_themestore</reportprofile>
+        <submitpage>formular.send.general.nomap</submitpage>
         <content>
-            <address id="addressa" urlparam="addressa" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
-            <address id="addressb" urlparam="addressb" displayname="Til Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
-            <input id="distance" type="text" displayname="Afstand (fugleflugt): " displayresult="0 m" urlparam="fugleflugt" onchange="var d = jQuery(this).val();if (d>5000) {jQuery('#zone').html('Zone 5')} else {jQuery('#zone').html('Zone 1')}"/>
-            <input id="zone" type="text" displayname="" urlparam="zone"/>
+            <input type="hidden" urlparam="about" defaultvalue="Beregning af afstande"/>
+            <address id="addressa" urlparam="val0" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
+            <address id="addressb" urlparam="val1" displayname="Til Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
+            <input id="distance" type="text" displayname="Afstand (fugleflugt): " displayresult="0 m" urlparam="val2" onchange="var d = jQuery(this).val();if (d>5000) {jQuery('#zone').html('Zone 5')} else {jQuery('#zone').html('Zone 1')}"/>
+            <input id="zone" type="text" displayname="" urlparam="val3"/>
         </content>
     </formular>
     <formular name="areachange">
+        <title>Areal</title>
         <header>Beregning af pris ud fra tegnet areal (change event på areal)</header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af events for arealer"/>
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Tegn en polygon" name="polygon" default="true"/>
@@ -37,67 +39,65 @@
     <formular name="checkbox">
         <header>Checkbokse som input</header>
         <submitpage>formular.send.general.nomap</submitpage>
-        <reportxsl>kvitering-nomap</reportxsl>
-        <reportprofile>kbh_themestore</reportprofile>
         <content>
-            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue=""/>
+            <input type="hidden" urlparam="about" defaultvalue="Test af checkbokse"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
             <input type="checkbox" displayname="Er du sikker:" urlparam="godkendt" defaultvalue="true"/>
-            <input type="checkbox" displayname="Send kvitering:" urlparam="sendkvitering" defaultvalue="false"/>
+            <input type="checkbox" displayname="Send kvitering:" urlparam="val0" defaultvalue="false"/>
         </content>
     </formular>
     <formular name="encoding">
         <header>Test enconding</header>
-        <submitpage>formular.send.general</submitpage>
-        <reportprofile>kbh_themestore</reportprofile>
+        <submitpage>formular.send.general.nomap</submitpage>
         <content>
-            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
+            <input type="hidden" urlparam="about" defaultvalue="Test af encoding"/>
+            <input type="input" displayname="Tekst med ÅÆØ:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
     <formular name="encoding-escape">
         <header>Test enconding med escape (afhjælper en fejl i nogle tilfælde i CBKort 2.6)</header>
-        <submitpage>formular.send.general</submitpage>
-        <reportprofile>kbh_themestore</reportprofile>
+        <submitpage>formular.send.general.nomap</submitpage>
         <js>/modules/formular/js/encodeparam.js</js>
         <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af tekster med ÆØÅ"/>
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
     <formular name="datechange">
         <header>Dato med begrænsning af input datoer ud fra hvad der er valgt i andet adresse felt</header>
-        <submitpage>formular.send.general</submitpage>
-        <reportprofile>kbh_themestore</reportprofile>
+        <submitpage>formular.send.general.nomap</submitpage>
         <content>
-            <input id="date1" type="date" displayname="Opsættelses dato:" urlparam="date1" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.setDatepickerLimit('date2',{start: jQuery('#date1').val()})"/>
-            <input id="date2" type="date" displayname="Nedtagelses dato:" urlparam="date2" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.setDatepickerLimit('date1',{end: jQuery('#date2').val()})"/>
+            <input type="hidden" urlparam="about" defaultvalue="Datovælger med begrænsninger"/>
+            <input id="date1" type="date" displayname="Opsættelses dato:" urlparam="val0" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.setDatepickerLimit('date2',{start: jQuery('#date1').val()})"/>
+            <input id="date2" type="date" displayname="Nedtagelses dato:" urlparam="val1" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.setDatepickerLimit('date1',{end: jQuery('#date2').val()})"/>
         </content>
     </formular>
     <formular name="date">
         <header>Dato (tæl antal dage)</header>
-        <submitpage>formular.send.general</submitpage>
-        <reportprofile>kbh_themestore</reportprofile>
+        <submitpage>formular.send.general.nomap</submitpage>
         <content>
-            <input id="date1" type="date" displayname="Opsættelses dato:" urlparam="date1" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
-            <input id="date2" type="date" displayname="Nedtagelses dato:" urlparam="date2" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
-            <input id="days" type="input" displayname="Dage:" urlparam="days"/>
+            <input type="hidden" urlparam="about" defaultvalue="Datovælger med altal af dage"/>
+            <input id="date1" type="date" displayname="Opsættelses dato:" urlparam="val0" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
+            <input id="date2" type="date" displayname="Nedtagelses dato:" urlparam="val1" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013" onchange="formular.countDays(jQuery('#date1').val(),jQuery('#date2').val(),'days')"/>
+            <input id="days" type="input" displayname="Antal dage:" urlparam="val0"/>
         </content>
     </formular>
     <formular name="condition">
         <header>Betinget input</header>
         <submitpage>formular.send.general.nomap</submitpage>
-        <reportxsl>kvitering-nomap</reportxsl>
-        <reportprofile>kbh_themestore</reportprofile>
         <content>
-            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="udnyttelse">
+            <input type="hidden" urlparam="about" defaultvalue="Betingede input"/>
+            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="val1">
                 <option value="mark i omdrift" name="Mark i omdrift"/>
                 <option value="braklagt mark" name="Braklagt mark"/>
                 <option value="udyrket areal" name="Udyrket areal"/>
                 <option value="græsning" name="Græsning"/>
             </input>
-            <input id="navn" type="input" displayname="Navn:" urlparam="val0" defaultvalue="" condition="jQuery('#udnyttelse').val() == 'braklagt mark'"/>
-            <input class="warning" type="text" displayname="Udyrket areal valgt" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
-            <input id="val27" type="checkbox" displayname="Er du sikker:" urlparam="godkendt" defaultvalue="false"/>
-            <input type="checkbox" displayname="Send kvitering:" urlparam="sendkvitering" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
-            <input class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
+            <input urlparam="val0" id="navn" type="input" displayname="Navn:" defaultvalue="" condition="jQuery('#udnyttelse').val() == 'braklagt mark'"/>
+            <input urlparam="val1" class="warning" type="text" displayname="Udyrket areal valgt" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
+            <input urlparam="val2" id="val27" type="checkbox" displayname="Er du sikker:" defaultvalue="false"/>
+            <input urlparam="val3" type="checkbox" displayname="Send kvitering:" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
+            <input urlparam="val4" class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
         </content>
     </formular>
     <formular name="tabs1">
@@ -106,6 +106,7 @@
         <reportprofile>kbh_themestore</reportprofile>
         <tabs class="testtab">true</tabs>
         <content displayname="Første side">
+            <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
             <input type="input" displayname="Adresse:" urlparam="val1"/>
             <input type="input" displayname="Postnr:" urlparam="val2"/>
@@ -138,11 +139,11 @@
     </formular>
     <formular name="tabs2">
         <header>Institutions blanket</header>
-        <submitpage>formular.send.general</submitpage>
-        <reportprofile>kbh_themestore</reportprofile>
+        <submitpage>formular.send.general.nomap</submitpage>
         <tabs class="smalltabs">true</tabs>
         <content displayname="1. Hvem er du?">
-            <input id="institution" type="dropdown" displayname="Vælg institution:" urlparam="institution">
+            <input type="hidden" urlparam="about" defaultvalue="Registrering af opgaver"/>
+            <input id="institution" type="dropdown" displayname="Vælg institution:" urlparam="name">
                 <option value="1" name="Kristrup Vuggestue"/>
                 <option value="2" name="Tjærbyvejens Vuggestue"/>
                 <option value="3" name="Vuggestuen Firkløveren"/>
@@ -150,42 +151,42 @@
             </input>
         </content>
         <content displayname="2. Hvad er opgaven?">
-            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="kategori">
+            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1">
                 <option value="1" name="Bygninger"/>
                 <option value="2" name="Veje &amp; stier"/>
                 <option value="3" name="Grønne områder"/>
             </input>
-            <input id="bygninger_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="bygninger_hoved" condition="jQuery('#kategori').val() == '1'">
+            <input id="bygninger_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="val2" condition="jQuery('#kategori').val() == '1'">
                 <option value="1" name="Tag &amp; facader"/>
                 <option value="2" name="Tekniske installationer"/>
                 <option value="3" name="Udvendige døre &amp; vinduer"/>
             </input>
-            <input id="vejeogstier_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="vejeogstier_hoved" condition="jQuery('#kategori').val() == '2'">
+            <input id="vejeogstier_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="val3" condition="jQuery('#kategori').val() == '2'">
                 <option value="1" name="aaa"/>
                 <option value="2" name="bbb"/>
                 <option value="3" name="ccc"/>
             </input>
-            <input id="gronneomr_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="gronneomr_hoved" condition="jQuery('#kategori').val() == '3'">
+            <input id="gronneomr_hoved" type="dropdown" displayname="Hovedgruppe:" urlparam="val4" condition="jQuery('#kategori').val() == '3'">
                 <option value="1" name="111"/>
                 <option value="2" name="222"/>
                 <option value="3" name="333"/>
             </input>
-            <input id="bygninger_tagogfacede_under" type="dropdown" displayname="Undergruppe:" urlparam="bygninger_tagogfacede_under" condition="jQuery('#kategori').val() == '1' &amp;&amp; jQuery('#bygninger_hoved').val() == '1'">
+            <input id="bygninger_tagogfacede_under" type="dropdown" displayname="Undergruppe:" urlparam="val5" condition="jQuery('#kategori').val() == '1' &amp;&amp; jQuery('#bygninger_hoved').val() == '1'">
                 <option value="1" name="Fundament"/>
                 <option value="2" name="Tag &amp; Tilbehør"/>
                 <option value="3" name="Ydervæg"/>
             </input>
-            <input type="date" displayname="Dato:" urlparam="date" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013"/>
+            <input type="date" displayname="Dato:" urlparam="val6" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013"/>
         </content>
         <content displayname="Indsend opgave">
-            <input id="bygninger_tagogfacede_under" type="dropdown" displayname="Opgave:" urlparam="bygninger_tagogfacede_under" condition="jQuery('#kategori').val() == '1' &amp;&amp; jQuery('#bygninger_hoved').val() == '1'">
+            <input id="bygninger_tagogfacede_under" type="dropdown" displayname="Opgave:" urlparam="val7" condition="jQuery('#kategori').val() == '1' &amp;&amp; jQuery('#bygninger_hoved').val() == '1'">
                 <option value="1" name="Fundament"/>
                 <option value="2" name="Tag &amp; Tilbehør"/>
                 <option value="3" name="Ydervæg"/>
             </input>
         </content>
         <content displayname="Detaljer">
-            <input type="textarea" displayname="Tekst:" urlparam="tekst"/>
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
             <input type="file" displayname="Billede:" urlparam="billede"/>
         </content>
     </formular>
@@ -194,6 +195,7 @@
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <content>
+            <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider"/>
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
             <input type="input" displayname="Adresse:" urlparam="val1"/>
             <input type="input" displayname="Postnr:" urlparam="val2"/>
@@ -229,15 +231,15 @@
         <header>Ansøgningsskema til &lt;br/&gt;vandhuller</header>
         <subheader>Ansøgning efter &lt;br/&gt;naturbeskyttelsesloven</subheader>
         <help displayname="Hjælp"><![CDATA[<b>Hjælp</b><br/>Her står der hvordan du kan bruge siden. Man kan skrive HTML ind i hjælpeteksten. Det kunne også være billeder og <a href="http://spatialmap.com">links</a>]]></help>
-        <submitpage>formular.send.soe-test</submitpage>
+        <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <reportlayers>default</reportlayers>
-        <reportxsl>kvitering</reportxsl>
+        <reportxsl>pdf</reportxsl>
         <reportmapscale>1000</reportmapscale>
         <css>/modules/formular/test/custom.css</css>
         <js>/modules/formular/test/custom.js</js>
         <content>
-            <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
+            <input type="hidden" urlparam="about" defaultvalue="Ansøgningsskema til vandhuller"/>
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153" regexp="[a-zæøå]" validate="Det skal være indtastet en adresse!"></address>
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
@@ -301,8 +303,7 @@
         <title>Ansøgningsskema til vandhuller</title>
         <header>Ansøgningsskema til vandhuller</header>
         <help displayname="Hjælp"><![CDATA[<b>Hjælp</b><br/>Her står der hvordan du kan bruge siden. Man kan skrive HTML ind i hjælpeteksten. Det kunne også være billeder og <a href="http://spatialmap.com">links</a>]]></help>
-        <submitpage>formular.config-test2</submitpage>
-        <reportxsl>kvitering-test2</reportxsl>
+        <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
             <input type="input" displayname="Navn:" urlparam="navn"/>

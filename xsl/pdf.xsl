@@ -214,7 +214,7 @@
 
 
         <fo:block>
-        <xsl:if test="$nomap='true'">
+        <xsl:if test="$nomap='false'">
 	        <fo:block page-break-before="always">
 	            <xsl:attribute name="margin-top">30mm</xsl:attribute>
 	            Bilag kort i 1:<xsl:value-of select="format-number(//row/col[@name='scale'], '#')"/>

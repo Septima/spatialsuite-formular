@@ -134,7 +134,8 @@ Formular = SpatialMap.Class ({
 	                        }
 	                        if (urlparam) {
 	                            this.postparams[urlparam] = {
-	                                id: id
+	                                id: id,
+	                                displayname: node.attr('displayname')
 	                            };
 	                        }
 	                        
@@ -757,6 +758,7 @@ Formular = SpatialMap.Class ({
             		textVal = jQuery('#'+this.postparams[name].id+'_org').val();
             	}
                 params[name] = this.encodeParam(name,val);
+                params[name+'_displayname'] = this.encodeParam(name+'_displayname',this.postparams[name].displayname);
                 
                 var t = jQuery('#'+this.postparams[name].id+'_displayname').text ();
                 if (t && val) {

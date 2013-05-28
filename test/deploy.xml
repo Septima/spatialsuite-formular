@@ -16,7 +16,7 @@
    
    <param name="module.formular.config">[module:formular-test.dir]/config/formular_config.xml</param>
    <param name="module.formular.upload.dir">[cbinfo.wwwroot.dir]/formular_upload</param> 
-   <param name="module.formular.xsl.dir">[module:formular-test.dir]/xsl</param>
+   <param name="module.formular.xsl.dir">[module:formular.dir]/xsl</param>
    <param name="module.formular.targetsetfile">[module:formular-test.dir]/queries/targetsets.xml</param>
 
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/test"/>

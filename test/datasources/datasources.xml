@@ -6,18 +6,34 @@
         <config version="1" requires="1">
             CREATE TABLE formulartest(id varchar(40), formular varchar(255), created timestamp, val0 varchar(255), val1 varchar(255), val2 varchar(255), val3 varchar(255), val4 varchar(255), val5 varchar(255), val6 varchar(255), val7 varchar(255));
         </config>
-        
+        <config version="2" requires="1">
+            ALTER TABLE formulartest ADD COLUMN name varchar(255);
+            ALTER TABLE formulartest ADD COLUMN email varchar(255);
+            ALTER TABLE formulartest ADD COLUMN phone varchar(255);
+            ALTER TABLE formulartest ADD COLUMN val8 varchar(255);
+            ALTER TABLE formulartest ADD COLUMN val9 varchar(255);
+            ALTER TABLE formulartest ADD COLUMN wkt CLOB;
+        </config>
+        <config version="3" requires="1">
+            ALTER TABLE formulartest ADD COLUMN approved smallint default 0;
+        </config>
+        <config version="4" requires="1">
+            ALTER TABLE formulartest ADD COLUMN updated timestamp;
+        </config>
     </endpoint>
 
     <datasource name="formular-test" endpoint="formular-test" displayname="Formular test data">
     
         <sql command="read">select * from formulartest;</sql>
         
-        <sql command="write">insert into formulartest(id, formular, created, val0, val1, val2, val3, val4, val5, val6, val7) 
-                                                   values(
+        <sql command="write">insert into formulartest(id, formular, created, name, email, phone, val0, val1, val2, val3, val4, val5, val6, val7, val8, val9, wkt) 
+                                               values(
                                                    [string: sessionid],
                                                    [string: formular], 
                                                    [timestamp: SystemTime()],
+                                                   [string: if IsDefined(name)         then name else null endif], 
+                                                   [string: if IsDefined(email)        then email else null endif], 
+                                                   [string: if IsDefined(phone)        then phone else null endif], 
                                                    [string: if IsDefined(val0)         then val0 else null endif], 
                                                    [string: if IsDefined(val1)         then val1 else null endif], 
                                                    [string: if IsDefined(val2)         then val2 else null endif], 
@@ -25,7 +41,16 @@
                                                    [string: if IsDefined(val4)         then val4 else null endif], 
                                                    [string: if IsDefined(val5)         then val5 else null endif], 
                                                    [string: if IsDefined(val6)         then val6 else null endif], 
-                                                   [string: if IsDefined(val7)         then val7 else null endif]);</sql>
+                                                   [string: if IsDefined(val7)         then val7 else null endif], 
+                                                   [string: if IsDefined(val8)         then val8 else null endif], 
+                                                   [string: if IsDefined(val9)         then val9 else null endif], 
+                                                   [string: if IsDefined(wkt)          then wkt else null endif]
+                                               );</sql>
+
+        <sql command="booking-read">select id, name, val0 as date, approved from formulartest where formular = [string: formular] order by created DESC</sql>
+        <sql command="booking-approve">UPDATE formulartest SET approved = 1, updated = [timestamp: SystemTime()] where ID = [string: id]</sql>
+        <sql command="booking-decline">UPDATE formulartest SET approved = -1, updated = [timestamp: SystemTime()] where ID = [string: id]</sql>
+
         <debug>false</debug>
     </datasource>
 

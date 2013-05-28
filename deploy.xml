@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy>
 
-   <version>3.1.0</version>  
+   <version>3.2.0</version>  
 
    <stoponerror>true</stoponerror>
    
@@ -12,6 +12,9 @@
    
    <param name="module.formular.xsl.dir">[module:formular.dir]/xsl</param> 
    <param name="module.formular.targetsetfile">[module:formular.dir]/queries/spatialqueries.xml</param> 
+
+   <param name="module.formular.pdf.logo">[module:formular.dir]/images/septima.jpg</param> 
+   <param name="module.formular.pdf.header">Ansøgning</param> 
 
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/css"/>
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/js"/>

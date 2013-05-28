@@ -29,7 +29,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
         <reportprofile>alt</reportprofile>                      <!-- OPTIONAL - Profil, der skal anvendes til at danne kortet i kviteringen (default er "alt") -->
         <reportlayers>default</reportlayers>                    <!-- OPTIONAL - Layers, der skal anvendes til at danne kortet i kviteringen. Det kan være en liste adskilt af mellemrum (default er "default", der gør at det er profilen default viste temaer, der vises) -->
-        <reportxsl>kvitering</reportxsl>                        <!-- OPTIONAL - UDEN XSL EXTENSTION! Hvis der er behov for at have en specifik xsl til at danne PDF-kviteringen (default er kvitering og peget på filen kvitering.xsl under modulet) -->
+        <reportxsl>pdf</reportxsl>                              <!-- OPTIONAL - UDEN XSL EXTENSTION! Hvis der er behov for at have en specifik xsl til at danne PDF-kviteringen (default er kvitering og peget på filen kvitering.xsl under modulet) -->
         <reportmapscale>500</reportmapscale>                    <!-- OPTIONAL - Den scale som kortet skal være i PDF-kviteringen (default er tilpasses til den tegnede feature plus 25+pct!400+minimum) -->
         <css>/css/custom/my.css</css>                           <!-- OPTIONAL - Hvis man gerne vil have sin egen css på siden -->
         <js>/js/custom/my.js</css>                              <!-- OPTIONAL - Hvis man gerne vil have sin egen js på siden. Kan bruges til at tilføje sine egne funktioner så det ikke er nødvendigt at skrive det hele i konfigurationen -->
@@ -205,9 +205,12 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.05.27 - Betingelser på input elementer
+* 2013.05.27 - Visning af de enkelte steps øverst på siden
 * 2013.05.08 - Change events på "area". Kan f.eks. bruges til at beregne priser ud fra tegnet areal
 * 2013.04.18 - Paging - Flere sider i sin formular, så siden ikke bliver så lang
 * 2013.04.18 - Default maptool - Angiv hvilket maptool, der skal være aktivt fra start
 * 2013.04.10 - Checkbox - Ny input type
 * 2013.04.10 - Radiobutton - Ny input type
+
 

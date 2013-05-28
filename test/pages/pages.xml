@@ -23,28 +23,36 @@
     </page>
 
     <page name="formular.send.general" contenttype="text/xml" resultpassing="pass-all">
-        <!--data handler="datasource" operation="execute-command">
+        <url-parameters>
+            <url-parameter name="formularxsl" value="pdf"/>
+            <url-parameter name="nomap" value="false"/>
+        </url-parameters>
+        <data handler="datasource" operation="execute-command">
             <url-parameters>
-                <url-parameter name="datasource" value="ds_formular_soe"/>
+                <url-parameter name="datasource" value="formular-test"/>
                 <url-parameter name="command" value="write"/>
             </url-parameters>
-        </data-->
+        </data>
         
         <!-- REQUIRED -->
         <include src="[module:formular.dir]/pages/pages-includes.xml" nodes="/pages/page[@name='formular.send']/*" mustexist="true"/>
     </page>
 
     <page name="formular.send.general.nomap" contenttype="text/xml" resultpassing="pass-all">
-        <!--data handler="datasource" operation="execute-command">
+        <url-parameters>
+            <url-parameter name="formularxsl" value="pdf"/>
+            <url-parameter name="nomap" value="true"/>
+        </url-parameters>
+        <data handler="datasource" operation="execute-command">
             <url-parameters>
-                <url-parameter name="datasource" value="ds_formular_soe"/>
+                <url-parameter name="datasource" value="formular-test"/>
                 <url-parameter name="command" value="write"/>
             </url-parameters>
-        </data-->
-        
+        </data>
+
         <data handler="PDFFormatter" operation="format-pdf">
             <url-parameters>
-                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module.formular.xsl.dir]/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/kvitering.xsl" endif</url-parameter>
+                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module.formular.xsl.dir]/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/pdf.xsl" endif</url-parameter>
             </url-parameters>
         </data>
     </page>

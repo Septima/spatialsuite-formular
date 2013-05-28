@@ -23,7 +23,14 @@
     <xsl:template match="formular[@name=$formular]">
         <html>
             <head>
-                <title><xsl:value-of select="title" /></title>
+                <xsl:choose>
+                    <xsl:when test="title">
+                        <title><xsl:value-of select="title" /></title>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <title><xsl:value-of select="header" /></title>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:variable name="cbinfo.jslib.jquery">[cbinfo.jslib.jquery]</xsl:variable>
                 <xsl:choose>
                     <xsl:when test="substring($cbinfo.jslib.jquery,0,2) = '['">

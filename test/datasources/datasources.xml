@@ -51,6 +51,8 @@
         <sql command="booking-approve">UPDATE formulartest SET approved = 1, updated = [timestamp: SystemTime()] where ID = [string: id]</sql>
         <sql command="booking-decline">UPDATE formulartest SET approved = -1, updated = [timestamp: SystemTime()] where ID = [string: id]</sql>
 
+        <sql command="read-dropdown">select '' || name as value, name from formulartest where name &lt;&gt; ''</sql>
+
         <debug>false</debug>
     </datasource>
 

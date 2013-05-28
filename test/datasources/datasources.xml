@@ -14,6 +14,12 @@
             ALTER TABLE formulartest ADD COLUMN val9 varchar(255);
             ALTER TABLE formulartest ADD COLUMN wkt CLOB;
         </config>
+        <config version="3" requires="1">
+            ALTER TABLE formulartest ADD COLUMN approved smallint default 0;
+        </config>
+        <config version="4" requires="1">
+            ALTER TABLE formulartest ADD COLUMN updated timestamp;
+        </config>
     </endpoint>
 
     <datasource name="formular-test" endpoint="formular-test" displayname="Formular test data">
@@ -21,7 +27,7 @@
         <sql command="read">select * from formulartest;</sql>
         
         <sql command="write">insert into formulartest(id, formular, created, name, email, phone, val0, val1, val2, val3, val4, val5, val6, val7, val8, val9, wkt) 
-                                                   values(
+                                               values(
                                                    [string: sessionid],
                                                    [string: formular], 
                                                    [timestamp: SystemTime()],
@@ -40,6 +46,11 @@
                                                    [string: if IsDefined(val9)         then val9 else null endif], 
                                                    [string: if IsDefined(wkt)          then wkt else null endif]
                                                );</sql>
+
+        <sql command="booking-read">select id, name, val0 as date, approved from formulartest where formular = [string: formular] order by created DESC</sql>
+        <sql command="booking-approve">UPDATE formulartest SET approved = 1, updated = [timestamp: SystemTime()] where ID = [string: id]</sql>
+        <sql command="booking-decline">UPDATE formulartest SET approved = -1, updated = [timestamp: SystemTime()] where ID = [string: id]</sql>
+
         <debug>false</debug>
     </datasource>
 

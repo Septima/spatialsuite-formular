@@ -52,7 +52,7 @@
 
         <data handler="PDFFormatter" operation="format-pdf">
             <url-parameters>
-                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module:formular.dir]/xsl/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/pdf.xsl" endif</url-parameter>
+                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module.formular.xsl.dir]/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/pdf.xsl" endif</url-parameter>
             </url-parameters>
         </data>
     </page>

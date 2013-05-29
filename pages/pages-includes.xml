@@ -94,5 +94,12 @@
         </data>
     </page>
 
+    <page name="formular.read.dropdown" contenttype="text/xml">
+        <data handler="datasource" operation="execute-command">
+           <url-parameters>
+                <url-parameter name="command" value="read-dropdown"/>
+            </url-parameters>
+        </data>
+    </page>
 
 </pages>

@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="dropdown">
+        <header>Dropdown hentet fra en datasource</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Dropdown hentet fra en datasource"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="val0" datasource="formular-test"/>
+            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1">
+                <option value="1" name="Bygninger"/>
+                <option value="2" name="Veje &amp; stier"/>
+                <option value="3" name="Grønne områder"/>
+            </input>
+        </content>
+    </formular>
     <formular name="distance">
         <header>Beregning af afstand i kategorier</header>
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Beregning af afstande"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
             <address id="addressa" urlparam="val0" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
             <address id="addressb" urlparam="val1" displayname="Til Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
             <input id="distance" type="text" displayname="Afstand (fugleflugt): " displayresult="0 m" urlparam="val2" onchange="var d = jQuery(this).val();if (d>5000) {jQuery('#zone').html('Zone 5')} else {jQuery('#zone').html('Zone 1')}"/>

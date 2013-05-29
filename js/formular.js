@@ -291,9 +291,22 @@ Formular = SpatialMap.Class ({
 	                                if (type=='dropdown') {
 	                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
 	                                    var option = node.find('option');
-	                                    for (var j=0;j<option.length;j++) {
-	                                    	var checked = (jQuery(option[j]).attr('value') == value ? ' selected="selected"' : '');
-	                                        $('#'+id).append('<option value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</option>');
+	                                    var list = [];
+	                                    if (node.attr('datasource')) {
+	                                    	list = this.dropdownFromDatasource(node.attr('datasource'));
+	                                    } else {
+		                                    for (var j=0;j<option.length;j++) {
+		                                    	list.push({
+		                                    		value: jQuery(option[j]).attr('value'),
+		                                    		name: jQuery(option[j]).attr('name'),
+		                                    		checked: jQuery(option[j]).attr('value') == value
+		                                    	});
+		                                    }
+	                                    }
+	                                    
+	                                    for (var j=0;j<list.length;j++) {
+	                                    	var checked = (list[j].checked ? ' selected="selected"' : '');
+	                                        $('#'+id).append('<option value="'+list[j].value+'"'+checked+'>'+list[j].name+'</option>');
 	                                    }
 	                                } else if (type=='radiobutton') {
 	                                    var option = node.find('option');
@@ -645,6 +658,33 @@ Formular = SpatialMap.Class ({
                 }
             },this)
         });
+    },
+    
+    dropdownFromDatasource: function (datasource) {
+        var params = {
+            page: 'formular.read.dropdown',
+            sessionid: this.sessionid,
+            datasource: datasource
+        };
+        var list = [];
+        jQuery.ajax( {
+            url: 'cbkort',
+            dataType: 'xml',
+            type: 'POST',
+            async: false,
+            data: params,
+            success : function(data, status) {
+            	var rows = jQuery(data).find('row');
+            	for (var i=0;i<rows.length;i++) {
+                	list.push({
+                		value: jQuery(rows[i]).find('col[name="value"]').text(),
+                		name: jQuery(rows[i]).find('col[name="name"]').text(),
+                		selected: (i==0)
+                	});
+            	}
+            }
+        });
+        return list;
     },
     
     query: function (wkt) {

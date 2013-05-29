@@ -205,6 +205,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.05.28 - Udfyld dropdowns ud fra en dasource
 * 2013.05.27 - Betingelser på input elementer
 * 2013.05.27 - Visning af de enkelte steps øverst på siden
 * 2013.05.08 - Change events på "area". Kan f.eks. bruges til at beregne priser ud fra tegnet areal

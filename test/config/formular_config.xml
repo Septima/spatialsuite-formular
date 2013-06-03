@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="themeoptions">
+        <title>Tema indstillinger</title>
+        <header>Flere temaer med forskellige options</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af options på temaer"/>
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme singleTile="false" useSessionID="false" name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme singleTile="true" opacity=".5" servicename="kbh_themestore" useSessionID="true" name="theme-biblioteker" host="/wms"/>
+                </themes>
+            </map>
+        </content>
+    </formular>
     <formular name="dropdown">
         <header>Dropdown hentet fra en datasource</header>
         <submitpage>formular.send.general.nomap</submitpage>

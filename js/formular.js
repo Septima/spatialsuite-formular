@@ -247,12 +247,51 @@ Formular = SpatialMap.Class ({
 	                                var layers = [];
 	                                var themes = node.find('theme');
 	                                for (var j=0;j<themes.length;j++) {
-	                                    layers.push({
-	                                        layername: jQuery(themes[j]).attr('name'),
-	                                        host: jQuery(themes[j]).attr('host') + (jQuery(themes[j]).attr('host').indexOf('?')+1 ? '&' : '?') + 'sessionid='+this.sessionid,
+	                                    var l = {
+	                                        layername: jQuery(themes[j]).attr('layername') || jQuery(themes[j]).attr('name'),
+	                                        host: jQuery(themes[j]).attr('host'),
 	                                        basemap:false,
 	                                        visible:true
-	                                    });
+	                                    };
+	                                    
+	                                    var servicename = jQuery(themes[j]).attr('servicename');
+	                                    if (servicename) {
+	                                    	l.servicename = servicename;
+	                                    }
+	                                    var singleTile = jQuery(themes[j]).attr('singleTile');
+	                                    if (singleTile && singleTile == 'true') {
+	                                    	l.singleTile = true;
+	                                    }
+	                                    var buffer = jQuery(themes[j]).attr('buffer');
+	                                    if (buffer) {
+	                                    	l.buffer = buffer-0;
+	                                    }
+	                                    var ratio = jQuery(themes[j]).attr('ratio');
+	                                    if (ratio) {
+	                                    	l.ratio = ratio-0;
+	                                    }
+	                                    var opacity = jQuery(themes[j]).attr('opacity');
+	                                    if (opacity) {
+	                                    	l.opacity = opacity-0;
+	                                    }
+	                                    var maxScale = jQuery(themes[j]).attr('maxScale');
+	                                    if (maxScale) {
+	                                    	l.maxScale = maxScale-0;
+	                                    }
+	                                    var minScale = jQuery(themes[j]).attr('minScale');
+	                                    if (minScale) {
+	                                    	l.minScale = minScale-0;
+	                                    }
+	                                    var format = jQuery(themes[j]).attr('format');
+	                                    if (format) {
+	                                    	l.format = format;
+	                                    }
+	                                    var useSessionID = jQuery(themes[j]).attr('useSessionID');
+	                                    if (useSessionID == 'false') {
+	                                    } else {
+	                                    	l.sessionid = this.sessionid;
+	                                    }
+	                                    layers.push(l);
 	                                }
 	                                
 	                                var mapoptions = {

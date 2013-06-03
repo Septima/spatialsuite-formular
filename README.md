@@ -132,6 +132,18 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions> <!-- OPTIONAL -->
                 <themes>
                     <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>
+                    <!-- Følgende atributter kan tilføjes til et theme:
+                        host          - Url til WMS service. Hvis man vil bruge en intern URL, tilføjes blot host="/wms"
+                        singleTile    - true | false
+                        ratio         - Kun ved brug af singleTile. Default 1,5
+                        opacity       - Skal laget være gennemsigtigt. Default 1 (ikke gennemsigtigt)
+                        buffer        - Henter tiles, der ikke er synlige. Default 0)
+                        maxScale
+                        minScale
+                        format        - Default image/png. Brug f.eks. image/jpeg til ortofoto
+                        layername     - Hvis laget ikke hedder det samme som temaet i CBkort
+                        useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
+                    -->
                 </themes>
             </map>
             
@@ -205,6 +217,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.05.28 - Udfyld dropdowns ud fra en dasource
 * 2013.05.27 - Betingelser på input elementer
 * 2013.05.27 - Visning af de enkelte steps øverst på siden
 * 2013.05.08 - Change events på "area". Kan f.eks. bruges til at beregne priser ud fra tegnet areal

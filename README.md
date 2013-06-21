@@ -64,6 +64,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 <option value="oprensning af sø" name="Oprensning af sø"/>
                 <option value="udvidelse af sø" name="Udvidelse af sø"/>
             </input>
+            <!-- Eller hent fra en datasource -->
+            <!-- Tilføj en "datasource" attribut til input elementet.
+                 Datasourcen skal have en command, der hedder "read-dropdown".
+                 Command'en er hårdkodet for at begrænse adgangen.
+                 Command'en skal returnere to colonner, der skal hedde hhv. "value" og "name". -->
+            <input type="dropdown" displayname="Hvad søges:" urlparam="hvad" datasource="ds_mintabel"/>
             
             <!-- input - type="radiobutton" -->
             <!-- Det samme som i dropdown -->

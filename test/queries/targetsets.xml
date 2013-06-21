@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spatialqueries>
     
-    <!--   
-    ===============================================================
-    CBkort version 2.x, copyright Carl Bro GIS&IT, 2009
-    ===============================================================
-    $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/test/queries/targetsets.xml $  
-    $Date: 22-10-12 11:49 $
-    $Revision: 2 $   
-    $Author: Nsm $
-    =============================================================== 
-    -->
-
-
     <targetset name="ejendom">
         <target
             name="jordstykke" 
@@ -41,9 +29,16 @@
         <target 
             extentbuffer="10"
             method="isWithinDistance(target.shape_wkt, selector.shape_wkt, 10)"
-            name="fredskov" presentation="[module:formular.dir]/presentations/pres_fredskov.xml" displayname="Fredskov">
+            name="fredskov" presentation="[module:formular-test.dir]/presentations/pres_fredskov.xml" displayname="Fredskov">
             <datasource name="ds_fredskov"/>
         </target>
     </targetset>
+    
+    <targetset name="drikkevand">
+	    <target presentation="[module:formular-test.dir]/presentations/pres-drikkevands_inter_senest" name="drikkevands_inter" displayname="DAI Drikkevandsinteresser">
+	        <datasource name="drikkevands_inter_senest_wfs"/>
+	    </target>
+    </targetset>
+    
 
 </spatialqueries>

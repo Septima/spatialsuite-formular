@@ -63,6 +63,11 @@ td {
     height:600px;
     z-index: 1;
 }
+.smallmap {
+    width:500px;
+    height:300px;
+    z-index: 1;
+}
 .header {
     color: #212121 !important;
     font-size: 16px;

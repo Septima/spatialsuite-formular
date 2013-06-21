@@ -342,11 +342,7 @@ Formular = SpatialMap.Class ({
 		                                    	});
 		                                    }
 	                                    }
-	                                    
-	                                    for (var j=0;j<list.length;j++) {
-	                                    	var checked = (list[j].checked ? ' selected="selected"' : '');
-	                                        $('#'+id).append('<option value="'+list[j].value+'"'+checked+'>'+list[j].name+'</option>');
-	                                    }
+	                                    this.populateDropdown($('#'+id),list);
 	                                } else if (type=='radiobutton') {
 	                                    var option = node.find('option');
 	                                    var str = '';
@@ -699,12 +695,15 @@ Formular = SpatialMap.Class ({
         });
     },
     
-    dropdownFromDatasource: function (datasource) {
+    dropdownFromDatasource: function (datasource,customparams) {
         var params = {
             page: 'formular.read.dropdown',
             sessionid: this.sessionid,
             datasource: datasource
         };
+        if (customparams) {
+        	params = SpatialMap.Util.extend (params,customparams);
+        }
         var list = [];
         jQuery.ajax( {
             url: 'cbkort',
@@ -724,6 +723,14 @@ Formular = SpatialMap.Class ({
             }
         });
         return list;
+    },
+    
+    populateDropdown: function (dropdown, list) {
+    	dropdown.empty();
+        for (var j=0;j<list.length;j++) {
+        	var checked = (list[j].checked ? ' selected="selected"' : '');
+        	dropdown.append('<option value="'+list[j].value+'"'+checked+'>'+list[j].name+'</option>');
+        }
     },
     
     query: function (wkt) {

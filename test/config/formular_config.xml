@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="changedropdown">
+        <header>Skif indholdet af en dropdown dynamisk</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Dynamisk indhold af en dropdown"/>
+            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1" onchange="formular.populateDropdown(jQuery('#indhold'),formular.dropdownFromDatasource('formular-test',{kategori:jQuery('#kategori').val()}))">
+                <option value="1" name="Bygninger"/>
+                <option value="2" name="Veje &amp; stier"/>
+                <option value="3" name="Grønne områder"/>
+            </input>
+            <input id="indhold" type="dropdown" displayname="Afhængigt indhold:" urlparam="val2">
+            </input>
+        </content>
+    </formular>
     <formular name="conflict">
         <title>Ansøgningsskema med konfliktsøgning</title>
         <header>Ansøgningsskema om udlednings af kvælstoffer</header>

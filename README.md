@@ -34,7 +34,6 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <css>/css/custom/my.css</css>                           <!-- OPTIONAL - Hvis man gerne vil have sin egen css på siden -->
         <js>/js/custom/my.js</css>                              <!-- OPTIONAL - Hvis man gerne vil have sin egen js på siden. Kan bruges til at tilføje sine egne funktioner så det ikke er nødvendigt at skrive det hele i konfigurationen -->
         <tabs>true</css>                                        <!-- OPTIONAL - Har man flere steps, kan man få vist de enkelte steps øverst på siden -->
-        <parsedisplaynames>true</parsedisplaynames>             <!-- OPTIONAL - displayname på hvert input felt sendes med til serveren, så man kan bruge dem i forbindelse med en generisk XSL. Sendes som parameteren urlparam+'_displayname' -->
         <content displayname="Første step">                     <!-- Der kan tilføjes flere content elementer for at få flere sider i sin formular -->
             <!-- content, kan bestå af et vilkårligt antal elementer i en vilkårlig rækkefølge. I følgende er de enkelte typer elementer beskrevet.
                  Generelt indeholder alle elementer, der indeholder noget, der skal sendes til serveren, atributten "urlparam". Dette er navnet på 
@@ -224,8 +223,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
-* 2013.06.28 - Mulighed for at sende ledetekster med som URL-parameter til serveren
-* 2013.05.28 - Udfyld dropdowns ud fra en datasource
+* 2013.05.28 - Udfyld dropdowns ud fra en dasource
 * 2013.05.27 - Betingelser på input elementer
 * 2013.05.27 - Visning af de enkelte steps øverst på siden
 * 2013.05.08 - Change events på "area". Kan f.eks. bruges til at beregne priser ud fra tegnet areal

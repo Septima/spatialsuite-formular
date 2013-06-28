@@ -39,8 +39,6 @@ Formular = SpatialMap.Class ({
     
     validAddress: false,
     
-    parseDisplaynames: false,
-    
     conditions: [],
     
     initialize: function (options) {
@@ -108,11 +106,6 @@ Formular = SpatialMap.Class ({
                     var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
                     tabcontainer.addClass(className);
                     jQuery('div#content').append(tabcontainer);
-                }
-                
-                var parseDisplaynames = jQuery(data).find('parsedisplaynames').text();
-                if (parseDisplaynames) {
-                    this.parseDisplaynames = (parseDisplaynames == 'true');
                 }
 
                 this.config = jQuery(data).find('content');
@@ -851,9 +844,7 @@ Formular = SpatialMap.Class ({
             		textVal = jQuery('#'+this.postparams[name].id+'_org').val();
             	}
                 params[name] = this.encodeParam(name,val);
-                if (this.parseDisplaynames) {
-                	params[name+'_displayname'] = this.encodeParam(name+'_displayname',this.postparams[name].displayname);
-                }
+                params[name+'_displayname'] = this.encodeParam(name+'_displayname',this.postparams[name].displayname);
                 
                 var t = jQuery('#'+this.postparams[name].id+'_displayname').text ();
                 if (t && val) {

@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <formular name="parsedisplaynames">
-        <header>Send ledeteksten med til server ved "Send"</header>
-        <submitpage>formular.send.general.nomap</submitpage>
-        <parsedisplaynames>true</parsedisplaynames>
-        <content>
-            <input type="hidden" urlparam="about" defaultvalue="Dynamisk indhold af en dropdown"/>
-            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1" onchange="formular.populateDropdown(jQuery('#indhold'),formular.dropdownFromDatasource('formular-test',{kategori:jQuery('#kategori').val()}))">
-                <option value="1" name="Bygninger"/>
-                <option value="2" name="Veje &amp; stier"/>
-                <option value="3" name="Grønne områder"/>
-            </input>
-            <input id="indhold" type="dropdown" displayname="Afhængigt indhold:" urlparam="val2">
-            </input>
-        </content>
-    </formular>
     <formular name="changedropdown">
-        <header>Skift indholdet af en dropdown dynamisk</header>
+        <header>Skif indholdet af en dropdown dynamisk</header>
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Dynamisk indhold af en dropdown"/>
@@ -330,7 +315,6 @@
         <css>/modules/formular/test/custom.css</css>
         <js>/modules/formular/test/custom.js</js>
         <content>
-            <input type="text" displayname="Dette står med &lt;b&gt;fed&lt;/b&gt; skrift"/>
             <input type="hidden" urlparam="about" defaultvalue="Ansøgningsskema til vandhuller"/>
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153" regexp="[a-zæøå]" validate="Det skal være indtastet en adresse!"></address>
             <maptools>

@@ -223,6 +223,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.06.03 - Nye options på temaer. Bl.a. singleTile og opacity
 * 2013.05.28 - Udfyld dropdowns ud fra en dasource
 * 2013.05.27 - Betingelser på input elementer
 * 2013.05.27 - Visning af de enkelte steps øverst på siden

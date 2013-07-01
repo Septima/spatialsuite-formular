@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="geosearchmapmarking">
+        <header>Adressesøgning med GeoSeach og markering i kort</header>
+        <subheader>Kun adressepunkter markeres</subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="GeoSearch med kort"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="muncode0101" usegeometry="true"/>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="geosearchmap">
+        <header>Adressesøgning med GeoSeach og kort</header>
+        <subheader>Matrikelsøgning er IKKE muligt endnu!</subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="GeoSearch med kort"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser,Matrikelnumre" filter="muncode0101"/>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="geosearch">
+        <header>Adressesøgning med GeoSeach</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="GeoSearch"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="parsedisplaynames">
         <header>Send ledeteksten med til server ved "Send"</header>
         <submitpage>formular.send.general.nomap</submitpage>

@@ -6,6 +6,14 @@
         <file filename="[module.formular.config]" />
     </page>
 
+    <page name="formular.get.ticket" contenttype="application/json" transientsession="true" sessionrequired="true">  
+        <data handler="expression" operation="evaluate">
+            <url-parameters>
+                <url-parameter name="expression">'getKmsTicket("[module.kms.login]","[module.kms.password]",true)'</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+
     <!-- REQUIRED -->
     <include src="[module:formular.dir]/pages/pages-includes.xml" nodes="/pages/*" mustexist="true"/>
 

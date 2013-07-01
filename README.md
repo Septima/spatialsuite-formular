@@ -95,6 +95,16 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  Hvis der kun er valgt en vej, så vil adresse_wkt være tom! -->
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
 
+            <!-- geosearch -->
+            <!-- Et felt hvor brugeren kan søge bl.a. en adresse vha. GeoSearch fra GST. Søgningen benyttes som udgangspunkt til at finde noget i kortet.
+                 vejen, martriklen, adressepunktet eller andet markeres som udgangspunkt ikke i kortet. Hvis "urlparam" atributten er defineret, sendes den tekst, der står i feltet, videre til servere.
+                 Derudover sendes adressepunktets wkt også til serveren som urlparam+"_wkt". Hvis urlparam="adresse" så vil adressepunktet blive sendt til serveren med adresse_wkt=POINT(XXXX YYYY)
+                 - resources - OPTIONAL (default "Adresser") - en liste af resurser fra GeoSearch f.eks. resources="Adresser,Matrikelnumre,Kommuner,Opstillingskredse,Politikredse,Postdistrikter,Regioner,Retskredse,Stednavne"
+                 - filter - OPTIONAL (default "") - find kun en delmængde ud fra en filter. Det kunne f.eks. være inden for en kommune filter="muncode0101"
+                 - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
+            -->
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true"/>
+
             <!-- input - type="date" -->
             <!-- Datovælger felt hvor man kan skrive en dato eller vælge 
                  Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
@@ -224,6 +234,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.07.01 - Ny adressesøgning med GeoSearch fra GST (SpatialMap 2.8 eller nyere)
 * 2013.06.28 - Mulighed for at sende ledetekster med som URL-parameter til serveren
 * 2013.06.03 - Nye options på temaer. Bl.a. singleTile og opacity
 * 2013.05.28 - Udfyld dropdowns ud fra en dasource

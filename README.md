@@ -102,8 +102,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - resources - OPTIONAL (default "Adresser") - en liste af resurser fra GeoSearch f.eks. resources="Adresser,Matrikelnumre,Kommuner,Opstillingskredse,Politikredse,Postdistrikter,Regioner,Retskredse,Stednavne"
                  - filter - OPTIONAL (default "") - find kun en delmængde ud fra en filter. Det kunne f.eks. være inden for en kommune filter="muncode0101"
                  - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
+                 - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
             -->
-            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true"/>
+            <geosearch urlparam="address" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true" usegeometry="false"/>
 
             <!-- input - type="date" -->
             <!-- Datovælger felt hvor man kan skrive en dato eller vælge 
@@ -234,6 +235,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.07.01 - Brug adressepunktet som registreringspunkt
 * 2013.07.01 - Ny adressesøgning med GeoSearch fra GST (SpatialMap 2.8 eller nyere)
 * 2013.06.28 - Mulighed for at sende ledetekster med som URL-parameter til serveren
 * 2013.06.03 - Nye options på temaer. Bl.a. singleTile og opacity

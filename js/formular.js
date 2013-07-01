@@ -204,11 +204,80 @@ Formular = SpatialMap.Class ({
                                                         data: a
                                                     }
                                                 };
-                                                   var calculateDistanceFunctionString = options.geometrySelect || null;
+                                                var calculateDistanceFunctionString = options.geometrySelect || null;
                                                 var disablemapValue = options.disablemap || null;
-                                                this.addressSelected (calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
+                                                this.addressSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
                                             },this,options)
                                         });
+                                    }
+                                    
+                                break;
+                                case 'geosearch':
+                                    var value = this.getParam(urlparam);
+                                    if (value == null) {
+                                        value = node.attr('defaultvalue');
+                                    }
+                                    jQuery('#content'+k+' > tbody:last').append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                                    var options = {
+                                        resources: node.attr('resources') || 'Adresser',
+                                        area: node.attr('filter') || '',
+                                        id: id,
+                                        limit: node.attr('limit') || 10
+                                    }
+                                    if (node.attr('geometry_selected')) { 
+                                        options.geometrySelect = new Function (node.attr('geometry_selected'));
+                                    }
+                                    if (node.attr('disablemap')) {
+                                        options.disablemap = node.attr('disablemap');
+                                    }
+                                    options.usegeometry = (node.attr('usegeometry') && node.attr('usegeometry') == 'true') ;
+
+                                    this.setGeoSearch(options);
+                                    if (urlparam) {
+                                        this.postparams[urlparam+'_wkt'] = {
+                                            id: id+'_wkt'
+                                        };
+                                    }
+                                    
+                                    if (node.attr('regexp')) {
+                                        this.inputValidation[id] = true;
+                                        jQuery('#'+id).valid8({
+                                            'regularExpressions': [
+                                                 { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid vÃ¦rdi!'}
+                                             ]
+                                        });
+                                    }
+                                    
+                                    if (value) {
+                                        var o = {};
+                                        for (var name in options) {
+                                            o[name] = options[name];
+                                        }
+                                        o.limit = 1;
+                                        
+                                        this.getTicket (SpatialMap.Function.bind(function (options,value) {
+                                            options.ticket = this.ticket;
+                                            options.service = 'GEO';
+                                            options.search = encodeURIComponent(value);
+                                            jQuery.ajax( {
+                                                scriptCharset: 'UTF-8',
+                                                url: '//kortforsyningen.kms.dk/Geosearch',
+                                                dataType : "jsonp",
+                                                data : options,
+                                                success : SpatialMap.Function.bind(function(options,result) {
+                                                    var a = result.data[0];
+                                                    jQuery('input#'+options.id).val(a.presentationString);
+                                                    var ui = {
+                                                        item: {
+                                                            data: a
+                                                        }
+                                                    };
+                                                    var calculateDistanceFunctionString = options.geometrySelect || null;
+                                                    var disablemapValue = options.disablemap || null;
+                                                    this.geoSearchSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
+                                                },this,options)
+                                            });
+                                        },this,o,value));
                                     }
                                     
                                 break;
@@ -591,11 +660,46 @@ Formular = SpatialMap.Class ({
             },
             delay: 200,
             minLength : 1,
-            select : SpatialMap.Function.bind(this.addressSelected,this,calculateDistanceFunctionString,disablemapValue)
+            select : SpatialMap.Function.bind(this.addressSelected,this,options,calculateDistanceFunctionString,disablemapValue)
         });
     },
     
-    addressSelected: function (cdfs,disablemapValue,event,ui) {        
+    setGeoSearch: function (options) {
+        this.getTicket (SpatialMap.Function.bind(function (options) {
+            var calculateDistanceFunctionString = options.geometrySelect || null;
+            var disablemapValue = options.disablemap || null;
+            options.ticket = this.ticket;
+            
+            jQuery('input#'+options.id).autocomplete({
+                selectFirst : true,
+                source: function(request, response) {
+                    jQuery.ajax( {
+                        scriptCharset: 'UTF-8',
+                        url: '//kortforsyningen.kms.dk/Geosearch?service=GEO&search='+ encodeURIComponent(request.term),
+                        dataType : "jsonp",
+                        autoFocus: true,
+                        data : options,
+                        success : function(result) {
+                            response(jQuery.map(result.data, function(item) {
+                                displayLabel = item.presentationString;
+                                displayValue = item.presentationString;
+                                return {
+                                    label: displayLabel,
+                                    value: displayValue,
+                                    data: item
+                                };
+                            }));
+                        }
+                    });
+                },
+                delay: 200,
+                minLength : 1,
+                select : SpatialMap.Function.bind(this.geoSearchSelected,this,options,calculateDistanceFunctionString,disablemapValue)
+            });
+        },this,options));
+    },
+    
+    addressSelected: function (options,cdfs,disablemapValue,event,ui) {
         var id = jQuery(event.target).attr('id');
         if (ui.item.data.type == 'street' && disablemapValue != 'true') {
             if (this.map) {
@@ -609,11 +713,66 @@ Formular = SpatialMap.Class ({
             }
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.wkt);
+            if (options.usegeometry) {
+                this.map.drawWKT (ui.item.data.wkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+            }
             if (jQuery('#'+id+'_wkt').attr('value') != '') {
                 if (cdfs) {
                     cdfs();                    
                 }
             }
+        }
+    },
+    
+    geoSearchSelected: function (options,cdfs,disablemapValue,event,ui) {
+        var id = jQuery(event.target).attr('id');
+        if (ui.item.data.type == 'streetNameType' && disablemapValue != 'true') {
+            if (this.map) {
+                this.map.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
+            }
+            this.validAddress = false;
+            jQuery('#'+id+'_wkt').val ('');
+        } else if (ui.item.data.type == 'matrikelnummer' && disablemapValue != 'true') {
+            alert('Det er ikke muligt at søge på jordstykker endnu!')
+            this.validAddress = false;
+            jQuery('#'+id+'_wkt').val ('');
+        } else {
+            if (this.map && disablemapValue != 'true') {
+                this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
+            }
+            this.validAddress = true;
+            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
+            if (options.usegeometry) {
+                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+            }
+            if (jQuery('#'+id+'_wkt').attr('value') != '') {
+                if (cdfs) {
+                    cdfs();                    
+                }
+            }
+        }
+    },
+    
+    getTicket: function (callback) {
+        if (this.ticket) {
+            callback();
+        } else {
+            var params = {
+                page: 'formular.get.ticket',
+                sessionid: this.sessionid
+            };
+    
+            jQuery.ajax( {
+                url : 'cbkort',
+                dataType : 'json',
+                type: 'POST',
+                async: true,
+                data : params,
+                success : SpatialMap.Function.bind( function(callback, data, status) {
+                    this.ticket = data.row[0].expressionresult;
+                    callback();
+                },this,callback)
+            });
         }
     },
     

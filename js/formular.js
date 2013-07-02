@@ -193,7 +193,7 @@ Formular = SpatialMap.Class ({
     
                                         jQuery.ajax( {
                                             scriptCharset: 'UTF-8',
-                                            url : 'http://find.spatialsuite.com/service/locations/2/detect/json/'+ encodeURIComponent(value),
+                                            url : '//smartadresse.dk/service/locations/2/detect/json/'+ encodeURIComponent(value),
                                             dataType : "jsonp",
                                             data : o,
                                             success : SpatialMap.Function.bind(function(options,result) {
@@ -641,7 +641,7 @@ Formular = SpatialMap.Class ({
             source: function(request, response) {
                 jQuery.ajax( {
                     scriptCharset: 'UTF-8',
-                    url : 'http://find.spatialsuite.com/service/locations/2/detect/json/'+ encodeURIComponent(request.term),
+                    url : '//smartadresse.dk/service/locations/2/detect/json/'+ encodeURIComponent(request.term),
                     dataType : "jsonp",
                     autoFocus: true,
                     data : options,

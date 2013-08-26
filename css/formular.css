@@ -38,7 +38,7 @@ body {
     top: 40%
 }
 #message_done {
-    margin-top: 40%;
+    margin-top: 24px;
     margin-left: 15%;
     padding-left: 24px;
     width: 60%;
@@ -305,4 +305,9 @@ div.helpbutton {
 	border-width: 14px;
 	top: 50%;
 	margin-top: -14px;
+}
+
+.hasDatepicker {
+    position: relative;
+    z-index: 9999;
 }

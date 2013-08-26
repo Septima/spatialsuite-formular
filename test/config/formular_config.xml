@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="confirm">
+        <header>Formular med godkendelse af registrering</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Formular med godkendelse af registrering"/>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Godkend tekst"/>
+            <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="input" displayname="Postnr:" urlparam="val2"/>
+            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
+        </content>
+    </formular>
     <formular name="geosearchmapmarking">
         <header>Adressesøgning med GeoSeach og markering i kort</header>
         <subheader>Kun adressepunkter markeres</subheader>

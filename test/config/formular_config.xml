@@ -209,6 +209,14 @@
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
+    <formular name="daterange">
+        <header>Dato med begrænsning af muligt dato interval</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Datovælger med begrænsninger"/>
+            <input id="date" type="date" displayname="Dato:" urlparam="val0" mindate="0" maxdate="+2"/>
+        </content>
+    </formular>
     <formular name="datechange">
         <header>Dato med begrænsning af input datoer ud fra hvad der er valgt i andet adresse felt</header>
         <submitpage>formular.send.general.nomap</submitpage>

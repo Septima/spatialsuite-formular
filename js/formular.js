@@ -458,10 +458,10 @@ Formular = SpatialMap.Class ({
                                             },this,id, change),
                                             onClose: change
                                         };
-                                        
+
+                                        var disabledDays = [];
                                         if (node.attr('limitfromdatasource')) {
                                                                                         
-                                            var disabledDays = [];
                                             var request = jQuery.ajax({
                                                 url : 'cbkort',
                                                 dataType : 'xml',
@@ -478,10 +478,33 @@ Formular = SpatialMap.Class ({
                                                 disabledDays.push(jQuery(cols[coli]).text());
                                             }
                                             
-                                            this.inputOptions[id].disabledDays = disabledDays;
+                                        }
+
+                                        var mindate = null;
+                                        if (node.attr('mindate') && jQuery.isNumeric(node.attr('mindate'))) {
+                                        	mindate = new Date();
+                                        	mindate.getMonth();
+                                        	mindate.setDate(mindate.getDate()+(node.attr('mindate')-1));
+                                        }
+                                        var maxdate = null;
+                                        if (node.attr('maxdate') && jQuery.isNumeric(node.attr('maxdate'))) {
+                                        	maxdate = new Date();
+                                        	maxdate.getMonth();
+                                        	maxdate.setDate(maxdate.getDate()+(node.attr('maxdate')-0));
+                                        }
                                         
+                                        if (disabledDays.length > 0 || mindate || maxdate) {
+                                        	this.inputOptions[id] = this.inputOptions[id] || {};
+                                            this.inputOptions[id].disabledDays = disabledDays;
                                             options.constrainInput = true;
-                                            options.beforeShowDay = SpatialMap.Function.bind( function (disabledDays, date) {
+                                            options.beforeShowDay = SpatialMap.Function.bind( function (disabledDays, mindate, maxdate, date) {
+                                            	if (mindate && date < mindate) {
+                                                    return [false];
+                                            	}
+                                            	if (maxdate && date > maxdate) {
+                                                    return [false];
+                                            	}
+                                            	
                                                 var m = date.getMonth()+1, d = date.getDate(), y = date.getFullYear();
                                                 m = (m<10?'0'+m:m);
                                                 d = (d<10?'0'+d:d);
@@ -489,7 +512,7 @@ Formular = SpatialMap.Class ({
                                                     return [false];
                                                 }
                                                 return [true];
-                                            }, this, disabledDays);
+                                            }, this, disabledDays, mindate, maxdate);
                                         }
                                         
                                         jQuery('#'+id).datepicker(options);

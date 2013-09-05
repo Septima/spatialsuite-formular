@@ -21,6 +21,10 @@
         <stylesheet>[module:formular.dir]/xsl/formular-config.xsl</stylesheet>
         <file filename="[module.formular.config]"/>
     </page>
+    
+    <page name="formular.clear" contenttype="text/xml">
+        <data handler="session" operation="remove-session"/>
+    </page>
 
     <page name="formular-query" contenttype="text/xml">
         <data handler="spatialquery2" operation="execute-query">

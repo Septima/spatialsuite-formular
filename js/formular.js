@@ -617,6 +617,8 @@ Formular = SpatialMap.Class ({
                 }
             },this)
         });
+        
+        jQuery('#loading').hide();
     },
     
     inputChanged: function (id) {

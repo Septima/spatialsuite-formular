@@ -111,6 +111,15 @@
                     </div>
                     </xsl:if>
                 </div>
+                <div id="loading">
+					<table height="100%" width="100%" align="center">
+					    <tr>
+					        <td align="center">
+					             <div class="loading">Henter formular</div>
+					        </td>
+					    </tr>
+					</table>
+			     </div>
             </body>
         </html>
     </xsl:template>

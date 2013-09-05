@@ -4,6 +4,7 @@ Formular = SpatialMap.Class ({
     sessionid: null,
     configpage: 'formular.config',
     submitpage: 'formular.send',
+    removeSessionPage: 'formular.clear',
     config: null,
     map: null,
     extent: [539430.4,6237856,591859.2,6290284.8],
@@ -1097,11 +1098,12 @@ Formular = SpatialMap.Class ({
                                 formular: this.name,
                                 sessionid: this.sessionid
                             },
-                            success: function (data) {
+                            success: SpatialMap.Function.bind( function (data) {
                                 if(data.result!='OK') {
                                     jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvitering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
                                 }
-                            }
+                                this.removeSession();
+                            },this)
                         });
                         jQuery('#message').show();
                         jQuery('#messagebuttons').show();
@@ -1114,11 +1116,27 @@ Formular = SpatialMap.Class ({
                     jQuery('#message').show();
                     jQuery('#messagebuttons').show();
                     jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                    this.removeSession();
                 }
             },this),
             error : SpatialMap.Function.bind( function(data, status) {
                 jQuery('#message').show().html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
             },this)
+        });
+    },
+    
+    removeSession: function () {
+    	var params = {
+            sessionid: this.sessionid,
+            page: this.removeSessionPage
+        }
+    	this.sessionid = null;
+        jQuery.ajax( {
+            url : '/cbkort',
+            dataType : 'xml',
+            type: 'POST',
+            async: true,
+            data: params
         });
     },
     

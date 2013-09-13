@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<datasources>
+
+  <endpoint name="formular-final" endpointtype="ws">
+    <service>[cbinfo.site.url]/jsp/modules/formular/final_xml.jsp</service>
+    <debug>true</debug>
+  </endpoint>
+
+  <datasource name="formular-final" endpoint="formular-final">
+
+    <command name="move" httpmethod="get">
+
+      <serviceextension>?filename=[frpdf]&amp;formular=[formular]&amp;frid=[frid]</serviceextension>
+
+      <outputmapping>
+        <rowxpath>/root/result</rowxpath>
+        <columnxpath name="message" type="string">message</columnxpath>
+      </outputmapping>
+      
+    </command>
+
+  </datasource>
+ 
+</datasources>

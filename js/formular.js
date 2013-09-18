@@ -194,20 +194,22 @@ Formular = SpatialMap.Class ({
     
                                         jQuery.ajax( {
                                             scriptCharset: 'UTF-8',
-                                            url : '//smartadresse.dk/service/locations/2/detect/json/'+ encodeURIComponent(value),
+                                            url : '//smartadresse.dk/service/locations/2/detect/json/'+ value,
                                             dataType : "jsonp",
                                             data : o,
                                             success : SpatialMap.Function.bind(function(options,result) {
-                                                var a = result.data[0];
-                                                jQuery('input#'+options.id).val(a.presentationString);
-                                                var ui = {
-                                                    item: {
-                                                        data: a
-                                                    }
-                                                };
-                                                var calculateDistanceFunctionString = options.geometrySelect || null;
-                                                var disablemapValue = options.disablemap || null;
-                                                this.addressSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
+                                                if (result.data.length > 0) {
+                                                    var a = result.data[0];
+	                                                jQuery('input#'+options.id).val(a.presentationString);
+	                                                var ui = {
+	                                                    item: {
+	                                                        data: a
+	                                                    }
+	                                                };
+	                                                var calculateDistanceFunctionString = options.geometrySelect || null;
+	                                                var disablemapValue = options.disablemap || null;
+	                                                this.addressSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
+                                                }
                                             },this,options)
                                         });
                                     }
@@ -244,7 +246,7 @@ Formular = SpatialMap.Class ({
                                         this.inputValidation[id] = true;
                                         jQuery('#'+id).valid8({
                                             'regularExpressions': [
-                                                 { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid vÃ¦rdi!'}
+                                                 { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
                                              ]
                                         });
                                     }
@@ -259,23 +261,25 @@ Formular = SpatialMap.Class ({
                                         this.getTicket (SpatialMap.Function.bind(function (options,value) {
                                             options.ticket = this.ticket;
                                             options.service = 'GEO';
-                                            options.search = encodeURIComponent(value);
+                                            options.search = value;
                                             jQuery.ajax( {
                                                 scriptCharset: 'UTF-8',
                                                 url: '//kortforsyningen.kms.dk/Geosearch',
                                                 dataType : "jsonp",
                                                 data : options,
                                                 success : SpatialMap.Function.bind(function(options,result) {
-                                                    var a = result.data[0];
-                                                    jQuery('input#'+options.id).val(a.presentationString);
-                                                    var ui = {
-                                                        item: {
-                                                            data: a
-                                                        }
-                                                    };
-                                                    var calculateDistanceFunctionString = options.geometrySelect || null;
-                                                    var disablemapValue = options.disablemap || null;
-                                                    this.geoSearchSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
+                                                    if (result.data.length > 0) {
+                                                        var a = result.data[0];
+	                                                    jQuery('input#'+options.id).val(a.presentationString);
+	                                                    var ui = {
+	                                                        item: {
+	                                                            data: a
+	                                                        }
+	                                                    };
+	                                                    var calculateDistanceFunctionString = options.geometrySelect || null;
+	                                                    var disablemapValue = options.disablemap || null;
+	                                                    this.geoSearchSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
+                                                    }
                                                 },this,options)
                                             });
                                         },this,o,value));

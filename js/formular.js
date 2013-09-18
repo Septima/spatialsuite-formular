@@ -25,7 +25,7 @@ Formular = SpatialMap.Class ({
     
     reportprofile: 'alt',
     reportlayers: 'default',
-    reportxsl: 'kvitering',
+    reportxsl: 'kvittering',
     reportmapscale: null,
     
     pdf: null,
@@ -198,7 +198,7 @@ Formular = SpatialMap.Class ({
                                         this.inputValidation[id] = true;
                                         jQuery('#'+id).valid8({
                                             'regularExpressions': [
-                                                 { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid vÃ¦rdi!'}
+                                                 { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
                                              ]
                                         });
                                     }
@@ -557,7 +557,7 @@ Formular = SpatialMap.Class ({
                                         this.inputValidation[id] = true;
                                         jQuery('#'+id).valid8({
                                             'regularExpressions': [
-                                                 { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid vÃ¦rdi!'}
+                                                 { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
                                              ]
                                         });
                                     }
@@ -604,7 +604,7 @@ Formular = SpatialMap.Class ({
                         var p = (k<this.config.length && k!=0 && this.config.length > 0);
                         var n = (k<this.config.length-1 && this.config.length > 0);
                         var s = (k==this.config.length-1);
-                        jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div>'+(p?'<button id="previous'+k+'">Forige</button>':'')+(n?'<button id="next'+k+'">Næste</button>':'')+(s?'<button id="sendbutton">Send</button>':'')+'</div></td></tr>');
+                        jQuery('#content'+k+' > tbody:last').append('<tr><td colspan="2" align="right"><div>'+(p?'<button id="previous'+k+'">Forrige</button>':'')+(n?'<button id="next'+k+'">Næste</button>':'')+(s?'<button id="sendbutton">Send</button>':'')+'</div></td></tr>');
                         if (p) {
                             jQuery('button#previous'+k).click(SpatialMap.Function.bind(this.previous,this,k));
                         }
@@ -1005,7 +1005,7 @@ Formular = SpatialMap.Class ({
     
     submit: function () {
         if (this.map && this.feature == null) {
-            alert('Tegn pÃ¥ kortet og udfyld alle felter inden der trykkes pÃ¥ "Send"');
+            alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
             return;
         } else {
             var params = {
@@ -1130,14 +1130,14 @@ Formular = SpatialMap.Class ({
 	                            },
 	                            success: SpatialMap.Function.bind( function (data) {
 	                                if(data.result!='OK') {
-	                                    jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvitering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+	                                    jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
 	                                }
 	                                this.removeSession();
 	                            },this)
 	                        });
 	                        jQuery('#message').show();
 	                        jQuery('#messagebuttons').show();
-	                        jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvitering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+	                        jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
 	                    } else {
 	                        jQuery('#message').show();
 	                        jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
@@ -1189,7 +1189,7 @@ Formular = SpatialMap.Class ({
                             this.removeSession();
                             jQuery('#message').show();
                             jQuery('#messagebuttons').show();
-                            jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvitering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                            jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
                         } else {
                         	this.showError();
                         }

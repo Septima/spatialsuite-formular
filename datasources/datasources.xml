@@ -2,7 +2,7 @@
 <datasources>
 
   <endpoint name="formular-final" endpointtype="ws">
-    <service>[cbinfo.site.url]/jsp/modules/formular/final_xml.jsp</service>
+    <service>[module.formular.site.url]/jsp/modules/formular/final_xml.jsp</service>
     <debug>true</debug>
   </endpoint>
 

@@ -5,6 +5,7 @@
  import="java.util.Properties"
  import="java.util.Enumeration"
  %><%
+        response.setContentType("text/xml; charset=UTF-8");
         //Usage: /jsp/saveFromTmp.jsp?file=FILE&frid=FRID&formular=FORMULAR, where
         //  FILE is the name of a file in cbinfo.imagepath.dir, and
         //  FRID is the FEATURE ROW ID for the current object, and
@@ -72,8 +73,9 @@ private void copyFile(JspWriter out, String sourceFileName, String destFileName)
 private String createErrorXML(Exception e){
     StringBuilder jsonResult = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     jsonResult.append("<root>\n");
-    jsonResult.append("  <result><message>" + e.getMessage().replace("\\", "/") + "</message></result>\n");
-    jsonResult.append("</root>");
+    jsonResult.append("  <result><message>ERROR</message></result>\n");
+    //jsonResult.append("  <result><message>" + e.getMessage().replace("\\", "/") + "</message></result>\n");
+    jsonResult.append("</root>"); 
     return jsonResult.toString(); 
 }
 

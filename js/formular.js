@@ -1350,8 +1350,12 @@ Formular.prototype.setFrid = function (data, params) {
 Formular.prototype.setPdf = function (data, params) {
 	params = this.handleError(data, params);
 	if (params != null) {
-		this.pdf = data.row[0].url.replace(/\/tmp\//,'');
-		params.frpdf = this.pdf;
+		for (var i=0;i<data.row.length;i++) {
+			if (data.row[i].url) {
+				this.pdf = data.row[i].url.replace(/\/tmp\//,'');
+				params.frpdf = this.pdf;
+			}
+		}
 	}
 	return params;
 }

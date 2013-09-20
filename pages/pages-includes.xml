@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pages>
     
-   <!-- 
-   ===============================================================
-   CBkort version 2.x, copyright Carl Bro GIS&IT, 2006
-   ===============================================================
-   $Archive: /Products/CBKort2/development/2.6/standard/wwwroot/WEB-INF/config/modules/standard/multiselect2/pages/pages.xml $ 
-   $Date: 18-08-10 16:01 $
-   $Revision: 11 $ 
-   $Author: Nsm $
-   ===============================================================   
-   --> 
-
     <page name="formular" contenttype="text/html">
         <stylesheet>[module:formular.dir]/xsl/formular.xsl</stylesheet>
         <file filename="[module.formular.config]"/>

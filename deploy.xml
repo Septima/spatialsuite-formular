@@ -5,6 +5,8 @@
 
    <stoponerror>true</stoponerror>
    
+   <param name="module.formular.site.url" ignore="IsDefined(module.formular.site.url)">[cbinfo.site.url]</param> 
+
    <param name="module.formular.upload.dir">[cbinfo.wwwroot.dir]/formular/upload</param> 
    <makedir dir="[module.formular.upload.dir]"/>
    <param name="module.formular.pdf.dir">[cbinfo.wwwroot.dir]/formular/pdf</param> 

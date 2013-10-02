@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pages>
     
-   <!-- 
-   ===============================================================
-   CBkort version 2.x, copyright Carl Bro GIS&IT, 2006
-   ===============================================================
-   $Archive: /Products/CBKort2/development/2.6/standard/wwwroot/WEB-INF/config/modules/standard/multiselect2/pages/pages.xml $ 
-   $Date: 18-08-10 16:01 $
-   $Revision: 11 $ 
-   $Author: Nsm $
-   ===============================================================   
-   --> 
-
     <page name="formular" contenttype="text/html">
         <stylesheet>[module:formular.dir]/xsl/formular.xsl</stylesheet>
         <file filename="[module.formular.config]"/>
@@ -105,5 +94,51 @@
             </url-parameters>
         </data>
     </page>
+
+    <page name="formular.move.pdf" contenttype="application/json" sessionrequired="true">
+        <data handler="datasource" operation="execute-command">
+           <url-parameters>
+                <url-parameter name="datasource" value="formular-final"/>
+                <url-parameter name="command" value="move"/>
+            </url-parameters>
+        </data>
+    </page>
+
+    <page name="formular.create-frid" contenttype="application/json" sessionrequired="true">  
+        <data handler="expression" operation="evaluate">
+            <url-parameters>
+                <url-parameter name="expression">'Guid()'</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+    
+    <page name="formular.create-pdf" contenttype="application/json" sessionrequired="true" resultpassing="pass-all">
+        <data handler="PDFFormatter" operation="format-pdf">
+            <url-parameters>
+                <url-parameter name="formularxsl" value="pdf"/>
+                <url-parameter name="nomap" value="false"/>
+                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module.formular.xsl.dir]/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/pdf.xsl" endif</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+    
+    <page name="formular.create-pdf.nomap" contenttype="application/json" sessionrequired="true" resultpassing="pass-all">
+        <data handler="PDFFormatter" operation="format-pdf">
+            <url-parameters>
+                <url-parameter name="formularxsl" value="pdf"/>
+                <url-parameter name="nomap" value="true"/>
+                <url-parameter name="stylesheet">if IsDefined(formularxsl) then "[module.formular.xsl.dir]/"+formularxsl+".xsl" else "[module:formular.dir]/xsl/pdf.xsl" endif</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+    
+    <page name="formular.save" contenttype="application/json" sessionrequired="true">  
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="command" value="write"/>
+            </url-parameters>
+        </data>
+    </page>
+    
 
 </pages>

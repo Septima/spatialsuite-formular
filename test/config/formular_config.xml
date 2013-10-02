@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="submitpages">
+        <header>Formular med flere submit pages</header>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.create-pdf.nomap</page>
+            <page>formular.save</page>
+            <page>formular.move.pdf</page>
+        </submitpages>
+        <reportprofile>kbh_themestore</reportprofile>
+        <content>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="hidden" urlparam="about" defaultvalue="Formular med flere submit pages"/>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Godkend tekst"/>
+            <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="input" displayname="Postnr:" urlparam="val2"/>
+        </content>
+    </formular>
     <formular name="confirm">
         <header>Formular med godkendelse af registrering</header>
         <submitpage>formular.send.general.nomap</submitpage>

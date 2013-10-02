@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spatialqueries>
     
-    <!--   
-    ===============================================================
-    CBkort version 2.x, copyright Carl Bro GIS&IT, 2009
-    ===============================================================
-    $Archive: /Products/CBKort2/development/2.9/custom/wwwroot/WEB-INF/config/modules/custom/formular/queries/spatialqueries.xml $  
-    $Date: 22-10-12 11:49 $
-    $Revision: 2 $   
-    $Author: Nsm $
-    =============================================================== 
-    -->
-
     <spatialquery name="formular-wkt">
         <options method="common-interior-point" keepselector="true" showalltargets="true"/>
         <distance>0</distance>

@@ -49,6 +49,7 @@
                         <script type="text/javascript" charset="ISO-8859-1" src="[cbinfo.jslib.jqueryui]"></script>
                     </xsl:otherwise>
                 </xsl:choose>
+				<script type="text/javascript" src="/modules/formular/js/jquery.ui.datepicker-[cbinfo.locale].js"></script>
                 <xsl:variable name="cbinfo.spatialmap.jslib">[cbinfo.spatialmap.jslib]</xsl:variable>
                 <xsl:choose>
                     <xsl:when test="substring($cbinfo.spatialmap.jslib,0,2) = '['">

@@ -1305,8 +1305,10 @@ Formular = SpatialMap.Class ({
                 var start_d = startdate[0]-0;
                 var start_m = startdate[1]-0;
                 var start_y = startdate[2]-0;
-                if (date.getDate() <= start_d && date.getMonth()+1 <= start_m && date.getFullYear() <= start_y) {
-                    return [false];
+                
+                startdate = new Date(start_y, start_m-1, start_d);
+                if (date <= startdate) {
+                	return [false];
                 }
             }
             if(options.end) {
@@ -1314,8 +1316,9 @@ Formular = SpatialMap.Class ({
                 var end_d = enddate[0]-0;
                 var end_m = enddate[1]-0;
                 var end_y = enddate[2]-0;
-                if (date.getDate() >= end_d && date.getMonth()+1 >= end_m && date.getFullYear() >= end_y) {
-                    return [false];
+                enddate = new Date(end_y, end_m-1, end_d);
+                if (date > enddate) {
+                	return [false];
                 }
             }
             

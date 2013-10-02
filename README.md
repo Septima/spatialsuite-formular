@@ -18,6 +18,12 @@ Konfigurationen er placeret vha. parameteren "module.formular.config", og er pt.
 <param name="module.formular.config">[module:formular.dir]/config/formular_config.xml</param>
 ```
 
+På grund af problemer i CBkort, er det nødvendigt at angive denne URL for alle sites
+```xml
+<param name="module.formular.site.url">http://localhost:8080</param> 
+```
+
+
 I filen er der angivet én eller flere formular konfigurationer. Hver konfiguration kan indeholde følgende:
 
 ```xml
@@ -25,7 +31,16 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <title>Ansøgningsskema til vandhuller</title>           <!-- OPTIONAL - Angiver den tekst, der står som titel i browseren -->
         <header>Ansøgningsskema til vandhuller</header>         <!-- OPTIONAL - Angiver den tekst, der står øverst på siden -->
         <subheader>Ansøgning efter naturbeskyttelsesloven</subheader> <!-- OPTIONAL - Angiver den tekst, der står under overskriften på siden -->
-        <submitpage>formular.send.soe</submitpage>              <!-- Den page, der skal kaldes for at gemme og danne kvitering - Denne page vil være specifik for hver formular. Se senere i dette dokument. -->
+
+        <submitpage>formular.send.soe</submitpage>              <!-- DEPRECATED - BRUG SUBMITPAGES I STEDET - Den page, der skal kaldes for at gemme og danne kvitering - Denne page vil være specifik for hver formular. Se senere i dette dokument. -->
+
+        <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
+            <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
+            <page parser="setPdf">formular.create-pdf</page>    
+            <page>formular.save</page>
+            <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
+        </submitpages>
+
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
         <reportprofile>alt</reportprofile>                      <!-- OPTIONAL - Profil, der skal anvendes til at danne kortet i kviteringen (default er "alt") -->
         <reportlayers>default</reportlayers>                    <!-- OPTIONAL - Layers, der skal anvendes til at danne kortet i kviteringen. Det kan være en liste adskilt af mellemrum (default er "default", der gør at det er profilen default viste temaer, der vises) -->
@@ -235,6 +250,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.09.20 - Mulighed for at kalde en sekvens af pages ved submit
 * 2013.07.01 - Brug adressepunktet som registreringspunkt
 * 2013.07.01 - Ny adressesøgning med GeoSearch fra GST (SpatialMap 2.8 eller nyere)
 * 2013.06.28 - Mulighed for at sende ledetekster med som URL-parameter til serveren

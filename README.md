@@ -252,6 +252,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2013.11.14 - onshow funktion tilføjet til datovælgeren
 * 2013.09.20 - Mulighed for at kalde en sekvens af pages ved submit
 * 2013.07.01 - Brug adressepunktet som registreringspunkt
 * 2013.07.01 - Ny adressesøgning med GeoSearch fra GST (SpatialMap 2.8 eller nyere)

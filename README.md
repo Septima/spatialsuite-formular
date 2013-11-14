@@ -125,7 +125,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <!-- Datovælger felt hvor man kan skrive en dato eller vælge 
                  Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
                  Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
-                 en dato skal pt være f.eks. 22.01.2013 -->
+                 en dato skal pt være f.eks. 22.01.2013 
+                 - onshow - OPTIONAL  - Funktion der kaldes når brugeren klikker på inputfeltet. Kan f.eks. bruges til at ændre datovælgeren. Skrives som et JavaScript udtryk.
+            -->
             <input type="date" displayname="Dato:" urlparam="date" limitfromdatasource="ds_formular_booking"/>
 
             <!-- input - type="file" -->

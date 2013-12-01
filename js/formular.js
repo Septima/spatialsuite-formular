@@ -481,6 +481,9 @@ Formular = SpatialMap.Class ({
                                             },this,id, change),
                                             onClose: change
                                         };
+                                        if (node.attr('onshow')) {
+                                        	options.beforeShow = new Function (node.attr('onshow'));
+                                        }
 
                                         var disabledDays = [];
                                         if (node.attr('limitfromdatasource')) {

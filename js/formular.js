@@ -413,11 +413,19 @@ Formular = SpatialMap.Class ({
                                     }
                                     html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
                                     jQuery('#content'+k+' > tbody:last').append(html);
-                                    this.spatialqueries.push({
+                                    var conflict = {
                                         id: id, //'conflictdiv_'+counter,
                                         targetsetfile: node.attr('targetsetfile'),
                                         targerset: node.attr('targerset')
-                                    });
+                                    };
+                                    if (node.attr('onconflict')) {
+                                        conflict.onconflict = new Function (node.attr('onconflict'));
+                                    }
+                                    if (node.attr('onnoconflict')) {
+                                        conflict.onnoconflict = new Function (node.attr('onnoconflict'));
+                                    }
+                                    this.spatialqueries.push(conflict);
+
                                 break;
                                 case 'input':
                                     var type = node.attr('type');
@@ -973,7 +981,8 @@ Formular = SpatialMap.Class ({
                 type: 'POST',
                 async: false,
                 data : params,
-                success : SpatialMap.Function.bind( function(id, data, status) {
+                success : SpatialMap.Function.bind( function(spatialquery, data, status) {
+                    var id = spatialquery.id;
                     var targets = jQuery(data).find('pcomposite[name="presentation"]');
                     var displayname = [];
                     var html = '';
@@ -992,7 +1001,7 @@ Formular = SpatialMap.Class ({
                         }
                     }
                     if (html != '') {
-                      jQuery('#container_conflictdiv_'+id).show();
+                        jQuery('#container_conflictdiv_'+id).show();
                         jQuery('#conflictdiv_'+id).html(html);
                     } else {
                       jQuery('#container_conflictdiv_'+id).hide();
@@ -1000,8 +1009,15 @@ Formular = SpatialMap.Class ({
                     if (count) {
                         jQuery('#'+id).val(reporttext);
                         jQuery('#container_conflictdiv_'+id).show('fast');
+                        if (spatialquery.onconflict) {
+                            spatialquery.onconflict.apply(jQuery('#'+id));
+                        }
+                    } else {
+                        if (spatialquery.onnoconflict) {
+                            spatialquery.onnoconflict();
+                        }
                     }
-                },this,this.spatialqueries[i].id)
+                },this,this.spatialqueries[i])
             });
         }
     },

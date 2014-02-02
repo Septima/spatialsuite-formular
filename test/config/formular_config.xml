@@ -102,8 +102,8 @@
         </content>
     </formular>
     <formular name="conflict">
-        <title>Ansøgningsskema med konfliktsøgning</title>
-        <header>Ansøgningsskema om udlednings af kvælstoffer</header>
+        <title>Konfliktsøgning</title>
+        <header>Konfliktsøgning</header>
         <subheader>Ansøgning efter naturbeskyttelsesloven</subheader>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
@@ -124,6 +124,32 @@
                 </themes>
             </map>
             <conflicts class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="conflictevent">
+        <title>Konfliktsøgning med events</title>
+        <header>Konfliktsøgning med events</header>
+        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>pdf</reportxsl>
+        <css>/modules/formular/test/custom.css</css>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af konfliktsøgning"/>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <conflicts onconflict="alert('Conflict');" onnoconflict="alert('Np conflict')" class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>

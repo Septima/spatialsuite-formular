@@ -189,6 +189,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - "class"         - angiver den css class, som feltet skal have. Det kan f.eks. være "warning", der gør at feltet bliver rødt.
                  - "targetset"     - angiver navnet på det targetset, som der skal søges i.
                  - "targetsetfile" - angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
+                 - "onconflict"    - angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
+                 - "onnoconflict"  - angiver det javascript der skal kaldes når der IKKE er ramt noget med denne konfliktsøgning.
                  På et targetset vil der typisk være anigvet ét target, men der kan godt være flere. På dette target er der knyttet en presentation. 
                  Inholdet af denne presentation, vil blive vist for brugeren. Hvis presentation ikke indeholder nogen columns, så vil der ikke blive vist 
                  noget resultat, men "displayname" vises. Det kan f.eks. bruges til at vise at der er fundet noget, men det er ikke interessant hvad det præcist er -->
@@ -252,6 +254,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.02.02 - onconflict og onnoconflict er tilføjet til konfliktsøgningsfunktionaliteten.
 * 2013.11.14 - onshow funktion tilføjet til datovælgeren
 * 2013.09.20 - Mulighed for at kalde en sekvens af pages ved submit
 * 2013.07.01 - Brug adressepunktet som registreringspunkt

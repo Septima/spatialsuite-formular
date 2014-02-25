@@ -168,6 +168,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 <maptool displayname="" name="line"/>
                 <maptool displayname="" name="point"/>
                 <maptool displayname="" name="circle"/>
+                <maptool displayname="" name="location"/>
             </maptools>
 
             <!-- map -->
@@ -264,6 +265,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.02.25 - Nyt maptool der kan benytte den aktuelle position til at navigere i kortet.
 * 2014.02.16 - Mulighed for at opdele i kolonner.
 * 2014.02.02 - onconflict og onnoconflict er tilføjet til konfliktsøgningsfunktionaliteten.
 * 2013.11.14 - onshow funktion tilføjet til datovælgeren

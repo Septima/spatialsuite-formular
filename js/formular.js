@@ -47,6 +47,8 @@ Formular = SpatialMap.Class ({
     
     parseDisplaynames: false,
     
+    multpleGeometries: false,
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -931,19 +933,29 @@ Formular = SpatialMap.Class ({
     },
 
     featureDrawed: function (event) {
-        if (this.feature) {
-            this.map.deleteFeature (this.feature.id);
+        if (this.multpleGeometries === false) {
+            if (this.feature.length > 0) {
+                var a = [];
+                for (var i=0;i<this.feature.length;i++) {
+                    a.push(this.feature[i].id);
+                }
+                this.map.deleteFeature (a);
+                this.feature = [];
+            }
         }
-        this.feature = event;
+        this.feature.push(event);
         
         if (this.areaid != null) {
-            var area = parseInt(event.wkt.getArea());
+            var area = 0;
+            for (var i=0;i<this.feature.length;i++) {
+                area += parseInt(this.feature[i]..wkt.getArea());
+            }
             jQuery('#areaspan_'+this.areaid).html(area);
             jQuery('#'+this.areaid).val(area);
             jQuery('#'+this.areaid).change();
         }
         
-        this.query (event.wkt);
+        this.query (this.feature);
     },
     
     selectFromDatasource: function (datasource,wkt) {
@@ -1009,10 +1021,10 @@ Formular = SpatialMap.Class ({
         }
     },
     
-    query: function (wkt) {
+    query: function (features) {
         var params = {
             page: 'formular-query',
-            wkt: wkt.toString(),
+            wkt: features[0].wkt.toString(),
             sessionid: this.sessionid
         }
         
@@ -1075,7 +1087,7 @@ Formular = SpatialMap.Class ({
     },
     
     submit: function () {
-        if (this.map && this.feature == null) {
+        if (this.map && this.feature.length === 0) {
             alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
             return;
         } else {
@@ -1086,8 +1098,8 @@ Formular = SpatialMap.Class ({
                 profile: this.reportprofile,
                 formularxsl: this.reportxsl
             };
-            if (this.map && this.feature) {
-                params.wkt = this.feature.wkt.toString();
+            if (this.map && this.feature.length > 0) {
+                params.wkt = this.feature[0].wkt.toString();
             }
             if (this.reportmapscale !== null) {
                 params.map_web = 'minscale+'+this.reportmapscale+'+maxscale+'+this.reportmapscale;

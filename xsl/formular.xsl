@@ -23,6 +23,7 @@
     <xsl:template match="formular[@name=$formular]">
         <html>
             <head>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
                 <xsl:choose>
                     <xsl:when test="title">
                         <title><xsl:value-of select="title" /></title>

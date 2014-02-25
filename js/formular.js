@@ -847,6 +847,10 @@ Formular = SpatialMap.Class ({
     activateTool: function (type,tool) {
         this.resetButtons();
         this.map.setClickEvent();
+        this.map.panzoom();
+        if (this.locateActive) {
+            this.map.locateRemove();
+        }
         jQuery('#'+this.mapbuttons[type]).addClass ('button_'+type+'_active');
         switch(type) {
             case 'pan':
@@ -874,6 +878,12 @@ Formular = SpatialMap.Class ({
             break;
             case 'point':
                 this.map.drawPoint(SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+            break;
+            case 'location':
+                
+                this.locateActive = true;
+                this.map.locate({watch: true});
+                
             break;
         }
     },

@@ -164,6 +164,15 @@ td {
     background-position: -259px -23px;
 }
 
+.button_location {
+    background-image: url("/modules/formular/css/img/location.png");
+    background-position: -1px 0;
+}
+.button_location_active {
+    background-image: url("/modules/formular/css/img/location.png");
+    background-position: -1px -23px;
+}
+
 .warning {
 	color: #FF0000;
 }

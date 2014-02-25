@@ -891,6 +891,7 @@ Formular = SpatialMap.Class ({
         this.map.panzoom();
         if (this.locateActive) {
             this.map.locateRemove();
+            this.locateActive = false;
         }
         jQuery('#'+this.mapbuttons[type]).addClass ('button_'+type+'_active');
         switch(type) {

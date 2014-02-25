@@ -331,3 +331,34 @@ div.helpbutton {
     padding-top: 40px;
     margin-top: 30px;
 }
+
+
+.tablecontent {
+    border-collapse: collapse;
+}
+.tabcontent > tbody > tr > td:first-child {
+    width: 150px;
+}
+.colcontainer2 {
+    width: 1230px;
+}
+.colcontainer3 {
+    width: 1950px;
+}
+.col {
+    float: left;
+}
+.col2 {
+    width: 50%;
+}
+.col3 {
+    width: 33%;
+}
+.col4 {
+    width: 25%;
+}
+
+.col .labeldiv {
+}
+.col .valuediv {
+}

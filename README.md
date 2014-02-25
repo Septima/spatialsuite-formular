@@ -67,7 +67,17 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - validate         - Tekst til validering. Det skrives under feltet for at angive hvad der er gjort galt.
                  - condition        - Skal feltet vises? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.
                   -->
-
+            
+            <!-- columns - Mulighed for at have input elementer i kolonner - tilføj class="mincss" for at få en kolonne til at opfører sig specielt -->
+            <columns>
+                <column>
+                    ...
+                </column>
+                <column>
+                    ...
+                </column>
+            </columns>
+            
             <!-- input - type="hidden" -->
             <!-- Kan bruges til at sende værdier, der ikke vedrører brugeren, til serveren -->
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
@@ -254,6 +264,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.02.16 - Mulighed for at opdele i kolonner.
 * 2014.02.02 - onconflict og onnoconflict er tilføjet til konfliktsøgningsfunktionaliteten.
 * 2013.11.14 - onshow funktion tilføjet til datovælgeren
 * 2013.09.20 - Mulighed for at kalde en sekvens af pages ved submit

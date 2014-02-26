@@ -169,6 +169,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 <maptool displayname="" name="point"/>
                 <maptool displayname="" name="circle"/>
                 <maptool displayname="" name="location"/>
+                <maptool displayname="" name="delete"/>
+                <maptool displayname="" name="move"/>
+                <maptool displayname="" name="modify"/>
             </maptools>
 
             <!-- map -->

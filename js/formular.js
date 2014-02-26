@@ -48,6 +48,7 @@ Formular = SpatialMap.Class ({
     parseDisplaynames: false,
     
     multpleGeometries: false,
+    mergeGeometries: true,
     
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
@@ -426,6 +427,9 @@ Formular = SpatialMap.Class ({
                 } else {
                     resolutions = this.resolutions;
                 }
+                
+                this.multpleGeometries = (typeof node.attr('multiplegeometries') !== 'undefined' && node.attr('multiplegeometries') === 'true');
+                this.mergeGeometries = (typeof node.attr('mergegeometries') !== 'undefined' && node.attr('mergegeometries') === 'false');
                 
                 var layers = [];
                 var themes = node.find('theme');
@@ -983,8 +987,6 @@ Formular = SpatialMap.Class ({
     },
     
     featureChanged: function (feature) {
-        
-        console.log('feature change');
         
         if (this.areaid != null) {
             var area = 0;

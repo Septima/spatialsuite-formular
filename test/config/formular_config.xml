@@ -2,7 +2,7 @@
 <config>
     <formular name="multiple">
         <header>Tegn flere geometrier i kortet</header>
-        <subheader>Alle geometrierne sendes til servere og kan gemmes</subheader>
+        <subheader>Alle geometrierne sendes til servere og kan gemmes. Det er kun muligt at tegne flere geometrier af samme type. Hvis man tegner en geometri af en anden type, så slettes de forudgående geometrier.</subheader>
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Location"/>
@@ -15,7 +15,7 @@
                 <maptool displayname="Ændre en geometri" name="modify"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
             </maptools>
-            <map class="my_map_class" multiplegeometries="true" mergegeometries="false">
+            <map class="my_map_class" multiplegeometries="true">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>

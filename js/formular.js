@@ -955,6 +955,16 @@ Formular = SpatialMap.Class ({
                 this.map.deleteFeature (a);
                 this.feature = [];
             }
+        } else {
+            //Delete all others if not the same geometry type
+            if (this.feature.length > 0 && event.wkt.CLASS_NAME.match(/Point|LineString|Polygon/)[0] !== this.feature[0].wkt.CLASS_NAME.match(/Point|LineString|Polygon/)[0]) {
+                var a = [];
+                for (var i=0;i<this.feature.length;i++) {
+                    a.push(this.feature[i].id);
+                }
+                this.map.deleteFeature (a);
+                this.feature = [];
+            }
         }
         
         this.feature.push(event);
@@ -1005,12 +1015,53 @@ Formular = SpatialMap.Class ({
     },
     
     setMergedGeometry: function (features,callback) {
-        if (features.length > 0) {
-            this.mergedFeature = features[0].wkt.toString();
-        } else {
+        if (features.length === 0) {
             this.mergedFeature = null;
+            callback();
+        } else if (features.length === 1) {
+            this.mergedFeature = features[0].wkt.toString();
+            callback();
+        } else {
+            this.mergedFeature = features[0].wkt.toString();
+            
+            var a = [];
+            for (var i=1;i<features.length;i++) {
+                a.push(features[i].wkt.toString());
+            }
+            
+            this.merge(a,SpatialMap.Function.bind(function (callback,wkt) {
+                callback();
+            },this,callback));
+
         }
-        callback();
+    },
+    
+    merge: function (wktarray,callback) {
+        var params = {
+            page: 'formular.geometry.union',
+            sessionid: this.sessionid,
+            wkt1: this.mergedFeature,
+            wkt2: wktarray.pop()
+        };
+    
+        jQuery.ajax({
+            url : 'cbkort',
+            dataType : 'json',
+            type: 'POST',
+            async: true,
+            data : params,
+            success : SpatialMap.Function.bind(function (wktarray,callback,data) {
+                this.mergedFeature = data.row[0].expressionresult;
+                if (wktarray.length > 0) {
+                    this.merge(wktarray, callback);
+                } else {
+                    callback(this.mergedFeature);
+                }
+            },this,wktarray,callback),
+            error : SpatialMap.Function.bind(function (callback) {
+                callback();
+            },this,callback)
+        });
     },
     
     selectFromDatasource: function (datasource,wkt) {
@@ -1108,7 +1159,7 @@ Formular = SpatialMap.Class ({
             
             if (features.length > 0) {
                 
-                params.wkt = features[0].wkt.toString();
+                params.wkt = this.mergedFeature;
             
                 if (this.spatialqueries[i].targerset) {
                     params.targetset = this.spatialqueries[i].targerset;
@@ -1178,7 +1229,7 @@ Formular = SpatialMap.Class ({
                 formularxsl: this.reportxsl
             };
             if (this.map && this.feature.length > 0) {
-                params.wkt = this.feature[0].wkt.toString();
+                params.wkt = this.mergedFeature;
             }
             if (this.reportmapscale !== null) {
                 params.map_web = 'minscale+'+this.reportmapscale+'+maxscale+'+this.reportmapscale;

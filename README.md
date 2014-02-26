@@ -174,6 +174,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <!-- map -->
             <!-- Det element, der indeholder kortet. -->
             <map>
+                <!-- Følgende atributter kan tilføjes til et theme:
+                    multiplegeometries  - Default false. Skal man kunne tegne flere geometrier i kortet
+                -->
                 <extent>539430.4,6237856,591859.2,6290284.8</extent>                <!-- OPTIONAL -->
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions> <!-- OPTIONAL -->
                 <themes>
@@ -265,6 +268,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.02.26 - Mulighed for at tegne flere geometrier af samme type i kortet.
 * 2014.02.25 - Nyt maptool der kan benytte den aktuelle position til at navigere i kortet.
 * 2014.02.16 - Mulighed for at opdele i kolonner.
 * 2014.02.02 - onconflict og onnoconflict er tilføjet til konfliktsøgningsfunktionaliteten.

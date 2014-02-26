@@ -164,6 +164,27 @@ td {
     background-position: -259px -23px;
 }
 
+.button_delete {
+    background-position: -285px 0;
+}
+.button_delete_active {
+    background-position: -285px -23px;
+}
+
+.button_move {
+    background-position: -1px 0;
+}
+.button_move_active {
+    background-position: -1px -23px;
+}
+
+.button_modify {
+    background-position: -233px 0;
+}
+.button_modify_active {
+    background-position: -233px -23px;
+}
+
 .button_location {
     background-image: url("/modules/formular/css/img/location.png");
     background-position: -1px 0;

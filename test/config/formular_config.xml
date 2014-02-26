@@ -10,6 +10,10 @@
                 <maptool displayname="Tegn en polygon" name="polygon" default="true"/>
                 <maptool displayname="Tegn et punkt" name="point"/>
                 <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
             </maptools>
             <map class="my_map_class" multiplegeometries="true" mergegeometries="false">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>

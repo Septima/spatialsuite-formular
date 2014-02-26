@@ -14,7 +14,7 @@ Formular = SpatialMap.Class ({
     mapbuttons: {},
     spatialqueries: [],
     postparams: {},
-    feature: null,
+    feature: [],
     areaid: null,
     
     defaultMapTool: 'pan',
@@ -911,6 +911,15 @@ Formular = SpatialMap.Class ({
                     this.map.setClickEvent(SpatialMap.Function.bind(this.selectFromDatasource,this,datasource));
                 }
             break;
+            case 'delete':
+                this.map.drawDelete(SpatialMap.Function.bind(this.featureDeleted,this));
+            break;
+            case 'move':
+                this.map.drawMove(SpatialMap.Function.bind(this.featureModified,this));
+            break;
+            case 'modify':
+                this.map.drawModify(SpatialMap.Function.bind(this.featureModified,this));
+            break;
             case 'polygon':
                 this.map.drawPolygon(SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
             break;
@@ -943,19 +952,63 @@ Formular = SpatialMap.Class ({
                 this.feature = [];
             }
         }
+        
         this.feature.push(event);
+        
+        this.featureChanged ();
+    },
+    
+    featureDeleted: function (event) {
+        if (event.type === 'DELETE') {
+            for (var i=0;i<this.feature.length;i++) {
+                if (this.feature[i].id === event.id) {
+                    this.feature.splice(i,1);
+                    break;
+                }
+            }
+            this.featureChanged ();
+        }
+    },
+    
+    featureModified: function (event) {
+        if (event.type === 'MODIFY') {
+            for (var i=0;i<this.feature.length;i++) {
+                if (this.feature[i].id === event.id) {
+                    this.feature[i] = event;
+                    break;
+                }
+            }
+            this.featureChanged ();
+        }
+    },
+    
+    featureChanged: function (feature) {
+        
+        console.log('feature change');
         
         if (this.areaid != null) {
             var area = 0;
             for (var i=0;i<this.feature.length;i++) {
-                area += parseInt(this.feature[i]..wkt.getArea());
+                area += parseInt(this.feature[i].wkt.getArea());
             }
             jQuery('#areaspan_'+this.areaid).html(area);
             jQuery('#'+this.areaid).val(area);
             jQuery('#'+this.areaid).change();
         }
         
-        this.query (this.feature);
+        this.setMergedGeometry (this.feature, SpatialMap.Function.bind(function () {
+            this.query (this.feature);
+        },this));
+        
+    },
+    
+    setMergedGeometry: function (features,callback) {
+        if (features.length > 0) {
+            this.mergedFeature = features[0].wkt.toString();
+        } else {
+            this.mergedFeature = null;
+        }
+        callback();
     },
     
     selectFromDatasource: function (datasource,wkt) {
@@ -977,7 +1030,27 @@ Formular = SpatialMap.Class ({
             success : SpatialMap.Function.bind( function(data, status) {
                 var wkt = jQuery(data).find('col[name="shape_wkt"]').text();
                 if (wkt) {
-                    this.map.drawWKT(wkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+                    this.map.drawWKT(wkt,SpatialMap.Function.bind(function (event) {
+                        
+                        var add = true;
+                        //If two features are identical then the two features are removed
+                        for (var i=0;i<this.feature.length;i++) {
+                            if (this.feature[i].wkt.toString() === event.wkt.toString()) {
+                                this.map.deleteFeature (this.feature[i].id);
+                                this.feature.splice(i,1);
+                                add = false;
+                                break;
+                            }
+                        }
+                        if (add) {
+                            this.featureDrawed(event);
+                        } else {
+                            //The feature is deleted
+                            this.featureChanged ();
+                            setTimeout(SpatialMap.Function.bind(function (e) {this.map.deleteFeature (e.id);},this,event),200);
+                        }
+                        
+                    },this),{styles: this.style});
                 }
             },this)
         });
@@ -1024,7 +1097,6 @@ Formular = SpatialMap.Class ({
     query: function (features) {
         var params = {
             page: 'formular-query',
-            wkt: features[0].wkt.toString(),
             sessionid: this.sessionid
         }
         
@@ -1032,57 +1104,62 @@ Formular = SpatialMap.Class ({
             jQuery('#'+this.spatialqueries[i].id).html('');
             jQuery('#container_'+this.spatialqueries[i].id).hide();
             
-            if (this.spatialqueries[i].targerset) {
-                params.targetset = this.spatialqueries[i].targerset;
-            }
-            if (this.spatialqueries[i].targetsetfile) {
-                params.targetsetfile = this.spatialqueries[i].targetsetfile;
-            }
-        
-            jQuery.ajax( {
-                url : 'cbkort',
-                dataType : 'xml',
-                type: 'POST',
-                async: false,
-                data : params,
-                success : SpatialMap.Function.bind( function(spatialquery, data, status) {
-                    var id = spatialquery.id;
-                    var targets = jQuery(data).find('pcomposite[name="presentation"]');
-                    var displayname = [];
-                    var html = '';
-                    var reporttext = '';
-                    var count = 0;
-                    for (var i=0;i<targets.length;i++) {
-                        //html += '<b>'+jQuery(targets[i]).find('col[name="targetdisplayname"]').text() + '</b><br/>';
-                        rowlist = jQuery(targets[i]).find('rowlist');
-                        for (var j=0;j<rowlist.length;j++) {
-                            var row = jQuery(rowlist[j]).find('row');
-                            count++;
-                            for (var k=0;k<row.length;k++) {
-                                reporttext += jQuery(row[k]).find('col[name="label"]').text() + jQuery(row[k]).find('col[name="value"]').text() + '\u000A';//'%0A';//'&#10;';//'&#xA;';//
-                                html += '<div class="targetrow">'+jQuery(row[k]).find('col[name="label"]').text() + jQuery(row[k]).find('col[name="value"]').text() + '</div>';
+            if (features.length > 0) {
+                
+                params.wkt = features[0].wkt.toString();
+            
+                if (this.spatialqueries[i].targerset) {
+                    params.targetset = this.spatialqueries[i].targerset;
+                }
+                if (this.spatialqueries[i].targetsetfile) {
+                    params.targetsetfile = this.spatialqueries[i].targetsetfile;
+                }
+            
+                jQuery.ajax( {
+                    url : 'cbkort',
+                    dataType : 'xml',
+                    type: 'POST',
+                    async: false,
+                    data : params,
+                    success : SpatialMap.Function.bind( function(spatialquery, data, status) {
+                        var id = spatialquery.id;
+                        var targets = jQuery(data).find('pcomposite[name="presentation"]');
+                        var displayname = [];
+                        var html = '';
+                        var reporttext = '';
+                        var count = 0;
+                        for (var i=0;i<targets.length;i++) {
+                            //html += '<b>'+jQuery(targets[i]).find('col[name="targetdisplayname"]').text() + '</b><br/>';
+                            rowlist = jQuery(targets[i]).find('rowlist');
+                            for (var j=0;j<rowlist.length;j++) {
+                                var row = jQuery(rowlist[j]).find('row');
+                                count++;
+                                for (var k=0;k<row.length;k++) {
+                                    reporttext += jQuery(row[k]).find('col[name="label"]').text() + jQuery(row[k]).find('col[name="value"]').text() + '\u000A';//'%0A';//'&#10;';//'&#xA;';//
+                                    html += '<div class="targetrow">'+jQuery(row[k]).find('col[name="label"]').text() + jQuery(row[k]).find('col[name="value"]').text() + '</div>';
+                                }
                             }
                         }
-                    }
-                    if (html != '') {
-                        jQuery('#container_conflictdiv_'+id).show();
-                        jQuery('#conflictdiv_'+id).html(html);
-                    } else {
-                      jQuery('#container_conflictdiv_'+id).hide();
-                    }
-                    if (count) {
-                        jQuery('#'+id).val(reporttext);
-                        jQuery('#container_conflictdiv_'+id).show('fast');
-                        if (spatialquery.onconflict) {
-                            spatialquery.onconflict.apply(jQuery('#'+id));
+                        if (html != '') {
+                            jQuery('#container_conflictdiv_'+id).show();
+                            jQuery('#conflictdiv_'+id).html(html);
+                        } else {
+                          jQuery('#container_conflictdiv_'+id).hide();
                         }
-                    } else {
-                        if (spatialquery.onnoconflict) {
-                            spatialquery.onnoconflict();
+                        if (count) {
+                            jQuery('#'+id).val(reporttext);
+                            jQuery('#container_conflictdiv_'+id).show('fast');
+                            if (spatialquery.onconflict) {
+                                spatialquery.onconflict.apply(jQuery('#'+id));
+                            }
+                        } else {
+                            if (spatialquery.onnoconflict) {
+                                spatialquery.onnoconflict();
+                            }
                         }
-                    }
-                },this,this.spatialqueries[i])
-            });
+                    },this,this.spatialqueries[i])
+                });
+            }
         }
     },
     

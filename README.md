@@ -159,8 +159,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             
             <!-- maptools -->
             <!-- Maptool, er nogle knapper, som brugeren kan vælge imellem når der skal interageres med kortet. Nedenstående liste er dem, der pt. er implementeret. "pan" toolet vil altid default være slået til. -->
-            <!-- På alle maptools kan man sætte displayname og herved få vist en tekst når musen føres over ikonet -->
-            <!-- Angiv hvilket tool, der skal være aktivt fra start. Det gøres ved at tilføje default="true" på et maptool -->
+            <!-- Følgende atributter kan tilføjes til et maptool:
+                name        - Angiver hvilket maptool, knappen skal referere til. Mulige værdier er: pan, select, polygon, line, point, circle, location, delete, move og modify.
+                default     - OPTIONAL - Den viste tekst når musen holdes over knappen
+                displayname - OPTIONAL - Angiv hvilket tool, der skal være aktivt fra start. Det gøres ved at tilføje default="true" på et maptool
+                disable     - OPTIONAL - Knappen er deaktiveret ved start. Kan ændres med formular.disableButton(['point'],false) ud fra valg i inputfelter eller skift i zoomlevel.
+            -->
             <maptools>
                 <maptool displayname="" name="pan" default="true"/>
                 <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE"/>   <!-- Select udpager fra en datasource, der skal angives som attribut -->
@@ -177,8 +181,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <!-- map -->
             <!-- Det element, der indeholder kortet. -->
             <map>
-                <!-- Følgende atributter kan tilføjes til et theme:
+                <!-- Følgende atributter kan tilføjes til et map:
                     multiplegeometries  - Default false. Skal man kunne tegne flere geometrier i kortet
+                    onchange            - Hvis man gerne vil have at der sker noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i. 
                 -->
                 <extent>539430.4,6237856,591859.2,6290284.8</extent>                <!-- OPTIONAL -->
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions> <!-- OPTIONAL -->
@@ -271,6 +276,8 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.03.05 - onchange tilføjet til kortet, så man kan gøre noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i.
+* 2014.03.05 - Mulighed for at disable et maptool.
 * 2014.02.26 - Mulighed for at tegne flere geometrier af samme type i kortet.
 * 2014.02.25 - Nyt maptool der kan benytte den aktuelle position til at navigere i kortet.
 * 2014.02.16 - Mulighed for at opdele i kolonner.

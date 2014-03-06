@@ -11,6 +11,8 @@ Formular = SpatialMap.Class ({
     extent: [539430.4,6237856,591859.2,6290284.8],
     resolutions: [0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4],
     
+    currentMapState: null,
+    
     mapbuttons: {},
     spatialqueries: [],
     postparams: {},
@@ -401,10 +403,16 @@ Formular = SpatialMap.Class ({
                     if (displayname) {
                         title = displayname.toString();
                     }
-                    $('#mapbuttons_'+counter).append('<div id="mapbutton_'+counter+'_'+j+'" class="button" title="'+title+'"></div>');
                     var id = 'mapbutton_'+counter+'_'+j;
-                    jQuery('#'+id).addClass('button_'+name).click(SpatialMap.Function.bind(this.activateTool,this,name,maptools[j]));
-                    this.mapbuttons[name] = id;
+                    var button = jQuery('<div id="'+id+'" class="button button_'+name+'" title="'+title+'"><div></div></div>')
+                    button.click(SpatialMap.Function.bind(this.activateTool,this,name));
+                    this.mapbuttons[name] = button;
+
+                    if (jQuery(maptools[j]).attr('disable')=='true') {
+                        button.addClass('button_disabled');
+                    }
+
+                    $('#mapbuttons_'+counter).append(button);
                     
                     if (jQuery(maptools[j]).attr('default')=='true') {
                         this.defaultMapTool = name;
@@ -486,7 +494,21 @@ Formular = SpatialMap.Class ({
                     resolutions: resolutions,
                     layers: layers
                 }
+                
+                if (node.attr('onchange')) {
+                    var mapchange = new Function (node.attr('onchange'));
+                    mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (handler,map) {
+                        this.currentMapState = map;
+                        handler(map);
+                    },this,mapchange);
+                } else {
+                    mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (map) {
+                        this.currentMapState = map;
+                    },this);
+                }
+                
                 this.map = new SpatialMap.Map ('map_'+counter,mapoptions);
+                
             break;
             case 'area':
                 this.areaid = id;
@@ -886,12 +908,33 @@ Formular = SpatialMap.Class ({
     },
     
     resetButtons: function () {
-        for (var name in this.mapbuttons) {
-            jQuery('#'+this.mapbuttons[name]).removeClass ('button_'+name+'_active');
+        for (var type in this.mapbuttons) {
+            this.mapbuttons[type].removeClass ('button_'+type+'_active');
         }
     },
     
-    activateTool: function (type,tool) {
+    disableButton: function (types,disable) {
+        if (!jQuery.isArray(types)) {
+            types = [types];
+        }
+        for (var i=0;i<types.length;i++) {
+            if (disable === true) {
+                this.mapbuttons[types[i]].addClass ('button_disabled');
+                if (this.mapbuttons[types[i]].hasClass('button_'+types[i]+'_active')) {
+                    this.activateTool(this.defaultMapTool)
+                }
+            } else {
+                this.mapbuttons[types[i]].removeClass ('button_disabled');
+            }
+        }
+    },
+    
+    activateTool: function (type) {
+        
+        if (this.mapbuttons[type].hasClass ('button_disabled')) {
+            return;
+        }
+        
         this.resetButtons();
         this.map.setClickEvent();
         this.map.panzoom();
@@ -899,7 +942,7 @@ Formular = SpatialMap.Class ({
             this.map.locateRemove();
             this.locateActive = false;
         }
-        jQuery('#'+this.mapbuttons[type]).addClass ('button_'+type+'_active');
+        this.mapbuttons[type].addClass ('button_'+type+'_active');
         switch(type) {
             case 'pan':
                 this.map.panzoom();

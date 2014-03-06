@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="mapchange">
+        <header>Gør noget afhændigt af zoomniveau i kortet</header>
+        <subheader>Knapperne er inactive og først når man er zoomet langt nok ind, er det muligt at tegne noget i kortet.</subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Location"/>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point"/>
+                <maptool displayname="Tegn en linie" name="line" disable="true"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
+                <maptool displayname="Flyt kortet" name="pan" default="true"/>
+            </maptools>
+            <map class="my_map_class" onchange="formular.disableButton(['point','line','delete','move','modify','select'],formular.currentMapState.zoomLevel &lt; 4)">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="multiple">
         <header>Tegn flere geometrier i kortet</header>
         <subheader>Alle geometrierne sendes til servere og kan gemmes. Det er kun muligt at tegne flere geometrier af samme type. Hvis man tegner en geometri af en anden type, så slettes de forudgående geometrier.</subheader>

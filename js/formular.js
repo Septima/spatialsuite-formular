@@ -939,7 +939,7 @@ Formular = SpatialMap.Class ({
     
     activateTool: function (type) {
         
-        if (this.mapbuttons[type].element.hasClass ('button_disabled')) {
+        if (this.mapbuttons[type] && this.mapbuttons[type].element && this.mapbuttons[type].element.hasClass ('button_disabled')) {
             return;
         }
         
@@ -950,7 +950,9 @@ Formular = SpatialMap.Class ({
             this.map.locateRemove();
             this.locateActive = false;
         }
-        this.mapbuttons[type].element.addClass ('button_'+type+'_active');
+        if (this.mapbuttons[type] && this.mapbuttons[type].element) {
+            this.mapbuttons[type].element.addClass ('button_'+type+'_active');
+        }
         switch(type) {
             case 'pan':
                 this.map.panzoom();

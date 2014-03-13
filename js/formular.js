@@ -869,9 +869,26 @@ Formular = SpatialMap.Class ({
             this.validAddress = false;
             jQuery('#'+id+'_wkt').val ('');
         } else if (ui.item.data.type == 'matrikelnummer' && disablemapValue != 'true') {
-            alert('Det er ikke muligt at søge på jordstykker endnu!')
-            this.validAddress = false;
-            jQuery('#'+id+'_wkt').val ('');
+            var x = [];
+            var y = [];
+            var p = ui.item.data.geometryWkt.replace('POLYGON((','').replace('))','').split(',');
+            for (var i=0;i<p.length;i++) {
+                var a = p[i].split(' ');
+                x.push(a[0]-0);
+                y.push(a[1]-0);
+            }
+            
+            if (this.map && disablemapValue != 'true') {
+                this.map.zoomToExtent({x1:Math.min.apply(Math, x),y1:Math.min.apply(Math, y),x2:Math.max.apply(Math, x),y2:Math.max.apply(Math, y)});
+            }
+            this.validAddress = true;
+            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
+            if (options.usegeometry) {
+                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+            }
+            
+            
+            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
         } else {
             if (this.map && disablemapValue != 'true') {
                 this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});

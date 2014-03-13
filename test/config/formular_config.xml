@@ -348,6 +348,31 @@
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
+    <formular name="datedependent">
+        <header>Dato med begrænsning af input datoer ud fra hvad der er valgt i andet dato felt (2)</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <js>/modules/formular/test/js/dateChecker.js</js>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Datovælger med begrænsninger"/>
+
+            <input type="text" displayname="Sætter dato til 21 dage tidligere"/>
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDate('frist_startdato',jQuery('#frist_slutdato').val(),-21)"/> 
+            <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato" urlparam="frist_startdato"/>
+
+            <input type="text" displayname="Sætter dato til 21 dage tidligere samt begrænser til ikke mere end 21 dage tidligere"/>
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato1"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato1',jQuery('#frist_slutdato1').val(),-21); setDateLimit('frist_startdato1',d)"/> 
+            <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato1" urlparam="frist_startdato"/>
+
+            <input type="text" displayname="Sætter dato til 21 dage tidligere samt begrænser til ikke mere end 21 dage tidligere samt ikke efter valgt dato"/>
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato2"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/> 
+            <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato2" urlparam="frist_startdato"/>
+
+            <input type="text" displayname="Udfyld en ledetekst efter valg"/>
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato3"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="jQuery('#frist_startdato3_displayname').html('Vedligehold, der afsluttes '+jQuery('#frist_slutdato3').val()+' påbegyndes tidligst:')"/> 
+            <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato3" urlparam="frist_startdato"/>
+
+        </content>
+    </formular>
     <formular name="daterange">
         <header>Dato med begrænsning af muligt dato interval</header>
         <submitpage>formular.send.general.nomap</submitpage>
@@ -357,7 +382,7 @@
         </content>
     </formular>
     <formular name="datechange">
-        <header>Dato med begrænsning af input datoer ud fra hvad der er valgt i andet adresse felt</header>
+        <header>Dato med begrænsning af input datoer ud fra hvad der er valgt i andet dato felt</header>
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Datovælger med begrænsninger"/>

@@ -15,4 +15,6 @@
    <copyfile fromfile="[module:formular-test.dir]/html/custom.css"     tofile="[cbinfo.wwwroot.dir]/modules/formular/test/custom.css"/>
    <copyfile fromfile="[module:formular-test.dir]/html/custom.js"     tofile="[cbinfo.wwwroot.dir]/modules/formular/test/custom.js"/>
 
+   <copydir fromdir="[module:formular-test.dir]/js"    todir="[cbinfo.wwwroot.dir]/modules/formular/test/js" replacetext="false"/>
+
 </deploy>

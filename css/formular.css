@@ -113,6 +113,7 @@ td {
     float: right;
     background-image: url("/images/standard/editing_tool_bar.png");
     background-repeat: no-repeat;
+    background-position: -467px 0;
     cursor: pointer;
     height: 24px;
     margin-bottom: 2px;

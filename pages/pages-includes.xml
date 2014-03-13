@@ -78,6 +78,17 @@
         </data>
     </page>
     
+    <page name="formular.send.geometry" contenttype="application/json" sessionrequired="true">
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="userdatasource"/>
+                <url-parameter name="command" value="write"/>
+                <url-parameter name="shape_wkt">wkt</url-parameter>
+                <url-parameter name="dynamiclayer" value="user*"/>
+                <url-parameter name="geometrycolumn" value="shape_wkt"/>
+            </url-parameters>
+        </data>
+    </page>
     
     <page name="formular.read.dates" contenttype="text/xml">
         <data handler="datasource" operation="execute-command">

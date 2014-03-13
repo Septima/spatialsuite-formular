@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="templates">
+        <header>Tegn med "templates"</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Location"/>
+            <maptools>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Tegn en bygning" name="template4" options="polygon -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en vej" name="template2" options="line -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en flagstang" name="template1" options="point -1000,1000"/>
+                <maptool displayname="Flyt kortet" name="pan" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="mapchange">
         <header>Gør noget afhændigt af zoomniveau i kortet</header>
         <subheader>Knapperne er inactive og først når man er zoomet langt nok ind, er det muligt at tegne noget i kortet.</subheader>
@@ -29,6 +54,7 @@
         <header>Tegn flere geometrier i kortet</header>
         <subheader>Alle geometrierne sendes til servere og kan gemmes. Det er kun muligt at tegne flere geometrier af samme type. Hvis man tegner en geometri af en anden type, så slettes de forudgående geometrier.</subheader>
         <submitpage>formular.send.general.nomap</submitpage>
+        <submitgeometrypage>formular.send.general.nomap</submitgeometrypage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Location"/>
             <maptools>

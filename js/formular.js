@@ -410,7 +410,8 @@ Formular = SpatialMap.Class ({
                     button.click(SpatialMap.Function.bind(this.activateTool,this,name));
                     this.mapbuttons[name] = {
                         element: button,
-                        options: null
+                        options: null,
+                        config: jQuery(maptools[j])
                     }
                     if (jQuery(maptools[j]).attr('options')) {
                         this.mapbuttons[name].options = jQuery(maptools[j]).attr('options').toString().toLowerCase();
@@ -976,7 +977,7 @@ Formular = SpatialMap.Class ({
             break;
             case 'select':
                 this.map.panzoom();
-                var datasource = jQuery(tool).attr('datasource').toString().toLowerCase();
+                var datasource = this.mapbuttons[type].config.attr('datasource').toString().toLowerCase();
                 if (!datasource || datasource == '') {
                     alert('Datasource missing!');
                     this.activateTool(this.currentMapTool);

@@ -19,7 +19,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -44,7 +44,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -70,7 +70,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -90,7 +90,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -136,7 +136,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -153,7 +153,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -215,7 +215,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                     <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
@@ -241,7 +241,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                     <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
@@ -264,7 +264,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme singleTile="false" useSessionID="false" name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme singleTile="false" useSessionID="false" name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                     <theme singleTile="true" opacity=".5" servicename="kbh_themestore" useSessionID="true" name="theme-biblioteker" host="/wms"/>
                 </themes>
             </map>
@@ -314,7 +314,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal:" onchange="jQuery('#pris').val('Prisen er: '+jQuery(this).val())"/>
@@ -450,7 +450,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
@@ -539,7 +539,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
@@ -579,7 +579,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal:"/>
@@ -669,7 +669,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
             <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>

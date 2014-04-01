@@ -1748,6 +1748,11 @@ function calculateDistance (a,b) {
     var wktA = jQuery('#'+a+'_wkt').val();
     var wktB = jQuery('#'+b+'_wkt').val();
 
+    //Det følgende sikre, at der ikke opstår JS-fejl, 
+    if (wktA == null || wktB == null) {
+        return;
+    }
+    
     if (wktA.match(/^POINT/) && wktB.match(/^POINT/)) {
 /* nyere måde
         var gA = new SpatialServer.Geometry ({wkt:wktA});

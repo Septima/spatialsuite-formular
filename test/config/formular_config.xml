@@ -1,5 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="poll">
+        <header>Spørgeskemaundersøgelse</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <js>/modules/formular/test/js/poll.js</js>
+        <tabs class="testtab">false</tabs>
+        <messages>
+            <message name="done">Her står der en tekst</message>
+        </messages>
+        <content displayname="Start">
+            <input type="input" id="journalnr" displayname="Indtast Jounalnummer" urlparam="journalnr" defaultvalue="09.02.01-P19" onkeyup="Poll.setFormularType(jQuery('#journalnr').val());"/>
+            <input type="radiobutton" displayname="Er du *" urlparam="brugertype" id="brugertype" onchange="Poll.setFormularType(jQuery('#journalnr').val());">
+                <option value="virksomhed" name="Virksomhed"/>
+                <option value="raadgiver" name="Rådgiver"/>
+                <option value="privat" name="Privat"/>
+            </input>
+            <input type="hidden" id="formulartype" urlparam="formulartype" defaultvalue="0"/>
+            <input type="hidden" id="kontakttype" urlparam="kotakttype" defaultvalue="0"/>
+        </content>
+        <content displayname="1">
+        
+            <input type="text" displayname="Hvor tilfreds har du været med vores tilsyn?" condition="Poll.formulartype == 1"/>
+            <input type="radiobutton" displayname="" id="svar1_1" urlparam="svar1_1" condition="Poll.formulartype == 1" onchange="Poll.setFormularState('svar1_1');">
+                <option value="4" name="Meget tilfreds"/>
+                <option value="3" name="Tilfreds"/>
+                <option value="2" name="Utilfreds"/>
+                <option value="1" name="Meget utilfreds"/>
+            </input>
+            <input type="text" displayname="Hvor tilfreds er du med tilsynest forløb?" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')" />
+            <input type="radiobutton" displayname="" id="svar1_2" urlparam="svar1_2" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">
+                <option value="4" name="Meget tilfreds"/>
+                <option value="3" name="Tilfreds"/>
+                <option value="2" name="Utilfreds"/>
+                <option value="1" name="Meget utilfreds"/>
+            </input>
+            <input type="text" displayname="Hvor tilfreds er du med kommunens medarbejder?" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')" />
+            <input type="radiobutton" displayname="" id="svar1_3" urlparam="svar1_3" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">
+                <option value="4" name="Meget tilfreds"/>
+                <option value="3" name="Tilfreds"/>
+                <option value="2" name="Utilfreds"/>
+                <option value="1" name="Meget utilfreds"/>
+            </input>
+            <input type="text" displayname="Hvor nemt er det at forstå vores brev?" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')" />
+            <input type="radiobutton" displayname="" id="svar1_4" urlparam="svar1_4" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">
+                <option value="3" name="Nemt at forstå"/>
+                <option value="2" name="Hverken nemt eller svært at forstå"/>
+                <option value="1" name="Svært at forstå"/>
+            </input>
+            <input type="text" displayname="Svarer vores afgørelse til dine forventninger efter dialog med vores medarbejder?" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')" />
+            <input type="radiobutton" displayname="" id="svar1_5" urlparam="svar1_5" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">
+                <option value="4" name="I høj grad"/>
+                <option value="3" name="I nogen grad"/>
+                <option value="2" name="I mindre grad"/>
+                <option value="1" name="Slet ikke"/>
+            </input>
+            
+            
+            <input type="text" displayname="Hvor tilfreds er du med sagens forløb?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_1" urlparam="svar2_1" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_1');">
+                <option value="4" name="Meget tilfreds"/>
+                <option value="3" name="Tilfreds"/>
+                <option value="2" name="Utilfreds"/>
+                <option value="1" name="Meget utilfreds"/>
+            </input>
+            <input type="text" displayname="Søgte du information inden fu sendte ansøgningen?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_2" urlparam="svar2_2" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_2');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Hvordan søgte du information?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja'"/>
+            <input type="radiobutton" displayname="" id="svar2_3" urlparam="svar2_3" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja'" onchange="Poll.setFormularState('svar2_3');">
+                <option value="5" name="På kommunens hjemmeside"/>
+                <option value="4" name="Ved telefonisk henvendelse"/>
+                <option value="3" name="Via e-mail korrespondance"/>
+                <option value="2" name="Ved fremmøde på kommunen"/>
+                <option value="1" name="På anden måde"/>
+            </input>
+            <input type="input" id="svar2_4" displayname="Hvor/hvordan?" urlparam="svar2_4" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja' &amp;&amp; Poll.state['svar2_3']=='1'"/>
+
+            <input type="text" displayname="I hvilken grad havde du udbytte af informationen?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')" />
+            <input type="radiobutton" displayname="" id="svar2_5" urlparam="svar2_5" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')">
+                <option value="4" name="I høj grad"/>
+                <option value="3" name="I nogen grad"/>
+                <option value="2" name="I mindre grad"/>
+                <option value="1" name="Slet ikke"/>
+            </input>
+            <input type="textarea" urlparam="svar2_6" displayname="Kommentar" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')"/>
+            
+            <input type="text" displayname="Hvor tilfreds er du med kommunens medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
+            <input type="radiobutton" displayname="" id="svar2_6" urlparam="svar2_6" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
+                <option value="4" name="Meget tilfreds"/>
+                <option value="3" name="Tilfreds"/>
+                <option value="2" name="Utilfreds"/>
+                <option value="1" name="Meget utilfreds"/>
+            </input>
+
+            <input type="text" displayname="Er du tilfreds med sagsbehandlingstiden?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_7" urlparam="svar2_7" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_7');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Svarede sagsbehandlingstiden til det vi havde stillet dig i udsigt?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_8" urlparam="svar2_8" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_7']=='nej'" onchange="Poll.setFormularState('svar2_8');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Hvilken sagsbehandlingstid havde vi lovet dig?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_7']=='nej' &amp;&amp; Poll.state['svar2_8']=='nej'"/>
+            <input type="input" displayname="" id="svar2_9" urlparam="svar2_9" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_7']=='nej' &amp;&amp; Poll.state['svar2_8']=='nej'"/>
+
+            <input type="text" displayname="Hvor nemt var det at forstå vores brev?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
+            <input type="radiobutton" displayname="" id="svar2_10" urlparam="svar2_10" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
+                <option value="3" name="Det var nemt at forstå"/>
+                <option value="2" name="Det var hverken nemt eller svært"/>
+                <option value="1" name="Det var svært at forstå"/>
+            </input>
+            
+            <input type="text" displayname="Svarer vores afgørelse til dine forventninger efter dialog med vores medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
+            <input type="radiobutton" displayname="" id="svar2_10" urlparam="svar2_10" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
+                <option value="4" name="I høj grad"/>
+                <option value="3" name="I nogen grad"/>
+                <option value="2" name="I mindre grad"/>
+                <option value="1" name="Slet ikke"/>
+            </input>
+
+
+        </content>
+        <content displayname="Slut">
+            <input type="textarea" urlparam="kommentar" displayname="Har du uddybende bemærkninger?"/>
+            <input type="input" displayname="Navn" urlparam="navn" defaultvalue="" condition="(Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')) || (Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2'))"/>
+            <input type="input" displayname="Tlf.nr." urlparam="tlf" condition="(Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')) || (Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2'))"/>
+            <input type="input" displayname="Email" urlparam="email" condition="(Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')) || (Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2'))"/>
+        </content>
+    </formular>
+    
+    
+    
     <formular name="templates">
         <header>Tegn med "templates"</header>
         <subheader></subheader>

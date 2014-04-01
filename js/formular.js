@@ -36,6 +36,8 @@ Formular = SpatialMap.Class ({
     confirm: null,
     submitbuttons: [],
     
+    messages: {},
+    
     showReport: true,
     showTabs: false,
     
@@ -103,6 +105,13 @@ Formular = SpatialMap.Class ({
                 if (reportmapscale) {
                     this.reportmapscale = reportmapscale;
                 }
+
+                var messages = jQuery(data).find('messages > message');
+                if (messages.length > 0) {
+                    for (var i=0;i<messages.length;i++) {
+                        this.messages[jQuery(messages[i]).attr('name')] = jQuery(messages[i]).text();
+                    }
+                }
                 
                 var pages = jQuery(data).find('submitpages > page');
                 if (pages.length > 0) {
@@ -144,6 +153,11 @@ Formular = SpatialMap.Class ({
                 if (this.config.length) {
                     for (var k=0;k<this.config.length;k++) {
                         var contenttable = jQuery('<table class="tablecontent tabcontent tabcontent'+k+'" id="content'+k+'"></table>');
+                        
+                        if (jQuery(this.config[k]).attr('condition')) {
+                            this.conditions.push({id: 'content'+k, elementId: 'content'+k, condition: node.attr('condition')});
+                        }
+                        
                         var contentcontainer = jQuery('<tbody></tbody>');
                         contenttable.append(contentcontainer);
                         jQuery('div#content').append(contenttable);
@@ -255,7 +269,7 @@ Formular = SpatialMap.Class ({
         }
         
         if (node.attr('condition')) {
-            this.conditions.push({id: id, condition: node.attr('condition')});
+            this.conditions.push({id: id, elementId: id+'_row', condition: node.attr('condition')});
         }
         
         var className = node.attr('class');
@@ -696,12 +710,21 @@ Formular = SpatialMap.Class ({
                 if (node.attr('onchange')) {
                     var f = new Function (node.attr('onchange'));
                 }
-                jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange) {
-                    if (onchange) {
-                        onchange();
-                    }
-                    this.inputChanged();
-                },this,f));
+                if (type === 'radiobutton') {
+                    jQuery('input:radio[name='+id+']').change(SpatialMap.Function.bind(function (onchange) {
+                        if (onchange) {
+                            onchange();
+                        }
+                        this.inputChanged();
+                    },this,f));
+                } else {
+                    jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange) {
+                        if (onchange) {
+                            onchange();
+                        }
+                        this.inputChanged();
+                    },this,f));
+                }
                 
                 var f = null;
                 if (node.attr('onkeyup')) {
@@ -745,9 +768,9 @@ Formular = SpatialMap.Class ({
                 this.conditions[i].condition = new Function ('return '+this.conditions[i].condition);
             }
             if (this.conditions[i].condition()) {
-                jQuery('#'+this.conditions[i].id+'_row').show();
+                jQuery('#'+this.conditions[i].elementId).show();
             } else {
-                jQuery('#'+this.conditions[i].id+'_row').hide();
+                jQuery('#'+this.conditions[i].elementId).hide();
             }
         }
     },
@@ -1475,16 +1498,24 @@ Formular = SpatialMap.Class ({
 	                                formular: this.name,
 	                                sessionid: this.sessionid
 	                            },
-	                            success: SpatialMap.Function.bind( function (data) {
+	                            success: SpatialMap.Function.bind( function (pdf,data) {
 	                                if(data.result!='OK') {
-	                                    jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+	                                    if (this.messages.done) {
+	                                        jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+	                                    } else {
+	                                        jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+	                                    }
 	                                }
 	                                this.removeSession();
-	                            },this)
+	                            },this,pdf)
 	                        });
 	                        jQuery('#message').show();
 	                        jQuery('#messagebuttons').show();
-	                        jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                            if (this.messages.done) {
+                                jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                            } else {
+                                jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                            }
 	                    } else {
 	                        jQuery('#message').show();
 	                        jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');

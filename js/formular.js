@@ -1664,16 +1664,27 @@ Formular = SpatialMap.Class ({
         jQuery('#'+b).isValid();
     },
 
-    countDays: function (date1,date2,resultElement) {
+    countDays: function (date1,date2,resultElement, nrOfAddedDays) {
+        var count = null;
         if (date1 && date2) {
             date1 = date1.split('.');
             date1 = new Date(date1[2],date1[1]-1,date1[0]);
             date2 = date2.split('.');
             date2 = new Date(date2[2],date2[1]-1,date2[0]);
-            jQuery('#'+resultElement).val(((date2-date1)/1000/60/60/24));
+            
+            count = (date2-date1)/1000/60/60/24;
+            if (typeof nrOfAddedDays === 'number') {
+                count += nrOfAddedDays;
+            }
+            if (typeof resultElement !== 'undefined' && resultElement) {
+                jQuery('#'+resultElement).val(count);
+            }
         } else {
-            jQuery('#'+resultElement).val('');
+            if (typeof resultElement !== 'undefined' && resultElement) {
+                jQuery('#'+resultElement).val('');
+            }
         }
+        return count;
     },
     
     setDatepickerLimit: function (id,options) {

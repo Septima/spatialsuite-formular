@@ -3,7 +3,14 @@
     <formular name="poll">
         <header>Spørgeskemaundersøgelse</header>
         <subheader></subheader>
-        <submitpage>formular.send.general.nomap</submitpage>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.create-pdf.nomap</page>
+            <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page>
+            <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page>
+<!--             <page>formular.save</page> -->
+<!--             <page>formular.move.pdf</page> -->
+        </submitpages>
         <js>/modules/formular/test/js/poll.js</js>
         <tabs class="testtab">false</tabs>
         <messages>

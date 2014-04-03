@@ -120,7 +120,8 @@ Formular = SpatialMap.Class ({
 	            		var p = {
 	            			name: jQuery(pages[i]).text(),
 	            			parser: jQuery(pages[i]).attr('parser'),
-	            			type: jQuery(pages[i]).attr('type')
+	            			type: jQuery(pages[i]).attr('type'),
+	            			condition: jQuery(pages[i]).attr('condition')
 	            		};
 	            		this.pages.push(p);
 	            	}
@@ -1470,7 +1471,7 @@ Formular = SpatialMap.Class ({
         }
         
         if (this.pages.length > 0) {
-        	
+            
         	var pages = this.pages.slice(0);
         	this.execute(params,pages);
         	
@@ -1536,53 +1537,72 @@ Formular = SpatialMap.Class ({
     },
     
     execute: function (params, pages) {
-        params.page = pages[0].name;
         
-        jQuery.ajax( {
-            url : 'cbkort',
-            dataType : pages[0].type || 'json',
-            type: 'POST',
-            async: true,
-            data : params,
-            success : SpatialMap.Function.bind( function(params, pages, data, status) {
-            	if (pages[0].parser) {
-            		params = this[pages[0].parser](data, params);
-            	} else {
-            		params = this.handleError(data, params);
-            	}
-            	
-            	if (params === null) {
-            		this.showError();
-            		return;
-            	}
-            	
-            	//Remove from list
-                pages.shift();
-                
-            	if (pages.length > 0) {
-            		this.execute(params, pages);
-            	} else {
-                    if (this.showReport) {
-                        if (this.pdf) {
-                            this.removeSession();
-                            jQuery('#message').show();
-                            jQuery('#messagebuttons').show();
-                            jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
-                        } else {
-                        	this.showError();
-                        }
-                    } else {
-                        jQuery('#message').show();
-                        jQuery('#messagebuttons').show();
-                        jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
-                        this.removeSession();
-                    }
-            	}
-            },this, params, pages),
-            error : SpatialMap.Function.bind( function(data, status) {
-                jQuery('#message').show().html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
-            },this)
-        });
+        if (!(pages[0].condition instanceof Function)) {
+            pages[0].condition = new Function ('return '+pages[0].condition);
+        }
+        if (pages[0].condition() === false) {
+            pages.shift();
+            
+            if (pages.length > 0) {
+                this.execute(params, pages);
+            } else {
+                this.pagesDone();
+            }
+        } else {
+            
+            params.page = pages[0].name;
+            
+            jQuery.ajax( {
+                url : 'cbkort',
+                dataType : pages[0].type || 'json',
+                type: 'POST',
+                async: true,
+                data : params,
+                success : SpatialMap.Function.bind( function(params, pages, data, status) {
+                	if (pages[0].parser) {
+                		params = this[pages[0].parser](data, params);
+                	} else {
+                		params = this.handleError(data, params);
+                	}
+                	
+                	if (params === null) {
+                		this.showError();
+                		return;
+                	}
+                	
+                	//Remove from list
+                    pages.shift();
+                    
+                	if (pages.length > 0) {
+                		this.execute(params, pages);
+                	} else {
+                	    this.pagesDone();
+                	}
+                },this, params, pages),
+                error : SpatialMap.Function.bind( function(data, status) {
+                    jQuery('#message').show().html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
+                },this)
+            });
+        }
+    },
+    
+    pagesDone: function () {
+        if (this.showReport) {
+            if (this.pdf) {
+                this.removeSession();
+                jQuery('#message').show();
+                jQuery('#messagebuttons').show();
+                jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+            } else {
+                this.showError();
+            }
+        } else {
+            jQuery('#message').show();
+            jQuery('#messagebuttons').show();
+            jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+            this.removeSession();
+        }
     },
     
     showError: function () {

@@ -37,6 +37,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
             <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
             <page parser="setPdf">formular.create-pdf</page>    
+            <page condition="false">formular.save</page>        <!-- Skal pagen kaldes? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.-->
             <page>formular.save</page>
             <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
         </submitpages>

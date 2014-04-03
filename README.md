@@ -37,6 +37,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
             <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
             <page parser="setPdf">formular.create-pdf</page>    
+            <page condition="false">formular.save</page>        <!-- Skal pagen kaldes? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.-->
             <page>formular.save</page>
             <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
         </submitpages>
@@ -67,7 +68,17 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - validate         - Tekst til validering. Det skrives under feltet for at angive hvad der er gjort galt.
                  - condition        - Skal feltet vises? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.
                   -->
-
+            
+            <!-- columns - Mulighed for at have input elementer i kolonner - tilføj class="mincss" for at få en kolonne til at opfører sig specielt -->
+            <columns>
+                <column>
+                    ...
+                </column>
+                <column>
+                    ...
+                </column>
+            </columns>
+            
             <!-- input - type="hidden" -->
             <!-- Kan bruges til at sende værdier, der ikke vedrører brugeren, til serveren -->
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Dette er en tekst, der skal sættes ind i kviteringen."/>
@@ -149,8 +160,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             
             <!-- maptools -->
             <!-- Maptool, er nogle knapper, som brugeren kan vælge imellem når der skal interageres med kortet. Nedenstående liste er dem, der pt. er implementeret. "pan" toolet vil altid default være slået til. -->
-            <!-- På alle maptools kan man sætte displayname og herved få vist en tekst når musen føres over ikonet -->
-            <!-- Angiv hvilket tool, der skal være aktivt fra start. Det gøres ved at tilføje default="true" på et maptool -->
+            <!-- Følgende atributter kan tilføjes til et maptool:
+                name        - Angiver hvilket maptool, knappen skal referere til. Mulige værdier er: pan, select, polygon, line, point, circle, location, delete, move og modify.
+                default     - OPTIONAL - Den viste tekst når musen holdes over knappen
+                displayname - OPTIONAL - Angiv hvilket tool, der skal være aktivt fra start. Det gøres ved at tilføje default="true" på et maptool
+                disable     - OPTIONAL - Knappen er deaktiveret ved start. Kan ændres med formular.disableButton(['point'],false) ud fra valg i inputfelter eller skift i zoomlevel.
+            -->
             <maptools>
                 <maptool displayname="" name="pan" default="true"/>
                 <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE"/>   <!-- Select udpager fra en datasource, der skal angives som attribut -->
@@ -158,11 +173,19 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 <maptool displayname="" name="line"/>
                 <maptool displayname="" name="point"/>
                 <maptool displayname="" name="circle"/>
+                <maptool displayname="" name="location"/>
+                <maptool displayname="" name="delete"/>
+                <maptool displayname="" name="move"/>
+                <maptool displayname="" name="modify"/>
             </maptools>
 
             <!-- map -->
             <!-- Det element, der indeholder kortet. -->
             <map>
+                <!-- Følgende atributter kan tilføjes til et map:
+                    multiplegeometries  - Default false. Skal man kunne tegne flere geometrier i kortet
+                    onchange            - Hvis man gerne vil have at der sker noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i. 
+                -->
                 <extent>539430.4,6237856,591859.2,6290284.8</extent>                <!-- OPTIONAL -->
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions> <!-- OPTIONAL -->
                 <themes>
@@ -189,6 +212,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - "class"         - angiver den css class, som feltet skal have. Det kan f.eks. være "warning", der gør at feltet bliver rødt.
                  - "targetset"     - angiver navnet på det targetset, som der skal søges i.
                  - "targetsetfile" - angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
+                 - "onconflict"    - angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
+                 - "onnoconflict"  - angiver det javascript der skal kaldes når der IKKE er ramt noget med denne konfliktsøgning.
                  På et targetset vil der typisk være anigvet ét target, men der kan godt være flere. På dette target er der knyttet en presentation. 
                  Inholdet af denne presentation, vil blive vist for brugeren. Hvis presentation ikke indeholder nogen columns, så vil der ikke blive vist 
                  noget resultat, men "displayname" vises. Det kan f.eks. bruges til at vise at der er fundet noget, men det er ikke interessant hvad det præcist er -->
@@ -252,6 +277,12 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.03.05 - onchange tilføjet til kortet, så man kan gøre noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i.
+* 2014.03.05 - Mulighed for at disable et maptool.
+* 2014.02.26 - Mulighed for at tegne flere geometrier af samme type i kortet.
+* 2014.02.25 - Nyt maptool der kan benytte den aktuelle position til at navigere i kortet.
+* 2014.02.16 - Mulighed for at opdele i kolonner.
+* 2014.02.02 - onconflict og onnoconflict er tilføjet til konfliktsøgningsfunktionaliteten.
 * 2013.11.14 - onshow funktion tilføjet til datovælgeren
 * 2013.09.20 - Mulighed for at kalde en sekvens af pages ved submit
 * 2013.07.01 - Brug adressepunktet som registreringspunkt

@@ -23,6 +23,7 @@
     <xsl:template match="formular[@name=$formular]">
         <html>
             <head>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
                 <xsl:choose>
                     <xsl:when test="title">
                         <title><xsl:value-of select="title" /></title>
@@ -76,6 +77,7 @@
                         <xsl:attribute name="type">text/css</xsl:attribute>
                     </xsl:element>
                 </xsl:if>
+                <script language="javascript" src="[cbinfo.js.url]/standard/proj4js/proj4js-compressed.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/jquery.valid8.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
                 <xsl:if test="js">

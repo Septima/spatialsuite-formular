@@ -1,5 +1,3 @@
-/* Danish initialisation for the jQuery UI date picker plugin. */
-/* Written by Jan Christensen ( deletestuff@gmail.com). */
 jQuery(function(jQuery){
 	jQuery.datepicker.regional['da'] = {
                 closeText: 'Luk',
@@ -14,7 +12,7 @@ jQuery(function(jQuery){
                 dayNamesShort: ['Søn','Man','Tir','Ons','Tor','Fre','Lør'],
                 dayNamesMin: ['Sø','Ma','Ti','On','To','Fr','Lø'],
                 weekHeader: 'Uge',
-        dateFormat: 'dd-mm-yy',
+        dateFormat: 'dd.mm.yy',
                 firstDay: 1,
                 isRTL: false,
                 showMonthAfterYear: false,

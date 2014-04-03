@@ -274,7 +274,7 @@
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="GeoSearch med kort"/>
-            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="muncode0101" usegeometry="true"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" usegeometry="true"/>
             <map class="my_map_class">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
@@ -291,7 +291,7 @@
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="GeoSearch med kort"/>
-            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser,Matrikelnumre" filter="muncode0101"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser,Matrikelnumre" filter="[module.spatialaddress.filter]"/>
             <map class="my_map_class">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
@@ -307,7 +307,7 @@
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="GeoSearch"/>
-            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" disablemap="true"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
@@ -433,8 +433,8 @@
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Beregning af afstande"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
-            <address id="addressa" urlparam="val0" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
-            <address id="addressb" urlparam="val1" displayname="Til Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0101" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
+            <address id="addressa" urlparam="val0" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
+            <address id="addressb" urlparam="val1" displayname="Til Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" disablemap="true" geometry_selected="calculateDistance('addressa','addressb')"></address>
             <input id="distance" type="text" displayname="Afstand (fugleflugt): " displayresult="0 m" urlparam="val2" onchange="var d = jQuery(this).val();if (d>5000) {jQuery('#zone').html('Zone 5')} else {jQuery('#zone').html('Zone 1')}"/>
             <input id="zone" type="text" displayname="" urlparam="val3"/>
         </content>
@@ -719,7 +719,7 @@
         <js>/modules/formular/test/custom.js</js>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Ansøgningsskema til vandhuller"/>
-            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153" regexp="[a-zæøå]" validate="Det skal være indtastet en adresse!"></address>
+            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" regexp="[a-zæøå]" validate="Det skal være indtastet en adresse!"></address>
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
@@ -784,7 +784,7 @@
         <help displayname="Hjælp"><![CDATA[<b>Hjælp</b><br/>Her står der hvordan du kan bruge siden. Man kan skrive HTML ind i hjælpeteksten. Det kunne også være billeder og <a href="http://spatialmap.com">links</a>]]></help>
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
-            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
+            <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
             <input type="input" displayname="Navn:" urlparam="navn"/>
         </content>
     </formular>

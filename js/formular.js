@@ -282,6 +282,8 @@ Formular = SpatialMap.Class ({
                 }
                 contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
                 var options = {
+                    noadrspec: 'true',
+                    limit: 15,
                     apikey: node.attr('apikey'),
                     area: node.attr('filter'),
                     id: id
@@ -802,7 +804,7 @@ Formular = SpatialMap.Class ({
             source: function(request, response) {
                 jQuery.ajax( {
                     scriptCharset: 'UTF-8',
-                    url : '//smartadresse.dk/service/locations/2/detect/json/'+ encodeURIComponent(request.term),
+                    url : '//smartadresse.dk/service/locations/3/detect/json/'+ encodeURIComponent(request.term),
                     dataType : "jsonp",
                     autoFocus: true,
                     data : options,
@@ -861,28 +863,7 @@ Formular = SpatialMap.Class ({
     },
     
     addressSelected: function (options,cdfs,disablemapValue,event,ui) {
-        var id = jQuery(event.target).attr('id');
-        if (ui.item.data.type == 'street' && disablemapValue != 'true') {
-            if (this.map) {
-                this.map.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
-            }
-            this.validAddress = false;
-            jQuery('#'+id+'_wkt').val ('');
-        } else {
-            if (this.map && disablemapValue != 'true') {
-                this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
-            }
-            this.validAddress = true;
-            jQuery('#'+id+'_wkt').val (ui.item.data.wkt);
-            if (options.usegeometry) {
-                this.map.drawWKT (ui.item.data.wkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
-            }
-            if (jQuery('#'+id+'_wkt').attr('value') != '') {
-                if (cdfs) {
-                    cdfs();                    
-                }
-            }
-        }
+        this.geoSearchSelected (options,cdfs,disablemapValue,event,ui);
     },
     
     geoSearchSelected: function (options,cdfs,disablemapValue,event,ui) {

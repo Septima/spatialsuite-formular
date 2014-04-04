@@ -1574,21 +1574,33 @@ Formular = SpatialMap.Class ({
                 this.removeSession();
                 jQuery('#message').show();
                 jQuery('#messagebuttons').show();
-                jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                if (this.messages.done) {
+                    jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                } else {
+                    jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                }
             } else {
                 this.showError();
             }
         } else {
             jQuery('#message').show();
             jQuery('#messagebuttons').show();
-            jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+            if (this.messages.done) {
+                jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+            } else {
+                jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+            }
             this.removeSession();
         }
     },
     
     showError: function () {
         jQuery('#message').show();
-        jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+        if (this.messages.error) {
+            jQuery('#messagetext').html('<div id="message_done">'+this.messages.error+'</div>');
+        } else {
+            jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+        }
     },
     
     handleError: function (data, params) {

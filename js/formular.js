@@ -788,12 +788,14 @@ Formular = SpatialMap.Class ({
     },
     
     showTab: function (i) {
-        jQuery('table.tablecontent.tabcontent').hide();
-        jQuery('table.tabcontent.tabcontent'+i).show();
-        
-        jQuery('.tabcontainer div').removeClass('active');
-        jQuery('.tabcontainer div#tab'+i).addClass('active');
-        jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+        if (!jQuery('.tabcontainer div#tab'+i).hasClass('disabled')) {
+            jQuery('table.tablecontent.tabcontent').hide();
+            jQuery('table.tabcontent.tabcontent'+i).show();
+            
+            jQuery('.tabcontainer div').removeClass('active');
+            jQuery('.tabcontainer div#tab'+i).addClass('active');
+            jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+        }
     },
     
     setAddressSelect: function (options) {

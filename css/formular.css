@@ -310,6 +310,11 @@ div.helpbutton {
     background-color: #4f4f4f;
     color: #fff;
 }
+.tabcontainer div.disabled {
+    font-style: italic;
+    cursor: default;
+    color: #999;
+}
 
 .arrow_box {
     position: relative;

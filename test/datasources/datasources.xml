@@ -56,4 +56,40 @@
         <debug>false</debug>
     </datasource>
 
+    <datasource name="formular-test-poll" endpoint="formular-test" displayname="Formular test data (poll)">
+    
+        <sql command="write">insert into poll(journalnr, brugertype, formulartype, kontakttype, svar1_1, svar1_2, svar1_3, svar1_4, svar1_5, svar2_1, svar2_2, svar2_3, svar2_4, svar2_5, svar2_6, svar2_7, svar2_8, svar2_9, svar2_10, svar2_11, svar2_12, kommentar, bilag, navn, tlf, email, oprettet) 
+                                               values(
+                                                   [string: journalnr],
+                                                   [string: brugertype], 
+                                                   [number: formulartype], 
+                                                   [number: kontakttype], 
+                                                   [number: if IsDefined(svar1_1)        then svar1_1 else 0 endif], 
+                                                   [number: if IsDefined(svar1_2)        then svar1_2 else 0 endif], 
+                                                   [number: if IsDefined(svar1_3)        then svar1_3 else 0 endif], 
+                                                   [number: if IsDefined(svar1_4)        then svar1_4 else 0 endif], 
+                                                   [number: if IsDefined(svar1_5)        then svar1_5 else 0 endif], 
+                                                   [number: if IsDefined(svar2_1)        then svar2_1 else 0 endif], 
+                                                   [string: if IsDefined(svar2_2)        then svar2_2 else '' endif], 
+                                                   [number: if IsDefined(svar2_3)        then svar2_3 else 0 endif], 
+                                                   [string: if IsDefined(svar2_4)        then svar2_4 else '' endif], 
+                                                   [number: if IsDefined(svar2_5)        then svar2_5 else 0 endif], 
+                                                   [string: if IsDefined(svar2_6)        then svar2_6 else '' endif], 
+                                                   [number: if IsDefined(svar2_7)        then svar2_7 else 0 endif],
+                                                   [string: if IsDefined(svar2_8)        then svar2_8 else '' endif], 
+                                                   [string: if IsDefined(svar2_9)        then svar2_9 else '' endif], 
+                                                   [string: if IsDefined(svar2_10)       then svar2_10 else '' endif], 
+                                                   [number: if IsDefined(svar2_11)       then svar2_11 else 0 endif],
+                                                   [number: if IsDefined(svar2_12)       then svar2_12 else 0 endif],
+                                                   [string: if IsDefined(kommentar)      then kommentar else '' endif], 
+                                                   [string: if IsDefined(bilag)          then bilag else '' endif], 
+                                                   [string: if IsDefined(navn)           then navn else '' endif], 
+                                                   [string: if IsDefined(tlf)            then tlf else '' endif], 
+                                                   [string: if IsDefined(email)          then email else '' endif], 
+                                                   [timestamp: SystemTime()]
+                                               );</sql>
+
+        <debug>false</debug>
+    </datasource>
+
 </datasources>

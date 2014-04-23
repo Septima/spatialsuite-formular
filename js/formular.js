@@ -265,7 +265,8 @@ Formular = SpatialMap.Class ({
         if (urlparam) {
             this.postparams[urlparam] = {
                 id: id,
-                displayname: node.attr('displayname')
+                displayname: node.attr('displayname'),
+                defaultValue: node.attr('defaultvalue')
             };
         }
         
@@ -1405,6 +1406,13 @@ Formular = SpatialMap.Class ({
                 }
                 if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
                     val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
+                    if (typeof val === 'undefined') {
+                        if (this.postparams[name].defaultValue) {
+                            val = this.postparams[name].defaultValue;
+                        } else {
+                            val = '';
+                        }
+                    }
                     textVal = val;
                 }
                 if (this.postparams[name].type && this.postparams[name].type == 'file') {

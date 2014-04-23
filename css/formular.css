@@ -394,3 +394,27 @@ div.helpbutton {
 }
 .col .valuediv {
 }
+
+
+.formular_modal {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: rgba(51, 51, 51, 0.7);
+    transition: opacity 0.15s linear 0s;
+    opacity: 1;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.formular_modal div {
+    position: absolute;
+    left: 40%;
+    top: 25%;
+    width: 20%;
+    padding: 25px; 
+    background-color: #fff;
+    z-index: 100;
+}

@@ -690,6 +690,7 @@ Formular = SpatialMap.Class ({
                 } else if (type=='file') {
                     contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
                     jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
+                        this.startFileUpload(id);
                         jQuery('#form_'+id).submit();
                     },this,id));
                 } else if (type=='checkbox') {
@@ -1625,7 +1626,23 @@ Formular = SpatialMap.Class ({
         });
     },
     
+    startFileUpload: function (id) {
+        this.currentFileUpload = id;
+        var modal = jQuery('#modal');
+        if (modal.length === 0) {
+            modal = jQuery('<div id="modal" class="formular_modal"><div>Fil uploades. Vent venligst...</div></div>');
+            jQuery('body').append(modal);
+        }
+        modal.show();
+    },
+    
+    endFileUpload: function (id) {
+        var modal = jQuery('#modal');
+        modal.hide();
+    },
+
     fileupload: function (filename,id,orgfilename) {
+        this.endFileUpload();
         jQuery('#'+id).val(filename);
         jQuery('#'+id+'_org').val(orgfilename);
     },

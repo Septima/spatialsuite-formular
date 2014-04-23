@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="fileupload">
+        <header>Vedhæft fil</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content displayname="Detaljer">
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+            <input type="file" displayname="Billede:" urlparam="billede"/>
+        </content>
+    </formular>
     <formular name="poll">
         <header>Spørgeskemaundersøgelse</header>
         <subheader></subheader>

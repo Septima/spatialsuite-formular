@@ -55,6 +55,8 @@ Formular = SpatialMap.Class ({
     multpleGeometries: false,
     mergeGeometries: true,
     
+    localstore: false,
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -245,6 +247,15 @@ Formular = SpatialMap.Class ({
                             jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
                         }
                     }
+                    
+                    var localstore = jQuery(data).find('localstore').text();
+                    if (localstore) {
+                        this.localstore = localstore != 'false';
+                        if (this.localstore) {
+                            this.readLocalStore();
+                        }
+                    }
+                    
                     this.checkConditions();
                     this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
@@ -265,7 +276,8 @@ Formular = SpatialMap.Class ({
         if (urlparam) {
             this.postparams[urlparam] = {
                 id: id,
-                displayname: node.attr('displayname')
+                displayname: node.attr('displayname'),
+                defaultValue: node.attr('defaultvalue')
             };
         }
         
@@ -525,11 +537,17 @@ Formular = SpatialMap.Class ({
                     var mapchange = new Function (node.attr('onchange'));
                     mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (handler,map) {
                         this.currentMapState = map;
+                        if (this.localstore) {
+                            this.writeLocalStore();
+                        }
                         handler(map);
                     },this,mapchange);
                 } else {
                     mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (map) {
                         this.currentMapState = map;
+                        if (this.localstore) {
+                            this.writeLocalStore();
+                        }
                     },this);
                 }
                 
@@ -541,6 +559,11 @@ Formular = SpatialMap.Class ({
                 contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
                 if (node.attr('onchange')) {
                     jQuery('#'+id).change(new Function (node.attr('onchange')));
+                }
+                
+                //For localstore
+                if (this.localstore) {
+                    jQuery('#'+id).change(SpatialMap.Function.bind(this.writeLocalStore,this));
                 }
             break;
             case 'conflicts':
@@ -690,6 +713,7 @@ Formular = SpatialMap.Class ({
                 } else if (type=='file') {
                     contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
                     jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
+                        this.startFileUpload(id);
                         jQuery('#form_'+id).submit();
                     },this,id));
                 } else if (type=='checkbox') {
@@ -761,6 +785,10 @@ Formular = SpatialMap.Class ({
     
     inputChanged: function (id) {
         
+        //For localstore
+        if (this.localstore) {
+            this.writeLocalStore();
+        }
         
         this.checkConditions();
     },
@@ -787,12 +815,14 @@ Formular = SpatialMap.Class ({
     },
     
     showTab: function (i) {
-        jQuery('table.tablecontent.tabcontent').hide();
-        jQuery('table.tabcontent.tabcontent'+i).show();
-        
-        jQuery('.tabcontainer div').removeClass('active');
-        jQuery('.tabcontainer div#tab'+i).addClass('active');
-        jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+        if (!jQuery('.tabcontainer div#tab'+i).hasClass('disabled')) {
+            jQuery('table.tablecontent.tabcontent').hide();
+            jQuery('table.tabcontent.tabcontent'+i).show();
+            
+            jQuery('.tabcontainer div').removeClass('active');
+            jQuery('.tabcontainer div#tab'+i).addClass('active');
+            jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+        }
     },
     
     setAddressSelect: function (options) {
@@ -1148,6 +1178,11 @@ Formular = SpatialMap.Class ({
         }
         
         this.setMergedGeometry (this.feature, SpatialMap.Function.bind(function () {
+
+            if (this.localstore) {
+                this.writeLocalStore();
+            }
+            
             this.query (this.feature);
         },this));
         
@@ -1355,6 +1390,100 @@ Formular = SpatialMap.Class ({
         }
     },
     
+    getCurrentValues: function () {
+        var params = {};
+        
+        if (this.map && this.feature.length > 0) {
+            params.wkt = this.mergedFeature;
+        }
+        for (var name in this.postparams) {
+            var val = jQuery('#'+this.postparams[name].id).val();
+            var textVal = val;
+            if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                val = jQuery('#'+this.postparams[name].id).is(':checked');
+                textVal = (val ? 'ja' : 'nej');
+            }
+            if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+                val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
+                if (typeof val === 'undefined') {
+                    if (this.postparams[name].defaultValue) {
+                        val = this.postparams[name].defaultValue;
+                    } else {
+                        val = '';
+                    }
+                }
+                textVal = val;
+            }
+            if (this.postparams[name].type && this.postparams[name].type == 'file') {
+                textVal = jQuery('#'+this.postparams[name].id+'_org').val();
+            }
+            params[name] = val;
+        }
+        
+        return params;
+    },
+    
+    setCurrentValues: function (params) {
+        
+        if (params.wkt) {
+            this.map.drawWKT (params.wkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+        }
+        
+        for (var name in this.postparams) {
+            var input = jQuery('#'+this.postparams[name].id);
+            var val = params[name];
+            
+            if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                jQuery('#'+this.postparams[name].id).prop('checked', val);
+            } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+                jQuery('input:radio[name='+this.postparams[name].id+'][value='+val+']').prop('checked', true);
+            } else if (this.postparams[name].type && this.postparams[name].type == 'file') {
+                //Not available
+            } else {
+                jQuery('#'+this.postparams[name].id).val(val);
+            }
+        }
+        
+    },
+    
+    setCurrentMap: function (mapState) {
+        this.map.zoomTo(mapState.zoomLevel);
+        var x = mapState.extent[0]+(mapState.extent[2]-mapState.extent[0])/2;
+        var y = mapState.extent[1]+(mapState.extent[3]-mapState.extent[1])/2;
+        this.map.panTo('POINT('+x+' '+y+')');
+    },
+    
+    writeLocalStore: function () {
+        if (store.enabled) {
+            var params = this.getCurrentValues();
+            var o = {
+                params: params,
+                map: this.currentMapState
+            }
+            store.set(this.name,o);
+        }
+    },
+    
+    readLocalStore: function () {
+        if (store.enabled) {
+            var o = store.get(this.name);
+            if (o) {
+                if (o.params) {
+                    this.setCurrentValues(o.params);
+                }
+                if (o.map) {
+                    this.setCurrentMap(o.map);
+                }
+            }
+        }
+    },
+
+    clearLocalStore: function () {
+        if (store.enabled) {
+            store.clear();
+        }
+    },
+
     submit: function () {
         if (this.map && this.feature.length === 0) {
             alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
@@ -1402,6 +1531,13 @@ Formular = SpatialMap.Class ({
                 }
                 if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
                     val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
+                    if (typeof val === 'undefined') {
+                        if (this.postparams[name].defaultValue) {
+                            val = this.postparams[name].defaultValue;
+                        } else {
+                            val = '';
+                        }
+                    }
                     textVal = val;
                 }
                 if (this.postparams[name].type && this.postparams[name].type == 'file') {
@@ -1574,21 +1710,33 @@ Formular = SpatialMap.Class ({
                 this.removeSession();
                 jQuery('#message').show();
                 jQuery('#messagebuttons').show();
-                jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                if (this.messages.done) {
+                    jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                } else {
+                    jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                }
             } else {
                 this.showError();
             }
         } else {
             jQuery('#message').show();
             jQuery('#messagebuttons').show();
-            jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+            if (this.messages.done) {
+                jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+            } else {
+                jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+            }
             this.removeSession();
         }
     },
     
     showError: function () {
         jQuery('#message').show();
-        jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+        if (this.messages.error) {
+            jQuery('#messagetext').html('<div id="message_done">'+this.messages.error+'</div>');
+        } else {
+            jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+        }
     },
     
     handleError: function (data, params) {
@@ -1599,6 +1747,11 @@ Formular = SpatialMap.Class ({
     },
     
     removeSession: function () {
+        
+        if (this.localstore) {
+            this.clearLocalStore();
+        }
+        
     	var params = {
             sessionid: this.sessionid,
             page: this.removeSessionPage
@@ -1613,7 +1766,23 @@ Formular = SpatialMap.Class ({
         });
     },
     
+    startFileUpload: function (id) {
+        this.currentFileUpload = id;
+        var modal = jQuery('#modal');
+        if (modal.length === 0) {
+            modal = jQuery('<div id="modal" class="formular_modal"><div>Fil uploades. Vent venligst...</div></div>');
+            jQuery('body').append(modal);
+        }
+        modal.show();
+    },
+    
+    endFileUpload: function (id) {
+        var modal = jQuery('#modal');
+        modal.hide();
+    },
+
     fileupload: function (filename,id,orgfilename) {
+        this.endFileUpload();
         jQuery('#'+id).val(filename);
         jQuery('#'+id+'_org').val(orgfilename);
     },

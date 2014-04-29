@@ -80,9 +80,13 @@ var Poll = {
         this.brugertype = jQuery('input:radio[name="brugertype"]:checked').val();
         
         if (typeof this.brugertype !== 'undefined' && this.formulartype > 0 && this.kontakttype > 0) {
-            jQuery('#next0').removeAttr("disabled");  
+            jQuery('#next0').removeAttr('disabled');
+            jQuery('#tab1').removeClass('disabled');
+            jQuery('#tab2').removeClass('disabled');
         } else {
-            jQuery('#next0').attr("disabled", "disabled");
+            jQuery('#next0').attr('disabled', 'disabled');
+            jQuery('#tab1').addClass('disabled');
+            jQuery('#tab2').addClass('disabled');
         }
         
     }

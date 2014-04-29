@@ -498,6 +498,16 @@
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
         </content>
     </formular>
+    <formular name="js">
+        <header>Test load af flere js filer fra konfigurationen</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <js>/modules/formular/js/encodeparam.js</js>
+        <js>/modules/formular-test/js/poll.js</js>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af tekster med ÆØÅ"/>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="ÅÆØåæø"/>
+        </content>
+    </formular>
     <formular name="datedependent">
         <header>Dato med begrænsning af input datoer ud fra hvad der er valgt i andet dato felt (2)</header>
         <submitpage>formular.send.general.nomap</submitpage>

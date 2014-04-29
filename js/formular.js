@@ -537,11 +537,17 @@ Formular = SpatialMap.Class ({
                     var mapchange = new Function (node.attr('onchange'));
                     mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (handler,map) {
                         this.currentMapState = map;
+                        if (this.localstore) {
+                            this.writeLocalStore();
+                        }
                         handler(map);
                     },this,mapchange);
                 } else {
                     mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (map) {
                         this.currentMapState = map;
+                        if (this.localstore) {
+                            this.writeLocalStore();
+                        }
                     },this);
                 }
                 
@@ -553,6 +559,11 @@ Formular = SpatialMap.Class ({
                 contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
                 if (node.attr('onchange')) {
                     jQuery('#'+id).change(new Function (node.attr('onchange')));
+                }
+                
+                //For localstore
+                if (this.localstore) {
+                    jQuery('#'+id).change(SpatialMap.Function.bind(this.writeLocalStore,this));
                 }
             break;
             case 'conflicts':
@@ -774,6 +785,10 @@ Formular = SpatialMap.Class ({
     
     inputChanged: function (id) {
         
+        //For localstore
+        if (this.localstore) {
+            this.writeLocalStore();
+        }
         
         this.checkConditions();
     },
@@ -1163,6 +1178,11 @@ Formular = SpatialMap.Class ({
         }
         
         this.setMergedGeometry (this.feature, SpatialMap.Function.bind(function () {
+
+            if (this.localstore) {
+                this.writeLocalStore();
+            }
+            
             this.query (this.feature);
         },this));
         
@@ -1426,17 +1446,35 @@ Formular = SpatialMap.Class ({
         
     },
     
+    setCurrentMap: function (mapState) {
+        this.map.zoomTo(mapState.zoomLevel);
+        var x = mapState.extent[0]+(mapState.extent[2]-mapState.extent[0])/2;
+        var y = mapState.extent[1]+(mapState.extent[3]-mapState.extent[1])/2;
+        this.map.panTo('POINT('+x+' '+y+')');
+    },
+    
     writeLocalStore: function () {
         if (store.enabled) {
             var params = this.getCurrentValues();
-            store.set(this.name,params);
+            var o = {
+                params: params,
+                map: this.currentMapState
+            }
+            store.set(this.name,o);
         }
     },
     
     readLocalStore: function () {
         if (store.enabled) {
-            var params = store.get(this.name);
-            this.setCurrentValues(params);
+            var o = store.get(this.name);
+            if (o) {
+                if (o.params) {
+                    this.setCurrentValues(o.params);
+                }
+                if (o.map) {
+                    this.setCurrentMap(o.map);
+                }
+            }
         }
     },
 

@@ -79,6 +79,7 @@
                 </xsl:if>
                 <script language="javascript" src="[cbinfo.js.url]/standard/proj4js/proj4js-compressed.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/jquery.valid8.js" type="text/javascript"></script>
+                <script language="javascript" src="/modules/formular/js/store.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
 
                 <xsl:for-each select="js">

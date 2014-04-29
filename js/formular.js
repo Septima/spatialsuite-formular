@@ -55,6 +55,8 @@ Formular = SpatialMap.Class ({
     multpleGeometries: false,
     mergeGeometries: true,
     
+    localstore: false,
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -245,6 +247,15 @@ Formular = SpatialMap.Class ({
                             jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
                         }
                     }
+                    
+                    var localstore = jQuery(data).find('localstore').text();
+                    if (localstore) {
+                        this.localstore = localstore != 'false';
+                        if (this.localstore) {
+                            this.readLocalStore();
+                        }
+                    }
+                    
                     this.checkConditions();
                     this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
@@ -526,11 +537,17 @@ Formular = SpatialMap.Class ({
                     var mapchange = new Function (node.attr('onchange'));
                     mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (handler,map) {
                         this.currentMapState = map;
+                        if (this.localstore) {
+                            this.writeLocalStore();
+                        }
                         handler(map);
                     },this,mapchange);
                 } else {
                     mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (map) {
                         this.currentMapState = map;
+                        if (this.localstore) {
+                            this.writeLocalStore();
+                        }
                     },this);
                 }
                 
@@ -542,6 +559,11 @@ Formular = SpatialMap.Class ({
                 contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
                 if (node.attr('onchange')) {
                     jQuery('#'+id).change(new Function (node.attr('onchange')));
+                }
+                
+                //For localstore
+                if (this.localstore) {
+                    jQuery('#'+id).change(SpatialMap.Function.bind(this.writeLocalStore,this));
                 }
             break;
             case 'conflicts':
@@ -763,6 +785,10 @@ Formular = SpatialMap.Class ({
     
     inputChanged: function (id) {
         
+        //For localstore
+        if (this.localstore) {
+            this.writeLocalStore();
+        }
         
         this.checkConditions();
     },
@@ -1152,6 +1178,11 @@ Formular = SpatialMap.Class ({
         }
         
         this.setMergedGeometry (this.feature, SpatialMap.Function.bind(function () {
+
+            if (this.localstore) {
+                this.writeLocalStore();
+            }
+            
             this.query (this.feature);
         },this));
         
@@ -1359,6 +1390,100 @@ Formular = SpatialMap.Class ({
         }
     },
     
+    getCurrentValues: function () {
+        var params = {};
+        
+        if (this.map && this.feature.length > 0) {
+            params.wkt = this.mergedFeature;
+        }
+        for (var name in this.postparams) {
+            var val = jQuery('#'+this.postparams[name].id).val();
+            var textVal = val;
+            if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                val = jQuery('#'+this.postparams[name].id).is(':checked');
+                textVal = (val ? 'ja' : 'nej');
+            }
+            if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+                val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
+                if (typeof val === 'undefined') {
+                    if (this.postparams[name].defaultValue) {
+                        val = this.postparams[name].defaultValue;
+                    } else {
+                        val = '';
+                    }
+                }
+                textVal = val;
+            }
+            if (this.postparams[name].type && this.postparams[name].type == 'file') {
+                textVal = jQuery('#'+this.postparams[name].id+'_org').val();
+            }
+            params[name] = val;
+        }
+        
+        return params;
+    },
+    
+    setCurrentValues: function (params) {
+        
+        if (params.wkt) {
+            this.map.drawWKT (params.wkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+        }
+        
+        for (var name in this.postparams) {
+            var input = jQuery('#'+this.postparams[name].id);
+            var val = params[name];
+            
+            if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                jQuery('#'+this.postparams[name].id).prop('checked', val);
+            } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+                jQuery('input:radio[name='+this.postparams[name].id+'][value='+val+']').prop('checked', true);
+            } else if (this.postparams[name].type && this.postparams[name].type == 'file') {
+                //Not available
+            } else {
+                jQuery('#'+this.postparams[name].id).val(val);
+            }
+        }
+        
+    },
+    
+    setCurrentMap: function (mapState) {
+        this.map.zoomTo(mapState.zoomLevel);
+        var x = mapState.extent[0]+(mapState.extent[2]-mapState.extent[0])/2;
+        var y = mapState.extent[1]+(mapState.extent[3]-mapState.extent[1])/2;
+        this.map.panTo('POINT('+x+' '+y+')');
+    },
+    
+    writeLocalStore: function () {
+        if (store.enabled) {
+            var params = this.getCurrentValues();
+            var o = {
+                params: params,
+                map: this.currentMapState
+            }
+            store.set(this.name,o);
+        }
+    },
+    
+    readLocalStore: function () {
+        if (store.enabled) {
+            var o = store.get(this.name);
+            if (o) {
+                if (o.params) {
+                    this.setCurrentValues(o.params);
+                }
+                if (o.map) {
+                    this.setCurrentMap(o.map);
+                }
+            }
+        }
+    },
+
+    clearLocalStore: function () {
+        if (store.enabled) {
+            store.clear();
+        }
+    },
+
     submit: function () {
         if (this.map && this.feature.length === 0) {
             alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
@@ -1622,6 +1747,11 @@ Formular = SpatialMap.Class ({
     },
     
     removeSession: function () {
+        
+        if (this.localstore) {
+            this.clearLocalStore();
+        }
+        
     	var params = {
             sessionid: this.sessionid,
             page: this.removeSessionPage

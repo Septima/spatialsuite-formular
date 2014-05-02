@@ -36,8 +36,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
 
         <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
             <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
+            <page parser="setFrid" urlparam="journalnummer">    <!-- Det er muligt at tilføje en "urlparam", der sendes til parseren. Herved kan man bestemme navnet på urlparametere der holder værdien -->
+                formular.create-frid
+            </page>  
             <page parser="setPdf">formular.create-pdf</page>    
             <page condition="false">formular.save</page>        <!-- Skal pagen kaldes? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.-->
+            <page type="json">mypage</page>                     <!-- Angiv "type" for at fortælle hvad pagen returnere. Default er "json" men det kan også være "xml" -->
             <page>formular.save</page>
             <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
         </submitpages>
@@ -278,6 +282,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.05.02 - Mulighed for at bestemme navnet på urlparameteren som en parser på en submitpage.
 * 2014.04.29 - localstore er tilføjet så det er muligt at få browseren til at gemme indtastede oplysninger til senere brug.
 * 2014.03.05 - onchange tilføjet til kortet, så man kan gøre noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i.
 * 2014.03.05 - Mulighed for at disable et maptool.

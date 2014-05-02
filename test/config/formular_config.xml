@@ -468,6 +468,17 @@
             <input type="input" displayname="Postnr:" urlparam="val2"/>
         </content>
     </formular>
+    <formular name="submitpages2">
+        <header>Formular med flere submit pages (med custom id)</header>
+        <subheader>Man vil gerne have at det unikke ID sendes som i en specifik urlparameter og ikke i "frid"</subheader>
+        <submitpages>
+            <page parser="setFrid" urlparam="journalnummer">formular.create-frid</page>
+            <page parser="setPdf">formular.create-pdf.nomap</page>
+        </submitpages>
+        <content displayname="Detaljer">
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+        </content>
+    </formular>
     <formular name="confirm">
         <header>Formular med godkendelse af registrering</header>
         <submitpage>formular.send.general.nomap</submitpage>

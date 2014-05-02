@@ -123,6 +123,7 @@ Formular = SpatialMap.Class ({
 	            			name: jQuery(pages[i]).text(),
 	            			parser: jQuery(pages[i]).attr('parser'),
 	            			type: jQuery(pages[i]).attr('type'),
+	            			urlparam: jQuery(pages[i]).attr('urlparam'),
 	            			condition: jQuery(pages[i]).attr('condition')
 	            		};
 	            		this.pages.push(p);
@@ -1678,7 +1679,7 @@ Formular = SpatialMap.Class ({
                 data : params,
                 success : SpatialMap.Function.bind( function(params, pages, data, status) {
                 	if (pages[0].parser) {
-                		params = this[pages[0].parser](data, params);
+                		params = this[pages[0].parser](data, params, pages[0].urlparam);
                 	} else {
                 		params = this.handleError(data, params);
                 	}
@@ -1899,23 +1900,29 @@ Formular = SpatialMap.Class ({
 
 
 
-Formular.prototype.setFrid = function (data, params) {
+Formular.prototype.setFrid = function (data, params, urlparamname) {
 	params = this.handleError(data, params);
 	if (params != null) {
+	    if (!urlparamname) {
+	        urlparamname = 'frid';
+	    }
 		for (var name in data.row[0]) {
-			params.frid = data.row[0][name];
+			params[urlparamname] = data.row[0][name];
 		}
 	}
 	return params;
 }
 
-Formular.prototype.setPdf = function (data, params) {
+Formular.prototype.setPdf = function (data, params, urlparamname) {
 	params = this.handleError(data, params);
 	if (params != null) {
+	    if (!urlparamname) {
+	        urlparamname = 'frpdf';
+	    }
 		for (var i=0;i<data.row.length;i++) {
 			if (data.row[i].url) {
 				this.pdf = data.row[i].url.replace(/\/tmp\//,'');
-				params.frpdf = this.pdf;
+				params[urlparamname] = this.pdf;
 			}
 		}
 	}

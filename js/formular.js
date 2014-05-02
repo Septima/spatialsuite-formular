@@ -1387,6 +1387,11 @@ Formular = SpatialMap.Class ({
                         }
                     },this,this.spatialqueries[i])
                 });
+            } else {
+                jQuery('#container_conflictdiv_'+this.spatialqueries[i].id).hide();
+                if (this.spatialqueries[i].onnoconflict) {
+                    this.spatialqueries[i].onnoconflict();
+                }
             }
         }
     },

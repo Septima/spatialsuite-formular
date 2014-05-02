@@ -615,6 +615,33 @@
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
+    <formular name="conflict-delete">
+        <header>Konfliktsøgning med slet af geometrier</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <submitgeometrypage>formular.send.general.nomap</submitgeometrypage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Location"/>
+            <maptools>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <conflicts class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+        </content>
+    </formular>
     <formular name="themeoptions">
         <title>Tema indstillinger</title>
         <header>Flere temaer med forskellige options</header>

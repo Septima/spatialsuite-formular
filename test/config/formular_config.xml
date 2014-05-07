@@ -596,6 +596,32 @@
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
+    <formular name="conflict2">
+        <title>Konfliktsøgning med formatering</title>
+        <header>Konfliktsøgning med formatering</header>
+        <subheader>Formater resultatet så det stilles pænt op</subheader>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>pdf</reportxsl>
+        <css>/modules/formular/test/css/conflict.css</css>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af konfliktsøgning"/>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <conflicts urlparam="konflikttekst1" displayname="" targerset="drikkevand2"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="conflictevent">
         <title>Konfliktsøgning med events</title>
         <header>Konfliktsøgning med events</header>

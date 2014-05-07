@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="htmltext">
+        <header>Vejledning i tekst med ikoner</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <css>/modules/formular/test/css/buttons.css</css>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="htmltext"/>
+            <input type="text" displayname="Tryk på &lt;div class='button_in_help button_pan'&gt;&lt;/div&gt; eller gør noget andet. Denne tekst kan godt være meget meget meget lang, men ikonerne skulle gerne stå rigtigt alligevel. Dette ikon står på en ny linie: &lt;div class='button_in_help button_modify'&gt;&lt;/div&gt; men står rigtigt alligevel."/>
+            <maptools>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Tegn en bygning" name="template4" options="polygon -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en vej" name="template2" options="line -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en flagstang" name="template1" options="point -1000,1000"/>
+                <maptool displayname="Flyt kortet" name="pan" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+        </content>
+    </formular>
     <formular name="store">
         <header>Husk værdier til næste gang</header>
         <subheader>Når man udfylder sin formular bliver værdierne løbende gemt i browseren. Herved kan man forlade siden og genoptage indtastningen senere.</subheader>

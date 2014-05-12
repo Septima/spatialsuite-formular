@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="log">
+        <header>Log hvis der sker fejl</header>
+        <subheader>Når der opstår en fejl vil servere blive kaldt så fejlen registreres</subheader>
+        <submitpage>formular.send.general.nomapZZ</submitpage>
+        <log>true</log>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Store"/>
+            <address id="address" urlparam="address" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Flyt kortet" name="pan"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+            <input type="file" displayname="Billede:" urlparam="billede"/>
+            <input type="radiobutton" displayname="Er du *" urlparam="brugertype" id="brugertype" defaultvalue="none">
+                <option value="virksomhed" name="Virksomhed"/>
+                <option value="raadgiver" name="Rådgiver"/>
+                <option value="privat" name="Privat"/>
+            </input>
+            <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
+        </content>
+    </formular>
     <formular name="htmltext">
         <header>Vejledning i tekst med ikoner</header>
         <subheader></subheader>

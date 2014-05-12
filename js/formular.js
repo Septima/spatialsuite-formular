@@ -57,6 +57,8 @@ Formular = SpatialMap.Class ({
     
     localstore: false,
     
+    logActive: false,
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -257,9 +259,21 @@ Formular = SpatialMap.Class ({
                         }
                     }
                     
+                    var log = jQuery(data).find('log').text();
+                    if (log) {
+                        this.logActive = (log === 'true');
+                    }
+
                     this.checkConditions();
                     this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
+                    
+//                    this.log({
+//                        type: 'info',
+//                        name: 'configready',
+//                        message: 'Start OK'
+//                    });
+
                 }
             },this)
         });
@@ -1641,6 +1655,15 @@ Formular = SpatialMap.Class ({
                                 jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
                             }
 	                    } else {
+	                        var m = jQuery(data).find('message').text();
+	                        if (!m) {
+	                            m = 'No PDF respose from server';
+	                        }
+	                        this.log({
+	                            type: 'error',
+	                            name: 'submitFinal',
+	                            message: m
+	                        });
 	                        jQuery('#message').show();
 	                        jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
 	                    }
@@ -1651,9 +1674,14 @@ Formular = SpatialMap.Class ({
 	                    this.removeSession();
 	                }
 	            },this),
-	            error : SpatialMap.Function.bind( function(data, status) {
+	            error : SpatialMap.Function.bind( function(params, data, status) {
+                    this.log({
+                        type: 'error',
+                        name: 'submitFinal',
+                        message: 'No respose from server'
+                    });
 	                jQuery('#message').show().html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
-	            },this)
+	            },this, params)
 	        });
 	        
         }
@@ -1899,6 +1927,29 @@ Formular = SpatialMap.Class ({
     
     encodeParam: function (name,val) {
         return encodeURIComponent(val);
+    },
+    
+    log: function (logObj) {
+        if (this.logActive === true) {
+            
+            var params = {
+                page: 'formular.log',
+                'log.sessionid': this.sessionid,
+                'log.formular': this.name
+            };
+            for (var name in logObj) {
+                params['log.'+name] = logObj[name];
+            }
+            
+            jQuery.ajax( {
+                url : 'cbkort',
+                dataType : 'json',
+                type: 'POST',
+                async: true,
+                data: params
+            });
+
+        }
     }
 
 });

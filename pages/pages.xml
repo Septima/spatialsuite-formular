@@ -35,7 +35,7 @@
                 <url-parameter name="log.sessionid">if IsDefined(log.sessionid) then log.sessionid else "unknown" endif</url-parameter>
                 <url-parameter name="log.ip">if IsDefined(log.ip) then log.ip else "unknown" endif</url-parameter>
                 <url-parameter name="log.type">if IsDefined(log.type) then log.type else "unknown" endif</url-parameter>
-                <url-parameter name="log.error">if IsDefined(log.error) then log.error else "unknown" endif</url-parameter>
+                <url-parameter name="log.name">if IsDefined(log.name) then log.name else "unknown" endif</url-parameter>
                 <url-parameter name="log.message">if IsDefined(log.message) then log.message else "unknown" endif</url-parameter>
                 <url-parameter name="log.obj">if IsDefined(log.obj) then log.obj else "{}" endif</url-parameter>
             </url-parameters>

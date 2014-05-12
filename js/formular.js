@@ -1622,7 +1622,7 @@ Formular = SpatialMap.Class ({
 	            type: 'POST',
 	            async: true,
 	            data : params,
-	            success : SpatialMap.Function.bind( function(data, status) {
+	            success : SpatialMap.Function.bind( function(params, data, status) {
 	                if (this.showReport) {
 	                    var pdf = jQuery(data).find('col[name="url"]');
 	                    if (pdf.length) {
@@ -1662,7 +1662,8 @@ Formular = SpatialMap.Class ({
 	                        this.log({
 	                            type: 'error',
 	                            name: 'submitFinal',
-	                            message: m
+	                            message: m,
+	                            obj: JSON.stringify(params)
 	                        });
 	                        jQuery('#message').show();
 	                        jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
@@ -1673,12 +1674,13 @@ Formular = SpatialMap.Class ({
 	                    jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
 	                    this.removeSession();
 	                }
-	            },this),
+	            },this, params),
 	            error : SpatialMap.Function.bind( function(params, data, status) {
                     this.log({
                         type: 'error',
                         name: 'submitFinal',
-                        message: 'No respose from server'
+                        message: 'No respose from server',
+                        obj: JSON.stringify(params)
                     });
 	                jQuery('#message').show().html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
 	            },this, params)

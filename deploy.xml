@@ -33,6 +33,7 @@
    <copyfile fromfile="[module:formular.dir]/js/jquery.ui.datepicker-da_DK.js"    tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.ui.datepicker-da_DK.js"/>
    <copyfile fromfile="[module:formular.dir]/js/jquery.ui.datepicker-en_GB.js"    tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.ui.datepicker-en_GB.js"/>
    <copyfile fromfile="[module:formular.dir]/js/store.js"          tofile="[cbinfo.wwwroot.dir]/modules/formular/js/store.js"/>
+   <copyfile fromfile="[module:formular.dir]/js/json2.js"          tofile="[cbinfo.wwwroot.dir]/modules/formular/js/json2.js"/>
 
    <copyfile fromfile="[module:formular.dir]/html/formular.html"   tofile="[cbinfo.wwwroot.dir]/formular.html"/>
 

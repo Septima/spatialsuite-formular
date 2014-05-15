@@ -31,7 +31,7 @@
     </endpoint>
   
     <datasource name="formular-log" endpoint="formular-log">
-         <sql command="read-log">select * from formular.log order by created DESC</sql>
+         <sql command="read-log">select * from formular.log order by created DESC limit [limit] offset [offset]</sql>
          <sql command="clear-log">delete from formular.log</sql>
          <sql command="write-log">insert into formular.log(created, formular, sessionid, ip, type, name, message, obj) values (
             [timestamp: SystemTime()], 

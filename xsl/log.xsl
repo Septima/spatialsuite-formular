@@ -13,6 +13,8 @@
 
 <xsl:param name = "datasource"/>
 <xsl:param name = "command"/>
+<xsl:param name = "limit">[module.formular.log.limit]</xsl:param>
+<xsl:param name = "offset">[module.formular.log.offset]</xsl:param>
 
 <xsl:decimal-format decimal-separator="," grouping-separator="." />
 
@@ -35,6 +37,7 @@
                 <table class="width-100 bordered striped">
                     <thead class="thead-gray">
                         <tr>
+                            <th></th>
 	                        <xsl:for-each select="//row[1]/col">
 	                            <th><xsl:value-of select="@name"/></th>
 	                        </xsl:for-each>
@@ -43,6 +46,7 @@
                     <tbody>
 				        <xsl:for-each select="//row">
 				            <tr>
+				                <td><xsl:value-of select="position()+$offset"/></td>
                                 <xsl:for-each select="col">
                                     <td><xsl:value-of select="."/></td>
                                 </xsl:for-each>
@@ -50,6 +54,14 @@
 				        </xsl:for-each>
                     </tbody>
                 </table>
+                <xsl:choose>
+                    <xsl:when test="count(//row) = $limit">
+                        <div>Row <xsl:value-of select="$offset+1"/> to <xsl:value-of select="$offset+$limit"/></div>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <div>Row <xsl:value-of select="$offset+1"/> to <xsl:value-of select="$offset+count(//row)"/></div>
+                    </xsl:otherwise>
+                </xsl:choose>
             </body>
         </html>
     </xsl:template>

@@ -3,7 +3,17 @@
     <formular name="log">
         <header>Log hvis der sker fejl</header>
         <subheader>Når der opstår en fejl vil servere blive kaldt så fejlen registreres</subheader>
-        <submitpage>formular.send.general.nomapZZ</submitpage>
+        <submitpages>
+            <page parser="setFrid" errortype="info" errormessage="Dette er en fejl men ikke så slem!">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="warning" errormessage="Dette er en fejl og den er lidt værre!">formular.geometry.union</page>
+            <page parser="setFrid" errortype="info">formular.create-frid-not-working</page>
+<!--             <page parser="setFrid" errortype="error" errormessage="Den er helt gal og vi stopper her!">formular.create-frid-not-working</page> -->
+            <page parser="setFrid" errortype="info" errormessage="Dette bliver aldrig vist da det sker efter en ERROR!">formular.create-frid-not-working</page>
+<!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
+<!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
+<!--             <page>formular.save</page> -->
+<!--             <page>formular.move.pdf</page> -->
+        </submitpages>
         <log>true</log>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Store"/>
@@ -28,6 +38,9 @@
                 <option value="privat" name="Privat"/>
             </input>
             <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
+
+            <submitbutton displayname="Opret ny" function="formular.start();"/>
+
         </content>
     </formular>
     <formular name="htmltext">

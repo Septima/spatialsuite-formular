@@ -16,7 +16,10 @@
    <param name="module.formular.targetsetfile">[module:formular.dir]/queries/spatialqueries.xml</param> 
 
    <param name="module.formular.pdf.logo">[module:formular.dir]/images/septima.jpg</param> 
-   <param name="module.formular.pdf.header">Ansøgning</param> 
+   <param name="module.formular.pdf.header">Ansøgning</param>
+   
+   <param name="module.formular.log.limit" ignore="IsDefined(module.formular.log.limit)">100</param> 
+   <param name="module.formular.log.offset" ignore="IsDefined(module.formular.log.offset)">0</param> 
 
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/css"/>
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/js"/>

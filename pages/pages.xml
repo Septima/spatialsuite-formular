@@ -48,6 +48,8 @@
             <url-parameters>
                 <url-parameter name="datasource" value="formular-log"/>
                 <url-parameter name="command" value="read-log"/>
+                <url-parameter name="limit">if IsDefined(limit) then limit else [module.formular.log.limit] endif</url-parameter>
+                <url-parameter name="offset">if IsDefined(offset) then offset else [module.formular.log.offset] endif</url-parameter>
             </url-parameters>
         </data>
     </page>

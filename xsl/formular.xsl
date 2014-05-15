@@ -110,7 +110,7 @@
             </head>
             <body>
                 <div class="formular_content">
-                    <div id="message"><div id="messagetext" class="messagetext"></div><div id="messagebuttons" class="messagebuttons"></div></div>
+                    <div id="message"><div id="messageloading" class="messagetext"></div><div id="messagetext" class="messagetext"></div><div id="messagebuttons" class="messagebuttons"></div></div>
                     <div id="content">
                         <div class="header"><xsl:value-of select="header" disable-output-escaping="yes"/></div>
                         <div class="subheader"><xsl:value-of select="subheader" disable-output-escaping="yes"/></div>

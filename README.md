@@ -44,6 +44,10 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <page type="json">mypage</page>                     <!-- Angiv "type" for at fortælle hvad pagen returnere. Default er "json" men det kan også være "xml" -->
             <page>formular.save</page>
             <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
+            <page errortype="info">formular.save</page>         <!-- errortype definere hvilken type fejlen er hvis pagen returnere en fejl. Mulige værdier er: "info", "warning" og "error". Hvis errortype er "error" så stopper alt. 
+                                                                     Hvis errortype er "info" eller "warning" fortsættes der men brugeren bliver informeret om at der er sket en fejl hvis der også er angivet en errormessage.
+                                                                     Hvis log er aktiveret så logges alle fejl -->
+            <page errormessage="Tekst">formular.save</page>     <!-- errormessage indeholder den tekst, der vises hvis der er en fejl. -->
         </submitpages>
 
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->

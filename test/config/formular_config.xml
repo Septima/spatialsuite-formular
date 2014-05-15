@@ -7,7 +7,8 @@
             <page parser="setFrid" errortype="info" errormessage="Dette er en fejl men ikke så slem!">formular.create-frid-not-working</page>
             <page parser="setFrid" errortype="warning" errormessage="Dette er en fejl og den er lidt værre!">formular.geometry.union</page>
             <page parser="setFrid" errortype="info">formular.create-frid-not-working</page>
-<!--             <page parser="setFrid" errortype="error" errormessage="Den er helt gal og vi stopper her!">formular.create-frid-not-working</page> -->
+            <page parser="setFrid" errortype="error">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="error" errormessage="Den er helt gal og vi stopper her!">formular.create-frid-not-working</page>
             <page parser="setFrid" errortype="info" errormessage="Dette bliver aldrig vist da det sker efter en ERROR!">formular.create-frid-not-working</page>
 <!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
 <!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
@@ -17,7 +18,7 @@
         <log>true</log>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Store"/>
-            <address id="address" urlparam="address" displayname="Fra Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
+            <address id="address" urlparam="address" defaultvalue="Larsbjørnsstræde 3, 1454 København K" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
             <maptools>
                 <maptool displayname="Tegn et punkt" name="point" default="true"/>
                 <maptool displayname="Flyt kortet" name="pan"/>
@@ -29,16 +30,17 @@
                     <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
-            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue="Septima"/>
             <input type="textarea" displayname="Tekst:" urlparam="val8"/>
             <input type="file" displayname="Billede:" urlparam="billede"/>
-            <input type="radiobutton" displayname="Er du *" urlparam="brugertype" id="brugertype" defaultvalue="none">
+            <input type="radiobutton" displayname="Brugertype:" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
                 <option value="virksomhed" name="Virksomhed"/>
                 <option value="raadgiver" name="Rådgiver"/>
                 <option value="privat" name="Privat"/>
             </input>
             <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
 
+            <confirm displayname="&lt;b&gt;Følgende oplysninger er indtastet. Er det korrekt?&lt;/b&gt;"/>
             <submitbutton displayname="Opret ny" function="formular.start();"/>
 
         </content>

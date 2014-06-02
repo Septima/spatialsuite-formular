@@ -668,6 +668,7 @@ Formular = SpatialMap.Class ({
                             if (this.inputValidation[id]) {
                                 jQuery('#'+id).isValid();
                             }
+                            this.inputChanged();
                             if (changehandler) {
                                 changehandler (jQuery('#'+id));
                             }

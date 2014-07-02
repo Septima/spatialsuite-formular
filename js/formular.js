@@ -331,6 +331,15 @@ Formular = SpatialMap.Class ({
                 if (node.attr('disablemap')) {
                     options.disablemap = node.attr('disablemap');
                 }
+                options.usegeometry = (node.attr('usegeometry') && node.attr('usegeometry') === 'true') ;
+                
+                if (node.attr('minzoom')) {
+                    options.minzoom = node.attr('minzoom')-0;
+                }
+                if (node.attr('minscale')) {
+                    options.minscale = node.attr('minscale')-0;
+                }
+
                 this.setAddressSelect(options);
                 if (urlparam) {
                     this.postparams[urlparam+'_wkt'] = {
@@ -395,7 +404,14 @@ Formular = SpatialMap.Class ({
                 if (node.attr('disablemap')) {
                     options.disablemap = node.attr('disablemap');
                 }
-                options.usegeometry = (node.attr('usegeometry') && node.attr('usegeometry') == 'true') ;
+                options.usegeometry = (node.attr('usegeometry') && node.attr('usegeometry') === 'true') ;
+                
+                if (node.attr('minzoom')) {
+                    options.minzoom = node.attr('minzoom')-0;
+                }
+                if (node.attr('minscale')) {
+                    options.minscale = node.attr('minscale')-0;
+                }
 
                 this.setGeoSearch(options);
                 if (urlparam) {
@@ -927,6 +943,19 @@ Formular = SpatialMap.Class ({
         if (ui.item.data.type == 'streetNameType' && disablemapValue != 'true') {
             if (this.map) {
                 this.map.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
+                
+                if (options.minzoom) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minzoom < mapstate.zoomLevel) {
+                        this.map.zoomTo(options.minzoom);
+                    }
+                }
+                if (options.minscale) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minscale > mapstate.scale) {
+                        this.map.zoomToScale(options.minscale);
+                    }
+                }
             }
             this.validAddress = false;
             jQuery('#'+id+'_wkt').val ('');
@@ -942,6 +971,19 @@ Formular = SpatialMap.Class ({
             
             if (this.map && disablemapValue != 'true') {
                 this.map.zoomToExtent({x1:Math.min.apply(Math, x),y1:Math.min.apply(Math, y),x2:Math.max.apply(Math, x),y2:Math.max.apply(Math, y)});
+                
+                if (options.minzoom) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minzoom < mapstate.zoomLevel) {
+                        this.map.zoomTo(options.minzoom);
+                    }
+                }
+                if (options.minscale) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minscale > mapstate.scale) {
+                        this.map.zoomToScale(options.minscale);
+                    }
+                }
             }
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
@@ -954,6 +996,19 @@ Formular = SpatialMap.Class ({
         } else {
             if (this.map && disablemapValue != 'true') {
                 this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
+                
+                if (options.minzoom) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minzoom < mapstate.zoomLevel) {
+                        this.map.zoomTo(options.minzoom);
+                    }
+                }
+                if (options.minscale) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minscale > mapstate.scale) {
+                        this.map.zoomToScale(options.minscale);
+                    }
+                }
             }
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);

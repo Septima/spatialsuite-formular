@@ -132,7 +132,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <!-- Et felt hvor brugeren kan søge en adresse vha. SpatialAddress. Adressesøgningen benyttes som udgangspunkt til at finde noget i kortet.
                  vejen eller Adressepunktet markeres ikke i kortet. Hvis "urlparam" atributten er defineret, sendes den tekst, der står i feltet, videre til servere.
                  Derudover sendes adressepunktets wkt også til serveren som urlparam+"_wkt". Hvis urlparam="adresse" så vil adressepunktet blive sendt til serveren med adresse_wkt=POINT(XXXX YYYY)
-                 Hvis der kun er valgt en vej, så vil adresse_wkt være tom! -->
+                 Hvis der kun er valgt en vej, så vil adresse_wkt være tom! 
+                 - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
+                 - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
+                 - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
+                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
+                 -->
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
 
             <!-- geosearch -->
@@ -143,6 +148,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - filter - OPTIONAL (default "") - find kun en delmængde ud fra en filter. Det kunne f.eks. være inden for en kommune filter="muncode0101"
                  - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
                  - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
+                 - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
+                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
             -->
             <geosearch urlparam="address" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true" usegeometry="false"/>
 
@@ -292,6 +299,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.07.02 - Minscale eller minzoom tilføjet til søgefunktionerne
 * 2014.07.02 - Flere standard klasser til styling af konfliktsøgningsresultat
 * 2014.05.12 - Mulighed for at logge fejl fra klienten
 * 2014.05.02 - Mulighed for at angive beskeden, der skal vises når oplysningerne er registreret eller det er gået galt.

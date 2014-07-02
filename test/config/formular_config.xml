@@ -654,7 +654,10 @@
                     <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
-            <conflicts class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-info" urlparam="konflikttekst1" displayname="&lt;strong&gt;Info&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-success" urlparam="konflikttekst1" displayname="&lt;strong&gt;Success&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-warning" urlparam="konflikttekst1" displayname="&lt;strong&gt;Warning&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-danger" urlparam="konflikttekst1" displayname="&lt;strong&gt;Danger&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
@@ -680,7 +683,7 @@
                     <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
-            <conflicts urlparam="konflikttekst1" displayname="" targerset="drikkevand2"/>
+            <conflicts class="warning-info" urlparam="konflikttekst1" displayname="" targerset="drikkevand2"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>

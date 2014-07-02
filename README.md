@@ -224,6 +224,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  Resultatet af den spatielle søgning, vises på det sted hvor dette element er angivet.
                  Ud over "displayname" og "urlparam", kan der kan sættes en række andre atributter:
                  - "class"         - angiver den css class, som feltet skal have. Det kan f.eks. være "warning", der gør at feltet bliver rødt.
+                                     Følgende værdier kan med fordel anvendes: "warning-info", "warning-success", "warning-warning" eller "warning-danger"
                  - "targetset"     - angiver navnet på det targetset, som der skal søges i.
                  - "targetsetfile" - angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
                  - "onconflict"    - angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
@@ -291,6 +292,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.07.02 - Flere standard klasser til styling af konfliktsøgningsresultat
 * 2014.05.12 - Mulighed for at logge fejl fra klienten
 * 2014.05.02 - Mulighed for at angive beskeden, der skal vises når oplysningerne er registreret eller det er gået galt.
 * 2014.05.02 - Mulighed for at bestemme navnet på urlparameteren som en parser på en submitpage.

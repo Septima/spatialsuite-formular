@@ -40,5 +40,10 @@
 	    </target>
     </targetset>
     
+    <targetset name="drikkevand2">
+        <target presentation="[module:formular-test.dir]/presentations/pres-drikkevand2" name="drikkevands_inter" displayname="DAI Drikkevandsinteresser">
+            <datasource name="drikkevands_inter_senest_wfs"/>
+        </target>
+    </targetset>
 
 </spatialqueries>

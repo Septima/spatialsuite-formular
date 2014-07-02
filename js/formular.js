@@ -57,6 +57,8 @@ Formular = SpatialMap.Class ({
     
     localstore: false,
     
+    logActive: false,
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -123,8 +125,19 @@ Formular = SpatialMap.Class ({
 	            			name: jQuery(pages[i]).text(),
 	            			parser: jQuery(pages[i]).attr('parser'),
 	            			type: jQuery(pages[i]).attr('type'),
-	            			condition: jQuery(pages[i]).attr('condition')
+	            			urlparam: jQuery(pages[i]).attr('urlparam'),
+	            			condition: jQuery(pages[i]).attr('condition'),
+	            			error: null
 	            		};
+	            		if (jQuery(pages[i]).attr('errortype')) {
+	            		    p.error = p.error || {};
+	            		    p.error.type = jQuery(pages[i]).attr('errortype');
+	            		}
+                        if (jQuery(pages[i]).attr('errormessage')) {
+                            p.error = p.error || {};
+                            p.error.message = jQuery(pages[i]).attr('errormessage');
+                        }
+	            		
 	            		this.pages.push(p);
 	            	}
                 } else {
@@ -256,9 +269,21 @@ Formular = SpatialMap.Class ({
                         }
                     }
                     
+                    var log = jQuery(data).find('log').text();
+                    if (log) {
+                        this.logActive = (log === 'true');
+                    }
+
                     this.checkConditions();
                     this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
+                    
+//                    this.log({
+//                        type: 'info',
+//                        name: 'configready',
+//                        message: 'Start OK'
+//                    });
+
                 }
             },this)
         });
@@ -643,6 +668,7 @@ Formular = SpatialMap.Class ({
                             if (this.inputValidation[id]) {
                                 jQuery('#'+id).isValid();
                             }
+                            this.inputChanged();
                             if (changehandler) {
                                 changehandler (jQuery('#'+id));
                             }
@@ -1386,6 +1412,11 @@ Formular = SpatialMap.Class ({
                         }
                     },this,this.spatialqueries[i])
                 });
+            } else {
+                jQuery('#container_conflictdiv_'+this.spatialqueries[i].id).hide();
+                if (this.spatialqueries[i].onnoconflict) {
+                    this.spatialqueries[i].onnoconflict();
+                }
             }
         }
     },
@@ -1559,7 +1590,7 @@ Formular = SpatialMap.Class ({
             jQuery('#messagebuttons').empty();
             
             if (this.confirm) {
-                jQuery('#messagetext').html('<div id="message_done">'+this.confirm+confirmtext+'</div>');
+                jQuery('#messagetext').append('<div id="message_done">'+this.confirm+confirmtext+'</div>');
                 var confirmbutton = jQuery('<button>Godkend</button>');
                 confirmbutton.click (SpatialMap.Function.bind(function (params) {
                     jQuery('#messagebuttons').hide();
@@ -1580,8 +1611,9 @@ Formular = SpatialMap.Class ({
     },
         
     submitFinal: function (params) {
-        jQuery('#messagetext').html('<div id="message_loading">Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)</div>');
+        jQuery('#messageloading').append('<div id="message_loading">Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)</div>');
 
+        jQuery('#messagetext').empty();
         jQuery('#messagebuttons').empty();
         for (var i=0;i<this.submitbuttons.length;i++) {
             jQuery('#messagebuttons').append(this.submitbuttons[i]);
@@ -1602,7 +1634,7 @@ Formular = SpatialMap.Class ({
 	            type: 'POST',
 	            async: true,
 	            data : params,
-	            success : SpatialMap.Function.bind( function(data, status) {
+	            success : SpatialMap.Function.bind( function(params, data, status) {
 	                if (this.showReport) {
 	                    var pdf = jQuery(data).find('col[name="url"]');
 	                    if (pdf.length) {
@@ -1619,35 +1651,55 @@ Formular = SpatialMap.Class ({
 	                            success: SpatialMap.Function.bind( function (pdf,data) {
 	                                if(data.result!='OK') {
 	                                    if (this.messages.done) {
-	                                        jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+	                                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
 	                                    } else {
-	                                        jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+	                                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
 	                                    }
 	                                }
 	                                this.removeSession();
 	                            },this,pdf)
 	                        });
 	                        jQuery('#message').show();
+                            jQuery('#messageloading').hide();
 	                        jQuery('#messagebuttons').show();
                             if (this.messages.done) {
-                                jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
                             } else {
-                                jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
                             }
 	                    } else {
-	                        jQuery('#message').show();
-	                        jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+	                        var m = jQuery(data).find('message').text();
+	                        if (!m) {
+	                            m = 'No PDF respose from server';
+	                        }
+	                        this.log({
+	                            type: 'error',
+	                            name: 'submitFinal',
+	                            message: m,
+	                            obj: JSON.stringify(params)
+	                        });
+                            jQuery('#message').show();
+	                        jQuery('#messageloading').hide();
+	                        jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
 	                    }
 	                } else {
 	                    jQuery('#message').show();
+                        jQuery('#messageloading').hide();
 	                    jQuery('#messagebuttons').show();
-	                    jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+	                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
 	                    this.removeSession();
 	                }
-	            },this),
-	            error : SpatialMap.Function.bind( function(data, status) {
-	                jQuery('#message').show().html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
-	            },this)
+	            },this, params),
+	            error : SpatialMap.Function.bind( function(params, data, status) {
+                    this.log({
+                        type: 'error',
+                        name: 'submitFinal',
+                        message: 'No respose from server',
+                        obj: JSON.stringify(params)
+                    });
+                    jQuery('#messageloading').hide();
+	                jQuery('#message').show().html('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
+	            },this, params)
 	        });
 	        
         }
@@ -1678,14 +1730,30 @@ Formular = SpatialMap.Class ({
                 data : params,
                 success : SpatialMap.Function.bind( function(params, pages, data, status) {
                 	if (pages[0].parser) {
-                		params = this[pages[0].parser](data, params);
-                	} else {
-                		params = this.handleError(data, params);
+                		params = this[pages[0].parser](data, params, pages[0].urlparam);
                 	}
+                    params = this.handleError(data, params, pages[0].error);
                 	
-                	if (params === null) {
-                		this.showError();
-                		return;
+                	if (this.isErrorRespose(data)) {
+                	    if (pages[0].error) {
+                            if (pages[0].error.type === 'info') {
+                                this.showErrorInfo(pages[0].error);
+                            } else if (pages[0].error.type === 'warning') {
+                                this.showErrorWarning(pages[0].error);
+                            } else if (pages[0].error.type === 'error') {
+                                this.showError(pages[0].error);
+                                this.pagesFail();
+                                return;
+                            } else {
+                                this.showError();
+                                this.pagesFail();
+                                return;
+                            }
+                	    } else {
+                            this.showError();
+                            this.pagesFail();
+                            return;
+                	    }
                 	}
                 	
                 	//Remove from list
@@ -1697,51 +1765,146 @@ Formular = SpatialMap.Class ({
                 	    this.pagesDone();
                 	}
                 },this, params, pages),
-                error : SpatialMap.Function.bind( function(data, status) {
-                    jQuery('#message').show().html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
-                },this)
+                error : SpatialMap.Function.bind( function(params, pages, data, status) {
+                    if (pages[0].parser) {
+                        params = this[pages[0].parser](data, params, pages[0].urlparam);
+                    }
+                    
+                    if (pages[0].error) {
+                        var go = false;
+                        if (pages[0].error.type === 'info') {
+                            this.showErrorInfo(pages[0].error);
+                        } else if (pages[0].error.type === 'warning') {
+                            this.showErrorWarning(pages[0].error);
+                        } else if (pages[0].error.type === 'error') {
+                            this.showError(pages[0].error);
+                            this.pagesFail();
+                            return;
+                        } else {
+                            this.showError();
+                            this.pagesFail();
+                            return;
+                        }
+                        
+                        //Remove from list
+                        pages.shift();
+                        
+                        if (pages.length > 0) {
+                            this.execute(params, pages);
+                        } else {
+                            this.pagesDone();
+                        }
+                        
+                    } else {
+                        this.showError();
+                    }
+                },this, params, pages)
             });
         }
     },
     
     pagesDone: function () {
+        jQuery('#messageloading').hide();
         if (this.showReport) {
+            this.removeSession();
+            jQuery('#message').show();
+            jQuery('#messagebuttons').show();
             if (this.pdf) {
-                this.removeSession();
-                jQuery('#message').show();
-                jQuery('#messagebuttons').show();
                 if (this.messages.done) {
-                    jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
                 } else {
-                    jQuery('#messagetext').html('<div id="message_done">Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
                 }
             } else {
-                this.showError();
+                if (this.messages.doneNoPDF) {
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.doneNoPDF+'</div>');
+                } else if (this.messages.done) {
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done+'</div>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret</div>');
+                }
             }
         } else {
             jQuery('#message').show();
             jQuery('#messagebuttons').show();
             if (this.messages.done) {
-                jQuery('#messagetext').html('<div id="message_done">'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
             } else {
-                jQuery('#messagetext').html('<div id="message_done">Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
             }
             this.removeSession();
         }
     },
     
-    showError: function () {
-        jQuery('#message').show();
-        if (this.messages.error) {
-            jQuery('#messagetext').html('<div id="message_done">'+this.messages.error+'</div>');
-        } else {
-            jQuery('#messagetext').html('<div id="message_done">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
-        }
+    pagesFail: function () {
+        jQuery('#messageloading').hide();
     },
     
-    handleError: function (data, params) {
-    	if (data.exception) {
-    		return null;
+    showErrorInfo: function (error) {
+        jQuery('#message').show();
+        
+        if (error && error.message) {
+            jQuery('#messagetext').append('<div id="message_done" class="message-info"><span class="icon-info2"></span>'+error.message+'</div>');
+        }
+        
+    },
+
+    showErrorWarning: function (error) {
+        jQuery('#message').show();
+        
+        if (error && error.message) {
+            jQuery('#messagetext').append('<div id="message_done" class="message-warning"><span class="icon-info2"></span>'+error.message+'</div>');
+        }
+        
+    },
+
+    showError: function (error) {
+        jQuery('#message').show();
+        
+        if (error && error.message) {
+            jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
+        } else {
+            if (this.messages.error) {
+                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
+            } else {
+                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+            }
+        }
+        
+    },
+    
+    isErrorRespose: function (data) {
+        return (data.exception || jQuery(data.responseXML).find('exception').length > 0);
+    },
+    
+    handleError: function (data, params, error) {
+    	if (this.isErrorRespose(data)) {
+    	    
+    	    var message = 'Error from server';
+            var type = 'error';
+
+            if (error && error.message) {
+                message = error.message;
+            } else {
+                if (data.responseXML) {
+                    if (jQuery(data.responseXML).find('message')) {
+                        message = jQuery(data.responseXML).find('message').text()
+                    }
+                } else {
+                    if (data.message) {
+                        message = data.message;
+                    }
+                }
+            }
+            if (error && error.type) {
+                type = error.type;
+            }
+            this.log({
+                type: type,
+                name: params.page,
+                message: message,
+                obj: JSON.stringify(params)
+            });
     	}
     	return params;
     },
@@ -1893,29 +2056,62 @@ Formular = SpatialMap.Class ({
     
     encodeParam: function (name,val) {
         return encodeURIComponent(val);
+    },
+    
+    log: function (logObj) {
+        if (this.logActive === true) {
+            
+            var params = {
+                page: 'formular.log',
+                'log.sessionid': this.sessionid,
+                'log.formular': this.name
+            };
+            for (var name in logObj) {
+                params['log.'+name] = logObj[name];
+            }
+            
+            jQuery.ajax( {
+                url : 'cbkort',
+                dataType : 'json',
+                type: 'POST',
+                async: true,
+                data: params
+            });
+
+        }
     }
 
 });
 
 
 
-Formular.prototype.setFrid = function (data, params) {
+Formular.prototype.setFrid = function (data, params, urlparamname) {
 	params = this.handleError(data, params);
 	if (params != null) {
-		for (var name in data.row[0]) {
-			params.frid = data.row[0][name];
-		}
+	    if (!urlparamname) {
+	        urlparamname = 'frid';
+	    }
+	    if (data && data.row && data.row[0]) {
+    		for (var name in data.row[0]) {
+    			params[urlparamname] = data.row[0][name];
+    		}
+	    } else {
+	        params[urlparamname] = this.sessionid;
+	    }
 	}
 	return params;
 }
 
-Formular.prototype.setPdf = function (data, params) {
+Formular.prototype.setPdf = function (data, params, urlparamname) {
 	params = this.handleError(data, params);
 	if (params != null) {
+	    if (!urlparamname) {
+	        urlparamname = 'frpdf';
+	    }
 		for (var i=0;i<data.row.length;i++) {
 			if (data.row[i].url) {
 				this.pdf = data.row[i].url.replace(/\/tmp\//,'');
-				params.frpdf = this.pdf;
+				params[urlparamname] = this.pdf;
 			}
 		}
 	}

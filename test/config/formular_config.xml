@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <formular name="log">
+        <header>Log hvis der sker fejl</header>
+        <subheader>Når der opstår en fejl vil servere blive kaldt så fejlen registreres</subheader>
+        <submitpages>
+            <page parser="setFrid" errortype="info" errormessage="Dette er en fejl men ikke så slem!">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="warning" errormessage="Dette er en fejl og den er lidt værre!">formular.geometry.union</page>
+            <page parser="setFrid" errortype="info">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="error">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="error" errormessage="Den er helt gal og vi stopper her!">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="info" errormessage="Dette bliver aldrig vist da det sker efter en ERROR!">formular.create-frid-not-working</page>
+<!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
+<!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
+<!--             <page>formular.save</page> -->
+<!--             <page>formular.move.pdf</page> -->
+        </submitpages>
+        <log>true</log>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Store"/>
+            <address id="address" urlparam="address" defaultvalue="Larsbjørnsstræde 3, 1454 København K" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Flyt kortet" name="pan"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue="Septima"/>
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+            <input type="file" displayname="Billede:" urlparam="billede"/>
+            <input type="radiobutton" displayname="Brugertype:" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
+                <option value="virksomhed" name="Virksomhed"/>
+                <option value="raadgiver" name="Rådgiver"/>
+                <option value="privat" name="Privat"/>
+            </input>
+            <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
+
+            <confirm displayname="&lt;b&gt;Følgende oplysninger er indtastet. Er det korrekt?&lt;/b&gt;"/>
+            <submitbutton displayname="Opret ny" function="formular.start();"/>
+
+        </content>
+    </formular>
+    <formular name="htmltext">
+        <header>Vejledning i tekst med ikoner</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <css>/modules/formular/test/css/buttons.css</css>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="htmltext"/>
+            <input type="text" displayname="Tryk på &lt;div class='button_in_help button_pan'&gt;&lt;/div&gt; eller gør noget andet. Denne tekst kan godt være meget meget meget lang, men ikonerne skulle gerne stå rigtigt alligevel. Dette ikon står på en ny linie: &lt;div class='button_in_help button_modify'&gt;&lt;/div&gt; men står rigtigt alligevel."/>
+            <maptools>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Tegn en bygning" name="template4" options="polygon -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en vej" name="template2" options="line -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en flagstang" name="template1" options="point -1000,1000"/>
+                <maptool displayname="Flyt kortet" name="pan" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+        </content>
+    </formular>
     <formular name="store">
         <header>Husk værdier til næste gang</header>
         <subheader>Når man udfylder sin formular bliver værdierne løbende gemt i browseren. Herved kan man forlade siden og genoptage indtastningen senere.</subheader>
@@ -84,46 +155,6 @@
                 <option value="2" name="Utilfreds"/>
                 <option value="1" name="Meget utilfreds"/>
             </input>
-
-
-
-
-
-            <!-- FORMULAR 2 - FANE 1 -->
-            <input type="text" displayname="Hvor tilfreds er du med sagens forløb?" condition="Poll.formulartype == 2"/>
-            <input type="radiobutton" displayname="" id="svar2_1" urlparam="svar2_1" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_1');">
-                <option value="4" name="Meget tilfreds"/>
-                <option value="3" name="Tilfreds"/>
-                <option value="2" name="Utilfreds"/>
-                <option value="1" name="Meget utilfreds"/>
-            </input>
-            <input type="text" displayname="Er du tilfreds med sagsbehandlingstiden?" condition="Poll.formulartype == 2"/>
-            <input type="radiobutton" displayname="" id="svar2_8" urlparam="svar2_8" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_8');">
-                <option value="ja" name="Ja"/>
-                <option value="nej" name="Nej"/>
-            </input>
-            <input type="text" displayname="Svarede sagsbehandlingstiden til det vi havde stillet dig i udsigt?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'"/>
-            <input type="radiobutton" displayname="" id="svar2_9" urlparam="svar2_9" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'" onchange="Poll.setFormularState('svar2_9');">
-                <option value="ja" name="Ja"/>
-                <option value="nej" name="Nej"/>
-            </input>
-            <input type="text" displayname="Hvilken sagsbehandlingstid havde vi lovet dig?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
-            <input type="input" displayname="" id="svar2_10" urlparam="svar2_10" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
-            
-            
-            
-            
-            
-            
-            
-
-
-        </content>
-        <content displayname="Information">
-        
-
-
-            <!-- FORMULAR 1 - FANE 2 -->
             <input type="text" displayname="Hvor tilfreds er du med kommunens medarbejder?" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar1_3" urlparam="svar1_3" defaultvalue="0" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">
                 <option value="4" name="Meget tilfreds"/>
@@ -144,35 +175,19 @@
                 <option value="2" name="I mindre grad"/>
                 <option value="1" name="Slet ikke"/>
             </input>
-            
-            
 
 
 
-            <!-- FORMULAR 2 - FANE 2 -->
-            <input type="text" displayname="Søgte du information inden du sendte ansøgningen?" condition="Poll.formulartype == 2"/>
-            <input type="radiobutton" displayname="" id="svar2_2" urlparam="svar2_2" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_2');">
-                <option value="ja" name="Ja"/>
-                <option value="nej" name="Nej"/>
+
+
+            <!-- FORMULAR 2 - FANE 1 -->
+            <input type="text" displayname="Hvor tilfreds er du med sagens forløb?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_1" urlparam="svar2_1" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_1');">
+                <option value="4" name="Meget tilfreds"/>
+                <option value="3" name="Tilfreds"/>
+                <option value="2" name="Utilfreds"/>
+                <option value="1" name="Meget utilfreds"/>
             </input>
-            <input type="text" displayname="Hvordan søgte du information?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja'"/>
-            <input type="radiobutton" displayname="" id="svar2_3" urlparam="svar2_3" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja'" onchange="Poll.setFormularState('svar2_3');">
-                <option value="5" name="På kommunens hjemmeside"/>
-                <option value="4" name="Ved telefonisk henvendelse"/>
-                <option value="3" name="Via e-mail korrespondance"/>
-                <option value="2" name="Ved fremmøde på kommunen"/>
-                <option value="1" name="På anden måde"/>
-            </input>
-            <input type="input" id="svar2_4" displayname="Hvor/hvordan?" urlparam="svar2_4" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja' &amp;&amp; Poll.state['svar2_3']=='1'"/>
-
-            <input type="text" displayname="I hvilken grad havde du udbytte af informationen?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')" />
-            <input type="radiobutton" displayname="" id="svar2_5" urlparam="svar2_5" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')">
-                <option value="4" name="I høj grad"/>
-                <option value="3" name="I nogen grad"/>
-                <option value="2" name="I mindre grad"/>
-                <option value="1" name="Slet ikke"/>
-            </input>
-
             <input type="text" displayname="Hvor tilfreds er du med kommunens medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_7" urlparam="svar2_7" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="4" name="Meget tilfreds"/>
@@ -180,14 +195,12 @@
                 <option value="2" name="Utilfreds"/>
                 <option value="1" name="Meget utilfreds"/>
             </input>
-
             <input type="text" displayname="Hvor nemt var det at forstå vores brev?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_11" urlparam="svar2_11" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="3" name="Det var nemt at forstå"/>
                 <option value="2" name="Det var hverken nemt eller svært"/>
                 <option value="1" name="Det var svært at forstå"/>
             </input>
-            
             <input type="text" displayname="Svarer vores afgørelse til dine forventninger efter dialog med vores medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_12" urlparam="svar2_12" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="4" name="I høj grad"/>
@@ -195,12 +208,51 @@
                 <option value="2" name="I mindre grad"/>
                 <option value="1" name="Slet ikke"/>
             </input>
+            <input type="text" displayname="Er du tilfreds med sagsbehandlingstiden?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_8" urlparam="svar2_8" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_8');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Svarede sagsbehandlingstiden til det vi havde stillet dig i udsigt?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'"/>
+            <input type="radiobutton" displayname="" id="svar2_9" urlparam="svar2_9" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'" onchange="Poll.setFormularState('svar2_9');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Hvilken sagsbehandlingstid havde vi lovet dig?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
+            <input type="input" displayname="" id="svar2_10" urlparam="svar2_10" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
+            
+            
+        </content>
+        <content displayname="Information">
+        
 
-            <input type="textarea" urlparam="svar2_6" displayname="Kommentar" condition="Poll.formulartype == 2"/>
-            
-            
-            
+            <!-- FORMULAR 1+2 - FANE 2 -->
 
+            <input type="text" displayname="Søgte du information inden du sendte ansøgningen?"/>
+            <input type="radiobutton" displayname="" id="svar2_2" urlparam="svar2_2" defaultvalue="0" onchange="Poll.setFormularState('svar2_2');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Hvordan søgte du information?" condition="Poll.state['svar2_2']=='ja'"/>
+            <input type="radiobutton" displayname="" id="svar2_3" urlparam="svar2_3" defaultvalue="0" condition="Poll.state['svar2_2']=='ja'" onchange="Poll.setFormularState('svar2_3');">
+                <option value="5" name="På kommunens hjemmeside"/>
+                <option value="4" name="Ved telefonisk henvendelse"/>
+                <option value="3" name="Via e-mail korrespondance"/>
+                <option value="2" name="Ved fremmøde på kommunen"/>
+                <option value="1" name="På anden måde"/>
+            </input>
+            <input type="input" id="svar2_4" displayname="Hvor/hvordan?" urlparam="svar2_4" condition="Poll.state['svar2_2']=='ja' &amp;&amp; Poll.state['svar2_3']=='1'"/>
+
+            <input type="text" displayname="I hvilken grad havde du udbytte af informationen?" condition="Poll.state['svar2_2']=='ja'" />
+            <input type="radiobutton" displayname="" id="svar2_5" urlparam="svar2_5" defaultvalue="0" condition="Poll.state['svar2_2']=='ja'">
+                <option value="4" name="I høj grad"/>
+                <option value="3" name="I nogen grad"/>
+                <option value="2" name="I mindre grad"/>
+                <option value="1" name="Slet ikke"/>
+            </input>
+
+            <input type="textarea" urlparam="svar2_6" displayname="Kommentar"/>
+            
 
         </content>
         <content displayname="Uddybende bemærkninger">
@@ -468,6 +520,17 @@
             <input type="input" displayname="Postnr:" urlparam="val2"/>
         </content>
     </formular>
+    <formular name="submitpages2">
+        <header>Formular med flere submit pages (med custom id)</header>
+        <subheader>Man vil gerne have at det unikke ID sendes som i en specifik urlparameter og ikke i "frid"</subheader>
+        <submitpages>
+            <page parser="setFrid" urlparam="journalnummer">formular.create-frid</page>
+            <page parser="setPdf">formular.create-pdf.nomap</page>
+        </submitpages>
+        <content displayname="Detaljer">
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+        </content>
+    </formular>
     <formular name="confirm">
         <header>Formular med godkendelse af registrering</header>
         <submitpage>formular.send.general.nomap</submitpage>
@@ -520,6 +583,23 @@
         <content>
             <input type="hidden" urlparam="about" defaultvalue="GeoSearch"/>
             <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" disablemap="true"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="address2">
+        <header>Adressesøgning med to GeoSeach hvor det kun er den ene der er knyttet til kortet</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="GeoSearch"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser,Matrikelnumre" filter="[module.spatialaddress.filter]" regexp="[a-zæøå]" validate="Der skal være indtastet en adresse!" />
+            <geosearch disablemap="true" urlparam="val1" displayname="Forpagter/lejer adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" regexp="[a-zæøå]" validate="Der skal være indtastet en adresse!" />
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
@@ -578,6 +658,32 @@
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
+    <formular name="conflict2">
+        <title>Konfliktsøgning med formatering</title>
+        <header>Konfliktsøgning med formatering</header>
+        <subheader>Formater resultatet så det stilles pænt op</subheader>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>pdf</reportxsl>
+        <css>/modules/formular/test/css/conflict.css</css>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af konfliktsøgning"/>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <conflicts urlparam="konflikttekst1" displayname="" targerset="drikkevand2"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="conflictevent">
         <title>Konfliktsøgning med events</title>
         <header>Konfliktsøgning med events</header>
@@ -602,6 +708,33 @@
             </map>
             <conflicts onconflict="alert('Conflict');" onnoconflict="alert('Np conflict')" class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="conflict-delete">
+        <header>Konfliktsøgning med slet af geometrier</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <submitgeometrypage>formular.send.general.nomap</submitgeometrypage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Location"/>
+            <maptools>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <conflicts class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
         </content>
     </formular>
     <formular name="themeoptions">
@@ -736,6 +869,13 @@
             <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato3"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="jQuery('#frist_startdato3_displayname').html('Vedligehold, der afsluttes '+jQuery('#frist_slutdato3').val()+' påbegyndes tidligst:')"/> 
             <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato3" urlparam="frist_startdato"/>
 
+            <input type="text" displayname="Begrænsede muligheder ud fra en datasource"/>
+            <input type="date" displayname="Vælg dato:" default="01.01.2013"  id="frist_dato4"  urlparam="frist_slutdato" limitfromdatasource="formular-test-dates" regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/> 
+
+            <input type="text" displayname="Begrænser datovælger ud fra valgt dato samt datasource"/>
+            <input type="date" displayname="Vælg først startdato:"   id="frist_startdato5"  urlparam="frist_startdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDateLimitSpan('frist_slutdato5',jQuery('#frist_startdato5').val())"/> 
+            <input type="date" displayname="Vælg slutdato"           id="frist_slutdato5" urlparam="frist_slutdato" condition="jQuery('#frist_startdato5').val() != ''" limitfromdatasource="formular-test-dates"/>
+
         </content>
     </formular>
     <formular name="daterange">
@@ -799,6 +939,7 @@
             <input urlparam="val2" id="val27" type="checkbox" displayname="Er du sikker:" defaultvalue="false"/>
             <input urlparam="val3" type="checkbox" displayname="Send kvitering:" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
             <input urlparam="val4" class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
+            <input urlparam="val6" type="date" displayname="Dato:" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
         </content>
     </formular>
     <formular name="tabs1">

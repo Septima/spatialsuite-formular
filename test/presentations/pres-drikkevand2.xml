@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<presentation>
+    <text name="overskrift" plural="" value=""/>
+    <columns>
+        <column name="">
+            <label><![CDATA[
+                '<table>
+                    <tr>
+                        <td>Vandværk:</td>
+                        <td colspan="2"><b>Albæk Vandværk</b></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Formand:</td>
+                        <td>Navn:</td>
+                        <td>Alvin Simmonsen</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Adresse:</td>
+                        <td>Bakken 4, Albæk, 8900 Randers</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Telefon:</td>
+                        <td>11223344</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Mobiltelefon:</td>
+                        <td>11223344</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Email:</td>
+                        <td><a href="navn.navnesen@gmail.com">navn.navnesen@gmail.com</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Vandværkspasser/ bestyrer:</td>
+                        <td>Navn:</td>
+                        <td>Alvin Simmonsen</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Adresse:</td>
+                        <td>Bakken 4, Albæk, 8900 Randers</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Telefon:</td>
+                        <td>11223344</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Mobiltelefon:</td>
+                        <td>11223344</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Email:</td>
+                        <td><a href="navn.navnesen@gmail.com">navn.navnesen@gmail.com</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Kasserer:</td>
+                        <td>Navn:</td>
+                        <td>Alvin Simmonsen</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Adresse:</td>
+                        <td>Bakken 4, Albæk, 8900 Randers</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Telefon:</td>
+                        <td>11223344</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Mobiltelefon:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Email:</td>
+                        <td><a href="navn.navnesen@gmail.com">navn.navnesen@gmail.com</a></td>
+                    </tr>
+                </table>'
+            ]]></label>
+            <value></value>
+        </column>
+    </columns>
+</presentation>

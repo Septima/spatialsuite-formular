@@ -36,10 +36,18 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
 
         <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
             <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
+            <page parser="setFrid" urlparam="journalnummer">    <!-- Det er muligt at tilføje en "urlparam", der sendes til parseren. Herved kan man bestemme navnet på urlparametere der holder værdien -->
+                formular.create-frid
+            </page>  
             <page parser="setPdf">formular.create-pdf</page>    
             <page condition="false">formular.save</page>        <!-- Skal pagen kaldes? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.-->
+            <page type="json">mypage</page>                     <!-- Angiv "type" for at fortælle hvad pagen returnere. Default er "json" men det kan også være "xml" -->
             <page>formular.save</page>
             <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
+            <page errortype="info">formular.save</page>         <!-- errortype definere hvilken type fejlen er hvis pagen returnere en fejl. Mulige værdier er: "info", "warning" og "error". Hvis errortype er "error" så stopper alt. 
+                                                                     Hvis errortype er "info" eller "warning" fortsættes der men brugeren bliver informeret om at der er sket en fejl hvis der også er angivet en errormessage.
+                                                                     Hvis log er aktiveret så logges alle fejl -->
+            <page errormessage="Tekst">formular.save</page>     <!-- errormessage indeholder den tekst, der vises hvis der er en fejl. -->
         </submitpages>
 
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
@@ -52,6 +60,11 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <tabs>true</css>                                        <!-- OPTIONAL - Har man flere steps, kan man få vist de enkelte steps øverst på siden -->
         <parsedisplaynames>true</parsedisplaynames>             <!-- OPTIONAL - displayname på hvert input felt sendes med til serveren, så man kan bruge dem i forbindelse med en generisk XSL. Sendes som parameteren urlparam+'_displayname' -->
         <localstore>true</localstore>                           <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false") -->
+        <log>true</log>                                         <!-- OPTIONAL - Skal fejl logges på serveren? For at se loggen kaldes http://hostnavn/spatialmap?page=formular.log.read (default er "false") -->
+        <messages>                                              <!-- OPTIONAL - Mulghed for at få vist sin egen tekst når brugeren er færdig -->
+            <message name="done">Mange tak for hjælpen! Hent kvittering &lt;a href="{{pdf}}"&gt;her&lt;/a&gt;</message> <!-- OPTIONAL - Teksten, der vises hvis det går godt. {{pdf}} erstattes af stien til pdf-dokumentet -->
+            <message name="error">Der er opståer en fejl!</message>                                                     <!-- OPTIONAL - Teksten, der vises hvis det går galt -->
+        </messages>
         <content displayname="Første step">                     <!-- Der kan tilføjes flere content elementer for at få flere sider i sin formular -->
             <!-- content, kan bestå af et vilkårligt antal elementer i en vilkårlig rækkefølge. I følgende er de enkelte typer elementer beskrevet.
                  Generelt indeholder alle elementer, der indeholder noget, der skal sendes til serveren, atributten "urlparam". Dette er navnet på 
@@ -134,11 +147,11 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <geosearch urlparam="address" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true" usegeometry="false"/>
 
             <!-- input - type="date" -->
-            <!-- Datovælger felt hvor man kan skrive en dato eller vælge 
-                 Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
-                 Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
-                 en dato skal pt være f.eks. 22.01.2013 
-                 - onshow - OPTIONAL  - Funktion der kaldes når brugeren klikker på inputfeltet. Kan f.eks. bruges til at ændre datovælgeren. Skrives som et JavaScript udtryk.
+            <!-- Datovælger felt hvor man kan skrive en dato eller vælge.
+                 - limitfromdatasource  - OPTIONAL - Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
+                                                     Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
+                                                     en dato skal pt være f.eks. 22.01.2013. Datasourcen SKAL indeholde en command, der hedder "read-dates"!
+                 - onshow               - OPTIONAL - Funktion der kaldes når brugeren klikker på inputfeltet. Kan f.eks. bruges til at ændre datovælgeren. Skrives som et JavaScript udtryk.
             -->
             <input type="date" displayname="Dato:" urlparam="date" limitfromdatasource="ds_formular_booking"/>
 
@@ -278,6 +291,9 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.05.12 - Mulighed for at logge fejl fra klienten
+* 2014.05.02 - Mulighed for at angive beskeden, der skal vises når oplysningerne er registreret eller det er gået galt.
+* 2014.05.02 - Mulighed for at bestemme navnet på urlparameteren som en parser på en submitpage.
 * 2014.04.29 - localstore er tilføjet så det er muligt at få browseren til at gemme indtastede oplysninger til senere brug.
 * 2014.03.05 - onchange tilføjet til kortet, så man kan gøre noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i.
 * 2014.03.05 - Mulighed for at disable et maptool.

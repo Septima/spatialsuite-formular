@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy>
 
-   <version>3.4.4</version>  
+   <version>3.4.5</version>  
 
    <stoponerror>true</stoponerror>
    
@@ -16,7 +16,10 @@
    <param name="module.formular.targetsetfile">[module:formular.dir]/queries/spatialqueries.xml</param> 
 
    <param name="module.formular.pdf.logo">[module:formular.dir]/images/septima.jpg</param> 
-   <param name="module.formular.pdf.header">Ansøgning</param> 
+   <param name="module.formular.pdf.header">Ansøgning</param>
+   
+   <param name="module.formular.log.limit" ignore="IsDefined(module.formular.log.limit)">100</param> 
+   <param name="module.formular.log.offset" ignore="IsDefined(module.formular.log.offset)">0</param> 
 
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/css"/>
    <makedir dir="[cbinfo.wwwroot.dir]/modules/formular/js"/>
@@ -33,6 +36,7 @@
    <copyfile fromfile="[module:formular.dir]/js/jquery.ui.datepicker-da_DK.js"    tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.ui.datepicker-da_DK.js"/>
    <copyfile fromfile="[module:formular.dir]/js/jquery.ui.datepicker-en_GB.js"    tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.ui.datepicker-en_GB.js"/>
    <copyfile fromfile="[module:formular.dir]/js/store.js"          tofile="[cbinfo.wwwroot.dir]/modules/formular/js/store.js"/>
+   <copyfile fromfile="[module:formular.dir]/js/json2.js"          tofile="[cbinfo.wwwroot.dir]/modules/formular/js/json2.js"/>
 
    <copyfile fromfile="[module:formular.dir]/html/formular.html"   tofile="[cbinfo.wwwroot.dir]/formular.html"/>
 

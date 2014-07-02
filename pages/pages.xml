@@ -25,4 +25,51 @@
     <!-- REQUIRED -->
     <include src="[module:formular.dir]/pages/pages-includes.xml" nodes="/pages/*" mustexist="true"/>
 
+
+    <page name="formular.log" contenttype="application/json" sessionrequired="false">
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="formular-log"/>
+                <url-parameter name="command" value="write-log"/>
+                <url-parameter name="log.formular">if IsDefined(log.formular) then log.formular else "unknown" endif</url-parameter>
+                <url-parameter name="log.sessionid">if IsDefined(log.sessionid) then log.sessionid else "unknown" endif</url-parameter>
+                <url-parameter name="log.ip">if IsDefined(log.ip) then log.ip else "unknown" endif</url-parameter>
+                <url-parameter name="log.type">if IsDefined(log.type) then log.type else "unknown" endif</url-parameter>
+                <url-parameter name="log.name">if IsDefined(log.name) then log.name else "unknown" endif</url-parameter>
+                <url-parameter name="log.message">if IsDefined(log.message) then log.message else "unknown" endif</url-parameter>
+                <url-parameter name="log.obj">if IsDefined(log.obj) then log.obj else "{}" endif</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+    
+    <page name="formular.log.read" contenttype="text/html" sessionrequired="false">
+        <stylesheet>[module:formular.dir]/xsl/log.xsl</stylesheet>
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="formular-log"/>
+                <url-parameter name="command" value="read-log"/>
+                <url-parameter name="limit">if IsDefined(limit) then limit else [module.formular.log.limit] endif</url-parameter>
+                <url-parameter name="offset">if IsDefined(offset) then offset else [module.formular.log.offset] endif</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+
+    <page name="formular.log.xml" contenttype="xml" sessionrequired="false">
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="formular-log"/>
+                <url-parameter name="command" value="read-log"/>
+            </url-parameters>
+        </data>
+    </page>
+
+    <page name="formular.log.clear" contenttype="xml" sessionrequired="false">
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="datasource" value="formular-log"/>
+                <url-parameter name="command">if IsDefined(command) then command+'-log' else "null" endif</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+
 </pages>

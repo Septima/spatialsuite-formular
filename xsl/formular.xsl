@@ -87,6 +87,7 @@
                 <script language="javascript" src="[cbinfo.js.url]/standard/proj4js/proj4js-compressed.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/jquery.valid8.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/store.js" type="text/javascript"></script>
+                <script language="javascript" src="/modules/formular/js/json2.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
 
                 <xsl:for-each select="js">
@@ -109,7 +110,7 @@
             </head>
             <body>
                 <div class="formular_content">
-                    <div id="message"><div id="messagetext" class="messagetext"></div><div id="messagebuttons" class="messagebuttons"></div></div>
+                    <div id="message"><div id="messageloading" class="messagetext"></div><div id="messagetext" class="messagetext"></div><div id="messagebuttons" class="messagebuttons"></div></div>
                     <div id="content">
                         <div class="header"><xsl:value-of select="header" disable-output-escaping="yes"/></div>
                         <div class="subheader"><xsl:value-of select="subheader" disable-output-escaping="yes"/></div>

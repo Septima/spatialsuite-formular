@@ -20,5 +20,28 @@
     </command>
 
   </datasource>
+  
+  
+    <endpoint name="formular-log" endpointtype="embedded" displayname="Formular log">
+        <srs>25832</srs>
+        <config version="1" requires="1">
+        CREATE SCHEMA formular AUTHORIZATION SA
+        CREATE TABLE formular.log ( created timestamp, formular varchar(255) NOT NULL, sessionid varchar(255), ip varchar(255), type varchar(255), name varchar(255), message varchar(4096), obj varchar(10000))
+        </config>
+    </endpoint>
+  
+    <datasource name="formular-log" endpoint="formular-log">
+         <sql command="read-log">select * from formular.log order by created DESC limit [limit] offset [offset]</sql>
+         <sql command="clear-log">delete from formular.log</sql>
+         <sql command="write-log">insert into formular.log(created, formular, sessionid, ip, type, name, message, obj) values (
+            [timestamp: SystemTime()], 
+            [string: log.formular],
+            [string: log.sessionid],
+            [string: log.ip],
+            [string: log.type],
+            [string: log.name],
+            [string: log.message],
+            [string: log.obj])</sql>
+    </datasource>
  
 </datasources>

@@ -586,6 +586,23 @@
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
+    <formular name="address2">
+        <header>Adressesøgning med to GeoSeach hvor det kun er den ene der er knyttet til kortet</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="GeoSearch"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser,Matrikelnumre" filter="[module.spatialaddress.filter]" regexp="[a-zæøå]" validate="Der skal være indtastet en adresse!" />
+            <geosearch disablemap="true" urlparam="val1" displayname="Forpagter/lejer adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" regexp="[a-zæøå]" validate="Der skal være indtastet en adresse!" />
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="parsedisplaynames">
         <header>Send ledeteksten med til server ved "Send"</header>
         <submitpage>formular.send.general.nomap</submitpage>
@@ -852,6 +869,13 @@
             <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato3"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="jQuery('#frist_startdato3_displayname').html('Vedligehold, der afsluttes '+jQuery('#frist_slutdato3').val()+' påbegyndes tidligst:')"/> 
             <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato3" urlparam="frist_startdato"/>
 
+            <input type="text" displayname="Begrænsede muligheder ud fra en datasource"/>
+            <input type="date" displayname="Vælg dato:" default="01.01.2013"  id="frist_dato4"  urlparam="frist_slutdato" limitfromdatasource="formular-test-dates" regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/> 
+
+            <input type="text" displayname="Begrænser datovælger ud fra valgt dato samt datasource"/>
+            <input type="date" displayname="Vælg først startdato:"   id="frist_startdato5"  urlparam="frist_startdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDateLimitSpan('frist_slutdato5',jQuery('#frist_startdato5').val())"/> 
+            <input type="date" displayname="Vælg slutdato"           id="frist_slutdato5" urlparam="frist_slutdato" condition="jQuery('#frist_startdato5').val() != ''" limitfromdatasource="formular-test-dates"/>
+
         </content>
     </formular>
     <formular name="daterange">
@@ -915,6 +939,7 @@
             <input urlparam="val2" id="val27" type="checkbox" displayname="Er du sikker:" defaultvalue="false"/>
             <input urlparam="val3" type="checkbox" displayname="Send kvitering:" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
             <input urlparam="val4" class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
+            <input urlparam="val6" type="date" displayname="Dato:" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
         </content>
     </formular>
     <formular name="tabs1">

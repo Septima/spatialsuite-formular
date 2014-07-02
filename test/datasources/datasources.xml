@@ -55,7 +55,28 @@
 			   oprettet timestamp
 			) 
         </config>
+
+        <config version="6" requires="1">
+            CREATE TABLE dates
+            (
+                id varchar(255),
+                date timestamp
+            ) 
+        </config>
+        
+        <onreload>
+            delete from dates;
+            insert into dates(id,date) values('a',DATEADD( 'dd', -4, now()));
+            insert into dates(id,date) values('b',DATEADD( 'dd', 4, now()));
+            insert into dates(id,date) values('c',DATEADD( 'dd', 14, now()));
+            insert into dates(id,date) values('d',DATEADD( 'dd', 18, now()));
+            insert into dates(id,date) values('f',DATEADD( 'dd', 24, now()));
+        </onreload>
     </endpoint>
+
+    <datasource name="formular-test-dates" endpoint="formular-test" displayname="Formular test data (datelimit)">
+        <sql command="read-dates">select TO_CHAR(date, 'DD.MM.YYYY') as dates from dates;</sql>
+    </datasource>
 
     <datasource name="formular-test" endpoint="formular-test" displayname="Formular test data">
     

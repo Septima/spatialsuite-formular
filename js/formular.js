@@ -1579,8 +1579,8 @@ Formular = SpatialMap.Class ({
                     params[name+'_displayname'] = this.encodeParam(name+'_displayname',this.postparams[name].displayname);
                 }
                 
-                var t = jQuery('#'+this.postparams[name].id+'_displayname').text ();
-                if (t && val) {
+                var t = this.postparams[name].displayname;
+                if (typeof t !== 'undefined' && val) {
                     confirmtext+='<br/>'+t+' '+textVal;
                 }
             }

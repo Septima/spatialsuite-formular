@@ -457,6 +457,40 @@
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
+    <formular name="multiple2">
+        <header>Tegn flere geometrier i kortet med attributter</header>
+        <subheader>Alle geometrierne sendes til servere og kan gemmes. Det er kun muligt at tegne flere geometrier af samme type. Hvis man tegner en geometri af en anden type, så slettes de forudgående geometrier.</subheader>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Location"/>
+            <maptools>
+                <maptool displayname="Tegn en polygon" name="polygon" default="true"/>
+<!--                 <maptool displayname="Tegn et punkt" name="point"/> -->
+<!--                 <maptool displayname="Tegn en linie" name="line"/> -->
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
+            </maptools>
+            <map class="my_map_class" multiplegeometries="true">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+                <attributes page="formular.geometry.save" datasource="karsten" command="test">
+                    <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
+                    <input type="input" displayname="Nummer 2:" urlparam="nummer2" defaultvalue="22"/>
+                    <input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>
+                </attributes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <input type="input" displayname="Adresse:" urlparam="adr" defaultvalue=""/>
+            <input type="input" displayname="Postnummer:" urlparam="post" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="multiple">
         <header>Tegn flere geometrier i kortet</header>
         <subheader>Alle geometrierne sendes til servere og kan gemmes. Det er kun muligt at tegne flere geometrier af samme type. Hvis man tegner en geometri af en anden type, så slettes de forudgående geometrier.</subheader>

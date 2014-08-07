@@ -145,6 +145,53 @@ td {
 	position: relative;
 }
 
+.features_attributes .labeldiv {
+    width: 140px;
+}
+.features_attributes .valuediv {
+    width: 420px;
+}
+.attributeswrapper {
+    box-sizing: border-box;
+    background-image: -webkit-linear-gradient(rgba( 238, 238, 238, 0), rgba( 238, 238, 238, 0));
+    background-image: linear-gradient(rgba( 238, 238, 238, 0),rgba( 238, 238, 238, 0));
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 3px;
+    -moz-box-sizing: border-box;    
+    margin: 5px;
+
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.attributeswrapper.active {
+    border-color: rgb(188, 232, 241);
+}
+.attributeswrapper > .attributesheader {
+    background-color: rgb(221, 221, 221);
+    padding: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    height: 24px;
+    line-height: 24px;
+}
+.attributeswrapper > .attributesheader > span.icon {
+    float: right;
+    padding: 5px;
+}
+.attributeswrapper > .attributesheader > span.icon:hover {
+    font-weight: bold;
+}
+.attributeswrapper.active > .attributesheader {
+    cursor: default;
+    background-color: rgb(217, 237, 247);
+    color: rgb(49, 112, 143);
+}
+.attributeswrapper > table.tablecontent {
+    margin: 5px;
+}
 
 
 .ui-autocomplete {
@@ -545,11 +592,11 @@ div.helpbutton {
 
 @font-face {
     font-family: 'icomoon';
-    src:url('fonts/icomoon.eot?xjit3o');
-    src:url('fonts/icomoon.eot?#iefixxjit3o') format('embedded-opentype'),
-        url('fonts/icomoon.woff?xjit3o') format('woff'),
-        url('fonts/icomoon.ttf?xjit3o') format('truetype'),
-        url('fonts/icomoon.svg?xjit3o#icomoon') format('svg');
+    src:url('fonts/icomoon.eot?ge2pc2');
+    src:url('fonts/icomoon.eot?#iefixge2pc2') format('embedded-opentype'),
+        url('fonts/icomoon.woff?ge2pc2') format('woff'),
+        url('fonts/icomoon.ttf?ge2pc2') format('truetype'),
+        url('fonts/icomoon.svg?ge2pc2#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -568,6 +615,9 @@ div.helpbutton {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-times:before {
+    content: "\f00d";
+}
 .icon-frame:before {
     content: "\e600";
 }

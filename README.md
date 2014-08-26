@@ -224,11 +224,11 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
                     -->
                 </themes>
-                <atributter page="formular.geometry.save" datasource="karsten" command="test">
+                <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">
                     <!-- Følgende atributter kan tilføjes til atributter:
                         page          - OPTIONAL - Deafult "formular.geometry.save". Angiv den page, der skal kaldes for hver geometri
-                        datasource    - OPTIONAL - Angiv hvilken datasource geometrien skal gemmes i
-                        command       - OPTIONAL - Angiv hvilken command, der skal benyttes for at gemme hver enkelt geometri
+                        datasource    - OPTIONAL - Angiv hvilken datasource geometrien skal gemmes i. Hvis man benytter sin egen page, kan datasource angives direkte på pagen, ellers skal den angives her!
+                        command       - OPTIONAL - Angiv hvilken command, der skal benyttes for at gemme hver enkelt geometri. Hvis man benytter sin egen page, kan command angives direkte på pagen, ellers skal den angives her!
                     -->
                     <!-- En liste af "input" element, der kan konfigureres på samme måde som alle andre input felter. Dog er der en række typer, der ikke kan benyttes, herunder adressesøgning m.m.
                     <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>

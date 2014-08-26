@@ -1375,8 +1375,12 @@ Formular = SpatialMap.Class ({
     },
     
     addFeatureAttributes: function (event) {
+        if (typeof this.featureCount === 'undefined') {
+            this.featureCount = 0;
+        }
+        this.featureCount++;
         var w = jQuery('<div class="attributeswrapper"></div>');
-        var h = jQuery('<div class="attributesheader"><span class="text">Geometri '+(this.feature.length+1)+'</span></div>');
+        var h = jQuery('<div class="attributesheader"><span class="text">Geometri '+this.featureCount+'</span></div>');
         w.append(h);
         event.element = w;
         

@@ -1279,14 +1279,25 @@ Formular = SpatialMap.Class ({
     },
     
     featureModified: function (event) {
-        if (event.type === 'MODIFY') {
-            for (var i=0;i<this.feature.length;i++) {
-                if (this.feature[i].id === event.id) {
-                    this.feature[i] = event;
-                    break;
-                }
+        var feature = null
+        for (var i=0;i<this.feature.length;i++) {
+            if (this.feature[i].id === event.id) {
+                this.feature[i].wkt = event.wkt;
+                feature = this.feature[i];
+                break;
             }
+        }
+        if (event.type === 'MODIFY') {
             this.featureChanged ();
+        } else if (event.type === 'SELECT') {
+            if (feature.element) {
+                jQuery('.attributeswrapper').removeClass('active');
+                feature.element.addClass('active');
+            }
+        } else if (event.type === 'UNSELECT') {
+            if (feature.element) {
+                jQuery('.attributeswrapper').removeClass('active');
+            }
         }
     },
     
@@ -1367,23 +1378,24 @@ Formular = SpatialMap.Class ({
         var w = jQuery('<div class="attributeswrapper"></div>');
         var h = jQuery('<div class="attributesheader"><span class="text">Geometri '+(this.feature.length+1)+'</span></div>');
         w.append(h);
+        event.element = w;
         
         var d = jQuery('<span class="icon icon-times"></span>');
-        d.click(SpatialMap.Function.bind(function (feature,element) {
-            element.remove();
+        d.click(SpatialMap.Function.bind(function (feature) {
+            feature.element.remove();
             this.map.deleteFeature(feature.id);
             feature.type = 'DELETE';
             this.featureDeleted(feature);
             return false;
-        },this,event,w));
+        },this,event));
         h.append(d);
         
-        h.click(SpatialMap.Function.bind(function (feature,element) {
+        h.click(SpatialMap.Function.bind(function (feature) {
             jQuery('.attributeswrapper').removeClass('active');
-            element.addClass('active');
+            feature.element.addClass('active');
             this.map.deselectFeatures();
             this.map.selectFeature(feature.id)
-        },this,event,w))
+        },this,event))
         
         var t = jQuery('<table class="tablecontent"><tbody></tbody></table>');
         w.append(t);
@@ -1399,7 +1411,6 @@ Formular = SpatialMap.Class ({
             }
         }
         event.params = params;
-        event.element = w;
     },
     
     selectFromDatasource: function (datasource,wkt) {

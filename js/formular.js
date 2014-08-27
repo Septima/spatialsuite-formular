@@ -1018,7 +1018,7 @@ Formular = SpatialMap.Class ({
             }
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
-            if (options.usegeometry) {
+            if (this.map && options.usegeometry) {
                 this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
             }
             
@@ -1043,7 +1043,7 @@ Formular = SpatialMap.Class ({
             }
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
-            if (options.usegeometry) {
+            if (this.map && options.usegeometry) {
                 this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
             }
             if (jQuery('#'+id+'_wkt').attr('value') != '') {
@@ -1435,7 +1435,7 @@ Formular = SpatialMap.Class ({
             data : params,
             success : SpatialMap.Function.bind( function(data, status) {
                 var wkt = jQuery(data).find('col[name="shape_wkt"]').text();
-                if (wkt) {
+                if (this.map && wkt) {
                     this.map.drawWKT(wkt,SpatialMap.Function.bind(function (event) {
                         
                         var add = true;
@@ -1609,7 +1609,7 @@ Formular = SpatialMap.Class ({
     
     setCurrentValues: function (params) {
         
-        if (params.wkt) {
+        if (this.map && params.wkt) {
             this.map.drawWKT (params.wkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
         }
         

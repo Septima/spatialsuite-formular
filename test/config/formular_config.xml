@@ -480,7 +480,7 @@
                 <themes>
                     <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
-                <attributes page="formular.geometry.save" datasource="karsten" command="test">
+                <attributes page="formular.geometry.save" datasource="formular-test-geometry" command="write">
                     <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
                     <input type="input" displayname="Nummer 2:" urlparam="nummer2" defaultvalue="22"/>
                     <input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>
@@ -1084,6 +1084,43 @@
         <content displayname="Detaljer">
             <input type="textarea" displayname="Tekst:" urlparam="val8"/>
             <input type="file" displayname="Billede:" urlparam="billede"/>
+        </content>
+    </formular>
+    <formular name="tabs3">
+        <header>Tab med condition</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs class="testtab">true</tabs>
+        <content displayname="Første side">
+            <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
+            <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="input" displayname="Postnr:" urlparam="val2" id="postnr"/>
+        </content>
+        <content displayname="Kort">
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
+            <input type="input" displayname="Hest:" urlparam="val4"/>
+            <input type="input" displayname="Får:" urlparam="val5"/>
+        </content>
+        <content displayname="Sidste side" condition="jQuery('#postnr').val() == '1'">
+            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="Paging"/>
+            <input type="input" displayname="ABC:" urlparam="val7"/>
+            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
         </content>
     </formular>
     <formular name="paging">

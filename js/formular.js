@@ -1984,11 +1984,55 @@ Formular = SpatialMap.Class ({
                 params.command = 'write';
             }
             
+            var featureResponse = {
+                count: this.feature.length,
+                fail: false
+            };
+            
             for (var i=0;i<this.feature.length;i++) {
                 var p = this.getParams(this.feature[i].params, params);
+                
+                jQuery.ajax( {
+                    url : 'cbkort',
+                    dataType : 'json',
+                    type: 'POST',
+                    async: true,
+                    data : p.params,
+                    success : SpatialMap.Function.bind( function(featureResponse, data, status) {
+                        featureResponse.count--;
+                        if (featureResponse.fail === false) {
+                            if (this.isErrorRespose(data)) {
+                                featureResponse.fail = true;
+                                this.showError();
+                                this.pagesFail();
+                            } else {
+                                if (featureResponse.count === 0) {
+                                    this.showDone();
+                                }
+                            }
+                        }
+                    },this,featureResponse),
+                    error : SpatialMap.Function.bind( function(featureResponse, data, status) {
+                        featureResponse.count--;
+                        if (featureResponse.fail !== false) {
+                            featureResponse.fail = true;
+                            this.showError();
+                            this.pagesFail();
+                        }
+                    },this,featureResponse)
+                });                
             }
+        } else {
+            this.showDone();
         }
         
+    },
+
+    pagesFail: function () {
+        jQuery('#messageloading').hide();
+    },
+    
+    showDone: function () {
         jQuery('#messageloading').hide();
         if (this.showReport) {
             this.removeSession();
@@ -2019,10 +2063,6 @@ Formular = SpatialMap.Class ({
             }
             this.removeSession();
         }
-    },
-    
-    pagesFail: function () {
-        jQuery('#messageloading').hide();
     },
     
     showErrorInfo: function (error) {

@@ -604,19 +604,19 @@ Formular = SpatialMap.Class ({
                 
                 this.map = new SpatialMap.Map ('map_'+counter,mapoptions);
                 
-                var a = node.find('attributes');
-                a = jQuery(a).children();
-                if (a.length > 0) {
+                var attributesNode = node.find('attributes');
+                var children = jQuery(attributesNode).children();
+                if (children.length > 0) {
                     this.multipleGeometriesAttributesOptions = {
-                        page: a.attr('page'),
-                        datasource: a.attr('datasource'),
-                        command: a.attr('command')
+                        page: attributesNode.attr('page'),
+                        datasource: attributesNode.attr('datasource'),
+                        command: attributesNode.attr('command')
                     }
                     
                     this.multipleGeometriesAttributes = [];
-                    for (var i=0;i<a.length;i++) {
+                    for (var i=0;i<children.length;i++) {
                         this.multipleGeometriesAttributes.push({
-                            config: jQuery(a[i]),
+                            config: jQuery(children[i]),
                             counter: counter
                         });
                     }

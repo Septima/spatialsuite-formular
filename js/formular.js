@@ -60,6 +60,8 @@ Formular = SpatialMap.Class ({
     
     logActive: false,
     
+    bootstrap: false,
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -155,10 +157,14 @@ Formular = SpatialMap.Class ({
                 var showTabs = jQuery(data).find('tabs').text();
                 if (showTabs) {
                     this.showTabs = (showTabs == 'true');
-                    var tabcontainer = jQuery('<div class="tabcontainer"></div>');
-                    var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
-                    tabcontainer.addClass(className);
-                    jQuery('div#content').append(tabcontainer);
+                    if (this.bootstrap === true) {
+                        
+                    } else {
+                        var tabcontainer = jQuery('<div class="tabcontainer"></div>');
+                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
+                        tabcontainer.addClass(className);
+                        jQuery('div#content').append(tabcontainer);
+                    }
                 }
                 var parseDisplaynames = jQuery(data).find('parsedisplaynames').text();
                 if (parseDisplaynames) {
@@ -2395,24 +2401,3 @@ function calculateDistance (a,b) {
     }
 }
 
-
-(function( jQuery ) {
-
-jQuery( ".ui-autocomplete-input" ).live( "autocompleteopen", function() {
-    var autocomplete = jQuery( this ).data( "autocomplete" ),
-        menu = autocomplete.menu;
-
-    if ( !autocomplete.options.selectFirst ) {
-        return;
-    }
-    //the requested term no longer matches the search, so drop out of this now
-    if(autocomplete.term != jQuery(this).val()){
-        //console.log("mismatch! "+autocomplete.term+'|'+$(this).val());
-        return;
-    }
-    //hack to prevent clearing of value on mismatch
-    menu.options.blur = function(event,ui){return}
-    menu.activate( jQuery.Event({ type: "mouseenter" }), menu.element.children().first() );
-});
-
-}( jQuery ));

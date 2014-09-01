@@ -224,6 +224,15 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
                     -->
                 </themes>
+                <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">
+                    <!-- Følgende atributter kan tilføjes til atributter:
+                        page          - OPTIONAL - Deafult "formular.geometry.save". Angiv den page, der skal kaldes for hver geometri
+                        datasource    - OPTIONAL - Angiv hvilken datasource geometrien skal gemmes i. Hvis man benytter sin egen page, kan datasource angives direkte på pagen, ellers skal den angives her!
+                        command       - OPTIONAL - Angiv hvilken command, der skal benyttes for at gemme hver enkelt geometri. Hvis man benytter sin egen page, kan command angives direkte på pagen, ellers skal den angives her!
+                    -->
+                    <!-- En liste af "input" element, der kan konfigureres på samme måde som alle andre input felter. Dog er der en række typer, der ikke kan benyttes, herunder adressesøgning m.m.
+                    <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
+                </attributes>
             </map>
             
             <!-- conflicts -->
@@ -299,6 +308,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2014.08.07 - Ny mulighed for at gemme flere geometrier med forskellige oplysninger
 * 2014.07.02 - Minscale eller minzoom tilføjet til søgefunktionerne
 * 2014.07.02 - Flere standard klasser til styling af konfliktsøgningsresultat
 * 2014.05.12 - Mulighed for at logge fejl fra klienten

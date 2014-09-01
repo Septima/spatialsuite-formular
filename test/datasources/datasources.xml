@@ -63,6 +63,10 @@
                 date timestamp
             ) 
         </config>
+
+        <config version="7" requires="1">
+            CREATE TABLE formulartest_geometry(id varchar(255), created timestamp, wkt CLOB);
+        </config>
         
         <onreload>
             delete from dates;
@@ -146,6 +150,20 @@
                                                    [string: if IsDefined(email)          then email else '' endif], 
                                                    [timestamp: SystemTime()]
                                                );</sql>
+    </datasource>
+
+    <datasource name="formular-test-geometry" endpoint="formular-test" displayname="Formular test geometry">
+    
+        <sql command="read">select * from formulartest_geometry;</sql>
+        
+        <sql command="write">insert into formulartest_geometry(id, created, wkt) 
+                                               values(
+                                                   [string: sessionid],
+                                                   [timestamp: SystemTime()],
+                                                   [string: if IsDefined(wkt)          then wkt else null endif]
+                                               );</sql>
+
+        <debug>false</debug>
     </datasource>
 
 </datasources>

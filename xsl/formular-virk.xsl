@@ -68,7 +68,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
                 <link rel="Stylesheet" type="text/css" href="/modules/formular/css/formular.css"></link>
-                <link rel="Stylesheet" type="text/css" href="/modules/formular/css/style.css"></link>
+                <link rel="Stylesheet" type="text/css" href="/modules/formular/css/bootstrap-formular.css"></link>
                 <xsl:if test="css">
                     <xsl:element name="link">
                         <xsl:attribute name="rel">Stylesheet</xsl:attribute>
@@ -194,7 +194,9 @@
         <!-- Main content wrapper start -->
         <div class="content row">
             <div class="col-sm-3">
-                <ul class="nav style-2 nav-collapse collapse">
+                <ul class="nav style-2 nav-collapse collapse navlist" >
+                
+                <!-- 
                     <li class="active">
                         <a href="eksempel03-1.html">1. Betingelser for brug af denne indberetning</a>
                     </li>
@@ -207,6 +209,7 @@
                     <li>
                         <a href="eksempel03-4.html">4. Opsummering og godkendelse</a>
                     </li>
+                -->
                 </ul>
             </div>
 
@@ -352,8 +355,9 @@
                                 </div>
                             </fieldset>
                         <div class="buttons">
-                            <a class="btn btn-primary button-prev pull-left" href="eksempel03-1.html">Forrige</a>
-                            <a data-toggle="modal" href="#myModal" class="btn btn-primary button-next pull-right">Næste</a>
+                            <a id="previous" class="btn btn-primary button-prev pull-left" href="#">Forrige</a>
+                            <a id="next" class="btn btn-primary button-next pull-right" href="#">Næste</a>
+                            <a id="submit" class="btn btn-primary pull-right" href="#Send">Indsend </a>
                             <div class="clearfix"></div>
                         </div>
                     </div>

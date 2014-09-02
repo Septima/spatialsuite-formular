@@ -61,6 +61,8 @@ Formular = SpatialMap.Class ({
     logActive: false,
     
     bootstrap: false,
+    numberOfTabs: 0,
+    currentTab: 0,
     
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
@@ -158,7 +160,9 @@ Formular = SpatialMap.Class ({
                 if (showTabs) {
                     this.showTabs = (showTabs == 'true');
                     if (this.bootstrap === true) {
-                        
+                        var tabcontainer = jQuery('.navlist');
+                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
+                        tabcontainer.addClass(className);
                     } else {
                         var tabcontainer = jQuery('<div class="tabcontainer"></div>');
                         var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
@@ -186,11 +190,22 @@ Formular = SpatialMap.Class ({
                         jQuery('div#content').append(contenttable);
                         if(this.showTabs) {
                             var displayname = jQuery(this.config[k]).attr('displayname');
-                            var item = jQuery('<div id="tab'+k+'" class="arrow_box">'+displayname+'</div>');
-                            item.click(SpatialMap.Function.bind(this.showTab,this,k));
-                            jQuery('.tabcontainer').append(item);
-                            if (k < this.config.length-1) {
-                                jQuery('.tabcontainer').append('<div id="tabsep'+(k+1)+'" class="sep"/>');
+
+                            if (this.bootstrap === true) {
+                                
+                                var item = jQuery('<li id="tab'+k+'"><a href="#'+displayname+'">'+displayname+'</a></li>');
+                                item.click(SpatialMap.Function.bind(this.showTab,this,k));
+                                jQuery('.navlist').append(item);
+                                this.numberOfTabs++;
+                                
+                            } else {
+                            
+                                var item = jQuery('<div id="tab'+k+'" class="arrow_box">'+displayname+'</div>');
+                                item.click(SpatialMap.Function.bind(this.showTab,this,k));
+                                jQuery('.tabcontainer').append(item);
+                                if (k < this.config.length-1) {
+                                    jQuery('.tabcontainer').append('<div id="tabsep'+(k+1)+'" class="sep"/>');
+                                }
                             }
                         }
 
@@ -241,19 +256,27 @@ Formular = SpatialMap.Class ({
                             }
                             
                         }
-                        var p = (k<this.config.length && k!=0 && this.config.length > 0);
-                        var n = (k<this.config.length-1 && this.config.length > 0);
-                        var s = (k==this.config.length-1);
-                        contentcontainer.append('<tr><td colspan="2" align="right"><div>'+(p?'<button id="previous'+k+'">Forrige</button>':'')+(n?'<button id="next'+k+'">Næste</button>':'')+(s?'<button id="sendbutton">Send</button>':'')+'</div></td></tr>');
-                        if (p) {
-                            jQuery('button#previous'+k).click(SpatialMap.Function.bind(this.previous,this,k));
+                        
+                        if (this.bootstrap) {
+
+                        } else {
+                        
+                            var p = (k<this.config.length && k!=0 && this.config.length > 0);
+                            var n = (k<this.config.length-1 && this.config.length > 0);
+                            var s = (k==this.config.length-1);
+                            contentcontainer.append('<tr><td colspan="2" align="right"><div>'+(p?'<button id="previous'+k+'">Forrige</button>':'')+(n?'<button id="next'+k+'">Næste</button>':'')+(s?'<button id="sendbutton">Send</button>':'')+'</div></td></tr>');
+                            if (p) {
+                                jQuery('button#previous'+k).click(SpatialMap.Function.bind(this.previous,this,k));
+                            }
+                            if (n) {
+                                jQuery('button#next'+k).click(SpatialMap.Function.bind(this.next,this,k));
+                            }
+                            if (s) {
+                                jQuery('button#sendbutton').click(SpatialMap.Function.bind(this.submit,this));
+                            }
+                            
                         }
-                        if (n) {
-                            jQuery('button#next'+k).click(SpatialMap.Function.bind(this.next,this,k));
-                        }
-                        if (s) {
-                            jQuery('button#sendbutton').click(SpatialMap.Function.bind(this.submit,this));
-                        }
+                        
                             //add submit button
 //                            jQuery('#content'+this.config.length-1+' > tbody:last').append('<tr><td colspan="2" align="right"><div class="submitbuttondiv" id="submitdiv"><button id="sendbutton">Send</button></div></td></tr>');
 //                            jQuery('#sendbutton').click(SpatialMap.Function.bind (function () {
@@ -265,6 +288,13 @@ Formular = SpatialMap.Class ({
                         this.activateTool (this.defaultMapTool);
                     }
                     if (this.showTabs) {
+                        
+                        if (this.bootstrap) {
+                            jQuery('.buttons a#previous').click(SpatialMap.Function.bind(this.previous,this));
+                            jQuery('.buttons a#next').click(SpatialMap.Function.bind(this.next,this));
+                            this.setButtons();
+                        }
+                        
                         if (this.confirm) {
                             var c = 'confirm';
                             jQuery('.tabcontainer').append('<div id="tabsep'+c+'" class="sep"/>');
@@ -886,21 +916,64 @@ Formular = SpatialMap.Class ({
     },
     
     next: function (current) {
-        this.showTab(current+1);
+        if (this.bootstrap === true) {
+            this.showTab(this.currentTab+1);
+        } else {
+            this.showTab(current+1);
+        }
     },
     
     previous: function (current) {
-        this.showTab(current-1);
+        if (this.bootstrap === true) {
+            this.showTab(this.currentTab-1);
+        } else {
+            this.showTab(current-1);
+        }
+    },
+    
+    setButtons: function () {
+        if (this.numberOfTabs < 2) {
+            jQuery('.buttons a').hide();
+        } else {
+            jQuery('.buttons a#submit').hide();
+            jQuery('.buttons a#previous').show();
+            jQuery('.buttons a#next').show();
+            if (this.currentTab === 0) {
+                jQuery('.buttons a#previous').hide();
+            }
+            if (this.currentTab === this.numberOfTabs-1) {
+                jQuery('.buttons a#next').hide();
+                jQuery('.buttons a#submit').show();
+            }
+        }
     },
     
     showTab: function (i) {
-        if (!jQuery('.tabcontainer div#tab'+i).hasClass('disabled')) {
-            jQuery('table.tablecontent.tabcontent').hide();
-            jQuery('table.tabcontent.tabcontent'+i).show();
+        if (this.bootstrap === true) {
+            jQuery('.navlist > li').removeClass('active');
+            jQuery('.navlist > li#tab'+i).addClass('active');
             
-            jQuery('.tabcontainer div').removeClass('active');
-            jQuery('.tabcontainer div#tab'+i).addClass('active');
-            jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+            setTimeout(SpatialMap.Function.bind(function (i) {
+                window.location.hash = jQuery('.navlist > li#tab'+i+' a').html();
+            },this,i),100);
+            
+            this.currentTab = i;
+            
+            //TODO: Show content
+            //TODO: validate input
+            
+            this.setButtons();
+            
+        } else {
+        
+            if (!jQuery('.tabcontainer div#tab'+i).hasClass('disabled')) {
+                jQuery('table.tablecontent.tabcontent').hide();
+                jQuery('table.tabcontent.tabcontent'+i).show();
+                
+                jQuery('.tabcontainer div').removeClass('active');
+                jQuery('.tabcontainer div#tab'+i).addClass('active');
+                jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+            }
         }
     },
     

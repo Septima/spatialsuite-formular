@@ -179,15 +179,29 @@ Formular = SpatialMap.Class ({
                 var counter = 0;
                 if (this.config.length) {
                     for (var k=0;k<this.config.length;k++) {
-                        var contenttable = jQuery('<table class="tablecontent tabcontent tabcontent'+k+'" id="content'+k+'"></table>');
                         
-                        if (jQuery(this.config[k]).attr('condition')) {
-                            this.conditions.push({id: 'content'+k, elementId: 'content'+k, condition: node.attr('condition')});
+                        var contentcontainer = null;
+
+                        if (this.bootstrap === true) {
+                            var contentcontainer = jQuery('<fieldset id="content'+k+'"></fieldset>');
+                            
+                            if (jQuery(this.config[k]).attr('condition')) {
+                                this.conditions.push({id: 'content'+k, elementId: 'content'+k, condition: node.attr('condition')});
+                            }
+                            jQuery('div#content').prepend(contentcontainer);
+                            
+                        } else {
+                            var contenttable = jQuery('<table class="tablecontent tabcontent tabcontent'+k+'" id="content'+k+'"></table>');
+                            
+                            if (jQuery(this.config[k]).attr('condition')) {
+                                this.conditions.push({id: 'content'+k, elementId: 'content'+k, condition: node.attr('condition')});
+                            }
+                            
+                            var contentcontainer = jQuery('<tbody></tbody>');
+                            contenttable.append(contentcontainer);
+                            jQuery('div#content').append(contenttable);
                         }
                         
-                        var contentcontainer = jQuery('<tbody></tbody>');
-                        contenttable.append(contentcontainer);
-                        jQuery('div#content').append(contenttable);
                         if(this.showTabs) {
                             var displayname = jQuery(this.config[k]).attr('displayname');
 
@@ -343,11 +357,19 @@ Formular = SpatialMap.Class ({
         if (node.attr('id')) {
             id = node.attr('id');
         }
+
+        var required = false;
+        if (node.attr('required')) {
+            required = node.attr('required') === 'true';
+        }
+
         var postparam = {
             id: id,
             displayname: node.attr('displayname'),
-            defaultValue: node.attr('defaultvalue')
+            defaultValue: node.attr('defaultvalue'),
+            required: required
         };
+        
         if (urlparam) {
             postparam.urlparam = urlparam;
         }
@@ -726,15 +748,38 @@ Formular = SpatialMap.Class ({
                     contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
                 } else if (type=='hidden') {
                     contentcontainer.append('<tr id="'+id+'_row" style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                } else if (type=='h1') {
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<h1 id="'+id+'" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h1>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><h1 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h1></td></tr>');
+                    }
+                } else if (type=='h2') {
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<h2 id="'+id+'" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h2>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><h2 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h2></td></tr>');
+                    }
                 } else if (type=='text') {
                     if (node.attr('displayresult')) {
                         var displayresult = node.attr('displayresult');
-                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
+                        
+                        if (this.bootstrap === true) {
+                            contentcontainer.append('<p id="'+id+'" class="'+(className ? className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></p>');
+                        } else {
+                            contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
+                        }
+                        
                         if (node.attr('onchange')) {
                             jQuery('#distanceresult_hidden').change(new Function (node.attr('onchange')));
                         }
-                    } else { 
-                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+                    } else {
+                        
+                        if (this.bootstrap === true) {
+                            contentcontainer.append('<p id="'+id+'" class="'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</p>');
+                        } else {
+                            contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+                        }
                     }
                 } else if (type=='date') {
                     contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
@@ -823,10 +868,19 @@ Formular = SpatialMap.Class ({
                         jQuery('#form_'+id).submit();
                     },this,id));
                 } else if (type=='checkbox') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><div class="checkbox"><label><input type="checkbox" title="'+node.attr('displayname')+'" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'>'+node.attr('displayname')+'</label></div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
+                    }
+                    
                 } else {
                     type = 'input';
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(required ? ' <span class="required">*</span>':'')+'</label><div class="'+(required ? 'required-enabled':'')+'"><input id="'+id+'" class="form-control" type="text" value="'+(value || '')+'"/></div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    }
                 }
                 if (urlparam) {
                     postparam.type = type;
@@ -953,13 +1007,15 @@ Formular = SpatialMap.Class ({
             jQuery('.navlist > li').removeClass('active');
             jQuery('.navlist > li#tab'+i).addClass('active');
             
+            jQuery('div#content fieldset').hide();
+            jQuery('div#content fieldset#content'+i).show();
+            
             setTimeout(SpatialMap.Function.bind(function (i) {
                 window.location.hash = jQuery('.navlist > li#tab'+i+' a').html();
             },this,i),100);
             
             this.currentTab = i;
             
-            //TODO: Show content
             //TODO: validate input
             
             this.setButtons();

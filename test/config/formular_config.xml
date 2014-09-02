@@ -2,14 +2,18 @@
 <config>
     <formular name="virk">
         <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>
-        <header>Formular med tabs</header>
+        <header>Formular til Virk.dk</header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <tabs class="testtab">true</tabs>
         <content displayname="Første side">
+            <input type="h1" class="section" displayname="Dette er en overskrift"/>
             <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
-            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="" required="true"/>
+            <input type="h2" displayname="Dette er en overskrift"/>
+            <input type="text" displayname="Dette er en tekst" urlparam="val2"/>
             <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
             <input type="input" displayname="Postnr:" urlparam="val2"/>
         </content>
         <content displayname="Kort">

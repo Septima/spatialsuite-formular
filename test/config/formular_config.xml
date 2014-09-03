@@ -6,17 +6,17 @@
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <tabs class="testtab">true</tabs>
-        <content displayname="Første side">
+        <content displayname="1. Første side">
             <input type="h1" class="section" displayname="Dette er en overskrift"/>
             <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
-            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="" required="true"/>
+            <input type="input" displayname="Navn" urlparam="val0" defaultvalue="" required="true" regexp=".+" validate="Angiv et navn"/>
             <input type="h2" displayname="Dette er en overskrift"/>
             <input type="text" displayname="Dette er en tekst" urlparam="val2"/>
-            <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="input" displayname="Adresse" urlparam="val1"/>
             <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
-            <input type="input" displayname="Postnr:" urlparam="val2"/>
+            <input type="input" displayname="Postnr" urlparam="val2"/>
         </content>
-        <content displayname="Kort">
+        <content displayname="2. Kort">
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
@@ -32,14 +32,18 @@
                     <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
             </map>
-            <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
-            <input type="input" displayname="Hest:" urlparam="val4"/>
-            <input type="input" displayname="Får:" urlparam="val5"/>
+            <input type="input" displayname="Ansøger" urlparam="val3" defaultvalue="Mig"/>
+            <input type="input" displayname="Hest" urlparam="val4"/>
+            <input type="input" displayname="Får" urlparam="val5"/>
         </content>
-        <content displayname="Sidste side">
-            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="Paging"/>
-            <input type="input" displayname="ABC:" urlparam="val7"/>
-            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
+        <content displayname="3. Sidste side">
+            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="" required="true" regexp=".+" validate="Noget nyt er ikke udfyldt"/>
+            <input type="input" displayname="ABC" urlparam="val7"/>
+        </content>
+        <content displayname="4. Opsummering og godkendelse" type="confirm">
+            <input type="error" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
         </content>
     </formular>
     <formular name="log">

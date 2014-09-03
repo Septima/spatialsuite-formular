@@ -178,7 +178,7 @@
         <!-- Mobile menu, Open step guide, start -->
         <div class="row">
             <div class="col-xs-12">
-                <button class="btn btn-steps visible-xs" type="button" data-toggle="collapse" data-target=".nav-collapse">Trin 1 af 5 <span class="caret"></span></button>
+                <button class="btn btn-steps visible-xs" type="button" data-toggle="collapse" data-target=".nav-collapse"><span id="steps">Trin 1 af 5</span> <span class="caret"></span></button>
                 <div id="dl-menu" class="dl-menuwrapper visible-xs">
                     <button class="dl-trigger">Open Menu</button>
                     <ul class="dl-menu">

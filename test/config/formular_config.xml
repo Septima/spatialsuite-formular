@@ -3,9 +3,11 @@
     <formular name="virk">
         <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>
         <header>Formular til Virk.dk</header>
-        <submitpage>formular.send.general</submitpage>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
         <reportprofile>kbh_themestore</reportprofile>
-        <tabs class="testtab">true</tabs>
+        <tabs>true</tabs>
         <content displayname="1. Første side">
             <input type="h1" class="section" displayname="Dette er en overskrift"/>
             <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
@@ -24,8 +26,9 @@
                 <maptool displayname="Tegn et punkt" name="point" default="true"/>
                 <maptool displayname="Tegn en linie" name="line"/>
                 <maptool displayname="Tegn en cirkel" name="circle"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
             </maptools>
-            <map class="my_map_class">
+            <map class="my_map_class" required="true">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>

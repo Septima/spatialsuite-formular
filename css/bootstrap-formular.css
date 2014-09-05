@@ -21,13 +21,15 @@ body {
     border: none;
 }
 
+fieldset .error.map, 
 fieldset .error input, 
 fieldset .error textarea, 
 fieldset .error select { 
     border: 4px solid #ce1415; 
 }
 
-fieldset .error .validationMessage { 
+fieldset .error .validationMessage,
+fieldset .error.validationMessage { 
     padding:0.8em 0 0.8em 0.8em; 
     background: #ce1415; 
     border-bottom: 1px solid #840000; 

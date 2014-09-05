@@ -213,7 +213,8 @@ Formular = SpatialMap.Class ({
                             contentElement: cententElement,
                             displayname: displayname,
                             type: jQuery(this.config[k]).attr('type') || '',
-                            visible: true
+                            visible: true,
+                            postparams: []
                         };
 
                         if(this.showTabs) {
@@ -276,6 +277,7 @@ Formular = SpatialMap.Class ({
                                         
                                         if (typeof postparam.urlparam !== 'undefined') {
                                             this.postparams[postparam.urlparam] = postparam;
+                                            tab.postparams.push(postparam);
                                         }
                                         counter++;
                                     }
@@ -288,6 +290,7 @@ Formular = SpatialMap.Class ({
 
                                 if (typeof postparam.urlparam !== 'undefined') {
                                     this.postparams[postparam.urlparam] = postparam;
+                                    tab.postparams.push(postparam);
                                 }
                                 counter++;
                             }
@@ -2080,52 +2083,63 @@ Formular = SpatialMap.Class ({
     },
     
     setPreview: function (element) {
-        var html = '';
-        for (var name in this.postparams) {
+        
+        element.empty();
+        
+        for (var i=0;i<this.tabs.length;i++) {
             
-            if (this.postparams[name].visible === true && this.postparams[name].tab.visible) {
+            if (this.tabs[i].type !== 'confirm') {
             
-                var val = jQuery('#'+this.postparams[name].id).val();
-                var textVal = val;
-                if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
-                    val = jQuery('#'+this.postparams[name].id).is(':checked');
-                    textVal = (val ? 'ja' : 'nej');
-                }
-                if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
-                    val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
-                    if (typeof val === 'undefined') {
-                        if (this.postparams[name].defaultValue) {
-                            val = this.postparams[name].defaultValue;
-                        } else {
-                            val = '';
+                element.append('<h2>'+this.tabs[i].displayname+'</h2>');
+                
+                for (var j=0;j<this.tabs[i].postparams.length;j++) {
+    
+                    var name = this.tabs[i].postparams[j].id;
+                    
+                    var param = this.tabs[i].postparams[j];
+                
+                    if (param.visible === true && param.tab.visible) {
+                    
+                        var val = jQuery('#'+param.id).val();
+                        var textVal = val;
+                        if (param.type && param.type == 'checkbox') {
+                            val = jQuery('#'+param.id).is(':checked');
+                            textVal = (val ? 'ja' : 'nej');
+                        }
+                        if (param.type && param.type == 'radiobutton') {
+                            val = jQuery('input:radio[name='+param.id+']:checked').val();
+                            if (typeof val === 'undefined') {
+                                if (param.defaultValue) {
+                                    val = param.defaultValue;
+                                } else {
+                                    val = '';
+                                }
+                            }
+                            textVal = val;
+                        }
+                        if (param.type && param.type == 'file') {
+                            textVal = jQuery('#'+param.id+'_org').val();
+                        }
+                        
+                        var t = param.displayname;
+                        console.log(t +' - '+ val);
+                        if (typeof t !== 'undefined') {
+                            if (this.bootstrap === true) {
+                                var valid = true;
+                                if (typeof this.inputValidation[param.id] !== 'undefined') {
+                                    valid = this.inputValidation[param.id].valid;
+                                }
+                                element.append('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                            } else {
+                                if (val) {
+                                    element.append('<br/>'+t+' '+textVal);
+                                }
+                            }
                         }
                     }
-                    textVal = val;
                 }
-                if (this.postparams[name].type && this.postparams[name].type == 'file') {
-                    textVal = jQuery('#'+this.postparams[name].id+'_org').val();
-                }
-                
-                var t = this.postparams[name].displayname;
-                console.log(t +' - '+ val);
-                if (typeof t !== 'undefined') {
-                    if (this.bootstrap === true) {
-                        var valid = true;
-                        if (typeof this.inputValidation[this.postparams[name].id] !== 'undefined') {
-                            valid = this.inputValidation[this.postparams[name].id].valid;
-                        }
-                        html+='<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[this.postparams[name].id].message+'</span>')+'</div>';
-                    } else {
-                        if (val) {
-                            html+='<br/>'+t+' '+textVal;
-                        }
-                    }
-                }
-                
             }
         }
-        
-        element.html(html);
     },
     
     getParams: function (postparams, params) {

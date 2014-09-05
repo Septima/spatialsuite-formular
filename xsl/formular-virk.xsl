@@ -108,7 +108,6 @@
                 var formular;
                 jQuery(function () {
 
-		            jQuery('div#form').show();
 		            jQuery('div#receipt').hide();
 
                     formular = new Formular ({
@@ -249,23 +248,12 @@
 	            <!-- Page content start -->
 	
 	            <div class="row">
-	                <div class="col-xs-12">
-	
-	                    <div class="alert alert-success">
-	                        <div class="header">Kvittering</div>
-	                        Din virksomhedsregistrering er modtaget
-	                    </div>
-	
-	                    <h1>Kvittering</h1>
-	                    <p>Nedenfor finder du dine indtastninger fra de foregående sider.</p>
-	
-	                    <p><a class="btn btn-primary hidden-print" href="javascript:window.print()">Udskriv kvittering</a></p>
-	
-	                    <div class="buttons">
-	
-	                    </div>
-	                </div>
-	            </div>
+	                <div id="finalmessage" class="col-xs-12">
+    	                <div id="messageloading" class="alert alert-warning"><div class="header">Ansøgningen registreres. Vent venligst...</div>Det kan tage op til et par minutter</div>
+	                    <div id="message"></div>
+                        <div id="submessage"></div>
+                    </div>
+                </div>
 	
 	            <div class="clearfix"></div>
 	

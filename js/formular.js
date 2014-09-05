@@ -2228,9 +2228,23 @@ Formular = SpatialMap.Class ({
                                 success: SpatialMap.Function.bind( function (pdf,data) {
                                     if(data.result!='OK') {
                                         if (this.messages.done) {
-                                            jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                                            if (this.bootstrap) {
+                                                var html = '<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>'+
+                                                           '<h1>Kvittering</h1>'+
+                                                           '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                                jQuery('div#finalmessage').html(html);
+                                            } else {
+                                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                                            }
                                         } else {
-                                            jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                                            if (this.bootstrap) {
+                                                var html = '<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>'+
+                                                           '<h1>Kvittering</h1>'+
+                                                           '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                                jQuery('div#finalmessage').html(html);
+                                            } else {
+                                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                                            }
                                         }
                                     }
                                     this.removeSession();
@@ -2240,9 +2254,23 @@ Formular = SpatialMap.Class ({
                             jQuery('#messageloading').hide();
                             jQuery('#messagebuttons').show();
                             if (this.messages.done) {
-                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                                if (this.bootstrap) {
+                                    var html = '<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>'+
+                                               '<h1>Kvittering</h1>'+
+                                               '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                    jQuery('div#finalmessage').html(html);
+                                } else {
+                                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                                }
                             } else {
-                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                                if (this.bootstrap) {
+                                    var html = '<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>'+
+                                               '<h1>Kvittering</h1>'+
+                                               '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                    jQuery('div#finalmessage').html(html)
+                                } else {
+                                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                                }
                             }
                         } else {
                             var m = jQuery(data).find('message').text();
@@ -2255,15 +2283,27 @@ Formular = SpatialMap.Class ({
                                 message: m,
                                 obj: JSON.stringify(params)
                             });
-                            jQuery('#message').show();
-                            jQuery('#messageloading').hide();
-                            jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                            
+                            if (this.bootstrap === true) {
+                                var html = '<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>'+
+                                jQuery('div#finalmessage').html(html);
+                            } else {
+                                jQuery('#message').show();
+                                jQuery('#messageloading').hide();
+                                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                            }
+                            
                         }
                     } else {
-                        jQuery('#message').show();
-                        jQuery('#messageloading').hide();
-                        jQuery('#messagebuttons').show();
-                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                        if (this.bootstrap === true) {
+                            var html = '<div class="alert alert-success"><div class="header">Din ansøgning er nu registreret</div> Tak for din henvendelse.</div>'+
+                            jQuery('div#finalmessage').html(html);
+                        } else {
+                            jQuery('#message').show();
+                            jQuery('#messageloading').hide();
+                            jQuery('#messagebuttons').show();
+                            jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                        }
                         this.removeSession();
                     }
                 },this, params),
@@ -2274,8 +2314,13 @@ Formular = SpatialMap.Class ({
                         message: 'No respose from server',
                         obj: JSON.stringify(params)
                     });
-                    jQuery('#messageloading').hide();
-                    jQuery('#message').show().html('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
+                    if (this.bootstrap === true) {
+                        var html = '<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Prøv igen eller kontakt kommunen.</div></div>'+
+                        jQuery('div#finalmessage').html(html);
+                    } else {
+                        jQuery('#messageloading').hide();
+                        jQuery('#message').show().html('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
+                    }
                 },this, params)
             });
             
@@ -2452,26 +2497,57 @@ Formular = SpatialMap.Class ({
             jQuery('#messagebuttons').show();
             if (this.pdf) {
                 if (this.messages.done) {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>');
+                        jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                    }
                 } else {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>');
+                        jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                    }
                 }
             } else {
                 if (this.messages.doneNoPDF) {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.doneNoPDF+'</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.doneNoPDF+'</div></div>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.doneNoPDF+'</div>');
+                    }
                 } else if (this.messages.done) {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done+'</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done+'</div>');
+                    }
                 } else {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret</div>');
+                    }
                 }
             }
         } else {
             jQuery('#message').show();
             jQuery('#messagebuttons').show();
             if (this.messages.done) {
-                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>');
+                    jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                }
             } else {
-                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-success"><div class="header">Din ansøgning er nu registreret</div>Tak for din henvendelse.</div></div>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                }
             }
             this.removeSession();
         }
@@ -2481,7 +2557,11 @@ Formular = SpatialMap.Class ({
         jQuery('#message').show();
         
         if (error && error.message) {
-            jQuery('#messagetext').append('<div id="message_done" class="message-info"><span class="icon-info2"></span>'+error.message+'</div>');
+            if (this.bootstrap === true) {
+                jQuery('#message').append('<div class="alert alert-info"><div class="header">'+error.message+'</div></div>');
+            } else {
+                jQuery('#messagetext').append('<div id="message_done" class="message-info"><span class="icon-info2"></span>'+error.message+'</div>');
+            }
         }
         
     },
@@ -2490,7 +2570,11 @@ Formular = SpatialMap.Class ({
         jQuery('#message').show();
         
         if (error && error.message) {
-            jQuery('#messagetext').append('<div id="message_done" class="message-warning"><span class="icon-info2"></span>'+error.message+'</div>');
+            if (this.bootstrap === true) {
+                jQuery('#message').append('<div class="alert alert-warning"><div class="header">'+error.message+'</div></div>');
+            } else {
+                jQuery('#messagetext').append('<div id="message_done" class="message-warning"><span class="icon-info2"></span>'+error.message+'</div>');
+            }
         }
         
     },
@@ -2499,12 +2583,24 @@ Formular = SpatialMap.Class ({
         jQuery('#message').show();
         
         if (error && error.message) {
-            jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
+            if (this.bootstrap === true) {
+                jQuery('#message').append('<div class="alert alert-danger"><div class="header">'+error.message+'</div></div>');
+            } else {
+                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
+            }
         } else {
             if (this.messages.error) {
-                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-danger"><div class="header">'+this.messages.error+'</div></div>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
+                }
             } else {
-                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                }
             }
         }
         

@@ -2122,7 +2122,6 @@ Formular = SpatialMap.Class ({
                         }
                         
                         var t = param.displayname;
-                        console.log(t +' - '+ val);
                         if (typeof t !== 'undefined') {
                             if (this.bootstrap === true) {
                                 var valid = true;
@@ -2183,12 +2182,18 @@ Formular = SpatialMap.Class ({
     },
         
     submitFinal: function (params) {
-        jQuery('#messageloading').append('<div id="message_loading">Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)</div>');
+        
+        if (this.bootstrap === true) {
+            jQuery('div#form').hide();
+            jQuery('div#receipt').show();
+        } else {
+            jQuery('#messageloading').append('<div id="message_loading">Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)</div>');
 
-        jQuery('#messagetext').empty();
-        jQuery('#messagebuttons').empty();
-        for (var i=0;i<this.submitbuttons.length;i++) {
-            jQuery('#messagebuttons').append(this.submitbuttons[i]);
+            jQuery('#messagetext').empty();
+            jQuery('#messagebuttons').empty();
+            for (var i=0;i<this.submitbuttons.length;i++) {
+                jQuery('#messagebuttons').append(this.submitbuttons[i]);
+            }
         }
         
         if (this.pages.length > 0) {

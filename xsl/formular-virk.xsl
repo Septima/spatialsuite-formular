@@ -107,6 +107,10 @@
                 <script type="text/javascript" language="javascript">
                 var formular;
                 jQuery(function () {
+
+		            jQuery('div#form').show();
+		            jQuery('div#receipt').hide();
+
                     formular = new Formular ({
                         bootstrap: true,
                         name: '<xsl:value-of select="$formular"/>',
@@ -192,7 +196,7 @@
         </div>
         <!-- Mobile menu, Open step guide, end -->
         <!-- Main content wrapper start -->
-        <div class="content row">
+        <div id="form" class="content row">
             <div class="col-sm-3">
                 <ul class="nav style-2 nav-collapse collapse navlist" >
                 
@@ -236,7 +240,38 @@
             <!-- Page content end -->
         </div>
         <!-- Main content end -->
-
+        
+        
+        <div id="receipt" class="content row">
+	        <div class="col-sm-9 main-content">
+	            <!-- Hidden link for accesibility -->
+	            <a id="contentstart" class="hide">Indhold start</a>
+	            <!-- Page content start -->
+	
+	            <div class="row">
+	                <div class="col-xs-12">
+	
+	                    <div class="alert alert-success">
+	                        <div class="header">Kvittering</div>
+	                        Din virksomhedsregistrering er modtaget
+	                    </div>
+	
+	                    <h1>Kvittering</h1>
+	                    <p>Nedenfor finder du dine indtastninger fra de foregående sider.</p>
+	
+	                    <p><a class="btn btn-primary hidden-print" href="javascript:window.print()">Udskriv kvittering</a></p>
+	
+	                    <div class="buttons">
+	
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="clearfix"></div>
+	
+	        </div>
+        </div>
+        
 
         <div class="clearfix"></div>
 

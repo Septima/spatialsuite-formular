@@ -24,7 +24,8 @@ body {
 fieldset .error.map, 
 fieldset .error input, 
 fieldset .error textarea, 
-fieldset .error select { 
+fieldset .error select, 
+fieldset .error .form-control-static { 
     border: 4px solid #ce1415; 
 }
 

@@ -448,11 +448,12 @@ Formular = SpatialMap.Class ({
                 if (node.attr('regexp')) {
                     this.inputValidation[id] = {
                         validate: true,
-                        tab: tab
+                        tab: tab,
+                        message: node.attr('validate') || 'Indtast en valid værdi!'
                     };
                     jQuery('#'+id).valid8({
                         'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
+                             { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
                          ]
                     });
                 }
@@ -524,11 +525,12 @@ Formular = SpatialMap.Class ({
                 if (node.attr('regexp')) {
                     this.inputValidation[id] = {
                         validate: true,
-                        tab: tab
+                        tab: tab,
+                        message: node.attr('validate') || 'Indtast en valid værdi!'
                     };
                     jQuery('#'+id).valid8({
                         'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
+                             { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
                          ]
                     });
                 }
@@ -736,6 +738,7 @@ Formular = SpatialMap.Class ({
                     this.inputValidation[id] = {
                         validate: true,
                         tab: tab,
+                        message: errormessage,
                         handler: SpatialMap.Function.bind(function (id,errormessage) {
                             var valid = this.feature.length > 0;
                             var map = jQuery('#'+id+'_row > .map');
@@ -837,6 +840,12 @@ Formular = SpatialMap.Class ({
                         contentcontainer.append('<div id="'+id+'_row" class="alert alert-danger'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</div>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="alert alert-danger'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+                    }
+                } else if (type=='preview') {
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="preview'+(className ? ' '+className : '')+'"></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="preview'+(className ? ' '+className : '')+'" id="'+id+'"></div></td></tr>');
                     }
                 } else if (type=='text') {
                     if (node.attr('displayresult')) {
@@ -966,11 +975,12 @@ Formular = SpatialMap.Class ({
                 if (node.attr('regexp')) {
                     this.inputValidation[id] = {
                         validate: true,
-                        tab: tab
+                        tab: tab,
+                        message: node.attr('validate') || 'Indtast en valid værdi!'
                     };
                     jQuery('#'+id).valid8({
                         'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
+                             { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
                          ]
                     });
                 }
@@ -1028,8 +1038,6 @@ Formular = SpatialMap.Class ({
     },
     
     inputChanged: function (id) {
-        
-        console.log('inputChanged');
         
         //For localstore
         if (this.localstore) {
@@ -1141,6 +1149,10 @@ Formular = SpatialMap.Class ({
             this.tabs[i].active = true;
             
             this.setButtons();
+            
+            if (this.tabs[i].type === 'confirm') {
+                this.setPreview(jQuery('.preview'));
+            }
             
         } else {
         
@@ -2065,6 +2077,55 @@ Formular = SpatialMap.Class ({
                 this.submitFinal(params);
             }
         }
+    },
+    
+    setPreview: function (element) {
+        var html = '';
+        for (var name in this.postparams) {
+            
+            if (this.postparams[name].visible === true && this.postparams[name].tab.visible) {
+            
+                var val = jQuery('#'+this.postparams[name].id).val();
+                var textVal = val;
+                if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                    val = jQuery('#'+this.postparams[name].id).is(':checked');
+                    textVal = (val ? 'ja' : 'nej');
+                }
+                if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+                    val = jQuery('input:radio[name='+this.postparams[name].id+']:checked').val();
+                    if (typeof val === 'undefined') {
+                        if (this.postparams[name].defaultValue) {
+                            val = this.postparams[name].defaultValue;
+                        } else {
+                            val = '';
+                        }
+                    }
+                    textVal = val;
+                }
+                if (this.postparams[name].type && this.postparams[name].type == 'file') {
+                    textVal = jQuery('#'+this.postparams[name].id+'_org').val();
+                }
+                
+                var t = this.postparams[name].displayname;
+                console.log(t +' - '+ val);
+                if (typeof t !== 'undefined') {
+                    if (this.bootstrap === true) {
+                        var valid = true;
+                        if (typeof this.inputValidation[this.postparams[name].id] !== 'undefined') {
+                            valid = this.inputValidation[this.postparams[name].id].valid;
+                        }
+                        html+='<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[this.postparams[name].id].message+'</span>')+'</div>';
+                    } else {
+                        if (val) {
+                            html+='<br/>'+t+' '+textVal;
+                        }
+                    }
+                }
+                
+            }
+        }
+        
+        element.html(html);
     },
     
     getParams: function (postparams, params) {

@@ -55,8 +55,9 @@
                     </xsl:otherwise>
                 </xsl:choose>
 
-                <link href="/modules/formular/css/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
-                <link href="http://designmanual.virk.dk/virkdesign/designmanualv2/css/designmanual.css" rel="stylesheet" media="screen, print" />
+                <link href="/modules/formular/css/virk/v2.1/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+                <link href="/modules/formular/css/virk/v2.1/css/designmanual.css" rel="stylesheet" media="screen, print" />
+                <link href="/modules/formular/css/virk/v2.1/css/component.css" rel="stylesheet" media="screen" />
 
                 <xsl:variable name="cbinfo.css.jqueryui">[cbinfo.css.jqueryui]</xsl:variable>
                 <xsl:choose>
@@ -84,10 +85,10 @@
                     </xsl:element>
                 </xsl:for-each>
                 
-                <script type="text/javascript" src="/modules/formular/css/bootstrap/js/bootstrap.min.js"></script>
-                <script type="text/javascript" src="/modules/formular/css/virk/modernizr.custom.js"></script>
-                <script type="text/javascript" src="/modules/formular/css/virk/jquery.dlmenu.js"></script>
-                <script type="text/javascript" src="/modules/formular/css/virk/common.js"></script>
+                <script type="text/javascript" src="/modules/formular/css/virk/v2.1/js/bootstrap.min.js"></script>
+                <script type="text/javascript" src="/modules/formular/css/virk/v2.1/js/modernizr.custom.js"></script>
+                <script type="text/javascript" src="/modules/formular/css/virk/v2.1/js/jquery.dlmenu.js"></script>
+                <script type="text/javascript" src="/modules/formular/css/virk/v2.1/js/common.js"></script>
 
 
                 <script language="javascript" src="[cbinfo.js.url]/standard/proj4js/proj4js-compressed.js" type="text/javascript"></script>

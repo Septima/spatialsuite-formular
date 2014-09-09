@@ -115,7 +115,7 @@
                 <div class="row">
                     <div class="col-sm-8 col-xs-12">
                         <a href="">
-                            <img src="http://designmanual.virk.dk/virkdesign/designmanualv2/graphics/logo-top.png" height="57" width="240" alt="Virk / Indberetning - logo" class="logo" />
+                            <img src="/modules/formular/css/virk/v2.1/graphics/logo-top.png" height="57" width="240" alt="Virk / Indberetning - logo" class="logo" />
                         </a>
                     </div>
                     <div class="col-xs-4 align-right nav-tools hidden-xs">
@@ -167,16 +167,9 @@
         <!-- Mobile menu, Open step guide, start -->
         <div class="row">
             <div class="col-xs-12">
-                <button class="btn btn-steps visible-xs" type="button" data-toggle="collapse" data-target=".nav-collapse"><span id="steps">Trin 1 af 5</span> <span class="caret"></span></button>
-                <div id="dl-menu" class="dl-menuwrapper visible-xs">
-                    <button class="dl-trigger">Open Menu</button>
-                    <ul class="dl-menu">
-                        <li>
-                            <a href="eksempel02.html">Mine kladder</a>
-                        </li>
-                    </ul>
+                <div class="stepscontainer visible-xs">
+                    <button class="btn btn-steps visible-xs" type="button" data-toggle="collapse" data-target=".nav-collapse"><span id="steps">Trin 1 af 5</span> <span class="caret"></span></button>
                 </div>
-                <!-- /dl-menuwrapper -->
             </div>
         </div>
         <!-- Mobile menu, Open step guide, end -->
@@ -276,7 +269,7 @@
                 </div>
                 <div class="col-xs-12 logo-container">
                     <a href="">
-                        <img src="http://designmanual.virk.dk/virkdesign/designmanualv2/graphics/logo-top.png" height="57" width="240" alt="Virk / Indberetning - logo" class="logo" />
+                        <img src="/modules/formular/css/virk/v2.1/graphics/logo-top.png" height="57" width="240" alt="Virk / Indberetning - logo" class="logo" />
                     </a>
                 </div>
             </div>

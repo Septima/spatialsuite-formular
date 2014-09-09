@@ -1,6 +1,11 @@
 body {
     margin: 0;
 }
+
+.stepscontainer {
+    height: 40px;
+}
+
 .navlist a {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

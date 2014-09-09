@@ -877,11 +877,11 @@ Formular = SpatialMap.Class ({
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><h2 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h2></td></tr>');
                     }
-                } else if (type=='error') {
+                } else if (type=='message') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<div id="'+id+'_row" class="alert alert-danger'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</div>');
+                        contentcontainer.append('<div id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</div>');
                     } else {
-                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="alert alert-danger'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="'+(className ? className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
                     }
                 } else if (type=='preview') {
                     if (this.bootstrap === true) {

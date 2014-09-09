@@ -67,7 +67,7 @@
             <input type="file" displayname="Billede" urlparam="billede"/>
         </content>
         <content displayname="4. Opsummering og godkendelse" type="confirm">
-            <input type="error" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
             <input type="h1" displayname="Opsummering og godkendelse"/>
             <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
             <input type="h1" class="section" displayname="Stamdata"/>

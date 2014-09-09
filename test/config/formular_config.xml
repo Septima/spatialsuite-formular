@@ -65,6 +65,7 @@
         <content displayname="3. Sidste side" condition="jQuery('#navn').val() !== '1'">
             <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="" required="true" regexp=".+" validate="Noget nyt er ikke udfyldt"/>
             <input type="input" displayname="ABC" urlparam="val7"/>
+            <input type="file" displayname="Billede" urlparam="billede"/>
         </content>
         <content displayname="4. Opsummering og godkendelse" type="confirm">
             <input type="error" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>

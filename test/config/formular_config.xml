@@ -18,6 +18,7 @@
             <input type="h2" displayname="Dette er en overskrift"/>
             <input type="text" displayname="Dette er en tekst" urlparam="val2"/>
             <input type="input" displayname="Adresse" urlparam="val1"/>
+            <input type="date" displayname="Dato:" urlparam="date"/>
             <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
             <input type="input" displayname="Postnr" urlparam="val2"/>
             <input type="dropdown" displayname="Hvad søges:" urlparam="hvad" defaultvalue="oprensning af sø">

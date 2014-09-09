@@ -34,16 +34,8 @@
                 <xsl:variable name="cbinfo.jslib.jquery">[cbinfo.jslib.jquery]</xsl:variable>
 
                 <script type="text/javascript" charset="ISO-8859-1" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+                <script type="text/javascript" charset="ISO-8859-1" src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
 
-                <xsl:variable name="cbinfo.jslib.jqueryui">[cbinfo.jslib.jqueryui]</xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="substring($cbinfo.jslib.jqueryui,0,2) = '['">
-                        <script type="text/javascript" charset="ISO-8859-1" src="/js/standard/jquery/jquery-1.6.2.min.js"></script>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <script type="text/javascript" charset="ISO-8859-1" src="[cbinfo.jslib.jqueryui]"></script>
-                    </xsl:otherwise>
-                </xsl:choose>
 				<script type="text/javascript" src="/modules/formular/js/jquery.ui.datepicker-[cbinfo.locale].js"></script>
                 <xsl:variable name="cbinfo.spatialmap.jslib">[cbinfo.spatialmap.jslib]</xsl:variable>
                 <xsl:choose>
@@ -59,15 +51,8 @@
                 <link href="/modules/formular/css/virk/v2.1/css/designmanual.css" rel="stylesheet" media="screen, print" />
                 <link href="/modules/formular/css/virk/v2.1/css/component.css" rel="stylesheet" media="screen" />
 
-                <xsl:variable name="cbinfo.css.jqueryui">[cbinfo.css.jqueryui]</xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="substring($cbinfo.css.jqueryui,0,2) = '['">
-                        <link rel="Stylesheet" type="text/css" href="/css/standard/jquery/jquery-ui-1.8.14.custom.css"></link>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <link rel="Stylesheet" type="text/css" href="[cbinfo.css.jqueryui]"></link>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <link rel="Stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"></link>
+
                 <link rel="Stylesheet" type="text/css" href="/modules/formular/css/formular.css"></link>
                 <link rel="Stylesheet" type="text/css" href="/modules/formular/css/bootstrap-formular.css"></link>
                 <xsl:if test="css">

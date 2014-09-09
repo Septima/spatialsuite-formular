@@ -830,9 +830,17 @@ Formular = SpatialMap.Class ({
                         contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
                     }
                 } else if (type=='textarea') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><textarea id="'+id+'" class="form-control">'+(value || '')+'</textarea></div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
+                    }
                 } else if (type=='hidden') {
-                    contentcontainer.append('<tr id="'+id+'_row" style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group hidden'+(className ? ' '+className : '')+'"><input id="'+id+'" class="form-control" type="hidden" value="'+(value || '')+'"/></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row" style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    }
                 } else if (type=='h1') {
                     if (this.bootstrap === true) {
                         contentcontainer.append('<h1 id="'+id+'" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h1>');
@@ -879,7 +887,11 @@ Formular = SpatialMap.Class ({
                         }
                     }
                 } else if (type=='date') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" class="form-control" type="text" value="'+(value || '')+'"/></div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    }
                     var change = null;
                     if (node.attr('onchange')) {
                         change = new Function (node.attr('onchange'));
@@ -887,7 +899,7 @@ Formular = SpatialMap.Class ({
                     var options = {
                         dateFormat: 'dd.mm.yy',
                         onSelect: SpatialMap.Function.bind( function (id,changehandler) {
-                            if (this.inputValidation[id].validate) {
+                            if (typeof this.inputValidation[id] !== 'undefined' && this.inputValidation[id].validate === true) {
                                 jQuery('#'+id).isValid();
                             }
                             this.inputChanged();

@@ -768,6 +768,9 @@ Formular = SpatialMap.Class ({
             break;
             case 'conflicts':
                 
+                postparam.visible = false;
+                postparam.type = 'conflicts';
+                
                 if (this.bootstrap === true) {
                     contentcontainer.append('<div id="'+id+'_row" class="hidden'+(className ? ' '+className : '')+'"></div><input type="hidden" id="'+id+'" value=""/>');
                 } else {
@@ -780,6 +783,7 @@ Formular = SpatialMap.Class ({
                 }
                 var conflict = {
                     id: id,
+                    postparam: postparam,
                     displayname: node.attr('displayname'),
                     targetsetfile: node.attr('targetsetfile'),
                     targerset: node.attr('targerset')
@@ -1872,6 +1876,7 @@ Formular = SpatialMap.Class ({
                             }
                         }
                         if (count) {
+                            spatialquery.postparam.visible = true;
                             jQuery('#'+id).val(reporttext);
                             if (this.bootstrap === true) {
                                 jQuery('#'+id+'_row').show('fast');
@@ -1882,6 +1887,7 @@ Formular = SpatialMap.Class ({
                                 spatialquery.onconflict.apply(jQuery('#'+id));
                             }
                         } else {
+                            spatialquery.postparam.visible = false;
                             if (spatialquery.onnoconflict) {
                                 spatialquery.onnoconflict();
                             }
@@ -1889,6 +1895,7 @@ Formular = SpatialMap.Class ({
                     },this,this.spatialqueries[i])
                 });
             } else {
+                this.spatialqueries[i].postparam.visible = false;
                 if (this.bootstrap === true) {
                     jQuery('#'+this.spatialqueries[i].id+'_row').hide();
                 } else {
@@ -2173,10 +2180,26 @@ Formular = SpatialMap.Class ({
                         if (typeof t !== 'undefined') {
                             if (this.bootstrap === true) {
                                 var valid = true;
+                                var e;
                                 if (typeof this.inputValidation[param.id] !== 'undefined') {
                                     valid = this.inputValidation[param.id].valid;
                                 }
-                                element.append('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                
+                                if (param.type === 'conflicts') {
+                                    e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                } else {
+                                    e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                }
+                                if (!valid) {
+                                    e.click(SpatialMap.Function.bind(function (input) {
+                                        this.showTab(input.tab.id);
+                                        var element = document.getElementById(input.id);
+                                        if (element) {
+                                            element.focus();
+                                        }
+                                    },this,param));
+                                }
+                                element.append(e);
                             } else {
                                 if (val) {
                                     element.append('<br/>'+t+' '+textVal);

@@ -27,7 +27,7 @@
                 <option value="udvidelse af sø" name="Udvidelse af sø"/>
             </input>
             <input type="input" displayname="Val 10" urlparam="val10"/>
-            <input type="radiobutton" displayname="Brugertype:" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
+            <input type="radiobutton" displayname="Brugertype" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
                 <option value="virksomhed" name="Virksomhed"/>
                 <option value="raadgiver" name="Rådgiver"/>
                 <option value="privat" name="Privat"/>
@@ -35,6 +35,7 @@
             <input type="input" displayname="Val 11" urlparam="val11"/>
         </content>
         <content displayname="2. Kort">
+            <address id="address" urlparam="address" defaultvalue="Frederiksberggade 28, 1459 København K" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true"></address>
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
@@ -52,6 +53,7 @@
                     <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
+            <area urlparam="areal" displayname="Areal"/>
             <conflicts class="alert alert-info" urlparam="konflikttekst1" displayname="&lt;h3&gt;Info&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
             <conflicts class="alert alert-success" urlparam="konflikttekst1" displayname="&lt;h3&gt;Success&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
             <conflicts class="alert alert-warning" urlparam="konflikttekst1" displayname="&lt;h3&gt;Warning&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
@@ -90,7 +92,7 @@
         <log>true</log>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Store"/>
-            <address id="address" urlparam="address" defaultvalue="Larsbjørnsstræde 3, 1454 København K" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
+            <address id="address" urlparam="address" defaultvalue="Frederiksberggade 28, 1459 København K" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
             <maptools>
                 <maptool displayname="Tegn et punkt" name="point" default="true"/>
                 <maptool displayname="Flyt kortet" name="pan"/>

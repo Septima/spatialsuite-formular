@@ -413,7 +413,13 @@ Formular = SpatialMap.Class ({
                 if (value == null) {
                     value = node.attr('defaultvalue');
                 }
-                contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" class="form-control" type="text" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                }
+                
                 var options = {
                     noadrspec: 'true',
                     limit: 15,
@@ -491,7 +497,11 @@ Formular = SpatialMap.Class ({
                 if (value == null) {
                     value = node.attr('defaultvalue');
                 }
-                contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" class="form-control" type="text" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                }
                 var options = {
                     resources: node.attr('resources') || 'Adresser',
                     area: node.attr('filter') || '',
@@ -756,7 +766,11 @@ Formular = SpatialMap.Class ({
             break;
             case 'area':
                 this.areaid = id;
-                contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label>'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;<input type="hidden" id="'+id+'" value=""/></label></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
+                }
                 if (node.attr('onchange')) {
                     jQuery('#'+id).change(new Function (node.attr('onchange')));
                 }
@@ -829,7 +843,7 @@ Formular = SpatialMap.Class ({
                     for (var j=0;j<option.length;j++) {
                         var checked = (jQuery(option[j]).attr('value') == value ? ' checked="checked"' : '');
                         if (this.bootstrap === true) {
-                            str += '<div class="radio"><label><input type="radio" id="'+id+'" name="'+id+'" title="'+jQuery(option[j]).attr('name')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                            str += '<div class="radio"><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'" title="'+jQuery(option[j]).attr('name')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
                         } else {
                             str += '<div><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
                         }

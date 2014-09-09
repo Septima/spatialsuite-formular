@@ -767,14 +767,20 @@ Formular = SpatialMap.Class ({
                 }
             break;
             case 'conflicts':
-                var html = '<tr id="'+id+'_row"><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
-                if (node.attr('displayname')!='') {
-                    html += '<div class="doublelabeldiv">'+node.attr('displayname')+'</div>';
+                
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="hidden'+(className ? ' '+className : '')+'"></div><input type="hidden" id="'+id+'" value=""/>');
+                } else {
+                    var html = '<tr id="'+id+'_row"><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
+                    if (node.attr('displayname')!='') {
+                        html += '<div class="doublelabeldiv">'+node.attr('displayname')+'</div>';
+                    }
+                    html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
+                    contentcontainer.append(html);
                 }
-                html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
-                contentcontainer.append(html);
                 var conflict = {
-                    id: id, //'conflictdiv_'+counter,
+                    id: id,
+                    displayname: node.attr('displayname'),
                     targetsetfile: node.attr('targetsetfile'),
                     targerset: node.attr('targerset')
                 };
@@ -1805,8 +1811,16 @@ Formular = SpatialMap.Class ({
         }
         
         for (var i=0;i<this.spatialqueries.length;i++) {
-            jQuery('#'+this.spatialqueries[i].id).html('');
-            jQuery('#container_'+this.spatialqueries[i].id).hide();
+            
+            if (this.bootstrap === true) {
+                jQuery('#'+this.spatialqueries[i].id+'_row').empty().hide().removeClass('hidden');
+                if (this.spatialqueries[i].displayname) {
+                    jQuery('#'+this.spatialqueries[i].id+'_row').append(this.spatialqueries[i].displayname);
+                }
+            } else {
+                jQuery('#'+this.spatialqueries[i].id).html('');
+                jQuery('#container_'+this.spatialqueries[i].id).hide();
+            }
             
             if (features.length > 0) {
                 
@@ -1833,7 +1847,6 @@ Formular = SpatialMap.Class ({
                         var reporttext = '';
                         var count = 0;
                         for (var i=0;i<targets.length;i++) {
-                            //html += '<b>'+jQuery(targets[i]).find('col[name="targetdisplayname"]').text() + '</b><br/>';
                             rowlist = jQuery(targets[i]).find('rowlist');
                             for (var j=0;j<rowlist.length;j++) {
                                 var row = jQuery(rowlist[j]).find('row');
@@ -1845,14 +1858,26 @@ Formular = SpatialMap.Class ({
                             }
                         }
                         if (html != '') {
-                            jQuery('#container_conflictdiv_'+id).show();
-                            jQuery('#conflictdiv_'+id).html(html);
+                            if (this.bootstrap === true) {
+                                jQuery('#'+id+'_row').show().append(html);
+                            } else {
+                                jQuery('#container_conflictdiv_'+id).show();
+                                jQuery('#conflictdiv_'+id).html(html);
+                            }
                         } else {
-                          jQuery('#container_conflictdiv_'+id).hide();
+                            if (this.bootstrap === true) {
+                                jQuery('#'+id+'_row').hide();
+                            } else {
+                                jQuery('#container_conflictdiv_'+id).hide();
+                            }
                         }
                         if (count) {
                             jQuery('#'+id).val(reporttext);
-                            jQuery('#container_conflictdiv_'+id).show('fast');
+                            if (this.bootstrap === true) {
+                                jQuery('#'+id+'_row').show('fast');
+                            } else {
+                                jQuery('#container_conflictdiv_'+id).show('fast');
+                            }
                             if (spatialquery.onconflict) {
                                 spatialquery.onconflict.apply(jQuery('#'+id));
                             }
@@ -1864,7 +1889,11 @@ Formular = SpatialMap.Class ({
                     },this,this.spatialqueries[i])
                 });
             } else {
-                jQuery('#container_conflictdiv_'+this.spatialqueries[i].id).hide();
+                if (this.bootstrap === true) {
+                    jQuery('#'+this.spatialqueries[i].id+'_row').hide();
+                } else {
+                    jQuery('#container_conflictdiv_'+this.spatialqueries[i].id).hide();
+                }
                 if (this.spatialqueries[i].onnoconflict) {
                     this.spatialqueries[i].onnoconflict();
                 }

@@ -317,11 +317,6 @@ Formular = SpatialMap.Class ({
                             
                         }
                         
-                            //add submit button
-//                            jQuery('#content'+this.config.length-1+' > tbody:last').append('<tr><td colspan="2" align="right"><div class="submitbuttondiv" id="submitdiv"><button id="sendbutton">Send</button></div></td></tr>');
-//                            jQuery('#sendbutton').click(SpatialMap.Function.bind (function () {
-//                                this.submit();
-//                            },this));
                     }
                     if (this.map) {
                         this.currentMapTool = this.defaultMapTool;
@@ -799,7 +794,11 @@ Formular = SpatialMap.Class ({
                     value = node.attr('defaultvalue');
                 }
                 if (type=='dropdown') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><select id="'+id+'" class="form-control"/></div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
+                    }
                     var option = node.find('option');
                     var list = [];
                     if (node.attr('datasource')) {
@@ -819,9 +818,17 @@ Formular = SpatialMap.Class ({
                     var str = '';
                     for (var j=0;j<option.length;j++) {
                         var checked = (jQuery(option[j]).attr('value') == value ? ' checked="checked"' : '');
-                        str += '<div><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                        if (this.bootstrap === true) {
+                            str += '<div class="radio"><label><input type="radio" id="'+id+'" name="'+id+'" title="'+jQuery(option[j]).attr('name')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                        } else {
+                            str += '<div><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                        }
                     }
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'">'+str+'</div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
+                    }
                 } else if (type=='textarea') {
                     contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
                 } else if (type=='hidden') {

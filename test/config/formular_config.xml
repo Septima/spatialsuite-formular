@@ -20,6 +20,18 @@
             <input type="input" displayname="Adresse" urlparam="val1"/>
             <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
             <input type="input" displayname="Postnr" urlparam="val2"/>
+            <input type="dropdown" displayname="Hvad søges:" urlparam="hvad" defaultvalue="oprensning af sø">
+                <option value="ny sø" name="Ny sø"/>
+                <option value="oprensning af sø" name="Oprensning af sø"/>
+                <option value="udvidelse af sø" name="Udvidelse af sø"/>
+            </input>
+            <input type="input" displayname="Val 10" urlparam="val10"/>
+            <input type="radiobutton" displayname="Brugertype:" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
+                <option value="virksomhed" name="Virksomhed"/>
+                <option value="raadgiver" name="Rådgiver"/>
+                <option value="privat" name="Privat"/>
+            </input>
+            <input type="input" displayname="Val 11" urlparam="val11"/>
         </content>
         <content displayname="2. Kort">
             <maptools>
@@ -36,8 +48,13 @@
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
                     <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
+            <conflicts class="warning-info" urlparam="konflikttekst1" displayname="&lt;strong&gt;Info&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-success" urlparam="konflikttekst1" displayname="&lt;strong&gt;Success&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-warning" urlparam="konflikttekst1" displayname="&lt;strong&gt;Warning&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-danger" urlparam="konflikttekst1" displayname="&lt;strong&gt;Danger&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
             <input type="input" displayname="Ansøger" urlparam="val3" defaultvalue="Mig"/>
             <input type="input" displayname="Hest" urlparam="val4"/>
             <input type="input" displayname="Får" urlparam="val5"/>

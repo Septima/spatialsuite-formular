@@ -14,10 +14,9 @@
             <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
             <input type="h1" class="section" displayname="Dette er en overskrift"/>
             <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
-            <input type="input" id="navn" displayname="Navn" urlparam="val0" defaultvalue="" required="true" regexp=".+" validate="Angiv et navn"/>
+            <input type="input" id="navn" displayname="Navn" urlparam="val0" defaultvalue="" placeholder="Indtast dit navn" required="true" regexp=".+" validate="Angiv et navn"/>
             <input type="h2" displayname="Dette er en overskrift"/>
             <input type="text" displayname="Dette er en tekst" urlparam="val2"/>
-            <input type="input" displayname="Adresse" urlparam="val1"/>
             <input type="date" displayname="Dato:" urlparam="date"/>
             <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
             <input type="input" displayname="Postnr" urlparam="val2"/>

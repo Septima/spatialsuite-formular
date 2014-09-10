@@ -228,7 +228,7 @@
 	
 	            <div class="row">
 	                <div id="finalmessage" class="col-xs-12">
-    	                <div id="messageloading" class="alert alert-warning"><div class="header">Ansøgningen registreres. Vent venligst...</div>Det kan tage op til et par minutter</div>
+    	                <div id="messageloading" class="alert alert-warning"></div>
 	                    <div id="message"></div>
                         <div id="submessage"></div>
                     </div>

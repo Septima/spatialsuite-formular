@@ -2275,6 +2275,11 @@ Formular = SpatialMap.Class ({
     submitFinal: function (params) {
         
         if (this.bootstrap === true) {
+            var message = '<div class="header">Ansøgningen registreres. Vent venligst...</div>Det kan tage op til et par minutter';
+            if (typeof this.messages.saving !== 'undefined') {
+                message = this.messages.saving;
+            }
+            jQuery('#messageloading').html(message);
             jQuery('div#form').hide();
             jQuery('div#receipt').show();
         } else {
@@ -2515,6 +2520,7 @@ Formular = SpatialMap.Class ({
                         
                     } else {
                         this.showError();
+                        this.pagesFail();
                     }
                 },this, params, pages)
             });

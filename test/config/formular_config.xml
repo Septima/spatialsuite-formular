@@ -10,6 +10,11 @@
         </submitpages>
         <reportprofile>kbh_themestore</reportprofile>
         <tabs>true</tabs>
+        <messages>
+            <message name="done"><![CDATA[<div class="header">Ansøgningen er nu registreret</div>Kommunen vender tilbage inden 14 dage, hvis der er brug for ydeligere oplysninger.]]></message>
+            <message name="saving"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+            <message name="error"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+        </messages>
         <content displayname="1. Første side">
             <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
             <input type="h1" class="section" displayname="Dette er en overskrift"/>

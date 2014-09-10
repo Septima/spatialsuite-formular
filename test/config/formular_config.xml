@@ -3,23 +3,29 @@
     <formular name="virk">
         <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>
         <header>Formular til Virk.dk</header>
-        <submitpages>
+        <submitpagesXX>
             <page parser="setFrid">formular.create-frid</page>
             <page parser="setPdf">formular.create-pdf.nomap</page>
             <page>formular.save</page>
+            <page>formular.move.pdf</page>
+        </submitpagesXX>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
         </submitpages>
         <reportprofile>kbh_themestore</reportprofile>
         <tabs>true</tabs>
         <messages>
             <message name="done"><![CDATA[<div class="header">Ansøgningen er nu registreret</div>Kommunen vender tilbage inden 14 dage, hvis der er brug for ydeligere oplysninger.]]></message>
-            <message name="saving"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+            <message name="saving"><![CDATA[<div class="header">Gemmer oplysninger...</div>Det kan tage lidt tid, så vær tålmodig.]]></message>
             <message name="error"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
         </messages>
         <content displayname="1. Første side">
             <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
             <input type="h1" class="section" displayname="Dette er en overskrift"/>
             <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
-            <input type="input" id="navn" displayname="Navn" urlparam="val0" defaultvalue="" placeholder="Indtast dit navn" required="true" regexp=".+" validate="Angiv et navn"/>
+            <input type="input" id="navn" displayname="Navn" urlparam="val0" defaultvalue="2" placeholder="Indtast dit navn" required="true" regexp=".+" validate="Angiv et navn"/>
             <input type="h2" displayname="Dette er en overskrift"/>
             <input type="text" displayname="Dette er en tekst" urlparam="val2"/>
             <input type="date" displayname="Dato:" urlparam="date"/>
@@ -39,7 +45,7 @@
             <input type="input" displayname="Val 11" urlparam="val11"/>
         </content>
         <content displayname="2. Kort">
-            <address id="address" urlparam="address" defaultvalue="Frederiksberggade 28, 1459 København K" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true"></address>
+            <address id="address" urlparam="address" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true"></address>
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
@@ -49,7 +55,7 @@
                 <maptool displayname="Tegn en cirkel" name="circle"/>
                 <maptool displayname="Slet en geometri" name="delete"/>
             </maptools>
-            <map class="my_map_class" required="true">
+            <map class="my_map_class" required="false">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
@@ -67,7 +73,7 @@
             <input type="input" displayname="Får" urlparam="val5"/>
         </content>
         <content displayname="3. Sidste side" condition="jQuery('#navn').val() !== '1'">
-            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="" required="true" regexp=".+" validate="Noget nyt er ikke udfyldt"/>
+            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="2" regexp=".+" validate="Noget nyt er ikke udfyldt"/>
             <input type="input" displayname="ABC" urlparam="val7"/>
             <input type="file" displayname="Billede" urlparam="billede"/>
         </content>

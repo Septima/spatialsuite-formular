@@ -56,6 +56,8 @@ Formular = SpatialMap.Class ({
     multipleGeometriesAttributes: [],
     mergeGeometries: true,
     
+    featureRequired: true,
+    
     localstore: false,
     
     logActive: false,
@@ -133,7 +135,8 @@ Formular = SpatialMap.Class ({
                         var p = {
                             name: jQuery(pages[i]).text(),
                             parser: jQuery(pages[i]).attr('parser'),
-                            type: jQuery(pages[i]).attr('type'),
+                            url: jQuery(pages[i]).attr('url') || 'cbkort',
+                            type: jQuery(pages[i]).attr('type') || 'json',
                             urlparam: jQuery(pages[i]).attr('urlparam'),
                             condition: jQuery(pages[i]).attr('condition'),
                             error: null
@@ -146,7 +149,6 @@ Formular = SpatialMap.Class ({
                             p.error = p.error || {};
                             p.error.message = jQuery(pages[i]).attr('errormessage');
                         }
-                        
                         this.pages.push(p);
                     }
                 } else {
@@ -738,6 +740,8 @@ Formular = SpatialMap.Class ({
                         });
                     }
                 }
+                
+                this.featureRequired = req;
                 
                 if (req === true) {
                     
@@ -2087,7 +2091,7 @@ Formular = SpatialMap.Class ({
     },
 
     submit: function () {
-        if (this.map && this.feature.length === 0) {
+        if (this.map && this.feature.length === 0 && this.featureRequired === true) {
             alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
             return;
         } else {
@@ -2329,7 +2333,7 @@ Formular = SpatialMap.Class ({
                                     if(data.result!='OK') {
                                         if (this.messages.done) {
                                             if (this.bootstrap) {
-                                                var html = '<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>'+
+                                                var html = '<div class="alert alert-success">'+this.messages.done+'</div>'+
                                                            '<h1>Kvittering</h1>'+
                                                            '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
                                                 jQuery('div#finalmessage').html(html);
@@ -2355,7 +2359,7 @@ Formular = SpatialMap.Class ({
                             jQuery('#messagebuttons').show();
                             if (this.messages.done) {
                                 if (this.bootstrap) {
-                                    var html = '<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>'+
+                                    var html = '<div class="alert alert-success">'+this.messages.done+'</div></div>'+
                                                '<h1>Kvittering</h1>'+
                                                '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
                                     jQuery('div#finalmessage').html(html);
@@ -2443,11 +2447,11 @@ Formular = SpatialMap.Class ({
         } else {
             
             params.page = pages[0].name;
-            params.outputformat = pages[0].type || 'json';
+            params.outputformat = pages[0].type;
             
             jQuery.ajax( {
-                url : 'cbkort',
-                dataType : params.outputformat,
+                url : pages[0].url,
+                dataType : pages[0].type,
                 type: 'POST',
                 async: true,
                 data : params,
@@ -2600,7 +2604,7 @@ Formular = SpatialMap.Class ({
             if (this.pdf) {
                 if (this.messages.done) {
                     if (this.bootstrap === true) {
-                        jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>');
+                        jQuery('#message').append('<div class="alert alert-success">'+this.messages.done+'</div>');
                         jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
                     } else {
                         jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
@@ -2616,13 +2620,13 @@ Formular = SpatialMap.Class ({
             } else {
                 if (this.messages.doneNoPDF) {
                     if (this.bootstrap === true) {
-                        jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.doneNoPDF+'</div></div>');
+                        jQuery('#message').append('<div class="alert alert-success">'+this.messages.doneNoPDF+'</div>');
                     } else {
                         jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.doneNoPDF+'</div>');
                     }
                 } else if (this.messages.done) {
                     if (this.bootstrap === true) {
-                        jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>');
+                        jQuery('#message').append('<div class="alert alert-success">'+this.messages.done+'</div>');
                     } else {
                         jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done+'</div>');
                     }
@@ -2639,7 +2643,7 @@ Formular = SpatialMap.Class ({
             jQuery('#messagebuttons').show();
             if (this.messages.done) {
                 if (this.bootstrap === true) {
-                    jQuery('#message').append('<div class="alert alert-success"><div class="header">'+this.messages.done+'</div></div>');
+                    jQuery('#message').append('<div class="alert alert-success">'+this.messages.done+'</div>');
                     jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
                 } else {
                     jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
@@ -2660,7 +2664,7 @@ Formular = SpatialMap.Class ({
         
         if (error && error.message) {
             if (this.bootstrap === true) {
-                jQuery('#message').append('<div class="alert alert-info"><div class="header">'+error.message+'</div></div>');
+                jQuery('#message').append('<div class="alert alert-info">'+error.message+'</div>');
             } else {
                 jQuery('#messagetext').append('<div id="message_done" class="message-info"><span class="icon-info2"></span>'+error.message+'</div>');
             }
@@ -2673,7 +2677,7 @@ Formular = SpatialMap.Class ({
         
         if (error && error.message) {
             if (this.bootstrap === true) {
-                jQuery('#message').append('<div class="alert alert-warning"><div class="header">'+error.message+'</div></div>');
+                jQuery('#message').append('<div class="alert alert-warning">'+error.message+'</div>');
             } else {
                 jQuery('#messagetext').append('<div id="message_done" class="message-warning"><span class="icon-info2"></span>'+error.message+'</div>');
             }
@@ -2686,14 +2690,14 @@ Formular = SpatialMap.Class ({
         
         if (error && error.message) {
             if (this.bootstrap === true) {
-                jQuery('#message').append('<div class="alert alert-danger"><div class="header">'+error.message+'</div></div>');
+                jQuery('#message').append('<div class="alert alert-danger">'+error.message+'</div>');
             } else {
                 jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
             }
         } else {
             if (this.messages.error) {
                 if (this.bootstrap === true) {
-                    jQuery('#message').append('<div class="alert alert-danger"><div class="header">'+this.messages.error+'</div></div>');
+                    jQuery('#message').append('<div class="alert alert-danger">'+this.messages.error+'</div>');
                 } else {
                     jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
                 }
@@ -2709,7 +2713,7 @@ Formular = SpatialMap.Class ({
     },
     
     isErrorRespose: function (data) {
-        return (data.exception || jQuery(data.responseXML).find('exception').length > 0);
+        return (data.exception || jQuery(data.responseXML).find('exception').length > 0 || data.result === 'ERROR');
     },
     
     handleError: function (data, params, error) {

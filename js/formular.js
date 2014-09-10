@@ -2278,7 +2278,11 @@ Formular = SpatialMap.Class ({
             jQuery('div#form').hide();
             jQuery('div#receipt').show();
         } else {
-            jQuery('#messageloading').append('<div id="message_loading">Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)</div>');
+            var message = 'Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)';
+            if (typeof this.messages.saving !== 'undefined') {
+                message = this.messages.saving;
+            }
+            jQuery('#messageloading').append('<div id="message_loading">'+message+'</div>');
 
             jQuery('#messagetext').empty();
             jQuery('#messagebuttons').empty();

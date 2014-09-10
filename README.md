@@ -62,8 +62,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <localstore>true</localstore>                           <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false") -->
         <log>true</log>                                         <!-- OPTIONAL - Skal fejl logges på serveren? For at se loggen kaldes http://hostnavn/spatialmap?page=formular.log.read (default er "false") -->
         <messages>                                              <!-- OPTIONAL - Mulghed for at få vist sin egen tekst når brugeren er færdig -->
-            <message name="done">Mange tak for hjælpen! Hent kvittering &lt;a href="{{pdf}}"&gt;her&lt;/a&gt;</message> <!-- OPTIONAL - Teksten, der vises hvis det går godt. {{pdf}} erstattes af stien til pdf-dokumentet -->
-            <message name="error">Der er opståer en fejl!</message>                                                     <!-- OPTIONAL - Teksten, der vises hvis det går galt -->
+            <message name="done">Mange tak for hjælpen! Hent kvittering &lt;a href="{{pdf}}"&gt;her&lt;/a&gt;</message>      <!-- OPTIONAL - Teksten, der vises hvis det går godt. {{pdf}} erstattes af stien til pdf-dokumentet -->
+            <message name="saving">Ansøgningen registreres. Vent venligst... (Det kan tage op til et par minutter)</message> <!-- OPTIONAL - Teksten, der vises mens serveren gemmer. -->
+            <message name="error">Der er opståer en fejl!</message>                                                          <!-- OPTIONAL - Teksten, der vises hvis det går galt -->
         </messages>
         <content displayname="Første step">                     <!-- Der kan tilføjes flere content elementer for at få flere sider i sin formular -->
             <!-- content, kan bestå af et vilkårligt antal elementer i en vilkårlig rækkefølge. I følgende er de enkelte typer elementer beskrevet.

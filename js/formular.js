@@ -2438,10 +2438,11 @@ Formular = SpatialMap.Class ({
         } else {
             
             params.page = pages[0].name;
+            params.outputformat = pages[0].type || 'json';
             
             jQuery.ajax( {
                 url : 'cbkort',
-                dataType : pages[0].type || 'json',
+                dataType : params.outputformat,
                 type: 'POST',
                 async: true,
                 data : params,

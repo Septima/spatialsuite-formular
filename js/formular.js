@@ -871,13 +871,13 @@ Formular = SpatialMap.Class ({
                     }
                 } else if (type=='h1') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<h1 id="'+id+'" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h1>');
+                        contentcontainer.append('<h1 id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h1>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><h1 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h1></td></tr>');
                     }
                 } else if (type=='h2') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<h2 id="'+id+'" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h2>');
+                        contentcontainer.append('<h2 id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h2>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><h2 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h2></td></tr>');
                     }
@@ -898,7 +898,7 @@ Formular = SpatialMap.Class ({
                         var displayresult = node.attr('displayresult');
                         
                         if (this.bootstrap === true) {
-                            contentcontainer.append('<p id="'+id+'" class="'+(className ? className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></p>');
+                            contentcontainer.append('<p id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></p>');
                         } else {
                             contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
                         }
@@ -909,7 +909,7 @@ Formular = SpatialMap.Class ({
                     } else {
                         
                         if (this.bootstrap === true) {
-                            contentcontainer.append('<p id="'+id+'" class="'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</p>');
+                            contentcontainer.append('<p id="'+id+'_row" class="'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</p>');
                         } else {
                             contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
                         }

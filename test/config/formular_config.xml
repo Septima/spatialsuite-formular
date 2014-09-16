@@ -31,11 +31,16 @@
             <input type="date" displayname="Dato:" urlparam="date"/>
             <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
             <input type="input" displayname="Postnr" urlparam="val2"/>
-            <input type="dropdown" displayname="Hvad søges:" urlparam="hvad" defaultvalue="oprensning af sø">
+            <input id="arr" type="dropdown" displayname="Hvad søges:" urlparam="hvad" defaultvalue="oprensning af sø">
                 <option value="ny sø" name="Ny sø"/>
                 <option value="oprensning af sø" name="Oprensning af sø"/>
                 <option value="udvidelse af sø" name="Udvidelse af sø"/>
             </input>
+            <input type="dropdown" id="ansv" displayname="*Er du ansvarlig FØR arrangementet" urlparam="ansvarlig_foer"  condition="jQuery('#arr').val() == 'udvidelse af sø'"> 
+		        <option value="" name=""/> 
+		        <option value="1" name="Ja"/> 
+		        <option value="0" name="Nej"/> 
+    		</input>   
             <input type="input" displayname="Val 10" urlparam="val10"/>
             <input type="radiobutton" displayname="Brugertype" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
                 <option value="virksomhed" name="Virksomhed"/>

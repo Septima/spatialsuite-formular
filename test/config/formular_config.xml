@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <formular name="virk">
+        <!-- virkid test="true">KARSTEN</virkid -->
         <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>
         <header>Formular til Virk.dk</header>
         <submitpagesXX>

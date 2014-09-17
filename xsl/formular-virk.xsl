@@ -2,9 +2,9 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output method="html" indent="yes" encoding="[cbinfo.html.encoding]" />
-	<xsl:param name = "formular"/>
-	<xsl:param name = "sessionid"/>
-	<xsl:param name = "formular-css">/modules/formular/css/formular.css</xsl:param>
+    <xsl:param name = "formular"/>
+    <xsl:param name = "sessionid"/>
+    <xsl:param name = "formular-css">/modules/formular/css/formular.css</xsl:param>
     <xsl:template match="/">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
@@ -36,7 +36,7 @@
                 <script type="text/javascript" charset="ISO-8859-1" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
                 <script type="text/javascript" charset="ISO-8859-1" src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
 
-				<script type="text/javascript" src="/modules/formular/js/jquery.ui.datepicker-[cbinfo.locale].js"></script>
+                <script type="text/javascript" src="/modules/formular/js/jquery.ui.datepicker-[cbinfo.locale].js"></script>
                 <xsl:variable name="cbinfo.spatialmap.jslib">[cbinfo.spatialmap.jslib]</xsl:variable>
                 <xsl:choose>
                     <xsl:when test="substring($cbinfo.spatialmap.jslib,0,2) = '['">
@@ -94,7 +94,7 @@
                 var formular;
                 jQuery(function () {
 
-		            jQuery('div#receipt').hide();
+                    jQuery('div#receipt').hide();
 
                     formular = new Formular ({
                         bootstrap: true,
@@ -128,32 +128,32 @@
                 <div class="row">
                     <div class="col-xs-8 info">
                         <a href="">Virk registrering &#8250;</a>
-		                <xsl:choose>
-		                    <xsl:when test="title">
-		                        <p><xsl:value-of select="title" /></p>
-		                    </xsl:when>
-		                    <xsl:otherwise>
-		                        <p><xsl:value-of select="header" /></p>
-		                    </xsl:otherwise>
-		                </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="title">
+                                <p><xsl:value-of select="title" /></p>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <p><xsl:value-of select="header" /></p>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </div>
                     <div class="col-xs-4 align-right">
                         <div class="inner-details">
                             <xsl:if test="contact">
-	                            <xsl:element name="a">
-	                                <xsl:attribute name="class">solution-author-link</xsl:attribute>
-	                                <xsl:attribute name="href"><xsl:value-of select="contact/@link"/></xsl:attribute>
-	                                <xsl:value-of select="contact" /> <span> &#8250;</span>
-	                            </xsl:element>
-	                            <div class="contact">
-	                                Support: <span class="solution-author-phone"><xsl:value-of select="contact/@phone" /></span>
-	                                <span class="divider">|</span>
-				                    <xsl:element name="a">
-				                        <xsl:attribute name="class">solution-author-email</xsl:attribute>
-				                        <xsl:attribute name="href">mailto:<xsl:value-of select="contact/@email"/></xsl:attribute>
-				                        E-mail <span>&#8250;</span>
-				                    </xsl:element>
-	                            </div>
+                                <xsl:element name="a">
+                                    <xsl:attribute name="class">solution-author-link</xsl:attribute>
+                                    <xsl:attribute name="href"><xsl:value-of select="contact/@link"/></xsl:attribute>
+                                    <xsl:value-of select="contact" /> <span> &#8250;</span>
+                                </xsl:element>
+                                <div class="contact">
+                                    Support: <span class="solution-author-phone"><xsl:value-of select="contact/@phone" /></span>
+                                    <span class="divider">|</span>
+                                    <xsl:element name="a">
+                                        <xsl:attribute name="class">solution-author-email</xsl:attribute>
+                                        <xsl:attribute name="href">mailto:<xsl:value-of select="contact/@email"/></xsl:attribute>
+                                        E-mail <span>&#8250;</span>
+                                    </xsl:element>
+                                </div>
                             </xsl:if>
                         </div>
                     </div>
@@ -221,22 +221,22 @@
         
         
         <div id="receipt" class="content row">
-	        <div class="col-sm-9 main-content">
-	            <!-- Hidden link for accesibility -->
-	            <a id="contentstart" class="hide">Indhold start</a>
-	            <!-- Page content start -->
-	
-	            <div class="row">
-	                <div id="finalmessage" class="col-xs-12">
-    	                <div id="messageloading" class="alert alert-warning"></div>
-	                    <div id="message"></div>
+            <div class="col-sm-9 main-content">
+                <!-- Hidden link for accesibility -->
+                <a id="contentstart" class="hide">Indhold start</a>
+                <!-- Page content start -->
+    
+                <div class="row">
+                    <div id="finalmessage" class="col-xs-12">
+                        <div id="messageloading" class="alert alert-warning"></div>
+                        <div id="message"></div>
                         <div id="submessage"></div>
                     </div>
                 </div>
-	
-	            <div class="clearfix"></div>
-	
-	        </div>
+    
+                <div class="clearfix"></div>
+    
+            </div>
         </div>
         
 
@@ -276,7 +276,21 @@
         </div>
     </div>            
             
-			     
+    <xsl:if test="virkid">
+        <script>
+           var _eOGsTM = {
+               diaID      : '<xsl:value-of select="virkid" />', // Dia formular ID
+               test       : <xsl:choose><xsl:when test="virkid/@test = 'false'">false</xsl:when><xsl:otherwise>true</xsl:otherwise></xsl:choose>       // False in production, true in test
+           };
+           (function(d,p,s){var e=d.createElement('script'),b=d.getElementsByTagName(p)[0];e.src=s+'/components/requirejs/require.js';e.setAttribute('data-main', s+'/scripts/eostm');b.appendChild(e)}(document,'body','//counter.virk.dk'));
+        </script>
+        <noscript><xsl:element name="img">
+               <xsl:attribute name="alt"></xsl:attribute>
+               <xsl:attribute name="height">1</xsl:attribute>
+               <xsl:attribute name="width">1</xsl:attribute>
+               <xsl:attribute name="src">//counter.virk.dk/tns.png?DiaID=<xsl:value-of select="virkid" />&amp;status=start</xsl:attribute>
+           </xsl:element></noscript>              
+    </xsl:if>
             </body>
         </html>
     </xsl:template>

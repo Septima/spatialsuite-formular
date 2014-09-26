@@ -44,6 +44,9 @@ fieldset .error.validationMessage {
     margin-top: 0px;
     display: block;
 }
+fieldset {
+    padding-bottom: 20px;
+}
 
 ul.nav.style-2 li.active a span.info { 
     background: url(http://designmanual.virk.dk/virkdesign/designmanualv2/css/../graphics/icon-checked.png) no-repeat left center; 
@@ -51,3 +54,4 @@ ul.nav.style-2 li.active a span.info {
 ul.nav.style-2 li.active a span.error { 
     background: url(http://designmanual.virk.dk/virkdesign/designmanualv2/css/../graphics/icon-error.png) no-repeat left center; 
 }
+

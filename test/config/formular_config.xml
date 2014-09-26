@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+
+    <formular name="test-required">
+        <title>Test - required</title>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportlayers>default</reportlayers>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs>true</tabs>
+        
+        <content displayname="Fane 1">  
+            <input type="text" displayname="&lt;strong&gt;Felter markeret med * skal udfyldes.&lt;/strong&gt;"/>
+        
+            <input type="dropdown"  id="val1" displayname="*Vælg?" urlparam="val1" regexp=".+" validate="Feltet skal udfyldes.">
+                <option value="" name=""/>
+                <option value="1" name="1"/>
+                <option value="2" name="2"/>
+            </input>
+            
+            <input type="input" displayname="Skal være udfyldt (validation):"  regexp=".+" validate="Feltet skal udfyldes." urlparam="val2" condition="jQuery('#val1').val() === '2'"/>
+            <input type="input" displayname="Skal være udfyldt (required):"  required="true" urlparam="val3" condition="jQuery('#val1').val() === '2'"/>
+        </content>
+        
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview" displayname=""/>
+        </content>
+    </formular>
+
+
+
+
     <formular name="virk">
         <!-- virkid test="true">KARSTEN</virkid -->
         <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>

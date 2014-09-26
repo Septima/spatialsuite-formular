@@ -451,17 +451,37 @@ Formular = SpatialMap.Class ({
                     };
                 }
                 
-                if (node.attr('regexp')) {
+                var regexp = node.attr('regexp');
+                if (regexp || req === true) {
                     this.inputValidation[id] = {
                         validate: true,
+                        required: req,
+                        regexp: regexp,
                         tab: tab,
                         message: node.attr('validate') || 'Indtast en valid værdi!'
                     };
-                    jQuery('#'+id).valid8({
-                        'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
-                         ]
-                    });
+
+                    if (req) {
+                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                            var valid = (jQuery('#'+id).val() !== '');
+                            var map = jQuery('#'+id+'_row > .map');
+                            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
+                            jQuery('#'+id+'ValidationMessage').remove();
+                            if (valid === false) {
+                                jQuery('#'+id+'_row > .required-enabled').addClass('error');
+                                jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                            }
+                            return valid;
+                        },this, id, this.inputValidation[id].message)  ;                      
+                    }
+
+                    if (regexp) {
+                        jQuery('#'+id).valid8({
+                            'regularExpressions': [
+                                 { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
+                             ]
+                        });
+                    }
                 }
                 
                 if (value) {
@@ -532,17 +552,37 @@ Formular = SpatialMap.Class ({
                     };
                 }
                 
-                if (node.attr('regexp')) {
+                var regexp = node.attr('regexp');
+                if (regexp || req === true) {
                     this.inputValidation[id] = {
                         validate: true,
+                        required: req,
+                        regexp: regexp,
                         tab: tab,
                         message: node.attr('validate') || 'Indtast en valid værdi!'
                     };
-                    jQuery('#'+id).valid8({
-                        'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
-                         ]
-                    });
+
+                    if (req) {
+                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                            var valid = (jQuery('#'+id).val() !== '');
+                            var map = jQuery('#'+id+'_row > .map');
+                            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
+                            jQuery('#'+id+'ValidationMessage').remove();
+                            if (valid === false) {
+                                jQuery('#'+id+'_row > .required-enabled').addClass('error');
+                                jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                            }
+                            return valid;
+                        },this, id, this.inputValidation[id].message)  ;                      
+                    }
+
+                    if (regexp) {
+                        jQuery('#'+id).valid8({
+                            'regularExpressions': [
+                                 { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
+                             ]
+                        });
+                    }
                 }
                 
                 if (value) {
@@ -1028,17 +1068,37 @@ Formular = SpatialMap.Class ({
                 if (urlparam) {
                     postparam.type = type;
                 }
-                if (node.attr('regexp')) {
+                var regexp = node.attr('regexp');
+                if (regexp || req === true) {
                     this.inputValidation[id] = {
                         validate: true,
+                        required: req,
+                        regexp: regexp,
                         tab: tab,
                         message: node.attr('validate') || 'Indtast en valid værdi!'
                     };
-                    jQuery('#'+id).valid8({
-                        'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
-                         ]
-                    });
+
+                    if (req) {
+                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                            var valid = (jQuery('#'+id).val() !== '');
+                            var map = jQuery('#'+id+'_row > .map');
+                            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
+                            jQuery('#'+id+'ValidationMessage').remove();
+                            if (valid === false) {
+                                jQuery('#'+id+'_row > .required-enabled').addClass('error');
+                                jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                            }
+                            return valid;
+                        },this, id, this.inputValidation[id].message)  ;                      
+                    }                    
+                    
+                    if (regexp) {
+                        jQuery('#'+id).valid8({
+                            'regularExpressions': [
+                                 { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
+                             ]
+                        });
+                    }
                 }
                 var f = null;
                 if (node.attr('onchange')) {
@@ -1117,6 +1177,10 @@ Formular = SpatialMap.Class ({
             
             if (typeof this.conditions[i].ref) {
                 this.conditions[i].ref.visible = visible;
+            }
+
+            if (typeof this.inputValidation[this.conditions[i].id] !== 'undefined') {
+                this.inputValidation[this.conditions[i].id].visible = visible
             }
         }
     },
@@ -2038,7 +2102,7 @@ Formular = SpatialMap.Class ({
     checkValidation: function () {
         this.valid = true;
         for (var name in this.validatedElements) {
-            if (this.inputValidation[name].validate === true && this.inputValidation[name].tab.visible === true) {
+            if (this.inputValidation[name].validate === true && this.inputValidation[name].tab.visible === true && this.inputValidation[name].visible !== false) {
                 var valid = true;
                 if (typeof this.inputValidation[name].handler !== 'undefined') {
                     valid = this.inputValidation[name].handler();
@@ -2057,17 +2121,22 @@ Formular = SpatialMap.Class ({
     },
     
     validateTab: function (tab) {
+
+        this.checkConditions();
+
         if (typeof tab === 'undefined') {
             tab = 0;
         }
         var invalidCount = 0;
         for (var name in this.inputValidation) {
-            if (this.inputValidation[name].validate === true && this.inputValidation[name].tab.id === tab && this.inputValidation[name].tab.visible === true) {
+            if (this.inputValidation[name].validate === true && this.inputValidation[name].tab.id === tab && this.inputValidation[name].tab.visible === true && this.inputValidation[name].visible !== false) {
+                var valid = true;
                 if (typeof this.inputValidation[name].handler !== 'undefined') {
                     valid = this.inputValidation[name].handler();
                 } else {
                     valid = jQuery('#'+name).isValid ();
                 }
+                
                 this.validatedElements[name] = valid;
                 this.inputValidation[name].valid = valid;
                 if (!valid) {
@@ -2111,6 +2180,7 @@ Formular = SpatialMap.Class ({
             var invalidCount = 0;
             for (var name in this.inputValidation) {
                 if (this.inputValidation[name].validate && this.inputValidation[name].tab.visible === true) {
+                    var valid = true;
                     if (typeof this.inputValidation[name].handler !== 'undefined') {
                         valid = this.inputValidation[name].handler();
                     } else {

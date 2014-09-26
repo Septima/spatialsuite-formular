@@ -929,6 +929,7 @@ Formular = SpatialMap.Class ({
                     }
                 } else if (type=='preview') {
                     if (this.bootstrap === true) {
+                        this.showEmptyInPreview = (node.attr('showempty') !== 'false');
                         contentcontainer.append('<div id="'+id+'_row" class="preview'+(className ? ' '+className : '')+'"></div>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="preview'+(className ? ' '+className : '')+'" id="'+id+'"></div></td></tr>');
@@ -2250,53 +2251,56 @@ Formular = SpatialMap.Class ({
                     if (param.visible === true && param.tab.visible) {
                     
                         var val = jQuery('#'+param.id).val();
-                        var textVal = val;
-                        if (param.type && param.type == 'checkbox') {
-                            val = jQuery('#'+param.id).is(':checked');
-                            textVal = (val ? 'ja' : 'nej');
-                        }
-                        if (param.type && param.type == 'radiobutton') {
-                            val = jQuery('input:radio[name='+param.id+']:checked').val();
-                            if (typeof val === 'undefined') {
-                                if (param.defaultValue) {
-                                    val = param.defaultValue;
-                                } else {
-                                    val = '';
-                                }
-                            }
-                            textVal = val;
-                        }
-                        if (param.type && param.type == 'file') {
-                            textVal = jQuery('#'+param.id+'_org').val();
-                        }
                         
-                        var t = param.displayname;
-                        if (typeof t !== 'undefined') {
-                            if (this.bootstrap === true) {
-                                var valid = true;
-                                var e;
-                                if (typeof this.inputValidation[param.id] !== 'undefined') {
-                                    valid = this.inputValidation[param.id].valid;
+                        if (this.showEmptyInPreview === true || val !== '') {
+                            var textVal = val;
+                            if (param.type && param.type == 'checkbox') {
+                                val = jQuery('#'+param.id).is(':checked');
+                                textVal = (val ? 'ja' : 'nej');
+                            }
+                            if (param.type && param.type == 'radiobutton') {
+                                val = jQuery('input:radio[name='+param.id+']:checked').val();
+                                if (typeof val === 'undefined') {
+                                    if (param.defaultValue) {
+                                        val = param.defaultValue;
+                                    } else {
+                                        val = '';
+                                    }
                                 }
-                                
-                                if (param.type === 'conflicts') {
-                                    e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                textVal = val;
+                            }
+                            if (param.type && param.type == 'file') {
+                                textVal = jQuery('#'+param.id+'_org').val();
+                            }
+                            
+                            var t = param.displayname;
+                            if (typeof t !== 'undefined') {
+                                if (this.bootstrap === true) {
+                                    var valid = true;
+                                    var e;
+                                    if (typeof this.inputValidation[param.id] !== 'undefined') {
+                                        valid = this.inputValidation[param.id].valid;
+                                    }
+                                    
+                                    if (param.type === 'conflicts') {
+                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                    } else {
+                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                    }
+                                    if (!valid) {
+                                        e.click(SpatialMap.Function.bind(function (input) {
+                                            this.showTab(input.tab.id);
+                                            var element = document.getElementById(input.id);
+                                            if (element) {
+                                                element.focus();
+                                            }
+                                        },this,param));
+                                    }
+                                    element.append(e);
                                 } else {
-                                    e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
-                                }
-                                if (!valid) {
-                                    e.click(SpatialMap.Function.bind(function (input) {
-                                        this.showTab(input.tab.id);
-                                        var element = document.getElementById(input.id);
-                                        if (element) {
-                                            element.focus();
-                                        }
-                                    },this,param));
-                                }
-                                element.append(e);
-                            } else {
-                                if (val) {
-                                    element.append('<br/>'+t+' '+textVal);
+                                    if (val) {
+                                        element.append('<br/>'+t+' '+textVal);
+                                    }
                                 }
                             }
                         }

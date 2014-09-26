@@ -23,6 +23,9 @@
             
             <input type="input" displayname="Skal være udfyldt (validation):"  regexp=".+" validate="Feltet skal udfyldes." urlparam="val2" condition="jQuery('#val1').val() === '2'"/>
             <input type="input" displayname="Skal være udfyldt (required):"  required="true" urlparam="val3" condition="jQuery('#val1').val() === '2'"/>
+
+            <input type="input" displayname="Felt uden condition:"  urlparam="val4"/>
+            <input type="input" displayname="Felt med condition:"  urlparam="val5" condition="jQuery('#val1').val() === '1'"/>
         </content>
         
         <content displayname="Opsummering og godkendelse" type="confirm">
@@ -30,7 +33,7 @@
             <input type="h1" displayname="Opsummering og godkendelse"/>
             <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
             <input type="h1" class="section" displayname="Stamdata"/>
-            <input type="preview" displayname=""/>
+            <input type="preview" showempty="false"/>
         </content>
     </formular>
 
@@ -125,7 +128,7 @@
             <input type="h1" displayname="Opsummering og godkendelse"/>
             <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
             <input type="h1" class="section" displayname="Stamdata"/>
-            <input type="preview" displayname=""/>
+            <input type="preview"/>
         </content>
     </formular>
     <formular name="log">

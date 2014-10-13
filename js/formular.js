@@ -591,7 +591,10 @@ Formular = SpatialMap.Class ({
                             jQuery('#'+id+'ValidationMessage').remove();
                             if (valid === false) {
                                 jQuery('#'+id+'_row > .required-enabled').addClass('error');
-                                jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                                var message = jQuery('#'+id+'ValidationMessage');
+                                if (message.length === 0) {
+                                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                                }
                             }
                             return valid;
                         },this, id, this.inputValidation[id].message)  ;                      
@@ -819,7 +822,10 @@ Formular = SpatialMap.Class ({
                             jQuery('#'+id+'ValidationMessage').remove();
                             if (valid === false) {
                                 map.addClass('error');
-                                jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(map);
+                                var message = jQuery('#'+id+'ValidationMessage');
+                                if (message.length === 0) {
+                                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(map);
+                                }
                             }
                             
                             return valid;
@@ -1109,7 +1115,10 @@ Formular = SpatialMap.Class ({
                             jQuery('#'+id+'ValidationMessage').remove();
                             if (valid === false) {
                                 jQuery('#'+id+'_row > .required-enabled').addClass('error');
-                                jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                                var message = jQuery('#'+id+'ValidationMessage');
+                                if (message.length === 0) {
+                                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                                }
                             }
                             return valid;
                         },this, id, this.inputValidation[id].message)  ;                      
@@ -2305,9 +2314,9 @@ Formular = SpatialMap.Class ({
                                     }
                                     
                                     if (param.type === 'conflicts') {
-                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
                                     } else {
-                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span id="navnValidationMessage" class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(this.inputValidation[param.id].required ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
                                     }
                                     if (!valid) {
                                         e.click(SpatialMap.Function.bind(function (input) {

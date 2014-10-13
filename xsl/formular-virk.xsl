@@ -201,7 +201,8 @@
                 <a id="contentstart" class="hide">Indhold start</a>
 
                 <div class="row">
-                    <div id="content" class="col-xs-12">
+                    <div id="content" class="col-xs-12 content-loading">
+                        <div class="content-loading-div"><div>Indlæser formular...</div></div>
                         <div class="buttons">
                             <a id="previous" class="btn btn-primary button-prev pull-left" href="#">Forrige</a>
                             <a id="next" class="btn btn-primary button-next pull-right" href="#">Næste</a>

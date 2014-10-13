@@ -375,6 +375,9 @@ Formular = SpatialMap.Class ({
         });
         
         jQuery('#loading').hide();
+        
+        //Bootstrap
+        jQuery('#content').removeClass('content-loading')
     },
     
     addInput: function (node,contentcontainer,options) {

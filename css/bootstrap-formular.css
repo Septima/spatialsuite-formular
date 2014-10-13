@@ -55,3 +55,26 @@ ul.nav.style-2 li.active a span.error {
     background: url(http://designmanual.virk.dk/virkdesign/designmanualv2/css/../graphics/icon-error.png) no-repeat left center; 
 }
 
+.content-loading-div {
+    display: none;
+    text-align: center;
+}
+.content-loading-div > div {
+    display: inline-block;
+    padding-left: 50px;
+    height: 50px;
+    line-height: 50px;
+    background-image: url("/images/standard/loading/loader_l.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
+    color: #999;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 30px;
+}
+.content-loading > .content-loading-div {
+    display: block;
+}
+.content-loading > .buttons {
+    display: none;
+}

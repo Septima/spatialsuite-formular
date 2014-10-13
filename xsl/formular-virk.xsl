@@ -82,6 +82,10 @@
                 <script language="javascript" src="/modules/formular/js/json2.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
 
+                <xsl:if test="virkid">
+                    <script language="javascript" src="/modules/formular/js/virk.js" type="text/javascript"></script>
+                </xsl:if>
+
                 <xsl:for-each select="js">
                     <xsl:element name="script">
                         <xsl:attribute name="language">javascript</xsl:attribute>
@@ -91,7 +95,6 @@
                 </xsl:for-each>
 
                 <script type="text/javascript" language="javascript">
-                var formular;
                 jQuery(function () {
 
                     jQuery('div#receipt').hide();
@@ -99,7 +102,8 @@
                     formular = new Formular ({
                         bootstrap: true,
                         name: '<xsl:value-of select="$formular"/>',
-                        sessionid:'<xsl:value-of select="$sessionid"/>'
+                        sessionid:'<xsl:value-of select="$sessionid"/>',
+                        _listeners: formular._listeners
                     });
                 });
                 </script>
@@ -277,21 +281,6 @@
         </div>
     </div>            
             
-    <xsl:if test="virkid">
-        <script>
-           var _eOGsTM = {
-               diaID      : '<xsl:value-of select="virkid" />', // Dia formular ID
-               test       : <xsl:choose><xsl:when test="virkid/@test = 'false'">false</xsl:when><xsl:otherwise>true</xsl:otherwise></xsl:choose>       // False in production, true in test
-           };
-           (function(d,p,s){var e=d.createElement('script'),b=d.getElementsByTagName(p)[0];e.src=s+'/components/requirejs/require.js';e.setAttribute('data-main', s+'/scripts/eostm');b.appendChild(e)}(document,'body','//counter.virk.dk'));
-        </script>
-        <noscript><xsl:element name="img">
-               <xsl:attribute name="alt"></xsl:attribute>
-               <xsl:attribute name="height">1</xsl:attribute>
-               <xsl:attribute name="width">1</xsl:attribute>
-               <xsl:attribute name="src">//counter.virk.dk/tns.png?DiaID=<xsl:value-of select="virkid" />&amp;status=start</xsl:attribute>
-           </xsl:element></noscript>              
-    </xsl:if>
             </body>
         </html>
     </xsl:template>

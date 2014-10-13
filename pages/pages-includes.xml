@@ -10,6 +10,10 @@
         <stylesheet>[module:formular.dir]/xsl/formular-virk.xsl</stylesheet>
         <file filename="[module.formular.config]"/>
     </page>
+    <page name="formular.virk.counter" contenttype="json">
+        <stylesheet>[module:formular.dir]/xsl/formular-virk-counter.xsl</stylesheet>
+        <file filename="[cbinfo.misc.dir]/standard/empty.xml"/>
+    </page>
 
     <page name="formular.config" contenttype="text/xml">
         <stylesheet>[module:formular.dir]/xsl/formular-config.xsl</stylesheet>

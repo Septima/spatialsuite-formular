@@ -1,3 +1,14 @@
+var formular = {
+        
+    _listeners: [],
+    
+    on: function (event, callback) {
+        var listener = {event:event,callback:callback};
+        this._listeners.push (listener);
+        return listener;
+    }
+};
+
 Formular = SpatialMap.Class ({
     
     name: null,
@@ -70,6 +81,8 @@ Formular = SpatialMap.Class ({
     validatedElements: {},
     mapId: null,
     
+    _listeners: [],
+    
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
         this.getConfig();
@@ -88,6 +101,11 @@ Formular = SpatialMap.Class ({
             data: params,
             url: 'cbkort',
             success: SpatialMap.Function.bind (function (data, textStatus, jqXHR) {
+                
+                this.configData = data;
+                
+                this.fireEvent('formular-config-ready',data);
+                
                 var help = jQuery(data).find('help').text();
                 if (help) {
                     jQuery('div.helpbutton').click(function () {
@@ -2735,6 +2753,9 @@ Formular = SpatialMap.Class ({
             }
             this.removeSession();
         }
+        
+        this.fireEvent('formular-complete');
+        
     },
     
     showErrorInfo: function (error) {
@@ -3003,6 +3024,33 @@ Formular = SpatialMap.Class ({
                 data: params
             });
 
+        }
+    },
+    
+    on: function (event, callback) {
+        var listener = {event:event,callback:callback};
+        this._listeners.push (listener);
+        return listener;
+    },
+    
+    off: function (listener) {
+        for (var i=0;i<this._listeners.length;i++) {
+            if (this._listeners[i] === listener) {
+                this._listeners.splice(i,1);
+                break;
+            }
+        }
+    },
+    
+    fireEvent: function (event,parameters) {
+        if (typeof this._listeners !== 'undefined') {
+            for (var i=0;i<this._listeners.length;i++) {
+                if (this._listeners[i].event === event) {
+                    if (typeof this._listeners[i].callback !== 'undefined') {
+                        this._listeners[i].callback.apply (this,arguments);
+                    }
+                }
+            }
         }
     }
 

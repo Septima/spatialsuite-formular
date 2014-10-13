@@ -1046,7 +1046,8 @@ Formular = SpatialMap.Class ({
                     
                 } else if (type=='file') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="'+(req ? 'required-enabled':'')+'"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></div>');
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="fileupload'+(req ? ' required-enabled':'')+'"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><span class="filupload-delete" title="Fjern vedhæftet fil"></span><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></div>');
+                        contentcontainer.find('#'+id+'_row .filupload-delete').click(SpatialMap.Function.bind(this.deleteFileUpload,this,id)).hide();
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
                     }
@@ -2859,11 +2860,19 @@ Formular = SpatialMap.Class ({
         var modal = jQuery('#modal');
         modal.hide();
     },
+    
+    deleteFileUpload: function (id) {
+        jQuery('#'+id).val('');
+        jQuery('#'+id+'_org').val('');
+        jQuery('#file_'+id).val('');
+        jQuery('#'+id+'_row .filupload-delete').hide();
+    },
 
     fileupload: function (filename,id,orgfilename) {
         this.endFileUpload();
         jQuery('#'+id).val(filename);
         jQuery('#'+id+'_org').val(orgfilename);
+        jQuery('#'+id+'_row .filupload-delete').show();
     },
     
     start: function () {

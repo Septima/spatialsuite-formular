@@ -78,3 +78,17 @@ ul.nav.style-2 li.active a span.error {
 .content-loading > .buttons {
     display: none;
 }
+
+.fileupload input[type="file"] {
+    display: inline !important;
+}
+
+.filupload-delete {
+    background: url("img/icon-close-round.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    width: 27px;
+    height: 27px;
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: -8px;
+    margin-left: 10px;
+}

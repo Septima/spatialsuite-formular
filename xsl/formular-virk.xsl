@@ -114,7 +114,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8 col-xs-12">
-                        <a href="">
+                        <a href="http://virk.dk">
                             <img src="/modules/formular/css/virk/v2.1/graphics/logo-top.png" height="57" width="240" alt="Virk / Indberetning - logo" class="logo" />
                         </a>
                     </div>
@@ -269,7 +269,7 @@
                     </xsl:if>
                 </div>
                 <div class="col-xs-12 logo-container">
-                    <a href="">
+                    <a href="http://virk.dk">
                         <img src="/modules/formular/css/virk/v2.1/graphics/logo-top.png" height="57" width="240" alt="Virk / Indberetning - logo" class="logo" />
                     </a>
                 </div>

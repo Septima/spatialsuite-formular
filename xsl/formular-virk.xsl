@@ -96,9 +96,6 @@
 
                 <script type="text/javascript" language="javascript">
                 jQuery(function () {
-
-                    jQuery('div#receipt').hide();
-
                     formular = new Formular ({
                         bootstrap: true,
                         name: '<xsl:value-of select="$formular"/>',
@@ -225,7 +222,7 @@
         <!-- Main content end -->
         
         
-        <div id="receipt" class="content row">
+        <div id="receipt" class="content row" style="display:none;">
             <div class="col-sm-9 main-content">
                 <!-- Hidden link for accesibility -->
                 <a id="contentstart" class="hide">Indhold start</a>

@@ -389,13 +389,14 @@ Formular = SpatialMap.Class ({
 //                    });
 
                 }
+                
+                //Bootstrap - fjern loading når filen er hentet
+                jQuery('#content').removeClass('content-loading')
+
             },this)
         });
         
         jQuery('#loading').hide();
-        
-        //Bootstrap
-        jQuery('#content').removeClass('content-loading')
     },
     
     addInput: function (node,contentcontainer,options) {

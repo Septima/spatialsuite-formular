@@ -2284,7 +2284,14 @@ Formular = SpatialMap.Class ({
                     
                         var val = jQuery('#'+param.id).val();
                         
-                        if (this.showEmptyInPreview === true || val !== '') {
+                        var valid = true;
+                        var req = false;
+                        if (typeof this.inputValidation[param.id] !== 'undefined') {
+                            valid = this.inputValidation[param.id].valid;
+                            req = this.inputValidation[param.id].required;
+                        }
+                        
+                        if (this.showEmptyInPreview === true || (val !== '' || req === true || valid === false)) {
                             var textVal = val;
                             if (param.type && param.type == 'checkbox') {
                                 val = jQuery('#'+param.id).is(':checked');
@@ -2308,16 +2315,12 @@ Formular = SpatialMap.Class ({
                             var t = param.displayname;
                             if (typeof t !== 'undefined') {
                                 if (this.bootstrap === true) {
-                                    var valid = true;
                                     var e;
-                                    if (typeof this.inputValidation[param.id] !== 'undefined') {
-                                        valid = this.inputValidation[param.id].valid;
-                                    }
                                     
                                     if (param.type === 'conflicts') {
                                         e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
                                     } else {
-                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(this.inputValidation[param.id].required ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(req ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
                                     }
                                     if (!valid) {
                                         e.click(SpatialMap.Function.bind(function (input) {

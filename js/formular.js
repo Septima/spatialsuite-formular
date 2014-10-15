@@ -2212,7 +2212,7 @@ Formular = SpatialMap.Class ({
             }
             var invalidCount = 0;
             for (var name in this.inputValidation) {
-                if (this.inputValidation[name].validate && this.inputValidation[name].tab.visible === true) {
+                if (this.inputValidation[name].validate && this.inputValidation[name].tab.visible === true && this.inputValidation[name].visible !== false) {
                     var valid = true;
                     if (typeof this.inputValidation[name].handler !== 'undefined') {
                         valid = this.inputValidation[name].handler();

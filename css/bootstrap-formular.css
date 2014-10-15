@@ -47,6 +47,14 @@ fieldset .error.validationMessage {
 fieldset {
     padding-bottom: 20px;
 }
+.required-enabled.valid .validationMessage,
+.required-enabled.valid .error.validationMessage {
+    display: none;
+}
+.required-enabled.error .validationMessage,
+.required-enabled.error .error.validationMessage {
+    display: block;
+}
 
 ul.nav.style-2 li.active a span.info { 
     background: url(http://designmanual.virk.dk/virkdesign/designmanualv2/css/../graphics/icon-checked.png) no-repeat left center; 

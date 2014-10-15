@@ -1000,7 +1000,7 @@ Formular = SpatialMap.Class ({
                             if (typeof this.inputValidation[id] !== 'undefined' && this.inputValidation[id].validate === true) {
                                 jQuery('#'+id).isValid();
                             }
-                            this.inputChanged();
+                            this.inputChanged(id);
                             if (changehandler) {
                                 changehandler (jQuery('#'+id));
                             }
@@ -1138,31 +1138,31 @@ Formular = SpatialMap.Class ({
                     var f = new Function (node.attr('onchange'));
                 }
                 if (type === 'radiobutton') {
-                    jQuery('input:radio[name='+id+']').change(SpatialMap.Function.bind(function (onchange) {
+                    jQuery('input:radio[name='+id+']').change(SpatialMap.Function.bind(function (onchange,id) {
                         if (onchange) {
                             onchange();
                         }
-                        this.inputChanged();
-                    },this,f));
+                        this.inputChanged(id);
+                    },this,f,id));
                 } else {
-                    jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange) {
+                    jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange,id) {
                         if (onchange) {
                             onchange();
                         }
-                        this.inputChanged();
-                    },this,f));
+                        this.inputChanged(id);
+                    },this,f,id));
                 }
                 
                 var f = null;
                 if (node.attr('onkeyup')) {
                     var f = new Function (node.attr('onkeyup'));
                 }
-                jQuery('#'+id).keyup(SpatialMap.Function.bind(function (onkeyup) {
+                jQuery('#'+id).keyup(SpatialMap.Function.bind(function (onkeyup,id) {
                     if (onkeyup) {
                         onkeyup();
                     }
-                    this.inputChanged();
-                },this,f));
+                    this.inputChanged(id);
+                },this,f,id));
 
 //                if (node.attr('onkeyup')) {
 //                    jQuery('#'+id).keyup(new Function (node.attr('onkeyup')));
@@ -1191,6 +1191,19 @@ Formular = SpatialMap.Class ({
         //For localstore
         if (this.localstore) {
             this.writeLocalStore();
+        }
+        
+        if (typeof id !== 'undefined') {
+            
+            var valid = true;
+            //Tjek det aktuelle inputfelt
+            if (typeof this.inputValidation[id] !== 'undefined' && typeof this.inputValidation[id].handler !== 'undefined' && this.inputValidation[id].validate === true && this.inputValidation[id].tab.visible === true && this.inputValidation[id].visible !== false) {
+                valid = this.inputValidation[id].handler();
+            }
+            if (valid === true) {
+                jQuery('#'+name).isValid ();
+            }
+            
         }
         
         this.checkConditions();

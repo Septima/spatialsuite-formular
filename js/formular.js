@@ -2166,6 +2166,17 @@ Formular = SpatialMap.Class ({
         return this.valid;
     },
     
+    validateAllTabs: function (tabs) {
+        var count = 0;
+        for (var i=0;i<this.tabs.length;i++) {
+            if (typeof tabs === 'undefined' || jQuery.inArray(this.tabs[i].id,tabs) > -1) {
+                if (this.tabs[i].visible === true) {
+                    count += this.validateTab(this.tabs[i].id);
+                }
+            }
+        }
+    },
+    
     validateTab: function (tab) {
 
         this.checkConditions();

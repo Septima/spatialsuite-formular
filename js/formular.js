@@ -1215,18 +1215,25 @@ Formular = SpatialMap.Class ({
                 this.conditions[i].condition = new Function ('return '+this.conditions[i].condition);
             }
             var visible = this.conditions[i].condition();
-            if (visible) {
-                jQuery('#'+this.conditions[i].elementId).show();
-            } else {
-                jQuery('#'+this.conditions[i].elementId).hide();
-            }
-            
-            if (typeof this.conditions[i].ref) {
-                this.conditions[i].ref.visible = visible;
-            }
-
-            if (typeof this.inputValidation[this.conditions[i].id] !== 'undefined') {
-                this.inputValidation[this.conditions[i].id].visible = visible
+            var first = (typeof this.conditions[i].visible === 'indefined');
+            if (first === true || this.conditions[i].visible !== visible) {
+                this.conditions[i].visible = visible;
+                if (visible) {
+                    jQuery('#'+this.conditions[i].elementId).show();
+                } else {
+                    jQuery('#'+this.conditions[i].elementId).hide();
+                }
+                
+                if (typeof this.conditions[i].ref) {
+                    if (typeof this.conditions[i].ref.tab !== 'undefined') {
+                        this.resetTabValidation(this.conditions[i].ref.tab.id);
+                    }
+                    this.conditions[i].ref.visible = visible;
+                }
+    
+                if (typeof this.inputValidation[this.conditions[i].id] !== 'undefined') {
+                    this.inputValidation[this.conditions[i].id].visible = visible
+                }
             }
         }
     },

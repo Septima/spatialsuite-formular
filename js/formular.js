@@ -2166,18 +2166,18 @@ Formular = SpatialMap.Class ({
         return this.valid;
     },
     
-    validateAllTabs: function (tabs) {
+    validateAllTabs: function (tabs, simple) {
         var count = 0;
         for (var i=0;i<this.tabs.length;i++) {
-            if (typeof tabs === 'undefined' || jQuery.inArray(this.tabs[i].id,tabs) > -1) {
+            if (typeof tabs === 'undefined' || tabs === null || jQuery.inArray(this.tabs[i].id,tabs) > -1) {
                 if (this.tabs[i].visible === true) {
-                    count += this.validateTab(this.tabs[i].id);
+                    count += this.validateTab(this.tabs[i].id,simple);
                 }
             }
         }
     },
     
-    validateTab: function (tab) {
+    validateTab: function (tab,simple) {
 
         this.checkConditions();
 
@@ -2214,6 +2214,19 @@ Formular = SpatialMap.Class ({
         this.checkConditions();
 
         return invalidCount;
+    },
+    
+    resetTabValidation: function (tabs) {
+        if (typeof tabs === 'undefined') {
+            jQuery('.navlist > li > a > span').remove();
+        } else {
+            if (!jQuery.isArray(tabs)) {
+                tabs = [tabs];
+            }
+            for (var i=0;i<tabs.length;i++) {
+                jQuery('.navlist > li#tab'+tabs[i]+' a > span').remove();
+            }
+        }
     },
 
     submit: function () {

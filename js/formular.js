@@ -345,11 +345,11 @@ Formular = SpatialMap.Class ({
                     if (this.showTabs) {
                         
                         if (this.bootstrap) {
-                            jQuery('.buttons a#previous').click(SpatialMap.Function.bind(this.previous,this));
-                            jQuery('.buttons a#next').click(SpatialMap.Function.bind(this.next,this));
+                            jQuery('.buttons #previous').click(SpatialMap.Function.bind(this.previous,this));
+                            jQuery('.buttons #next').click(SpatialMap.Function.bind(this.next,this));
                             this.setButtons();
                             
-                            jQuery('.buttons a#submit').click(SpatialMap.Function.bind(this.submit,this));
+                            jQuery('.buttons #submit').click(SpatialMap.Function.bind(this.submit,this));
 
                         } else {
                         
@@ -1281,17 +1281,17 @@ Formular = SpatialMap.Class ({
     
     setButtons: function () {
         if (this.tabs.length < 2) {
-            jQuery('.buttons a').hide();
+            jQuery('.buttons button').hide();
         } else {
-            jQuery('.buttons a#submit').hide();
-            jQuery('.buttons a#previous').show();
-            jQuery('.buttons a#next').show();
+            jQuery('.buttons #submit').hide();
+            jQuery('.buttons #previous').show();
+            jQuery('.buttons #next').show();
             if (this.currentTab === 0) {
                 jQuery('.buttons a#previous').hide();
             }
             if (this.currentTab === this.tabs.length-1) {
-                jQuery('.buttons a#next').hide();
-                jQuery('.buttons a#submit').show();
+                jQuery('.buttons #next').hide();
+                jQuery('.buttons #submit').show();
             }
         }
     },
@@ -2169,6 +2169,11 @@ Formular = SpatialMap.Class ({
                     break;
                 }
             }
+        }
+        if (this.valid === false) {
+            jQuery('button#submit').prop('disabled', 'disabled');
+        } else {
+            jQuery('button#submit').prop("disabled", false);
         }
         return this.valid;
     },

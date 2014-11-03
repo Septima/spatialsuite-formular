@@ -205,9 +205,9 @@
                     <div id="content" class="col-xs-12 content-loading">
                         <div class="content-loading-div"><div>Indlæser formular...</div></div>
                         <div class="buttons">
-                            <a id="previous" class="btn btn-primary button-prev pull-left" href="#">Forrige</a>
-                            <a id="next" class="btn btn-primary button-next pull-right" href="#">Næste</a>
-                            <a id="submit" class="btn btn-primary pull-right" href="#Send">Indsend </a>
+                            <button id="previous" class="btn btn-primary button-prev pull-left">Forrige</button>
+                            <button id="next" class="btn btn-primary button-next pull-right">Næste</button>
+                            <button id="submit" class="btn btn-primary pull-right">Indsend</button>
                             <div class="clearfix"></div>
                         </div>
                     </div>

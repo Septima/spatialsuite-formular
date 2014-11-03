@@ -1215,7 +1215,7 @@ Formular = SpatialMap.Class ({
                 this.conditions[i].condition = new Function ('return '+this.conditions[i].condition);
             }
             var visible = this.conditions[i].condition();
-            var first = (typeof this.conditions[i].visible === 'indefined');
+            var first = (typeof this.conditions[i].visible === 'undefined');
             if (first === true || this.conditions[i].visible !== visible) {
                 this.conditions[i].visible = visible;
                 if (visible) {

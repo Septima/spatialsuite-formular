@@ -4,7 +4,7 @@ jQuery(function () {
         if (virk) {
             var test = virk.attr('test');
             var virkid = virk.text();
-            jQuery('body').append('<img id="virkid_'+virkid+'" alt="" height="1" width="1" src="//counter.virk.dk/tns.png?DiaID='+virkid+'&test='+test+'" />');
+            jQuery('body').append('<img id="virkid_'+virkid+'" alt="" height="1" width="1" src="//counter.virk.dk/tns.png?DiaID='+virkid+'&test='+test+'&status=start" />');
 //            jQuery.getScript('/cbkort?page=formular.virk.counter&test='+test+'&virkid='+virkid);
         }
     });

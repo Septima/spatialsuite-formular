@@ -42,9 +42,21 @@ var datasourceResponse = {
     },
     
     show: function (row) {
+        console.log('show');
         
         for (var name in row) {
-            jQuery('#data_'+name+'_row').html(row[name]);
+            var e = jQuery('#data_'+name);
+            if (e.length === 0) {
+                e = jQuery('#data_'+name+'_row');
+            }
+            if (e.length > 0) {
+                var tagName = e.prop('tagName');
+                if (tagName && tagName.toLowerCase() === 'input') {
+                    e.val(row[name]);
+                } else {
+                    e.html(row[name]);
+                }
+            }
         }
         
         this.valid = true;
@@ -52,6 +64,7 @@ var datasourceResponse = {
     },
     
     hide: function () {
+        console.log('hide');
         this.valid = false;
         formular.checkConditions();
     }

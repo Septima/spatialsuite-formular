@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+
+    <formular name="datasourcevalidation">
+        <title>Test - required</title>
+        <js>/modules/formular/js/misc/datasourceresponse.js</js>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportlayers>default</reportlayers>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs>true</tabs>
+        
+        <content displayname="Fane 1">  
+            <input type="text" displayname="&lt;strong&gt;Felter markeret med * skal udfyldes.&lt;/strong&gt;"/>
+        
+            <input type="input" id="val1" displayname="AnlægsID" required="true" urlparam="id" onkeyup="if (jQuery('#val1').val() !== '' &amp;&amp; jQuery('#val2').val() !== '') { datasourceResponse.check({datasource: 'formular-test-validatetable', command: 'read-validate', val1: jQuery('#val1').val(), val2: jQuery('#val2').val()}) } else {datasourceResponse.hide()}"/>
+            <input type="input" id="val2" displayname="Kode" required="true" urlparam="kode" onkeyup="if (jQuery('#val1').val() !== '' &amp;&amp; jQuery('#val2').val() !== '') { datasourceResponse.check({datasource: 'formular-test-validatetable', command: 'read-validate', val1: jQuery('#val1').val(), val2: jQuery('#val2').val()}) } else {datasourceResponse.hide()}"/>
+
+            <input type="text" displayname="Indtast de oplysninger, der fremgår af brevet." condition="datasourceResponse.valid === false"/>
+
+            <input type="text" id="data_val3" displayname="" condition="datasourceResponse.valid === true"/>
+            <input type="input" id="data_val4" displayname=""/>
+            <input type="input" displayname="Husk:"  urlparam="val5" condition="datasourceResponse.valid === true"/>
+        </content>
+        
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt; Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview" showempty="false"/>
+        </content>
+    </formular>
+
     <formular name="test-required">
+        <virkid test="true">TEST</virkid>
         <title>Test - required</title>
         <submitpages>
             <page parser="setFrid">formular.create-frid</page>
@@ -15,7 +51,7 @@
         <content displayname="Fane 1">  
             <input type="text" displayname="&lt;strong&gt;Felter markeret med * skal udfyldes.&lt;/strong&gt;"/>
         
-            <input type="dropdown"  id="val1" displayname="*Vælg?" urlparam="val1" regexp=".+" validate="Feltet skal udfyldes.">
+            <input type="dropdown"  id="val1" displayname="Vælg?" urlparam="val1" required="true" validate="Feltet skal udfyldes.">
                 <option value="" name=""/>
                 <option value="1" name="1"/>
                 <option value="2" name="2"/>
@@ -29,7 +65,7 @@
         </content>
         
         <content displayname="Opsummering og godkendelse" type="confirm">
-            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt; Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
             <input type="h1" displayname="Opsummering og godkendelse"/>
             <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
             <input type="h1" class="section" displayname="Stamdata"/>
@@ -41,7 +77,7 @@
 
 
     <formular name="virk">
-        <!-- virkid test="true">KARSTEN</virkid -->
+        <virkid test="true">TEST</virkid>
         <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>
         <header>Formular til Virk.dk</header>
         <submitpagesXX>
@@ -66,7 +102,8 @@
             <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
             <input type="h1" class="section" displayname="Dette er en overskrift"/>
             <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
-            <input type="input" id="navn" displayname="Navn" urlparam="val0" defaultvalue="2" placeholder="Indtast dit navn" required="true" regexp=".+" validate="Angiv et navn"/>
+            <input type="input" id="navn" displayname="Navn" urlparam="val0" defaultvalue="" placeholder="Indtast dit navn" required="true" validate="Angiv et navn"/>
+            <input type="input" id="navn2" displayname="Navn2" urlparam="val00" defaultvalue="" placeholder="Indtast dit navn" required="true" validate="Angiv et navn"/>
             <input type="h2" displayname="Dette er en overskrift" condition="jQuery('#arr').val() !== 'udvidelse af sø'"/>
             <input type="text" displayname="Dette er en tekst" urlparam="val2" condition="jQuery('#arr').val() !== 'udvidelse af sø'"/>
             <input type="date" displayname="Dato:" urlparam="date"/>
@@ -101,7 +138,7 @@
                 <maptool displayname="Tegn en cirkel" name="circle"/>
                 <maptool displayname="Slet en geometri" name="delete"/>
             </maptools>
-            <map class="my_map_class" required="false">
+            <map displayname="Angiv placering i kort" class="my_map_class" required="true">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
@@ -120,8 +157,8 @@
         </content>
         <content displayname="3. Sidste side" condition="jQuery('#navn').val() !== '1'">
             <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="2" regexp=".+" validate="Noget nyt er ikke udfyldt"/>
-            <input type="input" displayname="ABC" urlparam="val7"/>
             <input type="file" displayname="Billede" urlparam="billede"/>
+            <input type="input" displayname="ABC" urlparam="val7"/>
         </content>
         <content displayname="4. Opsummering og godkendelse" type="confirm">
             <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>

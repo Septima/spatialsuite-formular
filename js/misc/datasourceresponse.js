@@ -42,8 +42,6 @@ var datasourceResponse = {
     },
     
     show: function (row) {
-        console.log('show');
-        
         for (var name in row) {
             var e = jQuery('#data_'+name);
             if (e.length === 0) {
@@ -64,7 +62,6 @@ var datasourceResponse = {
     },
     
     hide: function () {
-        console.log('hide');
         this.valid = false;
         formular.checkConditions();
     }

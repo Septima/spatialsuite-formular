@@ -77,7 +77,7 @@
 
 
     <formular name="virk">
-        <virkid test="true">TEST</virkid>
+        <virkid test="true" presenter="Septima">TEST</virkid>
         <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>
         <header>Formular til Virk.dk</header>
         <submitpagesXX>

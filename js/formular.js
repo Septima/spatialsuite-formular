@@ -272,6 +272,8 @@ Formular = SpatialMap.Class ({
                             if (node[0].nodeName === 'columns') {
                                 if (this.bootstrap === true) {
 
+                                    var rowID = (Math.random()+1).toString(36).substring(2,8);
+
                                     var row = jQuery('<div class="row"></div>');
                                     var className = node.attr('class');
                                     if (className) {
@@ -281,20 +283,15 @@ Formular = SpatialMap.Class ({
                                     var cols = node.children(); //column array
                                     var s = Math.floor(12/cols.length);
                                     for (var j = 0; j < cols.length; j++) {
+                                        var colID = j;
                                         var col = jQuery('<div></div>');
                                         var className = jQuery(cols[j]).attr('class');
-                                        if (className) {
-                                            col.addClass(className);
-                                        } else {
-                                            col.addClass('col-sm-'+s);
+                                        if (!className) {
+                                            className = 'col-sm-'+s;
                                         }
+                                        col.addClass(className);
 
                                         row.append(col);
-
-                                        var className = jQuery(cols[j]).attr('class');
-                                        if (className) {
-                                            col.addClass(className);
-                                        }
 
                                         var configCol = jQuery(cols[j]).children(); //Input array
 
@@ -304,6 +301,10 @@ Formular = SpatialMap.Class ({
                                                 counter: counter,
                                                 tab: tab
                                             });
+
+                                            postparam.colClassName = className;
+                                            postparam.colID = colID;
+                                            postparam.rowID = rowID;
 
                                             if (typeof postparam.urlparam !== 'undefined') {
                                                 this.postparams[postparam.urlparam] = postparam;
@@ -2039,7 +2040,7 @@ Formular = SpatialMap.Class ({
                         var reporttext = '';
                         var count = 0;
                         for (var i=0;i<targets.length;i++) {
-                            rowlist = jQuery(targets[i]).find('rowlist');
+                            var rowlist = jQuery(targets[i]).find('rowlist');
                             for (var j=0;j<rowlist.length;j++) {
                                 var row = jQuery(rowlist[j]).find('row');
                                 count++;
@@ -2376,76 +2377,107 @@ Formular = SpatialMap.Class ({
                     var name = param.id;
 
                     if (param.visible === true && param.tab.visible) {
+
+                        var e = this.getPreviewElement(param);
+                        if (e !== null) {
+
+                            if (typeof param.rowID !== 'undefined') {
+
+                                var rowElement = element.find('#previewRow_'+param.rowID);
+                                if (rowElement.length === 0) {
+                                    rowElement = jQuery('<div id="previewRow_' +param.rowID+ '" class="row"></div>');
+                                    element.append(rowElement);
+                                }
+                                var colElemet = rowElement.find('.previewCol_'+param.colID);
+                                if (colElemet.length === 0) {
+                                    colElemet = jQuery('<div class="previewCol_'+param.colID+'"></div>');
+                                    rowElement.append(colElemet);
+                                }
+                                colElemet.addClass(param.colClassName);
+                                colElemet.append(e);
+
+                            } else {
+                                element.append(e);
+                            }
+
+                        }
                     
-                        var val = jQuery('#'+param.id).val();
-                        
-                        var valid = true;
-                        var req = false;
-                        if (typeof this.inputValidation[param.id] !== 'undefined') {
-                            valid = this.inputValidation[param.id].valid;
-                            req = this.inputValidation[param.id].required;
-                        }
-
-                        var forceShow = false;
-                        if (param.type === 'h1' || param.type === 'h2') {
-                            forceShow = true;
-                        }
-
-                        if (this.showEmptyInPreview === true || forceShow === true || (val !== '' || req === true || valid === false)) {
-                            var textVal = val;
-                            if (param.type && param.type == 'checkbox') {
-                                val = jQuery('#'+param.id).is(':checked');
-                                textVal = (val ? 'ja' : 'nej');
-                            }
-                            if (param.type && param.type == 'radiobutton') {
-                                val = jQuery('input:radio[name='+param.id+']:checked').val();
-                                if (typeof val === 'undefined') {
-                                    if (param.defaultValue) {
-                                        val = param.defaultValue;
-                                    } else {
-                                        val = '';
-                                    }
-                                }
-                                textVal = val;
-                            }
-                            if (param.type && param.type == 'file') {
-                                textVal = jQuery('#'+param.id+'_org').val();
-                            }
-                            
-                            var t = param.displayname;
-                            if (typeof t !== 'undefined') {
-                                if (this.bootstrap === true) {
-                                    var e, click = true;
-                                    
-                                    if (param.type === 'h1' || param.type === 'h2') {
-                                        e = jQuery('<'+param.type+'>'+param.displayname+'</'+param.type+'>');
-                                        click = false;
-                                    } else if (param.type === 'conflicts') {
-                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
-                                    } else {
-                                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(req ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
-                                    }
-                                    if (!valid && click == true) {
-                                        e.click(SpatialMap.Function.bind(function (input) {
-                                            this.showTab(input.tab.id);
-                                            var element = document.getElementById(input.id);
-                                            if (element) {
-                                                element.focus();
-                                            }
-                                        },this,param));
-                                    }
-                                    element.append(e);
-                                } else {
-                                    if (val) {
-                                        element.append('<br/>'+t+' '+textVal);
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
         }
+    },
+
+
+    getPreviewElement: function (param) {
+        var e = null;
+
+        var val = jQuery('#'+param.id).val();
+
+        var valid = true;
+        var req = false;
+        if (typeof this.inputValidation[param.id] !== 'undefined') {
+            valid = this.inputValidation[param.id].valid;
+            req = this.inputValidation[param.id].required;
+        }
+
+        var forceShow = false;
+        if (param.type === 'h1' || param.type === 'h2') {
+            forceShow = true;
+        }
+
+        if (this.showEmptyInPreview === true || forceShow === true || (val !== '' || req === true || valid === false)) {
+            var textVal = val;
+            if (param.type && param.type == 'checkbox') {
+                val = jQuery('#'+param.id).is(':checked');
+                textVal = (val ? 'ja' : 'nej');
+            }
+            if (param.type && param.type == 'radiobutton') {
+                val = jQuery('input:radio[name='+param.id+']:checked').val();
+                if (typeof val === 'undefined') {
+                    if (param.defaultValue) {
+                        val = param.defaultValue;
+                    } else {
+                        val = '';
+                    }
+                }
+                textVal = val;
+            }
+            if (param.type && param.type == 'file') {
+                textVal = jQuery('#'+param.id+'_org').val();
+            }
+
+            var t = param.displayname;
+            if (typeof t !== 'undefined') {
+                if (this.bootstrap === true) {
+                    var click = true;
+
+                    if (param.type === 'h1' || param.type === 'h2') {
+                        e = jQuery('<'+param.type+'>'+param.displayname+'</'+param.type+'>');
+                        click = false;
+                    } else if (param.type === 'conflicts') {
+                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                    } else {
+                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(req ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                    }
+                    if (!valid && click == true) {
+                        e.click(SpatialMap.Function.bind(function (input) {
+                            this.showTab(input.tab.id);
+                            var element = document.getElementById(input.id);
+                            if (element) {
+                                element.focus();
+                            }
+                        },this,param));
+                    }
+                } else {
+                    if (val) {
+                        e = jQuery('<br/>'+t+' '+textVal);
+                    }
+                }
+            }
+        }
+
+        return e;
     },
     
     getParams: function (postparams, params) {

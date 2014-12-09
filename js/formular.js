@@ -465,7 +465,8 @@ Formular = SpatialMap.Class ({
             defaultValue: node.attr('defaultvalue'),
             required: req,
             visible: true,
-            tab: tab
+            tab: tab,
+            config: node
         };
         
         if (urlparam) {
@@ -2369,11 +2370,11 @@ Formular = SpatialMap.Class ({
                 element.append('<h2>'+this.tabs[i].displayname+'</h2>');
                 
                 for (var j=0;j<this.tabs[i].postparams.length;j++) {
-    
-                    var name = this.tabs[i].postparams[j].id;
-                    
+
                     var param = this.tabs[i].postparams[j];
-                
+
+                    var name = param.id;
+
                     if (param.visible === true && param.tab.visible) {
                     
                         var val = jQuery('#'+param.id).val();
@@ -2384,8 +2385,13 @@ Formular = SpatialMap.Class ({
                             valid = this.inputValidation[param.id].valid;
                             req = this.inputValidation[param.id].required;
                         }
-                        
-                        if (this.showEmptyInPreview === true || (val !== '' || req === true || valid === false)) {
+
+                        var forceShow = false;
+                        if (param.type === 'h1' || param.type === 'h2') {
+                            forceShow = true;
+                        }
+
+                        if (this.showEmptyInPreview === true || forceShow === true || (val !== '' || req === true || valid === false)) {
                             var textVal = val;
                             if (param.type && param.type == 'checkbox') {
                                 val = jQuery('#'+param.id).is(':checked');
@@ -2409,14 +2415,17 @@ Formular = SpatialMap.Class ({
                             var t = param.displayname;
                             if (typeof t !== 'undefined') {
                                 if (this.bootstrap === true) {
-                                    var e;
+                                    var e, click = true;
                                     
-                                    if (param.type === 'conflicts') {
+                                    if (param.type === 'h1' || param.type === 'h2') {
+                                        e = jQuery('<'+param.type+'>'+param.displayname+'</'+param.type+'>');
+                                        click = false;
+                                    } else if (param.type === 'conflicts') {
                                         e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
                                     } else {
                                         e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(req ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
                                     }
-                                    if (!valid) {
+                                    if (!valid && click == true) {
                                         e.click(SpatialMap.Function.bind(function (input) {
                                             this.showTab(input.tab.id);
                                             var element = document.getElementById(input.id);

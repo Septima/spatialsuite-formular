@@ -66,7 +66,7 @@ Formular = SpatialMap.Class ({
     multipleGeometries: false,
     multipleGeometriesAttributes: [],
     mergeGeometries: true,
-    
+
     featureRequired: true,
     
     localstore: false,
@@ -101,11 +101,11 @@ Formular = SpatialMap.Class ({
             data: params,
             url: 'cbkort',
             success: SpatialMap.Function.bind (function (data, textStatus, jqXHR) {
-                
+
                 this.configData = data;
-                
+
                 this.fireEvent('formular-config-ready',data);
-                
+
                 var help = jQuery(data).find('help').text();
                 if (help) {
                     jQuery('div.helpbutton').click(function () {
@@ -121,7 +121,7 @@ Formular = SpatialMap.Class ({
                     });
                     jQuery('#helpbuttons').append(button);
                 }
-                
+
                 var profile = jQuery(data).find('reportprofile').text();
                 if (profile) {
                     this.reportprofile = profile;
@@ -145,7 +145,7 @@ Formular = SpatialMap.Class ({
                         this.messages[jQuery(messages[i]).attr('name')] = jQuery(messages[i]).text();
                     }
                 }
-                
+
                 var pages = jQuery(data).find('submitpages > page');
                 if (pages.length > 0) {
                     this.pages = [];
@@ -175,7 +175,7 @@ Formular = SpatialMap.Class ({
                         this.submitpage = jQuery(page[0]).text();
                     }
                 }
-                
+
                 var showReport = jQuery(data).find('showreport').text();
                 if (showReport) {
                     this.showReport = showReport != 'false';
@@ -185,11 +185,11 @@ Formular = SpatialMap.Class ({
                     this.showTabs = (showTabs == 'true');
                     if (this.bootstrap === true) {
                         var tabcontainer = jQuery('.navlist');
-                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
+                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class');
                         tabcontainer.addClass(className);
                     } else {
                         var tabcontainer = jQuery('<div class="tabcontainer"></div>');
-                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
+                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class');
                         tabcontainer.addClass(className);
                         jQuery('div#content').append(tabcontainer);
                     }
@@ -203,24 +203,24 @@ Formular = SpatialMap.Class ({
                 var counter = 0;
                 if (this.config.length) {
                     for (var k=0;k<this.config.length;k++) {
-                        
+
                         var contentcontainer = null;
                         var cententElement = null;
 
                         if (this.bootstrap === true) {
                             contentcontainer = jQuery('<fieldset id="content'+k+'"></fieldset>');
-                            
+
                             jQuery('div#content').prepend(contentcontainer);
-                            
+
                             cententElement = contentcontainer;
-                            
+
                         } else {
                             var contenttable = jQuery('<table class="tablecontent tabcontent tabcontent'+k+'" id="content'+k+'"></table>');
-                            
+
                             contentcontainer = jQuery('<tbody></tbody>');
                             contenttable.append(contentcontainer);
                             jQuery('div#content').append(contenttable);
-                            
+
                             cententElement = contenttable;
                         }
 
@@ -238,18 +238,18 @@ Formular = SpatialMap.Class ({
                         };
 
                         if(this.showTabs) {
-                            
+
                             if (this.bootstrap === true) {
-                                
+
                                 tab.element = jQuery('<li id="tab'+k+'"><a title="'+displayname+'" href="#'+displayname+'">'+displayname+'</a></li>');
                                 tab.element.click(SpatialMap.Function.bind(function (tab) {
                                     var count = this.validateTab(this.currentTab);
                                     this.showTab(tab.id);
                                 },this,tab));
                                 jQuery('.navlist').append(tab.element);
-                                
+
                             } else {
-                            
+
                                 tab.element = jQuery('<div id="tab'+k+'" class="arrow_box">'+displayname+'</div>');
                                 tab.element.click(SpatialMap.Function.bind(this.showTab,this,tab.id));
                                 jQuery('.tabcontainer').append(tab.element);
@@ -257,49 +257,94 @@ Formular = SpatialMap.Class ({
                                     jQuery('.tabcontainer').append('<div id="tabsep'+(k+1)+'" class="sep"/>');
                                 }
                             }
-                            
+
                             if (jQuery(this.config[k]).attr('condition')) {
                                 this.conditions.push({id: 'tab'+k, elementId: 'tab'+k, condition: jQuery(this.config[k]).attr('condition'), ref: tab});
                             }
-                            
+
                         }
                         this.tabs.push(tab);
 
                         var config = jQuery(this.config[k]).children();
                         for (var i=0; i<config.length; i++) {
                             var node = jQuery(config[i]);
-                            
+
                             if (node[0].nodeName === 'columns') {
-                                var colTR = jQuery('<tr></tr>');
-                                var colTD = jQuery('<td colspan="2"></td>');
-                                colTR.append(colTD);
-                                contentcontainer.append(colTR);
-                                var className = node.attr('class');
-                                var cols = node.children(); //column array
-                                var div2 = jQuery('<div class="colcontainer colcontainer'+cols.length+''+(className ? ' '+className : '')+'"></div>');
-                                colTD.append(div2);
-                                for (var j=0;j<cols.length;j++) {
-                                    var className = jQuery(cols[j]).attr('class');
-                                    var div = jQuery('<div class="col col'+cols.length+''+(className ? ' '+className : '')+'"></div>');
-                                    var colcontenttable = jQuery('<table class="tablecontent" id="content'+k+'_'+j+'"></table>');
-                                    var colcontentcontainer = jQuery('<tbody></tbody>');
-                                    colcontenttable.append(colcontentcontainer);
-                                    div.append(colcontenttable);
-                                    div2.append(div);
-                                    var configCol = jQuery(cols[j]).children(); //Input array
-                                    
-                                    for (var l=0; l<configCol.length; l++) {
-                                        var nodeCol = jQuery(configCol[l]); //Input
-                                        var postparam = this.addInput(nodeCol,colcontentcontainer,{
-                                            counter: counter,
-                                            tab: tab
-                                        });
-                                        
-                                        if (typeof postparam.urlparam !== 'undefined') {
-                                            this.postparams[postparam.urlparam] = postparam;
-                                            tab.postparams.push(postparam);
+                                if (this.bootstrap === true) {
+
+                                    var row = jQuery('<div class="row"></div>');
+                                    var className = node.attr('class');
+                                    if (className) {
+                                        row.addClass(className);
+                                    }
+                                    contentcontainer.append(row);
+                                    var cols = node.children(); //column array
+                                    var s = Math.floor(12/cols.length);
+                                    for (var j = 0; j < cols.length; j++) {
+                                        var col = jQuery('<div></div>');
+                                        var className = jQuery(cols[j]).attr('class');
+                                        if (className) {
+                                            col.addClass(className);
+                                        } else {
+                                            col.addClass('col-sm-'+s);
                                         }
-                                        counter++;
+
+                                        row.append(col);
+
+                                        var className = jQuery(cols[j]).attr('class');
+                                        if (className) {
+                                            col.addClass(className);
+                                        }
+
+                                        var configCol = jQuery(cols[j]).children(); //Input array
+
+                                        for (var l = 0; l < configCol.length; l++) {
+                                            var nodeCol = jQuery(configCol[l]); //Input
+                                            var postparam = this.addInput(nodeCol, col, {
+                                                counter: counter,
+                                                tab: tab
+                                            });
+
+                                            if (typeof postparam.urlparam !== 'undefined') {
+                                                this.postparams[postparam.urlparam] = postparam;
+                                                tab.postparams.push(postparam);
+                                            }
+                                            counter++;
+                                        }
+                                    }
+
+                                } else {
+                                    var colTR = jQuery('<tr></tr>');
+                                    var colTD = jQuery('<td colspan="2"></td>');
+                                    colTR.append(colTD);
+                                    contentcontainer.append(colTR);
+                                    var className = node.attr('class');
+                                    var cols = node.children(); //column array
+                                    var div2 = jQuery('<div class="colcontainer colcontainer' + cols.length + '' + (className ? ' ' + className : '') + '"></div>');
+                                    colTD.append(div2);
+                                    for (var j = 0; j < cols.length; j++) {
+                                        var className = jQuery(cols[j]).attr('class');
+                                        var div = jQuery('<div class="col col' + cols.length + '' + (className ? ' ' + className : '') + '"></div>');
+                                        var colcontenttable = jQuery('<table class="tablecontent" id="content' + k + '_' + j + '"></table>');
+                                        var colcontentcontainer = jQuery('<tbody></tbody>');
+                                        colcontenttable.append(colcontentcontainer);
+                                        div.append(colcontenttable);
+                                        div2.append(div);
+                                        var configCol = jQuery(cols[j]).children(); //Input array
+
+                                        for (var l = 0; l < configCol.length; l++) {
+                                            var nodeCol = jQuery(configCol[l]); //Input
+                                            var postparam = this.addInput(nodeCol, colcontentcontainer, {
+                                                counter: counter,
+                                                tab: tab
+                                            });
+
+                                            if (typeof postparam.urlparam !== 'undefined') {
+                                                this.postparams[postparam.urlparam] = postparam;
+                                                tab.postparams.push(postparam);
+                                            }
+                                            counter++;
+                                        }
                                     }
                                 }
                             } else {
@@ -314,13 +359,13 @@ Formular = SpatialMap.Class ({
                                 }
                                 counter++;
                             }
-                            
+
                         }
-                        
+
                         if (this.bootstrap) {
 
                         } else {
-                        
+
                             var p = (k<this.config.length && k!=0 && this.config.length > 0);
                             var n = (k<this.config.length-1 && this.config.length > 0);
                             var s = (k==this.config.length-1);
@@ -334,25 +379,25 @@ Formular = SpatialMap.Class ({
                             if (s) {
                                 jQuery('button#sendbutton').click(SpatialMap.Function.bind(this.submit,this));
                             }
-                            
+
                         }
-                        
+
                     }
                     if (this.map) {
                         this.currentMapTool = this.defaultMapTool;
                         this.activateTool (this.defaultMapTool);
                     }
                     if (this.showTabs) {
-                        
+
                         if (this.bootstrap) {
                             jQuery('.buttons #previous').click(SpatialMap.Function.bind(this.previous,this));
                             jQuery('.buttons #next').click(SpatialMap.Function.bind(this.next,this));
                             this.setButtons();
-                            
+
                             jQuery('.buttons #submit').click(SpatialMap.Function.bind(this.submit,this));
 
                         } else {
-                        
+
                             if (this.confirm) {
                                 var c = 'confirm';
                                 jQuery('.tabcontainer').append('<div id="tabsep'+c+'" class="sep"/>');
@@ -364,7 +409,7 @@ Formular = SpatialMap.Class ({
                             }
                         }
                     }
-                    
+
                     var localstore = jQuery(data).find('localstore').text();
                     if (localstore) {
                         this.localstore = localstore != 'false';
@@ -372,7 +417,7 @@ Formular = SpatialMap.Class ({
                             this.readLocalStore();
                         }
                     }
-                    
+
                     var log = jQuery(data).find('log').text();
                     if (log) {
                         this.logActive = (log === 'true');
@@ -381,7 +426,7 @@ Formular = SpatialMap.Class ({
                     this.checkConditions();
                     this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
-                    
+
 //                    this.log({
 //                        type: 'info',
 //                        name: 'configready',
@@ -389,9 +434,9 @@ Formular = SpatialMap.Class ({
 //                    });
 
                 }
-                
+
                 //Bootstrap - fjern loading når filen er hentet
-                jQuery('#content').removeClass('content-loading')
+                jQuery('#content').removeClass('content-loading');
 
             },this)
         });
@@ -2244,7 +2289,6 @@ Formular = SpatialMap.Class ({
     submit: function () {
         if (this.map && this.feature.length === 0 && this.featureRequired === true) {
             alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
-            return;
         } else {
             var params = {
                 sessionid: this.sessionid,

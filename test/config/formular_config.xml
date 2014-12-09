@@ -1,6 +1,338 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="asbestaffald">
+        <!--virkid test="true" presenter="Septima">TEST</virkid-->
+        <contact email="miljo@albertsund.dk" phone="-" link="http://www.albertsund.dk">Albertslund Kommune</contact>
+        <title>Anmeldelse af asbestaffald</title>
+        <header>Anmeldelse af asbestaffald</header>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportprofile>demo01</reportprofile>
+        <tabs>true</tabs>
+        <messages>
+            <message name="done"><![CDATA[<div class="header">Ansøgningen er nu registreret</div>Kommunen vender tilbage inden 14 dage, hvis der er brug for ydeligere oplysninger.]]></message>
+            <message name="saving"><![CDATA[<div class="header">Gemmer oplysninger...</div>Det kan tage lidt tid, så vær tålmodig.]]></message>
+            <message name="error"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+        </messages>
+        <content displayname="Anmelder">
+            <input type="text" displayname="Virksomheder skal anmelde farligt affald til Albertslund Kommune uanset mængden af det farlige affald som beskrevet i
+„&lt;a href='http://albertslund.dk/media/104629/Regulativ-for-erhvervsaffald.pdf'&gt;Regulativ for erhvervsaffald&lt;/a&gt;“ og i
+&lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Kap11'&gt;affaldsbekendtgørelsen kap. 11&lt;/a&gt;."></input>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="h1" class="section" displayname="Anmelder"/>
+            <input type="hidden" urlparam="about" defaultvalue="Anmeldelse af asbestaffald"/>
+            <columns>
+                <column class="col-sm-8">
+                    <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn" required="true" validate="Angiv et navn"/>
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="CVR.nr." urlparam="val1" placeholder="Indtast virksomheds CVR nr." required="true" validate="Angiv et CVR nummer"/>
+                </column>
+            </columns>
+            <address urlparam="val2" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <input type="input" displayname="Kontaktperson" urlparam="val3" placeholder="Indtast virksomheds kontaktperson" required="false" validate="Angiv et navn"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Telefonnummer" urlparam="val4" placeholder="" required="false" validate="Angiv et telefonnummer"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Email" urlparam="val5" placeholder="" required="true" validate="Angiv en email adresse"/>
+                </column>
+            </columns>
+        </content>
+        <content displayname="Hvor stammer affaldet fra?">
+            <input type="h1" class="section" displayname="Hvor stammer affaldet fra?"/>
+            <address urlparam="val6" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <columns>
+                <column>
+                    <input type="input" displayname="Matrikelnr" urlparam="val7"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Ejerlav" urlparam="val8"/>
+                </column>
+            </columns>
+            <input type="input" displayname="Ejer" urlparam="val9"/>
+
+            <input type="text" displayname=""/>
+            <input type="message" class="alert alert-warning" displayname="Asbestholdigt affald skal anmeldes senest 14 dage før affaldet fremkommer"/>
+
+            <columns>
+                <column>
+                    <input id="startdate" type="date" displayname="Forventet dato for arbejdets påbegyndelse" urlparam="val10" mindate="0" onchange="setDate('enddate',jQuery('#startdate').val(),0)"/>
+                </column>
+                <column>
+                    <input id="enddate"   type="date" displayname="Forventet dato for arbejdets afslutning"   urlparam="val11" mindate="0"/>
+                </column>
+            </columns>
+
+            <input type="textarea" displayname="Bemærkninger" urlparam="val12"/>
+
+        </content>
+        <content displayname="Asbestaffaldets type">
+            <input type="text" displayname="Affaldstyper og EAK-koder kan findes i &lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Bil2'&gt;affaldsbekendtgørelsens bilag 2&lt;/a&gt;."/>
+            <input type="h1" class="section" displayname="Asbestaffaldets type"/>
+
+            <input type="h2" displayname="Ikke støvende" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="textarea" displayname="Emballage" urlparam="val11"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Mængde (ton)" urlparam="val12"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Transportør" urlparam="val13"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Støvende" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="textarea" displayname="Emballage" urlparam="val21" disabled="true" defaultvalue="Befugtet i 2 lag kraftig plast
+mærket „ASBEST“"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Mængde (ton)" urlparam="val22"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Transportør" urlparam="val23"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Stærkt støvende" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="textarea" displayname="Emballage" urlparam="val31" defaultvalue="Befugtet i 2 lag kraftig plast
+mærket „ASBEST“" disabled="true"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Mængde (ton)" urlparam="val32"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Transportør" urlparam="val33"/>
+                </column>
+            </columns>
+
+            <input type="text" displayname=""/>
+
+            <input type="h1" class="section" displayname="Eventuelt bilag kan vedhæftes her"/>
+            <input type="file" displayname="Vedhæft bilag" urlparam="bilag"/>
+        </content>
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview"/>
+        </content>
+    </formular>
+
+    <formular name="farligtaffald">
+        <!--virkid test="true" presenter="Septima">TEST</virkid-->
+        <contact email="miljo@albertsund.dk" phone="-" link="http://www.albertsund.dk">Albertslund Kommune</contact>
+        <title>Anmeldelse af farligt affald</title>
+        <header>Anmeldelse af farligt affald</header>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportprofile>demo01</reportprofile>
+        <tabs>true</tabs>
+        <messages>
+            <message name="done"><![CDATA[<div class="header">Ansøgningen er nu registreret</div>Kommunen vender tilbage inden 14 dage, hvis der er brug for ydeligere oplysninger.]]></message>
+            <message name="saving"><![CDATA[<div class="header">Gemmer oplysninger...</div>Det kan tage lidt tid, så vær tålmodig.]]></message>
+            <message name="error"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+        </messages>
+        <content displayname="Anmelder">
+            <input type="text" displayname="Virksomheder skal anmelde farligt affald til Albertslund Kommune uanset mængden af det farlige affald som beskrevet i
+„&lt;a href='http://albertslund.dk/media/104629/Regulativ-for-erhvervsaffald.pdf'&gt;Regulativ for erhvervsaffald&lt;/a&gt;“ og i
+&lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Kap11'&gt;affaldsbekendtgørelsen kap. 11&lt;/a&gt;."></input>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="h1" class="section" displayname="Anmelder"/>
+            <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
+            <columns>
+                <column class="col-sm-8">
+                    <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn" required="true" validate="Angiv et navn"/>
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="CVR.nr." urlparam="val1" placeholder="Indtast virksomheds CVR nr." required="true" validate="Angiv et CVR nummer"/>
+                </column>
+            </columns>
+            <address urlparam="val2" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <input type="input" displayname="Kontaktperson" urlparam="val3" placeholder="Indtast virksomheds kontaktperson" required="false" validate="Angiv et navn"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Telefonnummer" urlparam="val4" placeholder="" required="false" validate="Angiv et telefonnummer"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Email" urlparam="val5" placeholder="" required="true" validate="Angiv en email adresse"/>
+                </column>
+            </columns>
+        </content>
+        <content displayname="Fraktioner">
+            <input type="h1" class="section" displayname="Fraktioner"/>
+            <input type="text" displayname="&lt;strong&gt;OBS!&lt;/strong&gt; Asbest og PCB-holdigt affald skal anmeldes i separate skemaer."/>
+            <input type="text" displayname=" Alt farligt affald skal afhentes af &lt;a href='http://www.smoka.dk'&gt;SMOKA&lt;/a&gt;, med mindre virksomheden har opnået
+fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;a href='http://albertslund.dk'&gt;www.albertlund.dk&lt;/a&gt;."/>
+            <input type="text" displayname=" Farligt affald, der fremkommer ved bygge- og anlægsarbejde eller andre aktiviteter, skal også anmeldes."/>
+            <input type="h2" displayname="Affaldet fremkommer"/>
+            <input type="radiobutton" displayname="Affaldet fremkommer" urlparam="val6">
+                <option value="Løbende" name="Løbende"/>
+                <option value="Ved aktivitet" name="Ved aktivitet"/>
+            </input>
+        </content>
+        <content displayname="Asbestaffaldets type">
+            <input type="text" displayname="Affaldstyper og EAK-koder kan findes i &lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Bil2'&gt;affaldsbekendtgørelsens bilag 2&lt;/a&gt;."/>
+            <input type="h1" class="section" displayname="Asbestaffaldets type"/>
+
+            <input type="h2" displayname="Affedtningsaffald (EAK-kode: 110113)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val11"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val12"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val13"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Batterier (EAK-kode: 200133)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val21"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val22"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val23"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Bilbatterier (EAK-kode: 160601)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val31"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val32"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val33"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Blyholdigt affald (EAK-kode: 170403)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val41"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val42"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val43"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Bremsevæske (EAK-kode: 160113)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val51"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val52"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val53"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Kemikalieaffald (EAK-kode: 160508)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val61"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val62"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val63"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Lysstofsrør/lavenergipærer (EAK-kode: 200121)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val71"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val72"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val73"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Oliefiltre (EAK-kode: 160107)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val81"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val82"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val83"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Opløsningsmiddel (EAK-kode: 140603)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val91"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val92"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val93"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Spildolie (EAK-kode: 130208)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val101"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val102"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val103"/>
+                </column>
+            </columns>
+
+            <input type="text" displayname=""/>
+
+            <input type="h1" class="section" displayname="Eventuelt bilag kan vedhæftes her"/>
+            <input type="file" displayname="Vedhæft bilag" urlparam="bilag"/>
+        </content>
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview"/>
+        </content>
+    </formular>
 
     <formular name="datasourcevalidation">
         <title>Test - required</title>
@@ -1419,12 +1751,12 @@
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
             <input type="input" displayname="Adresse:" urlparam="val1"/>
             <columns class="test">
-	            <column class="col113">
+	            <column>
 		            <input type="input" displayname="Tlf" urlparam="val2"/>
 		            <input type="input" displayname="Email:" urlparam="val3"/>
 	                <input type="input" displayname="Hest:" urlparam="val6"/>
 	            </column>
-	            <column class="col115">
+	            <column>
 		            <input type="input" displayname="Postnr:" urlparam="val4"/>
 		            <input type="input" displayname="By:" urlparam="val5"/>
 	            </column>

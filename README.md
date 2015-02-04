@@ -13,6 +13,11 @@ http://sandkasse.randers.dk/cbkort?page=formular&formular=soe
 
 Dette giver en side, der kan indlejres som en Iframe i et CMS system. Stylingen er derfor gjort meget enkelt, så den vil passe ind (næsten) hvor som helst.
 
+Installer modulet:
+```xml
+<module name="formular-test" dir="custom/formular/test" permissionlevel="public"/>
+```
+
 Konfigurationen er placeret vha. parameteren "module.formular.config", og er pt. sat i filen "cbinfo_k730.xml:
 ```xml
 <param name="module.formular.config">[module:formular.dir]/config/formular_config.xml</param>

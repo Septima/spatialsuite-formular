@@ -15,7 +15,7 @@ Dette giver en side, der kan indlejres som en Iframe i et CMS system. Stylingen 
 
 Installer modulet:
 ```xml
-<module name="formular-test" dir="custom/formular/test" permissionlevel="public"/>
+<module name="formular" dir="custom/formular" permissionlevel="public"/>
 ```
 
 Konfigurationen er placeret vha. parameteren "module.formular.config", og er pt. sat i filen "cbinfo_k730.xml:

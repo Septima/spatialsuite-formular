@@ -540,6 +540,9 @@ div.helpbutton {
 .tabcontent > tbody > tr > td:first-child {
     width: 150px;
 }
+.tabcontent > tbody > tr > td.colspan2:first-child {
+    width: 600px;
+}
 .colcontainer2 {
     width: 1230px;
 }

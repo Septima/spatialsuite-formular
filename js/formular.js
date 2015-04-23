@@ -1,3 +1,14 @@
+var formular = {
+        
+    _listeners: [],
+    
+    on: function (event, callback) {
+        var listener = {event:event,callback:callback};
+        this._listeners.push (listener);
+        return listener;
+    }
+};
+
 Formular = SpatialMap.Class ({
     
     name: null,
@@ -55,10 +66,22 @@ Formular = SpatialMap.Class ({
     multipleGeometries: false,
     multipleGeometriesAttributes: [],
     mergeGeometries: true,
+
+    featureRequired: true,
     
     localstore: false,
     
     logActive: false,
+    
+    bootstrap: false,
+    tabs: [],
+    currentTab: 0,
+    
+    valid: true,
+    validatedElements: {},
+    mapId: null,
+    
+    _listeners: [],
     
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
@@ -78,6 +101,11 @@ Formular = SpatialMap.Class ({
             data: params,
             url: 'cbkort',
             success: SpatialMap.Function.bind (function (data, textStatus, jqXHR) {
+
+                this.configData = data;
+
+                this.fireEvent('formular-config-ready',data);
+
                 var help = jQuery(data).find('help').text();
                 if (help) {
                     jQuery('div.helpbutton').click(function () {
@@ -93,7 +121,7 @@ Formular = SpatialMap.Class ({
                     });
                     jQuery('#helpbuttons').append(button);
                 }
-                
+
                 var profile = jQuery(data).find('reportprofile').text();
                 if (profile) {
                     this.reportprofile = profile;
@@ -117,37 +145,37 @@ Formular = SpatialMap.Class ({
                         this.messages[jQuery(messages[i]).attr('name')] = jQuery(messages[i]).text();
                     }
                 }
-                
+
                 var pages = jQuery(data).find('submitpages > page');
                 if (pages.length > 0) {
-	            	this.pages = [];
-	            	for (var i=0;i<pages.length;i++) {
-	            		var p = {
-	            			name: jQuery(pages[i]).text(),
-	            			parser: jQuery(pages[i]).attr('parser'),
-	            			type: jQuery(pages[i]).attr('type'),
-	            			urlparam: jQuery(pages[i]).attr('urlparam'),
-	            			condition: jQuery(pages[i]).attr('condition'),
-	            			error: null
-	            		};
-	            		if (jQuery(pages[i]).attr('errortype')) {
-	            		    p.error = p.error || {};
-	            		    p.error.type = jQuery(pages[i]).attr('errortype');
-	            		}
+                    this.pages = [];
+                    for (var i=0;i<pages.length;i++) {
+                        var p = {
+                            name: jQuery(pages[i]).text(),
+                            parser: jQuery(pages[i]).attr('parser'),
+                            url: jQuery(pages[i]).attr('url') || 'cbkort',
+                            type: jQuery(pages[i]).attr('type') || 'json',
+                            urlparam: jQuery(pages[i]).attr('urlparam'),
+                            condition: jQuery(pages[i]).attr('condition'),
+                            error: null
+                        };
+                        if (jQuery(pages[i]).attr('errortype')) {
+                            p.error = p.error || {};
+                            p.error.type = jQuery(pages[i]).attr('errortype');
+                        }
                         if (jQuery(pages[i]).attr('errormessage')) {
                             p.error = p.error || {};
                             p.error.message = jQuery(pages[i]).attr('errormessage');
                         }
-	            		
-	            		this.pages.push(p);
-	            	}
+                        this.pages.push(p);
+                    }
                 } else {
-	                var page = jQuery(data).find('submitpage');
-	                if (page.length > 0) {
-	                    this.submitpage = jQuery(page[0]).text();
-	                }
+                    var page = jQuery(data).find('submitpage');
+                    if (page.length > 0) {
+                        this.submitpage = jQuery(page[0]).text();
+                    }
                 }
-                
+
                 var showReport = jQuery(data).find('showreport').text();
                 if (showReport) {
                     this.showReport = showReport != 'false';
@@ -155,10 +183,16 @@ Formular = SpatialMap.Class ({
                 var showTabs = jQuery(data).find('tabs').text();
                 if (showTabs) {
                     this.showTabs = (showTabs == 'true');
-                    var tabcontainer = jQuery('<div class="tabcontainer"></div>');
-                    var className = jQuery(jQuery(data).find('tabs')[0]).attr('class')
-                    tabcontainer.addClass(className);
-                    jQuery('div#content').append(tabcontainer);
+                    if (this.bootstrap === true) {
+                        var tabcontainer = jQuery('.navlist');
+                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class');
+                        tabcontainer.addClass(className);
+                    } else {
+                        var tabcontainer = jQuery('<div class="tabcontainer"></div>');
+                        var className = jQuery(jQuery(data).find('tabs')[0]).attr('class');
+                        tabcontainer.addClass(className);
+                        jQuery('div#content').append(tabcontainer);
+                    }
                 }
                 var parseDisplaynames = jQuery(data).find('parsedisplaynames').text();
                 if (parseDisplaynames) {
@@ -169,107 +203,214 @@ Formular = SpatialMap.Class ({
                 var counter = 0;
                 if (this.config.length) {
                     for (var k=0;k<this.config.length;k++) {
-                        var contenttable = jQuery('<table class="tablecontent tabcontent tabcontent'+k+'" id="content'+k+'"></table>');
-                        
-                        if (jQuery(this.config[k]).attr('condition')) {
-                            this.conditions.push({id: 'content'+k, elementId: 'content'+k, condition: node.attr('condition')});
+
+                        var contentcontainer = null;
+                        var cententElement = null;
+
+                        if (this.bootstrap === true) {
+                            contentcontainer = jQuery('<fieldset id="content'+k+'"></fieldset>');
+
+                            jQuery('div#content').prepend(contentcontainer);
+
+                            cententElement = contentcontainer;
+
+                        } else {
+                            var contenttable = jQuery('<table class="tablecontent tabcontent tabcontent'+k+'" id="content'+k+'"></table>');
+
+                            contentcontainer = jQuery('<tbody></tbody>');
+                            contenttable.append(contentcontainer);
+                            jQuery('div#content').append(contenttable);
+
+                            cententElement = contenttable;
                         }
-                        
-                        var contentcontainer = jQuery('<tbody></tbody>');
-                        contenttable.append(contentcontainer);
-                        jQuery('div#content').append(contenttable);
+
+                        var displayname = jQuery(this.config[k]).attr('displayname');
+
+                        var tab = {
+                            id: k,
+                            contentId: 'content'+k,
+                            element: null,
+                            contentElement: cententElement,
+                            displayname: displayname,
+                            type: jQuery(this.config[k]).attr('type') || '',
+                            visible: true,
+                            postparams: []
+                        };
+
                         if(this.showTabs) {
-                            var displayname = jQuery(this.config[k]).attr('displayname');
-                            var item = jQuery('<div id="tab'+k+'" class="arrow_box">'+displayname+'</div>');
-                            item.click(SpatialMap.Function.bind(this.showTab,this,k));
-                            jQuery('.tabcontainer').append(item);
-                            if (k < this.config.length-1) {
-                                jQuery('.tabcontainer').append('<div id="tabsep'+(k+1)+'" class="sep"/>');
+
+                            if (this.bootstrap === true) {
+
+                                tab.element = jQuery('<li id="tab'+k+'"><a title="'+displayname+'" href="#'+displayname+'">'+displayname+'</a></li>');
+                                tab.element.click(SpatialMap.Function.bind(function (tab) {
+                                    var count = this.validateTab(this.currentTab);
+                                    this.showTab(tab.id);
+                                },this,tab));
+                                jQuery('.navlist').append(tab.element);
+
+                            } else {
+
+                                tab.element = jQuery('<div id="tab'+k+'" class="arrow_box">'+displayname+'</div>');
+                                tab.element.click(SpatialMap.Function.bind(this.showTab,this,tab.id));
+                                jQuery('.tabcontainer').append(tab.element);
+                                if (k < this.config.length-1) {
+                                    jQuery('.tabcontainer').append('<div id="tabsep'+(k+1)+'" class="sep"/>');
+                                }
                             }
+
+                            if (jQuery(this.config[k]).attr('condition')) {
+                                this.conditions.push({id: 'tab'+k, elementId: 'tab'+k, condition: jQuery(this.config[k]).attr('condition'), ref: tab});
+                            }
+
                         }
+                        this.tabs.push(tab);
 
                         var config = jQuery(this.config[k]).children();
                         for (var i=0; i<config.length; i++) {
                             var node = jQuery(config[i]);
-                            
+
                             if (node[0].nodeName === 'columns') {
-                                var colTR = jQuery('<tr></tr>');
-                                var colTD = jQuery('<td colspan="2"></td>');
-                                colTR.append(colTD);
-                                contentcontainer.append(colTR);
-                                var className = node.attr('class');
-                                var cols = node.children(); //column array
-                                var div2 = jQuery('<div class="colcontainer colcontainer'+cols.length+''+(className ? ' '+className : '')+'"></div>');
-                                colTD.append(div2);
-                                for (var j=0;j<cols.length;j++) {
-                                    var className = jQuery(cols[j]).attr('class');
-                                    var div = jQuery('<div class="col col'+cols.length+''+(className ? ' '+className : '')+'"></div>');
-                                    var colcontenttable = jQuery('<table class="tablecontent" id="content'+k+'_'+j+'"></table>');
-                                    var colcontentcontainer = jQuery('<tbody></tbody>');
-                                    colcontenttable.append(colcontentcontainer);
-                                    div.append(colcontenttable);
-                                    div2.append(div);
-                                    var configCol = jQuery(cols[j]).children(); //Input array
-                                    
-                                    for (var l=0; l<configCol.length; l++) {
-                                        var nodeCol = jQuery(configCol[l]); //Input
-                                        var postparam = this.addInput(nodeCol,colcontentcontainer,{
-                                            counter: counter
-                                        });
-                                        
-                                        if (typeof postparam.urlparam !== 'undefined') {
-                                            this.postparams[postparam.urlparam] = postparam;
+                                if (this.bootstrap === true) {
+
+                                    var rowID = (Math.random()+1).toString(36).substring(2,8);
+
+                                    var row = jQuery('<div class="row"></div>');
+                                    var className = node.attr('class');
+                                    if (className) {
+                                        row.addClass(className);
+                                    }
+                                    contentcontainer.append(row);
+                                    var cols = node.children(); //column array
+                                    var s = Math.floor(12/cols.length);
+                                    for (var j = 0; j < cols.length; j++) {
+                                        var colID = j;
+                                        var col = jQuery('<div></div>');
+                                        var className = jQuery(cols[j]).attr('class');
+                                        if (!className) {
+                                            className = 'col-sm-'+s;
                                         }
-                                        counter++;
+                                        col.addClass(className);
+
+                                        row.append(col);
+
+                                        var configCol = jQuery(cols[j]).children(); //Input array
+
+                                        for (var l = 0; l < configCol.length; l++) {
+                                            var nodeCol = jQuery(configCol[l]); //Input
+                                            var postparam = this.addInput(nodeCol, col, {
+                                                counter: counter,
+                                                tab: tab
+                                            });
+
+                                            postparam.colClassName = className;
+                                            postparam.colID = colID;
+                                            postparam.rowID = rowID;
+
+                                            if (typeof postparam.urlparam !== 'undefined') {
+                                                this.postparams[postparam.urlparam] = postparam;
+                                                tab.postparams.push(postparam);
+                                            }
+                                            counter++;
+                                        }
+                                    }
+
+                                } else {
+                                    var colTR = jQuery('<tr></tr>');
+                                    var colTD = jQuery('<td colspan="2"></td>');
+                                    colTR.append(colTD);
+                                    contentcontainer.append(colTR);
+                                    var className = node.attr('class');
+                                    var cols = node.children(); //column array
+                                    var div2 = jQuery('<div class="colcontainer colcontainer' + cols.length + '' + (className ? ' ' + className : '') + '"></div>');
+                                    colTD.append(div2);
+                                    for (var j = 0; j < cols.length; j++) {
+                                        var className = jQuery(cols[j]).attr('class');
+                                        var div = jQuery('<div class="col col' + cols.length + '' + (className ? ' ' + className : '') + '"></div>');
+                                        var colcontenttable = jQuery('<table class="tablecontent" id="content' + k + '_' + j + '"></table>');
+                                        var colcontentcontainer = jQuery('<tbody></tbody>');
+                                        colcontenttable.append(colcontentcontainer);
+                                        div.append(colcontenttable);
+                                        div2.append(div);
+                                        var configCol = jQuery(cols[j]).children(); //Input array
+
+                                        for (var l = 0; l < configCol.length; l++) {
+                                            var nodeCol = jQuery(configCol[l]); //Input
+                                            var postparam = this.addInput(nodeCol, colcontentcontainer, {
+                                                counter: counter,
+                                                tab: tab
+                                            });
+
+                                            if (typeof postparam.urlparam !== 'undefined') {
+                                                this.postparams[postparam.urlparam] = postparam;
+                                                tab.postparams.push(postparam);
+                                            }
+                                            counter++;
+                                        }
                                     }
                                 }
                             } else {
                                 var postparam = this.addInput(node,contentcontainer,{
-                                    counter: counter
+                                    counter: counter,
+                                    tab: tab
                                 });
 
                                 if (typeof postparam.urlparam !== 'undefined') {
                                     this.postparams[postparam.urlparam] = postparam;
+                                    tab.postparams.push(postparam);
                                 }
                                 counter++;
                             }
-                            
+
                         }
-                        var p = (k<this.config.length && k!=0 && this.config.length > 0);
-                        var n = (k<this.config.length-1 && this.config.length > 0);
-                        var s = (k==this.config.length-1);
-                        contentcontainer.append('<tr><td colspan="2" align="right"><div>'+(p?'<button id="previous'+k+'">Forrige</button>':'')+(n?'<button id="next'+k+'">Næste</button>':'')+(s?'<button id="sendbutton">Send</button>':'')+'</div></td></tr>');
-                        if (p) {
-                            jQuery('button#previous'+k).click(SpatialMap.Function.bind(this.previous,this,k));
+
+                        if (this.bootstrap) {
+
+                        } else {
+
+                            var p = (k<this.config.length && k!=0 && this.config.length > 0);
+                            var n = (k<this.config.length-1 && this.config.length > 0);
+                            var s = (k==this.config.length-1);
+                            contentcontainer.append('<tr><td colspan="2" align="right"><div>'+(p?'<button id="previous'+k+'">Forrige</button>':'')+(n?'<button id="next'+k+'">Næste</button>':'')+(s?'<button id="sendbutton">Send</button>':'')+'</div></td></tr>');
+                            if (p) {
+                                jQuery('button#previous'+k).click(SpatialMap.Function.bind(this.previous,this,k));
+                            }
+                            if (n) {
+                                jQuery('button#next'+k).click(SpatialMap.Function.bind(this.next,this,k));
+                            }
+                            if (s) {
+                                jQuery('button#sendbutton').click(SpatialMap.Function.bind(this.submit,this));
+                            }
+
                         }
-                        if (n) {
-                            jQuery('button#next'+k).click(SpatialMap.Function.bind(this.next,this,k));
-                        }
-                        if (s) {
-                            jQuery('button#sendbutton').click(SpatialMap.Function.bind(this.submit,this));
-                        }
-                            //add submit button
-//                            jQuery('#content'+this.config.length-1+' > tbody:last').append('<tr><td colspan="2" align="right"><div class="submitbuttondiv" id="submitdiv"><button id="sendbutton">Send</button></div></td></tr>');
-//                            jQuery('#sendbutton').click(SpatialMap.Function.bind (function () {
-//                                this.submit();
-//                            },this));
+
                     }
                     if (this.map) {
                         this.currentMapTool = this.defaultMapTool;
                         this.activateTool (this.defaultMapTool);
                     }
                     if (this.showTabs) {
-                        if (this.confirm) {
-                            var c = 'confirm';
-                            jQuery('.tabcontainer').append('<div id="tabsep'+c+'" class="sep"/>');
-                            var item = jQuery('<div id="tab'+c+'">Godkend</div>');
-                            //item.click(SpatialMap.Function.bind(this.showTab,this,k));
-                            jQuery('.tabcontainer').append(item);
+
+                        if (this.bootstrap) {
+                            jQuery('.buttons #previous').click(SpatialMap.Function.bind(this.previous,this));
+                            jQuery('.buttons #next').click(SpatialMap.Function.bind(this.next,this));
+                            this.setButtons();
+
+                            jQuery('.buttons #submit').click(SpatialMap.Function.bind(this.submit,this));
+
                         } else {
-                            jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
+
+                            if (this.confirm) {
+                                var c = 'confirm';
+                                jQuery('.tabcontainer').append('<div id="tabsep'+c+'" class="sep"/>');
+                                var item = jQuery('<div id="tab'+c+'">Godkend</div>');
+                                //item.click(SpatialMap.Function.bind(this.showTab,this,k));
+                                jQuery('.tabcontainer').append(item);
+                            } else {
+                                jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
+                            }
                         }
                     }
-                    
+
                     var localstore = jQuery(data).find('localstore').text();
                     if (localstore) {
                         this.localstore = localstore != 'false';
@@ -277,7 +418,7 @@ Formular = SpatialMap.Class ({
                             this.readLocalStore();
                         }
                     }
-                    
+
                     var log = jQuery(data).find('log').text();
                     if (log) {
                         this.logActive = (log === 'true');
@@ -286,7 +427,7 @@ Formular = SpatialMap.Class ({
                     this.checkConditions();
                     this.showTab(0);
 //                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
-                    
+
 //                    this.log({
 //                        type: 'info',
 //                        name: 'configready',
@@ -294,6 +435,10 @@ Formular = SpatialMap.Class ({
 //                    });
 
                 }
+
+                //Bootstrap - fjern loading når filen er hentet
+                jQuery('#content').removeClass('content-loading');
+
             },this)
         });
         
@@ -303,21 +448,35 @@ Formular = SpatialMap.Class ({
     addInput: function (node,contentcontainer,options) {
         var urlparam = node.attr('urlparam');
         var counter = options.counter;
+        var tab = options.tab;
         var id = 'input_'+counter;
         if (node.attr('id')) {
             id = node.attr('id');
         }
+
+        var req = false;
+        if (node.attr('required')) {
+            req = node.attr('required') === 'true';
+        }
+
         var postparam = {
             id: id,
             displayname: node.attr('displayname'),
-            defaultValue: node.attr('defaultvalue')
+            description: node.attr('description'),
+            defaultValue: node.attr('defaultvalue'),
+            required: req,
+            visible: true,
+            tab: tab,
+            disabled: node.attr('disabled') === 'true',
+            config: node
         };
+        
         if (urlparam) {
             postparam.urlparam = urlparam;
         }
         
         if (node.attr('condition')) {
-            this.conditions.push({id: id, elementId: id+'_row', condition: node.attr('condition')});
+            this.conditions.push({id: id, elementId: id+'_row', condition: node.attr('condition'), required: req, ref: postparam});
         }
         
         var className = node.attr('class');
@@ -327,7 +486,13 @@ Formular = SpatialMap.Class ({
                 if (value == null) {
                     value = node.attr('defaultvalue');
                 }
-                contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" class="form-control" placeholder="'+(node.attr('placeholder') || '')+'" type="text" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" placeholder="'+(node.attr('placeholder') || '')+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                }
+                
                 var options = {
                     noadrspec: 'true',
                     limit: 15,
@@ -357,13 +522,37 @@ Formular = SpatialMap.Class ({
                     };
                 }
                 
-                if (node.attr('regexp')) {
-                    this.inputValidation[id] = true;
-                    jQuery('#'+id).valid8({
-                        'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
-                         ]
-                    });
+                var regexp = node.attr('regexp');
+                if (regexp || req === true) {
+                    this.inputValidation[id] = {
+                        validate: true,
+                        required: req,
+                        regexp: regexp,
+                        tab: tab,
+                        message: node.attr('validate') || 'Indtast en valid værdi!'
+                    };
+
+                    if (req) {
+                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                            var valid = (jQuery('#'+id).val() !== '');
+                            var map = jQuery('#'+id+'_row > .map');
+                            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
+                            jQuery('#'+id+'ValidationMessage').remove();
+                            if (valid === false) {
+                                jQuery('#'+id+'_row > .required-enabled').addClass('error');
+                                jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                            }
+                            return valid;
+                        },this, id, this.inputValidation[id].message)  ;                      
+                    }
+
+                    if (regexp) {
+                        jQuery('#'+id).valid8({
+                            'regularExpressions': [
+                                 { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
+                             ]
+                        });
+                    }
                 }
                 
                 if (value) {
@@ -401,7 +590,11 @@ Formular = SpatialMap.Class ({
                 if (value == null) {
                     value = node.attr('defaultvalue');
                 }
-                contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" class="form-control" placeholder="'+(node.attr('placeholder') || '')+'" type="text" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="addressdiv"><input class="input1" placeholder="'+(node.attr('placeholder') || '')+'" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                }
                 var options = {
                     resources: node.attr('resources') || 'Adresser',
                     area: node.attr('filter') || '',
@@ -430,13 +623,40 @@ Formular = SpatialMap.Class ({
                     };
                 }
                 
-                if (node.attr('regexp')) {
-                    this.inputValidation[id] = true;
-                    jQuery('#'+id).valid8({
-                        'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
-                         ]
-                    });
+                var regexp = node.attr('regexp');
+                if (regexp || req === true) {
+                    this.inputValidation[id] = {
+                        validate: true,
+                        required: req,
+                        regexp: regexp,
+                        tab: tab,
+                        message: node.attr('validate') || 'Indtast en valid værdi!'
+                    };
+
+                    if (req) {
+                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                            var valid = (jQuery('#'+id).val() !== '');
+                            var map = jQuery('#'+id+'_row > .map');
+                            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
+                            jQuery('#'+id+'ValidationMessage').remove();
+                            if (valid === false) {
+                                jQuery('#'+id+'_row > .required-enabled').addClass('error');
+                                var message = jQuery('#'+id+'ValidationMessage');
+                                if (message.length === 0) {
+                                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                                }
+                            }
+                            return valid;
+                        },this, id, this.inputValidation[id].message)  ;                      
+                    }
+
+                    if (regexp) {
+                        jQuery('#'+id).valid8({
+                            'regularExpressions': [
+                                 { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
+                             ]
+                        });
+                    }
                 }
                 
                 if (value) {
@@ -475,8 +695,13 @@ Formular = SpatialMap.Class ({
                 
             break;
             case 'maptools':
-                //contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" align="right"><div id="button1" class="button button1"></div><div id="button2" class="button button2"></div></td></tr>');
-                contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" align="right"><div id="mapbuttons_'+counter+'"></div></td></tr>');
+                
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group maptools'+(className ? ' '+className : '')+'"><div id="mapbuttons_'+counter+'"></div></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" align="right"><div id="mapbuttons_'+counter+'"></div></td></tr>');
+                }
+                
                 var maptools = node.find('maptool');
                 for (var j=0;j<maptools.length;j++) {
                     var name = jQuery(maptools[j]).attr('name').toString().toLowerCase();
@@ -509,7 +734,15 @@ Formular = SpatialMap.Class ({
                 }
             break;
             case 'map':
-                contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></td></tr>');
+                
+                this.mapId = id;
+                
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group mapcontainer"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></td></tr>');
+                }
+                
                 var extent = node.find('extent').text();
                 if (extent) {
                     extent = extent.split(',');
@@ -622,10 +855,43 @@ Formular = SpatialMap.Class ({
                     }
                 }
                 
+                this.featureRequired = req;
+                
+                if (req === true) {
+                    
+                    var errormessage = node.attr('validate') || 'Tegn i kortet!';
+                    
+                    this.inputValidation[id] = {
+                        validate: true,
+                        tab: tab,
+                        message: errormessage,
+                        handler: SpatialMap.Function.bind(function (id,errormessage) {
+                            var valid = this.feature.length > 0;
+                            var map = jQuery('#'+id+'_row > .map');
+                            map.removeClass('error');
+                            jQuery('#'+id+'ValidationMessage').remove();
+                            if (valid === false) {
+                                map.addClass('error');
+                                var message = jQuery('#'+id+'ValidationMessage');
+                                if (message.length === 0) {
+                                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(map);
+                                }
+                            }
+                            
+                            return valid;
+                        },this, id, errormessage)
+                    };
+                }
+
+                
             break;
             case 'area':
                 this.areaid = id;
-                contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label>'+node.attr('displayname')+' <span id="areaspan_'+id+'">0</span> m&#178;<input type="hidden" id="'+id+'" value=""/></label></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="areadiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span id="areaspan_'+id+'">0</span> m&#178;</div><input type="hidden" id="'+id+'" value=""/></td></tr>');
+                }
                 if (node.attr('onchange')) {
                     jQuery('#'+id).change(new Function (node.attr('onchange')));
                 }
@@ -636,14 +902,24 @@ Formular = SpatialMap.Class ({
                 }
             break;
             case 'conflicts':
-                var html = '<tr id="'+id+'_row"><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
-                if (node.attr('displayname')!='') {
-                    html += '<div class="doublelabeldiv">'+node.attr('displayname')+'</div>';
+                
+                postparam.visible = false;
+                postparam.type = 'conflicts';
+                
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="hidden'+(className ? ' '+className : '')+'"></div><input type="hidden" id="'+id+'" value=""/>');
+                } else {
+                    var html = '<tr id="'+id+'_row"><td colspan="2"><div id="container_conflictdiv_'+id+'" class="inputdiv conflictdivcontainer'+(className ? ' '+className : '')+'">';
+                    if (node.attr('displayname')!='') {
+                        html += '<div class="doublelabeldiv">'+node.attr('displayname')+'</div>';
+                    }
+                    html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
+                    contentcontainer.append(html);
                 }
-                html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
-                contentcontainer.append(html);
                 var conflict = {
-                    id: id, //'conflictdiv_'+counter,
+                    id: id,
+                    postparam: postparam,
+                    displayname: node.attr('displayname'),
                     targetsetfile: node.attr('targetsetfile'),
                     targerset: node.attr('targerset')
                 };
@@ -663,7 +939,11 @@ Formular = SpatialMap.Class ({
                     value = node.attr('defaultvalue');
                 }
                 if (type=='dropdown') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><select id="'+id+'" class="form-control"/>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv"><select class="select1" id="'+id+'"/></div></td></tr>');
+                    }
                     var option = node.find('option');
                     var list = [];
                     if (node.attr('datasource')) {
@@ -673,7 +953,8 @@ Formular = SpatialMap.Class ({
                             list.push({
                                 value: jQuery(option[j]).attr('value'),
                                 name: jQuery(option[j]).attr('name'),
-                                checked: jQuery(option[j]).attr('value') == value
+                                checked: jQuery(option[j]).attr('value') == value,
+                                disabled: jQuery(option[j]).attr('disabled') === 'true'
                             });
                         }
                     }
@@ -683,25 +964,82 @@ Formular = SpatialMap.Class ({
                     var str = '';
                     for (var j=0;j<option.length;j++) {
                         var checked = (jQuery(option[j]).attr('value') == value ? ' checked="checked"' : '');
-                        str += '<div><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                        if (this.bootstrap === true) {
+                            str += '<div class="radio"><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'" title="'+jQuery(option[j]).attr('name')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                        } else {
+                            str += '<div><label><input type="radio" id="'+id+'" name="'+id+'" value="'+jQuery(option[j]).attr('value')+'"'+checked+'>'+jQuery(option[j]).attr('name')+'</label></div>';
+                        }
                     }
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'">'+str+'</div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'<div></td><td><div class="valuediv">'+str+'</div></td></tr>');
+                    }
                 } else if (type=='textarea') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><textarea id="'+id+'" class="form-control" '+(postparam.disabled ? 'disabled':'')+'>'+(value || '')+'</textarea></div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><textarea class="textarea1" id="'+id+'">'+(value || '')+'</textarea></div></td></tr>');
+                    }
                 } else if (type=='hidden') {
-                    contentcontainer.append('<tr id="'+id+'_row" style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group hidden'+(className ? ' '+className : '')+'"><input id="'+id+'" class="form-control" type="hidden" value="'+(value || '')+'"/></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row" style="display:none;"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    }
+                } else if (type=='h1') {
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<h1 id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h1>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><h1 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h1></td></tr>');
+                    }
+                } else if (type=='h2') {
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<h2 id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h2>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><h2 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h2></td></tr>');
+                    }
+                } else if (type=='message') {
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="'+(className ? className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+                    }
+                } else if (type=='preview') {
+                    if (this.bootstrap === true) {
+                        this.showEmptyInPreview = (node.attr('showempty') !== 'false');
+                        contentcontainer.append('<div id="'+id+'_row" class="preview'+(className ? ' '+className : '')+'"></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="preview'+(className ? ' '+className : '')+'" id="'+id+'"></div></td></tr>');
+                    }
                 } else if (type=='text') {
                     if (node.attr('displayresult')) {
                         var displayresult = node.attr('displayresult');
-                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
+                        
+                        if (this.bootstrap === true) {
+                            contentcontainer.append('<p id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></p>');
+                        } else {
+                            contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="textdiv'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'<span class="distanceresult">'+displayresult+'</span><input type="hidden" id="distanceresult_hidden" value=""/></div></td></tr>'); 
+                        }
+                        
                         if (node.attr('onchange')) {
                             jQuery('#distanceresult_hidden').change(new Function (node.attr('onchange')));
                         }
-                    } else { 
-                        contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+                    } else {
+                        
+                        if (this.bootstrap === true) {
+                            contentcontainer.append('<p id="'+id+'_row" class="'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</p>');
+                        } else {
+                            contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
+                        }
                     }
                 } else if (type=='date') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    var today = (new Date()).toLocaleDateString().replace(/\//g,'.').replace(/^([0-9])\./,'0$1.').replace(/\.([0-9])\./,'.0$1.');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" '+(postparam.disabled ? 'disabled':'')+' class="form-control" placeholder="'+(node.attr('placeholder') || 'ex. '+today)+'" type="text" value="'+(value || '')+'"/>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" placeholder="'+(node.attr('placeholder') || '')+'" value="'+(value || '')+'"/></div></td></tr>');
+                    }
                     var change = null;
                     if (node.attr('onchange')) {
                         change = new Function (node.attr('onchange'));
@@ -709,10 +1047,10 @@ Formular = SpatialMap.Class ({
                     var options = {
                         dateFormat: 'dd.mm.yy',
                         onSelect: SpatialMap.Function.bind( function (id,changehandler) {
-                            if (this.inputValidation[id]) {
+                            if (typeof this.inputValidation[id] !== 'undefined' && this.inputValidation[id].validate === true) {
                                 jQuery('#'+id).isValid();
                             }
-                            this.inputChanged();
+                            this.inputChanged(id);
                             if (changehandler) {
                                 changehandler (jQuery('#'+id));
                             }
@@ -780,59 +1118,101 @@ Formular = SpatialMap.Class ({
                     }
                     
                     jQuery('#'+id).datepicker(options);
+                    
                 } else if (type=='file') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="fileupload'+(req ? ' required-enabled':'')+'"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input '+(postparam.disabled ? 'disabled':'')+' type="file" name="file_'+id+'" id="file_'+id+'" /><span class="filupload-delete" title="Fjern vedhæftet fil"></span><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></div>');
+                        contentcontainer.find('#'+id+'_row .filupload-delete').click(SpatialMap.Function.bind(this.deleteFileUpload,this,id)).hide();
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
+                    }
                     jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
                         this.startFileUpload(id);
                         jQuery('#form_'+id).submit();
                     },this,id));
                 } else if (type=='checkbox') {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><div class="checkbox"><label><input type="checkbox" title="'+node.attr('displayname')+'" '+(postparam.disabled ? 'disabled':'')+' id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'>'+node.attr('displayname')+'</label></div>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
+                    }
+                    
                 } else {
                     type = 'input';
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" value="'+(value || '')+'"/></div></td></tr>');
+                    if (this.bootstrap === true) {
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" class="form-control" placeholder="'+(node.attr('placeholder') || '')+'" type="text" '+(postparam.disabled ? 'disabled':'')+' value="'+(value || '')+'"/>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div></div>');
+                    } else {
+                        contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" placeholder="'+(node.attr('placeholder') || '')+'" value="'+(value || '')+'"/></div></td></tr>');
+                    }
                 }
                 if (urlparam) {
                     postparam.type = type;
                 }
-                if (node.attr('regexp')) {
-                    this.inputValidation[id] = true;
-                    jQuery('#'+id).valid8({
-                        'regularExpressions': [
-                             { expression: new RegExp(node.attr('regexp')), errormessage: node.attr('validate') || 'Indtast en valid værdi!'}
-                         ]
-                    });
+                var regexp = node.attr('regexp');
+                if (regexp || req === true) {
+                    this.inputValidation[id] = {
+                        validate: true,
+                        required: req,
+                        regexp: regexp,
+                        tab: tab,
+                        message: node.attr('validate') || 'Indtast en valid værdi!'
+                    };
+
+                    if (req) {
+                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                            var valid = (jQuery('#'+id).val() !== '');
+                            var map = jQuery('#'+id+'_row > .map');
+                            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
+                            jQuery('#'+id+'ValidationMessage').remove();
+                            if (valid === false) {
+                                jQuery('#'+id+'_row > .required-enabled').addClass('error');
+                                var message = jQuery('#'+id+'ValidationMessage');
+                                if (message.length === 0) {
+                                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                                }
+                            }
+                            return valid;
+                        },this, id, this.inputValidation[id].message)  ;                      
+                    }                    
+                    
+                    if (regexp) {
+                        jQuery('#'+id).valid8({
+                            'regularExpressions': [
+                                 { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
+                             ]
+                        });
+                    }
                 }
                 var f = null;
                 if (node.attr('onchange')) {
                     var f = new Function (node.attr('onchange'));
                 }
                 if (type === 'radiobutton') {
-                    jQuery('input:radio[name='+id+']').change(SpatialMap.Function.bind(function (onchange) {
+                    jQuery('input:radio[name='+id+']').change(SpatialMap.Function.bind(function (onchange,id) {
                         if (onchange) {
                             onchange();
                         }
-                        this.inputChanged();
-                    },this,f));
+                        this.inputChanged(id);
+                    },this,f,id));
                 } else {
-                    jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange) {
+                    jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange,id) {
                         if (onchange) {
                             onchange();
                         }
-                        this.inputChanged();
-                    },this,f));
+                        this.inputChanged(id);
+                    },this,f,id));
                 }
                 
                 var f = null;
                 if (node.attr('onkeyup')) {
                     var f = new Function (node.attr('onkeyup'));
                 }
-                jQuery('#'+id).keyup(SpatialMap.Function.bind(function (onkeyup) {
+                jQuery('#'+id).keyup(SpatialMap.Function.bind(function (onkeyup,id) {
                     if (onkeyup) {
                         onkeyup();
                     }
-                    this.inputChanged();
-                },this,f));
+                    this.inputChanged(id);
+                },this,f,id));
 
 //                if (node.attr('onkeyup')) {
 //                    jQuery('#'+id).keyup(new Function (node.attr('onkeyup')));
@@ -863,6 +1243,19 @@ Formular = SpatialMap.Class ({
             this.writeLocalStore();
         }
         
+        if (typeof id !== 'undefined') {
+            
+            var valid = true;
+            //Tjek det aktuelle inputfelt
+            if (typeof this.inputValidation[id] !== 'undefined' && typeof this.inputValidation[id].handler !== 'undefined' && this.inputValidation[id].validate === true && this.inputValidation[id].tab.visible === true && this.inputValidation[id].visible !== false) {
+                valid = this.inputValidation[id].handler();
+            }
+            if (valid === true) {
+                jQuery('#'+name).isValid ();
+            }
+            
+        }
+        
         this.checkConditions();
     },
     
@@ -871,30 +1264,129 @@ Formular = SpatialMap.Class ({
             if (!(this.conditions[i].condition instanceof Function)) {
                 this.conditions[i].condition = new Function ('return '+this.conditions[i].condition);
             }
-            if (this.conditions[i].condition()) {
-                jQuery('#'+this.conditions[i].elementId).show();
-            } else {
-                jQuery('#'+this.conditions[i].elementId).hide();
+            var visible = this.conditions[i].condition();
+            var first = (typeof this.conditions[i].visible === 'undefined');
+            if (first === true || this.conditions[i].visible !== visible) {
+                this.conditions[i].visible = visible;
+                if (visible) {
+                    jQuery('#'+this.conditions[i].elementId).show();
+                } else {
+                    jQuery('#'+this.conditions[i].elementId).hide();
+                }
+                
+                if (typeof this.conditions[i].ref) {
+                    if (typeof this.conditions[i].ref.tab !== 'undefined') {
+                        this.resetTabValidation(this.conditions[i].ref.tab.id);
+                    }
+                    this.conditions[i].ref.visible = visible;
+                }
+    
+                if (typeof this.inputValidation[this.conditions[i].id] !== 'undefined') {
+                    this.inputValidation[this.conditions[i].id].visible = visible
+                }
             }
         }
     },
     
     next: function (current) {
-        this.showTab(current+1);
+        if (this.bootstrap === true) {
+            var next = this.currentTab+1;
+            for (var i=next;i<this.tabs.length;i++) {
+                if (this.tabs[i].visible === true) {
+                    break;
+                } else {
+                    next++;
+                }
+            }
+            var count = this.validateTab(this.currentTab);
+            if (next <= this.tabs.length) {
+                this.showTab(next);
+            }
+        } else {
+            this.showTab(current+1);
+        }
     },
     
     previous: function (current) {
-        this.showTab(current-1);
+        if (this.bootstrap === true) {
+            var prev = this.currentTab-1;
+            for (var i=prev;i=0;i--) {
+                if (this.tabs[i].visible === true) {
+                    
+                    break;
+                } else {
+                    prev = i-1;
+                }
+            }
+            var count = this.validateTab(this.currentTab);
+            if (prev >= 0) {
+                this.showTab(prev);
+            }
+        
+        } else {
+            prev = current-1;
+            this.showTab(prev);
+        }
+    },
+    
+    setButtons: function () {
+        if (this.tabs.length < 2) {
+            jQuery('.buttons button').hide();
+        } else {
+            jQuery('.buttons #submit').hide();
+            jQuery('.buttons #previous').show();
+            jQuery('.buttons #next').show();
+            if (this.currentTab === 0) {
+                jQuery('.buttons a#previous').hide();
+            }
+            if (this.currentTab === this.tabs.length-1) {
+                jQuery('.buttons #next').hide();
+                jQuery('.buttons #submit').show();
+            }
+        }
     },
     
     showTab: function (i) {
-        if (!jQuery('.tabcontainer div#tab'+i).hasClass('disabled')) {
-            jQuery('table.tablecontent.tabcontent').hide();
-            jQuery('table.tabcontent.tabcontent'+i).show();
+        if (this.bootstrap === true) {
             
-            jQuery('.tabcontainer div').removeClass('active');
-            jQuery('.tabcontainer div#tab'+i).addClass('active');
-            jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+            var count = this.tabs.length;
+            for (var j=0;j<this.tabs.length;j++) {
+                if (this.tabs[j].visible === false) {
+                    count--;
+                }
+            }
+            
+            jQuery('#steps').html('Trin '+(i+1)+' af '+count+' ');
+            
+            jQuery('.navlist > li').removeClass('active');
+            jQuery('.navlist > li#tab'+i).addClass('active');
+            
+            jQuery('div#content fieldset').hide();
+            this.tabs[i].contentElement.show();
+            
+            setTimeout(SpatialMap.Function.bind(function (tab) {
+                window.location.hash = tab.displayname;
+            },this,this.tabs[i]),100);
+            
+            this.currentTab = i;
+            this.tabs[i].active = true;
+            
+            this.setButtons();
+            
+            if (this.tabs[i].type === 'confirm') {
+                this.setPreview(jQuery('.preview'));
+            }
+            
+        } else {
+        
+            if (!jQuery('.tabcontainer div#tab'+i).hasClass('disabled')) {
+                jQuery('table.tablecontent.tabcontent').hide();
+                jQuery('table.tabcontent.tabcontent'+i).show();
+                
+                jQuery('.tabcontainer div').removeClass('active');
+                jQuery('.tabcontainer div#tab'+i).addClass('active');
+                jQuery('.tabcontainer div#tabsep'+i).addClass('active');
+            }
         }
     },
     
@@ -1322,6 +1814,10 @@ Formular = SpatialMap.Class ({
             this.query (this.feature);
         },this));
         
+        this.validateMap();
+        
+        this.inputChanged();
+        
     },
     
     setMergedGeometry: function (features,callback) {
@@ -1408,7 +1904,10 @@ Formular = SpatialMap.Class ({
         var params = {};
         for (var i=0;i<this.multipleGeometriesAttributes.length;i++) {
             var pp = this.addInput(this.multipleGeometriesAttributes[i].config,t,{
-                counter: this.multipleGeometriesAttributes[i].counter*100000+(this.feature.length*100)+i
+                counter: this.multipleGeometriesAttributes[i].counter*100000+(this.feature.length*100)+i,
+                tab: {
+                    id: 999
+                }
             });
             if (typeof pp.urlparam !== 'undefined') {
                 params[pp.urlparam] = pp;
@@ -1496,7 +1995,7 @@ Formular = SpatialMap.Class ({
         dropdown.empty();
         for (var j=0;j<list.length;j++) {
             var checked = (list[j].checked ? ' selected="selected"' : '');
-            dropdown.append('<option value="'+list[j].value+'"'+checked+'>'+list[j].name+'</option>');
+            dropdown.append('<option value="'+list[j].value+'"'+checked+' '+(list[j].disabled === true ? 'disabled="disabled' : '')+'>'+list[j].name+'</option>');
         }
     },
     
@@ -1507,8 +2006,16 @@ Formular = SpatialMap.Class ({
         }
         
         for (var i=0;i<this.spatialqueries.length;i++) {
-            jQuery('#'+this.spatialqueries[i].id).html('');
-            jQuery('#container_'+this.spatialqueries[i].id).hide();
+            
+            if (this.bootstrap === true) {
+                jQuery('#'+this.spatialqueries[i].id+'_row').empty().hide().removeClass('hidden');
+                if (this.spatialqueries[i].displayname) {
+                    jQuery('#'+this.spatialqueries[i].id+'_row').append(this.spatialqueries[i].displayname);
+                }
+            } else {
+                jQuery('#'+this.spatialqueries[i].id).html('');
+                jQuery('#container_'+this.spatialqueries[i].id).hide();
+            }
             
             if (features.length > 0) {
                 
@@ -1535,8 +2042,7 @@ Formular = SpatialMap.Class ({
                         var reporttext = '';
                         var count = 0;
                         for (var i=0;i<targets.length;i++) {
-                            //html += '<b>'+jQuery(targets[i]).find('col[name="targetdisplayname"]').text() + '</b><br/>';
-                            rowlist = jQuery(targets[i]).find('rowlist');
+                            var rowlist = jQuery(targets[i]).find('rowlist');
                             for (var j=0;j<rowlist.length;j++) {
                                 var row = jQuery(rowlist[j]).find('row');
                                 count++;
@@ -1547,18 +2053,32 @@ Formular = SpatialMap.Class ({
                             }
                         }
                         if (html != '') {
-                            jQuery('#container_conflictdiv_'+id).show();
-                            jQuery('#conflictdiv_'+id).html(html);
+                            if (this.bootstrap === true) {
+                                jQuery('#'+id+'_row').show().append(html);
+                            } else {
+                                jQuery('#container_conflictdiv_'+id).show();
+                                jQuery('#conflictdiv_'+id).html(html);
+                            }
                         } else {
-                          jQuery('#container_conflictdiv_'+id).hide();
+                            if (this.bootstrap === true) {
+                                jQuery('#'+id+'_row').hide();
+                            } else {
+                                jQuery('#container_conflictdiv_'+id).hide();
+                            }
                         }
                         if (count) {
+                            spatialquery.postparam.visible = true;
                             jQuery('#'+id).val(reporttext);
-                            jQuery('#container_conflictdiv_'+id).show('fast');
+                            if (this.bootstrap === true) {
+                                jQuery('#'+id+'_row').show('fast');
+                            } else {
+                                jQuery('#container_conflictdiv_'+id).show('fast');
+                            }
                             if (spatialquery.onconflict) {
                                 spatialquery.onconflict.apply(jQuery('#'+id));
                             }
                         } else {
+                            spatialquery.postparam.visible = false;
                             if (spatialquery.onnoconflict) {
                                 spatialquery.onnoconflict();
                             }
@@ -1566,7 +2086,12 @@ Formular = SpatialMap.Class ({
                     },this,this.spatialqueries[i])
                 });
             } else {
-                jQuery('#container_conflictdiv_'+this.spatialqueries[i].id).hide();
+                this.spatialqueries[i].postparam.visible = false;
+                if (this.bootstrap === true) {
+                    jQuery('#'+this.spatialqueries[i].id+'_row').hide();
+                } else {
+                    jQuery('#container_conflictdiv_'+this.spatialqueries[i].id).hide();
+                }
                 if (this.spatialqueries[i].onnoconflict) {
                     this.spatialqueries[i].onnoconflict();
                 }
@@ -1637,6 +2162,15 @@ Formular = SpatialMap.Class ({
         this.map.panTo('POINT('+x+' '+y+')');
     },
     
+    validateMap: function () {
+        var name = this.mapId;
+        if (typeof this.inputValidation[name] !== 'undefined' && this.inputValidation[name].validate === true && this.inputValidation[name].tab.visible === true) {
+            if (typeof this.inputValidation[name].handler !== 'undefined') {
+                this.inputValidation[name].handler();
+            }
+        }
+    },
+    
     writeLocalStore: function () {
         if (store.enabled) {
             var params = this.getCurrentValues();
@@ -1667,11 +2201,99 @@ Formular = SpatialMap.Class ({
             store.clear();
         }
     },
+    
+    checkValidation: function () {
+        this.valid = true;
+        for (var name in this.validatedElements) {
+            if (this.inputValidation[name].validate === true && this.inputValidation[name].tab.visible === true && this.inputValidation[name].visible !== false) {
+                var valid = true;
+                if (typeof this.inputValidation[name].handler !== 'undefined') {
+                    valid = this.inputValidation[name].handler();
+                } else {
+                    valid = jQuery('#'+name).isValid ();
+                }
+                
+                this.inputValidation[name].valid = valid;
+                if (!valid) {
+                    this.valid = false
+                    break;
+                }
+            }
+        }
+        if (this.valid === false) {
+            jQuery('button#submit').prop('disabled', 'disabled');
+        } else {
+            jQuery('button#submit').prop("disabled", false);
+        }
+        return this.valid;
+    },
+    
+    validateAllTabs: function (tabs, simple) {
+        var count = 0;
+        for (var i=0;i<this.tabs.length;i++) {
+            if (typeof tabs === 'undefined' || tabs === null || jQuery.inArray(this.tabs[i].id,tabs) > -1) {
+                if (this.tabs[i].visible === true) {
+                    count += this.validateTab(this.tabs[i].id,simple);
+                }
+            }
+        }
+    },
+    
+    validateTab: function (tab,simple) {
+
+        this.checkConditions();
+
+        if (typeof tab === 'undefined') {
+            tab = 0;
+        }
+        var invalidCount = 0;
+        for (var name in this.inputValidation) {
+            if (this.inputValidation[name].validate === true && this.inputValidation[name].tab.id === tab && this.inputValidation[name].tab.visible === true && this.inputValidation[name].visible !== false) {
+                var valid = true;
+                if (typeof this.inputValidation[name].handler !== 'undefined') {
+                    valid = this.inputValidation[name].handler();
+                } else {
+                    valid = jQuery('#'+name).isValid ();
+                }
+                
+                this.validatedElements[name] = valid;
+                this.inputValidation[name].valid = valid;
+                if (!valid) {
+                    invalidCount++;
+                }
+            }
+        }
+        
+        if (invalidCount > 0) {
+            jQuery('.navlist > li#tab'+tab+' a > span').remove();
+            jQuery('.navlist > li#tab'+tab+' a').append('<span class="error">Du mangler at udfylde data</span>');
+        } else {
+            jQuery('.navlist > li#tab'+tab+' a > span').remove();
+            jQuery('.navlist > li#tab'+tab+' a').append('<span class="info">Udfyldt</span>');
+        }
+        
+        this.checkValidation();
+        this.checkConditions();
+
+        return invalidCount;
+    },
+    
+    resetTabValidation: function (tabs) {
+        if (typeof tabs === 'undefined') {
+            jQuery('.navlist > li > a > span').remove();
+        } else {
+            if (!jQuery.isArray(tabs)) {
+                tabs = [tabs];
+            }
+            for (var i=0;i<tabs.length;i++) {
+                jQuery('.navlist > li#tab'+tabs[i]+' a > span').remove();
+            }
+        }
+    },
 
     submit: function () {
-        if (this.map && this.feature.length === 0) {
+        if (this.map && this.feature.length === 0 && this.featureRequired === true) {
             alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
-            return;
         } else {
             var params = {
                 sessionid: this.sessionid,
@@ -1688,8 +2310,13 @@ Formular = SpatialMap.Class ({
             }
             var invalidCount = 0;
             for (var name in this.inputValidation) {
-                if (this.inputValidation[name]) {
-                    var valid = jQuery('#'+name).isValid ();
+                if (this.inputValidation[name].validate && this.inputValidation[name].tab.visible === true && this.inputValidation[name].visible !== false) {
+                    var valid = true;
+                    if (typeof this.inputValidation[name].handler !== 'undefined') {
+                        valid = this.inputValidation[name].handler();
+                    } else {
+                        valid = jQuery('#'+name).isValid ();
+                    }
                     if (!valid) {
                         invalidCount++;
                     }
@@ -1735,6 +2362,126 @@ Formular = SpatialMap.Class ({
         }
     },
     
+    setPreview: function (element) {
+        
+        element.empty();
+        
+        for (var i=0;i<this.tabs.length;i++) {
+            
+            if (this.tabs[i].type !== 'confirm') {
+            
+                element.append('<h2>'+this.tabs[i].displayname+'</h2>');
+                
+                for (var j=0;j<this.tabs[i].postparams.length;j++) {
+
+                    var param = this.tabs[i].postparams[j];
+
+                    var name = param.id;
+
+                    if (param.visible === true && param.tab.visible) {
+
+                        var e = this.getPreviewElement(param);
+                        if (e !== null) {
+
+                            if (typeof param.rowID !== 'undefined') {
+
+                                var rowElement = element.find('#previewRow_'+param.rowID);
+                                if (rowElement.length === 0) {
+                                    rowElement = jQuery('<div id="previewRow_' +param.rowID+ '" class="row"></div>');
+                                    element.append(rowElement);
+                                }
+                                var colElemet = rowElement.find('.previewCol_'+param.colID);
+                                if (colElemet.length === 0) {
+                                    colElemet = jQuery('<div class="previewCol_'+param.colID+'"></div>');
+                                    rowElement.append(colElemet);
+                                }
+                                colElemet.addClass(param.colClassName);
+                                colElemet.append(e);
+
+                            } else {
+                                element.append(e);
+                            }
+
+                        }
+                    
+                    }
+                }
+            }
+        }
+    },
+
+
+    getPreviewElement: function (param) {
+        var e = null;
+
+        var val = jQuery('#'+param.id).val();
+
+        var valid = true;
+        var req = false;
+        if (typeof this.inputValidation[param.id] !== 'undefined') {
+            valid = this.inputValidation[param.id].valid;
+            req = this.inputValidation[param.id].required;
+        }
+
+        var forceShow = false;
+        if (param.type === 'h1' || param.type === 'h2') {
+            forceShow = true;
+        }
+
+        if (this.showEmptyInPreview === true || forceShow === true || (val !== '' || req === true || valid === false)) {
+            var textVal = val;
+            if (param.type && param.type == 'checkbox') {
+                val = jQuery('#'+param.id).is(':checked');
+                textVal = (val ? 'ja' : 'nej');
+            }
+            if (param.type && param.type == 'radiobutton') {
+                val = jQuery('input:radio[name='+param.id+']:checked').val();
+                if (typeof val === 'undefined') {
+                    if (param.defaultValue) {
+                        val = param.defaultValue;
+                    } else {
+                        val = '';
+                    }
+                }
+                textVal = val;
+            }
+            if (param.type && param.type == 'file') {
+                textVal = jQuery('#'+param.id+'_org').val();
+            }
+
+            var t = param.displayname;
+            if (typeof t !== 'undefined') {
+                if (this.bootstrap === true) {
+                    var click = true;
+
+                    if (param.type === 'h1' || param.type === 'h2') {
+                        e = jQuery('<'+param.type+'>'+param.displayname+'</'+param.type+'>');
+                        click = false;
+                    } else if (param.type === 'conflicts') {
+                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                    } else {
+                        e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(req ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
+                    }
+                    if (!valid && click == true) {
+                        e.click(SpatialMap.Function.bind(function (input) {
+                            this.showTab(input.tab.id);
+                            var element = document.getElementById(input.id);
+                            if (element) {
+                                element.focus();
+                            }
+                        },this,param));
+                    }
+                } else {
+                    if (val) {
+                        e = jQuery('<br/>'+t+' '+textVal);
+                    }
+                }
+            }
+        }
+
+        return e;
+    },
+    
     getParams: function (postparams, params) {
         var confirmtext = '';
         if (typeof params === 'undefined') {
@@ -1776,97 +2523,157 @@ Formular = SpatialMap.Class ({
     },
         
     submitFinal: function (params) {
-        jQuery('#messageloading').append('<div id="message_loading">Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)</div>');
+        
+        if (this.bootstrap === true) {
+            var message = '<div class="header">Ansøgningen registreres. Vent venligst...</div>Det kan tage op til et par minutter';
+            if (typeof this.messages.saving !== 'undefined') {
+                message = this.messages.saving;
+            }
+            jQuery('#messageloading').html(message);
+            jQuery('div#form').hide();
+            jQuery('div#receipt').show();
+        } else {
+            var message = 'Ansøgningen registreres. Vent venligst...<br/>(Det kan tage op til et par minutter)';
+            if (typeof this.messages.saving !== 'undefined') {
+                message = this.messages.saving;
+            }
+            jQuery('#messageloading').append('<div id="message_loading">'+message+'</div>');
 
-        jQuery('#messagetext').empty();
-        jQuery('#messagebuttons').empty();
-        for (var i=0;i<this.submitbuttons.length;i++) {
-            jQuery('#messagebuttons').append(this.submitbuttons[i]);
+            jQuery('#messagetext').empty();
+            jQuery('#messagebuttons').empty();
+            for (var i=0;i<this.submitbuttons.length;i++) {
+                jQuery('#messagebuttons').append(this.submitbuttons[i]);
+            }
         }
         
         if (this.pages.length > 0) {
             
-        	var pages = this.pages.slice(0);
-        	this.execute(params,pages);
-        	
+            var pages = this.pages.slice(0);
+            this.execute(params,pages);
+            
         } else {
-        	//The old way
-	        params.page = this.submitpage;
-	        
-	        jQuery.ajax( {
-	            url : 'cbkort',
-	            dataType : 'xml',
-	            type: 'POST',
-	            async: true,
-	            data : params,
-	            success : SpatialMap.Function.bind( function(params, data, status) {
-	                if (this.showReport) {
-	                    var pdf = jQuery(data).find('col[name="url"]');
-	                    if (pdf.length) {
-	                        jQuery.ajax( {
-	                            url : '/jsp/modules/formular/final.jsp',
-	                            dataType : 'json',
-	                            type: 'POST',
-	                            async: true,
-	                            data : {
-	                                file: pdf.text().replace(/\/tmp\//,''),
-	                                formular: this.name,
-	                                sessionid: this.sessionid
-	                            },
-	                            success: SpatialMap.Function.bind( function (pdf,data) {
-	                                if(data.result!='OK') {
-	                                    if (this.messages.done) {
-	                                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
-	                                    } else {
-	                                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
-	                                    }
-	                                }
-	                                this.removeSession();
-	                            },this,pdf)
-	                        });
-	                        jQuery('#message').show();
-                            jQuery('#messageloading').hide();
-	                        jQuery('#messagebuttons').show();
-                            if (this.messages.done) {
-                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
-                            } else {
-                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
-                            }
-	                    } else {
-	                        var m = jQuery(data).find('message').text();
-	                        if (!m) {
-	                            m = 'No PDF respose from server';
-	                        }
-	                        this.log({
-	                            type: 'error',
-	                            name: 'submitFinal',
-	                            message: m,
-	                            obj: JSON.stringify(params)
-	                        });
+            //The old way
+            params.page = this.submitpage;
+            
+            jQuery.ajax( {
+                url : 'cbkort',
+                dataType : 'xml',
+                type: 'POST',
+                async: true,
+                data : params,
+                success : SpatialMap.Function.bind( function(params, data, status) {
+                    if (this.showReport) {
+                        var pdf = jQuery(data).find('col[name="url"]');
+                        if (pdf.length) {
+                            jQuery.ajax( {
+                                url : '/jsp/modules/formular/final.jsp',
+                                dataType : 'json',
+                                type: 'POST',
+                                async: true,
+                                data : {
+                                    file: pdf.text().replace(/\/tmp\//,''),
+                                    formular: this.name,
+                                    sessionid: this.sessionid
+                                },
+                                success: SpatialMap.Function.bind( function (pdf,data) {
+                                    if(data.result!='OK') {
+                                        if (this.messages.done) {
+                                            if (this.bootstrap) {
+                                                var html = '<div class="alert alert-success">'+this.messages.done+'</div>'+
+                                                           '<h1>Kvittering</h1>'+
+                                                           '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                                jQuery('div#finalmessage').html(html);
+                                            } else {
+                                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                                            }
+                                        } else {
+                                            if (this.bootstrap) {
+                                                var html = '<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>'+
+                                                           '<h1>Kvittering</h1>'+
+                                                           '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                                jQuery('div#finalmessage').html(html);
+                                            } else {
+                                                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                                            }
+                                        }
+                                    }
+                                    this.removeSession();
+                                },this,pdf)
+                            });
                             jQuery('#message').show();
-	                        jQuery('#messageloading').hide();
-	                        jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
-	                    }
-	                } else {
-	                    jQuery('#message').show();
-                        jQuery('#messageloading').hide();
-	                    jQuery('#messagebuttons').show();
-	                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
-	                    this.removeSession();
-	                }
-	            },this, params),
-	            error : SpatialMap.Function.bind( function(params, data, status) {
+                            jQuery('#messageloading').hide();
+                            jQuery('#messagebuttons').show();
+                            if (this.messages.done) {
+                                if (this.bootstrap) {
+                                    var html = '<div class="alert alert-success">'+this.messages.done+'</div></div>'+
+                                               '<h1>Kvittering</h1>'+
+                                               '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                    jQuery('div#finalmessage').html(html);
+                                } else {
+                                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}',pdf.text())+'</div>');
+                                }
+                            } else {
+                                if (this.bootstrap) {
+                                    var html = '<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>'+
+                                               '<h1>Kvittering</h1>'+
+                                               '<p><a class="btn btn-primary hidden-print" href="'+pdf.text()+'">Udskriv kvittering</a></p>';
+                                    jQuery('div#finalmessage').html(html)
+                                } else {
+                                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="'+pdf.text()+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                                }
+                            }
+                        } else {
+                            var m = jQuery(data).find('message').text();
+                            if (!m) {
+                                m = 'No PDF respose from server';
+                            }
+                            this.log({
+                                type: 'error',
+                                name: 'submitFinal',
+                                message: m,
+                                obj: JSON.stringify(params)
+                            });
+                            
+                            if (this.bootstrap === true) {
+                                var html = '<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>'+
+                                jQuery('div#finalmessage').html(html);
+                            } else {
+                                jQuery('#message').show();
+                                jQuery('#messageloading').hide();
+                                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                            }
+                            
+                        }
+                    } else {
+                        if (this.bootstrap === true) {
+                            var html = '<div class="alert alert-success"><div class="header">Din ansøgning er nu registreret</div> Tak for din henvendelse.</div>'+
+                            jQuery('div#finalmessage').html(html);
+                        } else {
+                            jQuery('#message').show();
+                            jQuery('#messageloading').hide();
+                            jQuery('#messagebuttons').show();
+                            jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                        }
+                        this.removeSession();
+                    }
+                },this, params),
+                error : SpatialMap.Function.bind( function(params, data, status) {
                     this.log({
                         type: 'error',
                         name: 'submitFinal',
                         message: 'No respose from server',
                         obj: JSON.stringify(params)
                     });
-                    jQuery('#messageloading').hide();
-	                jQuery('#message').show().html('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
-	            },this, params)
-	        });
-	        
+                    if (this.bootstrap === true) {
+                        var html = '<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Prøv igen eller kontakt kommunen.</div></div>'+
+                        jQuery('div#finalmessage').html(html);
+                    } else {
+                        jQuery('#messageloading').hide();
+                        jQuery('#message').show().html('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
+                    }
+                },this, params)
+            });
+            
         }
     },
     
@@ -1886,21 +2693,22 @@ Formular = SpatialMap.Class ({
         } else {
             
             params.page = pages[0].name;
+            params.outputformat = pages[0].type;
             
             jQuery.ajax( {
-                url : 'cbkort',
-                dataType : pages[0].type || 'json',
+                url : pages[0].url,
+                dataType : pages[0].type,
                 type: 'POST',
                 async: true,
                 data : params,
                 success : SpatialMap.Function.bind( function(params, pages, data, status) {
-                	if (pages[0].parser) {
-                		params = this[pages[0].parser](data, params, pages[0].urlparam);
-                	}
+                    if (pages[0].parser) {
+                        params = this[pages[0].parser](data, params, pages[0].urlparam);
+                    }
                     params = this.handleError(data, params, pages[0].error);
-                	
-                	if (this.isErrorRespose(data)) {
-                	    if (pages[0].error) {
+                    
+                    if (this.isErrorRespose(data)) {
+                        if (pages[0].error) {
                             if (pages[0].error.type === 'info') {
                                 this.showErrorInfo(pages[0].error);
                             } else if (pages[0].error.type === 'warning') {
@@ -1914,21 +2722,21 @@ Formular = SpatialMap.Class ({
                                 this.pagesFail();
                                 return;
                             }
-                	    } else {
+                        } else {
                             this.showError();
                             this.pagesFail();
                             return;
-                	    }
-                	}
-                	
-                	//Remove from list
+                        }
+                    }
+                    
+                    //Remove from list
                     pages.shift();
                     
-                	if (pages.length > 0) {
-                		this.execute(params, pages);
-                	} else {
-                	    this.pagesDone(params);
-                	}
+                    if (pages.length > 0) {
+                        this.execute(params, pages);
+                    } else {
+                        this.pagesDone(params);
+                    }
                 },this, params, pages),
                 error : SpatialMap.Function.bind( function(params, pages, data, status) {
                     if (pages[0].parser) {
@@ -1962,6 +2770,7 @@ Formular = SpatialMap.Class ({
                         
                     } else {
                         this.showError();
+                        this.pagesFail();
                     }
                 },this, params, pages)
             });
@@ -2040,36 +2849,74 @@ Formular = SpatialMap.Class ({
             jQuery('#messagebuttons').show();
             if (this.pdf) {
                 if (this.messages.done) {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success">'+this.messages.done+'</div>');
+                        jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                    }
                 } else {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>');
+                        jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret.<br/>Hent en kvittering på ansøgningen <a href="/tmp/'+this.pdf+'" target="_blank">her</a> (Åbnes i et nyt vindue!)</div>');
+                    }
                 }
             } else {
                 if (this.messages.doneNoPDF) {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.doneNoPDF+'</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success">'+this.messages.doneNoPDF+'</div>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.doneNoPDF+'</div>');
+                    }
                 } else if (this.messages.done) {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done+'</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success">'+this.messages.done+'</div>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done+'</div>');
+                    }
                 } else {
-                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret</div>');
+                    if (this.bootstrap === true) {
+                        jQuery('#message').append('<div class="alert alert-success"><div class="header">Ansøgningen er nu registreret</div></div>');
+                    } else {
+                        jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Ansøgningen er nu registreret</div>');
+                    }
                 }
             }
         } else {
             jQuery('#message').show();
             jQuery('#messagebuttons').show();
             if (this.messages.done) {
-                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-success">'+this.messages.done+'</div>');
+                    jQuery('#submessage').append('<h1>Kvittering</h1><p><a class="btn btn-primary hidden-print" href="/tmp/'+this.pdf+'">Udskriv kvittering</a></p>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>'+this.messages.done.replace('{{pdf}}','/tmp/'+this.pdf)+'</div>');
+                }
             } else {
-                jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-success"><div class="header">Din ansøgning er nu registreret</div>Tak for din henvendelse.</div></div>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done"><span class="icon-checkmark"></span>Din ansøgning er nu registreret. Tak for din henvendelse.</div>');
+                }
             }
             this.removeSession();
         }
+        
+        this.fireEvent('formular-complete');
+        
     },
     
     showErrorInfo: function (error) {
         jQuery('#message').show();
         
         if (error && error.message) {
-            jQuery('#messagetext').append('<div id="message_done" class="message-info"><span class="icon-info2"></span>'+error.message+'</div>');
+            if (this.bootstrap === true) {
+                jQuery('#message').append('<div class="alert alert-info">'+error.message+'</div>');
+            } else {
+                jQuery('#messagetext').append('<div id="message_done" class="message-info"><span class="icon-info2"></span>'+error.message+'</div>');
+            }
         }
         
     },
@@ -2078,7 +2925,11 @@ Formular = SpatialMap.Class ({
         jQuery('#message').show();
         
         if (error && error.message) {
-            jQuery('#messagetext').append('<div id="message_done" class="message-warning"><span class="icon-info2"></span>'+error.message+'</div>');
+            if (this.bootstrap === true) {
+                jQuery('#message').append('<div class="alert alert-warning">'+error.message+'</div>');
+            } else {
+                jQuery('#messagetext').append('<div id="message_done" class="message-warning"><span class="icon-info2"></span>'+error.message+'</div>');
+            }
         }
         
     },
@@ -2087,25 +2938,37 @@ Formular = SpatialMap.Class ({
         jQuery('#message').show();
         
         if (error && error.message) {
-            jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
+            if (this.bootstrap === true) {
+                jQuery('#message').append('<div class="alert alert-danger">'+error.message+'</div>');
+            } else {
+                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
+            }
         } else {
             if (this.messages.error) {
-                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-danger">'+this.messages.error+'</div>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
+                }
             } else {
-                jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                if (this.bootstrap === true) {
+                    jQuery('#message').append('<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                } else {
+                    jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+                }
             }
         }
         
     },
     
     isErrorRespose: function (data) {
-        return (data.exception || jQuery(data.responseXML).find('exception').length > 0);
+        return (data.exception || jQuery(data.responseXML).find('exception').length > 0 || data.result === 'ERROR');
     },
     
     handleError: function (data, params, error) {
-    	if (this.isErrorRespose(data)) {
-    	    
-    	    var message = 'Error from server';
+        if (this.isErrorRespose(data)) {
+            
+            var message = 'Error from server';
             var type = 'error';
 
             if (error && error.message) {
@@ -2130,8 +2993,8 @@ Formular = SpatialMap.Class ({
                 message: message,
                 obj: JSON.stringify(params)
             });
-    	}
-    	return params;
+        }
+        return params;
     },
     
     removeSession: function () {
@@ -2140,11 +3003,11 @@ Formular = SpatialMap.Class ({
             this.clearLocalStore();
         }
         
-    	var params = {
+        var params = {
             sessionid: this.sessionid,
             page: this.removeSessionPage
         }
-    	this.sessionid = null;
+        this.sessionid = null;
         jQuery.ajax( {
             url : '/cbkort',
             dataType : 'xml',
@@ -2168,11 +3031,19 @@ Formular = SpatialMap.Class ({
         var modal = jQuery('#modal');
         modal.hide();
     },
+    
+    deleteFileUpload: function (id) {
+        jQuery('#'+id).val('');
+        jQuery('#'+id+'_org').val('');
+        jQuery('#file_'+id).val('');
+        jQuery('#'+id+'_row .filupload-delete').hide();
+    },
 
     fileupload: function (filename,id,orgfilename) {
         this.endFileUpload();
         jQuery('#'+id).val(filename);
         jQuery('#'+id+'_org').val(orgfilename);
+        jQuery('#'+id+'_row .filupload-delete').show();
     },
     
     start: function () {
@@ -2190,14 +3061,14 @@ Formular = SpatialMap.Class ({
                      { expression: new RegExp('QQQQQQ'), errormessage: message || 'Ikke ens!'}
                  ]
             });
-            this.inputValidation[b] = true;
+            this.inputValidation[b].validate = true;
         } else {
             jQuery('#'+b).valid8({
                 'regularExpressions': [
                      { expression: new RegExp('.*')}
                  ]
             });
-            this.inputValidation[b] = false;
+            this.inputValidation[b].validate = false;
         }
         jQuery('#'+b).isValid();
     },
@@ -2255,7 +3126,7 @@ Formular = SpatialMap.Class ({
                 
                 startdate = new Date(start_y, start_m-1, start_d);
                 if (date <= startdate) {
-                	return [false];
+                    return [false];
                 }
             }
             if(options.end) {
@@ -2265,7 +3136,7 @@ Formular = SpatialMap.Class ({
                 var end_y = enddate[2]-0;
                 enddate = new Date(end_y, end_m-1, end_d);
                 if (date > enddate) {
-                	return [false];
+                    return [false];
                 }
             }
             
@@ -2304,6 +3175,33 @@ Formular = SpatialMap.Class ({
             });
 
         }
+    },
+    
+    on: function (event, callback) {
+        var listener = {event:event,callback:callback};
+        this._listeners.push (listener);
+        return listener;
+    },
+    
+    off: function (listener) {
+        for (var i=0;i<this._listeners.length;i++) {
+            if (this._listeners[i] === listener) {
+                this._listeners.splice(i,1);
+                break;
+            }
+        }
+    },
+    
+    fireEvent: function (event,parameters) {
+        if (typeof this._listeners !== 'undefined') {
+            for (var i=0;i<this._listeners.length;i++) {
+                if (this._listeners[i].event === event) {
+                    if (typeof this._listeners[i].callback !== 'undefined') {
+                        this._listeners[i].callback.apply (this,arguments);
+                    }
+                }
+            }
+        }
     }
 
 });
@@ -2311,36 +3209,36 @@ Formular = SpatialMap.Class ({
 
 
 Formular.prototype.setFrid = function (data, params, urlparamname) {
-	params = this.handleError(data, params);
-	if (params != null) {
-	    if (!urlparamname) {
-	        urlparamname = 'frid';
-	    }
-	    if (data && data.row && data.row[0]) {
-    		for (var name in data.row[0]) {
-    			params[urlparamname] = data.row[0][name];
-    		}
-	    } else {
-	        params[urlparamname] = this.sessionid;
-	    }
-	}
-	return params;
+    params = this.handleError(data, params);
+    if (params != null) {
+        if (!urlparamname) {
+            urlparamname = 'frid';
+        }
+        if (data && data.row && data.row[0]) {
+            for (var name in data.row[0]) {
+                params[urlparamname] = data.row[0][name];
+            }
+        } else {
+            params[urlparamname] = this.sessionid;
+        }
+    }
+    return params;
 }
 
 Formular.prototype.setPdf = function (data, params, urlparamname) {
-	params = this.handleError(data, params);
-	if (params != null) {
-	    if (!urlparamname) {
-	        urlparamname = 'frpdf';
-	    }
-		for (var i=0;i<data.row.length;i++) {
-			if (data.row[i].url) {
-				this.pdf = data.row[i].url.replace(/\/tmp\//,'');
-				params[urlparamname] = this.pdf;
-			}
-		}
-	}
-	return params;
+    params = this.handleError(data, params);
+    if (params != null) {
+        if (!urlparamname) {
+            urlparamname = 'frpdf';
+        }
+        for (var i=0;i<data.row.length;i++) {
+            if (data.row[i].url) {
+                this.pdf = data.row[i].url.replace(/\/tmp\//,'');
+                params[urlparamname] = this.pdf;
+            }
+        }
+    }
+    return params;
 }
 
 
@@ -2395,24 +3293,3 @@ function calculateDistance (a,b) {
     }
 }
 
-
-(function( jQuery ) {
-
-jQuery( ".ui-autocomplete-input" ).live( "autocompleteopen", function() {
-    var autocomplete = jQuery( this ).data( "autocomplete" ),
-        menu = autocomplete.menu;
-
-    if ( !autocomplete.options.selectFirst ) {
-        return;
-    }
-    //the requested term no longer matches the search, so drop out of this now
-    if(autocomplete.term != jQuery(this).val()){
-        //console.log("mismatch! "+autocomplete.term+'|'+$(this).val());
-        return;
-    }
-    //hack to prevent clearing of value on mismatch
-    menu.options.blur = function(event,ui){return}
-    menu.activate( jQuery.Event({ type: "mouseenter" }), menu.element.children().first() );
-});
-
-}( jQuery ));

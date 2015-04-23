@@ -1,0 +1,102 @@
+body {
+    margin: 0;
+}
+
+.stepscontainer {
+    height: 40px;
+}
+
+.navlist a {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.mapcontainer > .map {
+    width: 100%;
+}
+.maptools {
+    height: 30px;
+}
+
+.error {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+fieldset .error.map, 
+fieldset .error input, 
+fieldset .error textarea, 
+fieldset .error select, 
+fieldset .error .form-control-static { 
+    border: 4px solid #ce1415; 
+}
+
+fieldset .error .validationMessage,
+fieldset .error.validationMessage { 
+    padding:0.8em 0 0.8em 0.8em; 
+    background: #ce1415; 
+    border-bottom: 1px solid #840000; 
+    color:#fff; 
+    margin-bottom:0; 
+    margin-top: 0px;
+    display: block;
+}
+fieldset {
+    padding-bottom: 20px;
+}
+.required-enabled.valid .validationMessage,
+.required-enabled.valid .error.validationMessage {
+    display: none;
+}
+.required-enabled.error .validationMessage,
+.required-enabled.error .error.validationMessage {
+    display: block;
+}
+
+ul.nav.style-2 li.active a span.info { 
+    background: url(http://designmanual.virk.dk/virkdesign/designmanualv2/css/../graphics/icon-checked.png) no-repeat left center; 
+}
+ul.nav.style-2 li.active a span.error { 
+    background: url(http://designmanual.virk.dk/virkdesign/designmanualv2/css/../graphics/icon-error.png) no-repeat left center; 
+}
+
+.content-loading-div {
+    display: none;
+    text-align: center;
+}
+.content-loading-div > div {
+    display: inline-block;
+    padding-left: 50px;
+    height: 50px;
+    line-height: 50px;
+    background-image: url("/images/standard/loading/loader_l.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
+    color: #999;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 30px;
+}
+.content-loading > .content-loading-div {
+    display: block;
+}
+.content-loading > .buttons {
+    display: none;
+}
+
+.fileupload input[type="file"] {
+    display: inline !important;
+}
+
+.filupload-delete {
+    background: url("img/icon-close-round.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    width: 27px;
+    height: 27px;
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: -8px;
+    margin-left: 10px;
+}

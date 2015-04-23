@@ -56,10 +56,29 @@
             </url-parameters>
         </data>
     </page>
-    
-    
-    
-    
-    
+
+    <page name="formular.send.test.pdf" contenttype="text/html" resultpassing="pass-all" sessionreqiured="false">
+        <stylesheet>[module:formular-test.dir]/xsl/link.xsl</stylesheet>
+        <url-parameters>
+            <url-parameter name="formularxsl" value="pdf"/>
+            <url-parameter name="nomap" value="true"/>
+        </url-parameters>
+        <data handler="PDFFormatter" operation="format-pdf">
+            <url-parameters>
+                <url-parameter name="stylesheet">"[module:formular-test.dir]/xsl/test.xsl"</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+
+
+    <page name="formular.test.detaljer.xml" contenttype="xml" sessionreqiured="false">
+        <data handler="datasource" operation="execute-command"/>
+    </page>
+    <page name="formular.test.detaljer" contenttype="text/html" sessionreqiured="false">
+        <stylesheet>[module:formular-test.dir]/xsl/detaljer.xsl</stylesheet>
+        <data handler="datasource" operation="execute-command"/>
+    </page>
+
+
 
 </pages>

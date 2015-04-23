@@ -26,10 +26,12 @@
    <makedir dir="[cbinfo.wwwroot.dir]/jsp/modules/formular"/>
 
    <copydir fromdir="[module:formular.dir]/css"    todir="[cbinfo.wwwroot.dir]/modules/formular/css" replacetext="false"/>
+   <copydir fromdir="[module:formular.dir]/js"    todir="[cbinfo.wwwroot.dir]/modules/formular/js" replacetext="false"/>
 
    <copyfile fromfile="[module:formular.dir]/jsp/upload.jsp"       tofile="[cbinfo.wwwroot.dir]/jsp/modules/formular/upload.jsp"/>
    <copyfile fromfile="[module:formular.dir]/jsp/final.jsp"        tofile="[cbinfo.wwwroot.dir]/jsp/modules/formular/final.jsp"/>
    <copyfile fromfile="[module:formular.dir]/jsp/final_xml.jsp"    tofile="[cbinfo.wwwroot.dir]/jsp/modules/formular/final_xml.jsp"/>
+   <copyfile fromfile="[module:formular.dir]/jsp/final_json.jsp"   tofile="[cbinfo.wwwroot.dir]/jsp/modules/formular/final_json.jsp"/>
    <copyfile fromfile="[module:formular.dir]/js/formular.js"       tofile="[cbinfo.wwwroot.dir]/modules/formular/js/formular.js"/>
    <copyfile fromfile="[module:formular.dir]/js/jquery.valid8.js"  tofile="[cbinfo.wwwroot.dir]/modules/formular/js/jquery.valid8.js"/>
    <copyfile fromfile="[module:formular.dir]/js/encodeparam.js"    tofile="[cbinfo.wwwroot.dir]/modules/formular/js/encodeparam.js"/>

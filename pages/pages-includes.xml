@@ -6,6 +6,15 @@
         <file filename="[module.formular.config]"/>
     </page>
 
+    <page name="formular.virk" contenttype="text/html">
+        <stylesheet>[module:formular.dir]/xsl/formular-virk.xsl</stylesheet>
+        <file filename="[module.formular.config]"/>
+    </page>
+    <page name="formular.virk.counter" contenttype="json">
+        <stylesheet>[module:formular.dir]/xsl/formular-virk-counter.xsl</stylesheet>
+        <file filename="[cbinfo.misc.dir]/standard/empty.xml"/>
+    </page>
+
     <page name="formular.config" contenttype="text/xml">
         <stylesheet>[module:formular.dir]/xsl/formular-config.xsl</stylesheet>
         <file filename="[module.formular.config]"/>
@@ -147,6 +156,14 @@
         <data handler="datasource" operation="execute-command">
             <url-parameters>
                 <url-parameter name="command" value="write"/>
+            </url-parameters>
+        </data>
+    </page>
+    
+    <page name="formular.read.data" contenttype="application/json" sessionrequired="true">  
+        <data handler="datasource" operation="execute-command">
+            <url-parameters>
+                <url-parameter name="command">if IsDefined(command) then command else "read" endif</url-parameter>
             </url-parameters>
         </data>
     </page>

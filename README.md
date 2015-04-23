@@ -36,9 +36,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <title>Ansøgningsskema til vandhuller</title>           <!-- OPTIONAL - Angiver den tekst, der står som titel i browseren -->
         <header>Ansøgningsskema til vandhuller</header>         <!-- OPTIONAL - Angiver den tekst, der står øverst på siden -->
         <subheader>Ansøgning efter naturbeskyttelsesloven</subheader> <!-- OPTIONAL - Angiver den tekst, der står under overskriften på siden -->
-
         <submitpage>formular.send.soe</submitpage>              <!-- DEPRECATED - BRUG SUBMITPAGES I STEDET - Den page, der skal kaldes for at gemme og danne kvitering - Denne page vil være specifik for hver formular. Se senere i dette dokument. -->
-
         <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
             <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
             <page parser="setFrid" urlparam="journalnummer">    <!-- Det er muligt at tilføje en "urlparam", der sendes til parseren. Herved kan man bestemme navnet på urlparametere der holder værdien -->
@@ -54,7 +52,6 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                                                                      Hvis log er aktiveret så logges alle fejl -->
             <page errormessage="Tekst">formular.save</page>     <!-- errormessage indeholder den tekst, der vises hvis der er en fejl. -->
         </submitpages>
-
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
         <reportprofile>alt</reportprofile>                      <!-- OPTIONAL - Profil, der skal anvendes til at danne kortet i kviteringen (default er "alt") -->
         <reportlayers>default</reportlayers>                    <!-- OPTIONAL - Layers, der skal anvendes til at danne kortet i kviteringen. Det kan være en liste adskilt af mellemrum (default er "default", der gør at det er profilen default viste temaer, der vises) -->

@@ -953,7 +953,8 @@ Formular = SpatialMap.Class ({
                             list.push({
                                 value: jQuery(option[j]).attr('value'),
                                 name: jQuery(option[j]).attr('name'),
-                                checked: jQuery(option[j]).attr('value') == value
+                                checked: jQuery(option[j]).attr('value') == value,
+                                disabled: jQuery(option[j]).attr('disabled') === 'true'
                             });
                         }
                     }
@@ -1994,7 +1995,7 @@ Formular = SpatialMap.Class ({
         dropdown.empty();
         for (var j=0;j<list.length;j++) {
             var checked = (list[j].checked ? ' selected="selected"' : '');
-            dropdown.append('<option value="'+list[j].value+'"'+checked+'>'+list[j].name+'</option>');
+            dropdown.append('<option value="'+list[j].value+'"'+checked+' '+(list[j].disabled === true ? 'disabled="disabled' : '')+'>'+list[j].name+'</option>');
         }
     },
     

@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="timerange">
+        <header>Dato og tidsvælger med begrænsning af muligt tidsinterval</header>
+        <reportprofile>demo01</reportprofile>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page>formular.save</page>
+        </submitpages>
+        <js>/modules/formular/test/js/timecheck.js</js>
+        <content>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="hidden" urlparam="val3" defaultvalue="time"/>
+            <input type="hidden" urlparam="command" defaultvalue="write"/>
+            <input type="hidden" urlparam="about" defaultvalue="Datovælger med begrænsninger"/>
+            <input id="date" type="date" displayname="Dato:" urlparam="val0" mindate="0" maxdate="+2" onchange="TimeCheck.checkDate('date','val1', 'formular-test')"/>
+            <input type="dropdown"  id="val1" displayname="Fra kl" urlparam="val1" required="true" onchange="TimeCheck.checkTime('val1', 'val2')" validate="Feltet skal udfyldes." condition="TimeCheck.date !== ''">
+                <option value="" name="Vælg"/>
+                <option value="0800" name="8:00"/>
+                <option value="0830" name="8:30"/>
+                <option value="0900" name="9:00"/>
+                <option value="0930" name="9:30"/>
+                <option value="1000" name="10:00"/>
+                <option value="1030" name="10:30"/>
+                <option value="1100" name="11:00"/>
+                <option value="1130" name="11:30"/>
+                <option value="1200" name="12:00"/>
+                <option value="1230" name="12:30"/>
+                <option value="1300" name="13:00"/>
+                <option value="1330" name="13:30"/>
+                <option value="1400" name="14:00"/>
+                <option value="1430" name="14:30"/>
+                <option value="1500" name="15:00"/>
+                <option value="1530" name="15:30"/>
+            </input>
+            <input type="dropdown"  id="val2" displayname="Til kl" urlparam="val2" required="true" validate="Feltet skal udfyldes." condition="TimeCheck.date !== '' &amp;&amp; TimeCheck.start !== ''">
+                <option value="" name="Vælg"/>
+                <option value="0830" name="8:30"/>
+                <option value="0900" name="9:00"/>
+                <option value="0930" name="9:30"/>
+                <option value="1000" name="10:00"/>
+                <option value="1030" name="10:30"/>
+                <option value="1100" name="11:00"/>
+                <option value="1130" name="11:30"/>
+                <option value="1200" name="12:00"/>
+                <option value="1230" name="12:30"/>
+                <option value="1300" name="13:00"/>
+                <option value="1330" name="13:30"/>
+                <option value="1400" name="14:00"/>
+                <option value="1430" name="14:30"/>
+                <option value="1500" name="15:00"/>
+                <option value="1530" name="15:30"/>
+                <option value="1600" name="16:00"/>
+            </input>
+        </content>
+    </formular>
+
+    <formular name="simple">
+        <title>Formular TEST</title>
+        <header>Formular TEST</header>
+        <subheader>Formular TEST</subheader>
+        <reportprofile>demo01</reportprofile>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <content>
+            <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn" required="true" validate="Angiv et navn"/>
+        </content>
+    </formular>
+
     <formular name="asbestaffald">
         <!--virkid test="true" presenter="Septima">TEST</virkid-->
         <contact email="miljo@albertsund.dk" phone="-" link="http://www.albertsund.dk">Albertslund Kommune</contact>

@@ -3151,18 +3151,14 @@ Formular = SpatialMap.Class ({
             return;
         }
         options.command = (typeof options.command !== 'undefined' ? options.command : 'read');
-        options.overwrite = (typeof options.overwrite !== 'undefined' ? options.overwrite : true);
-        options.params = (typeof options.params !== 'undefined' ? options.params : {});
 
         var params = {
             page: 'formular.read.datasource',
-            sessionid: this.sessionid,
-            datasource: options.datasource,
-            command: options.command
+            sessionid: this.sessionid
         };
 
-        for (var name in options.params) {
-            params[name] = options.params[name];
+        for (var name in options) {
+            params[name] = options[name];
         }
 
         jQuery.ajax( {

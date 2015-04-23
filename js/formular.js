@@ -3145,6 +3145,44 @@ Formular = SpatialMap.Class ({
         
         
     },
+
+    setFromDatasource: function (options) {
+        if (typeof options === 'undefined' || typeof options.datasource === 'undefined') {
+            return;
+        }
+        options.command = (typeof options.command !== 'undefined' ? options.command : 'read');
+        options.overwrite = (typeof options.overwrite !== 'undefined' ? options.overwrite : true);
+        options.params = (typeof options.params !== 'undefined' ? options.params : {});
+
+        var params = {
+            page: 'formular.read.datasource',
+            sessionid: this.sessionid,
+            datasource: options.datasource,
+            command: options.command
+        };
+
+        for (var name in options.params) {
+            params[name] = options.params[name];
+        }
+
+        jQuery.ajax( {
+            url : 'cbkort',
+            dataType : 'json',
+            type: 'POST',
+            async: true,
+            data : params,
+            success : SpatialMap.Function.bind( function(data) {
+
+                if (typeof data.row !== 'undefined' && typeof data.row[0] !== 'undefined' && typeof data.row[0].row !== 'undefined') {
+                    var rows = data.row[0].row;
+                    if (rows.length > 0) {
+                        this.setCurrentValues(rows[0]);
+                    }
+                }
+
+            },this)
+        });
+    },
     
     getParam: function (name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;

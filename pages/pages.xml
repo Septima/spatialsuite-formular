@@ -80,4 +80,8 @@
         </data>
     </page>
 
+    <page name="formular.read.datasource" contenttype="json" sessionrequired="false">
+        <data handler="datasource" operation="execute-command"/>
+    </page>
+
 </pages>

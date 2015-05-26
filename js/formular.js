@@ -122,6 +122,11 @@ Formular = SpatialMap.Class ({
                     jQuery('#helpbuttons').append(button);
                 }
 
+                var headerurl = jQuery(data).find('headerhtml').attr('url');
+                if (headerurl) {
+                    jQuery('header.navbar').load(headerurl);
+                }
+
                 var profile = jQuery(data).find('reportprofile').text();
                 if (profile) {
                     this.reportprofile = profile;

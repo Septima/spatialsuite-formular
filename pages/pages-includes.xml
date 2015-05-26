@@ -6,6 +6,10 @@
         <file filename="[module.formular.config]"/>
     </page>
 
+    <page name="formular.skin" contenttype="text/html">
+        <stylesheet>[module:formular.dir]/xsl/formular-skin.xsl</stylesheet>
+        <file filename="[module.formular.config]"/>
+    </page>
     <page name="formular.virk" contenttype="text/html">
         <stylesheet>[module:formular.dir]/xsl/formular-virk.xsl</stylesheet>
         <file filename="[module.formular.config]"/>

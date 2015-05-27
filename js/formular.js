@@ -172,7 +172,8 @@ Formular = SpatialMap.Class ({
                         }
                         this.pages.push(p);
                     }
-                } else {
+                } else { 
+				
                     var page = jQuery(data).find('submitpage');
                     if (page.length > 0) {
                         this.submitpage = jQuery(page[0]).text();

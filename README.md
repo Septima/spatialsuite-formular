@@ -13,6 +13,15 @@ http://sandkasse.randers.dk/cbkort?page=formular&formular=soe
 
 Dette giver en side, der kan indlejres som en Iframe i et CMS system. Stylingen er derfor gjort meget enkelt, så den vil passe ind (næsten) hvor som helst.
 
+http://sandkasse.randers.dk/cbkort?page=formular.skin&formular=soe
+
+Dette giver en stand-alone side med et nyt og modernet design.
+
+Installer modulet:
+```xml
+<module name="formular" dir="custom/formular" permissionlevel="public"/>
+```
+
 Konfigurationen er placeret vha. parameteren "module.formular.config", og er pt. sat i filen "cbinfo_k730.xml:
 ```xml
 <param name="module.formular.config">[module:formular.dir]/config/formular_config.xml</param>
@@ -30,18 +39,24 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
     <formular name="soe">                                       <!-- name er navnet på formularen og refererer til værdien af URL-parameteren "formular" -->
         <title>Ansøgningsskema til vandhuller</title>           <!-- OPTIONAL - Angiver den tekst, der står som titel i browseren -->
         <header>Ansøgningsskema til vandhuller</header>         <!-- OPTIONAL - Angiver den tekst, der står øverst på siden -->
-        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader> <!-- OPTIONAL - Angiver den tekst, der står under overskriften på siden -->
-
+        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader>            <!-- OPTIONAL - Angiver den tekst, der står under overskriften på siden -->
+        <headerhtml url="/modules/formularconfig/html/virkheader.html"></header> <!-- OPTIONAL - Bruges i forbindelse med "skin" for at tilføje en custom header til siden. HTML'en kan også tilføjes direkte som indhold til dette tag. -->
         <submitpage>formular.send.soe</submitpage>              <!-- DEPRECATED - BRUG SUBMITPAGES I STEDET - Den page, der skal kaldes for at gemme og danne kvitering - Denne page vil være specifik for hver formular. Se senere i dette dokument. -->
-
         <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
             <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
+            <page parser="setFrid" urlparam="journalnummer">    <!-- Det er muligt at tilføje en "urlparam", der sendes til parseren. Herved kan man bestemme navnet på urlparametere der holder værdien -->
+                formular.create-frid
+            </page>  
             <page parser="setPdf">formular.create-pdf</page>    
             <page condition="false">formular.save</page>        <!-- Skal pagen kaldes? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.-->
+            <page type="json">mypage</page>                     <!-- Angiv "type" for at fortælle hvad pagen returnere. Default er "json" men det kan også være "xml" -->
             <page>formular.save</page>
             <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
+            <page errortype="info">formular.save</page>         <!-- errortype definere hvilken type fejlen er hvis pagen returnere en fejl. Mulige værdier er: "info", "warning" og "error". Hvis errortype er "error" så stopper alt. 
+                                                                     Hvis errortype er "info" eller "warning" fortsættes der men brugeren bliver informeret om at der er sket en fejl hvis der også er angivet en errormessage.
+                                                                     Hvis log er aktiveret så logges alle fejl -->
+            <page errormessage="Tekst">formular.save</page>     <!-- errormessage indeholder den tekst, der vises hvis der er en fejl. -->
         </submitpages>
-
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
         <reportprofile>alt</reportprofile>                      <!-- OPTIONAL - Profil, der skal anvendes til at danne kortet i kviteringen (default er "alt") -->
         <reportlayers>default</reportlayers>                    <!-- OPTIONAL - Layers, der skal anvendes til at danne kortet i kviteringen. Det kan være en liste adskilt af mellemrum (default er "default", der gør at det er profilen default viste temaer, der vises) -->
@@ -52,6 +67,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <tabs>true</css>                                        <!-- OPTIONAL - Har man flere steps, kan man få vist de enkelte steps øverst på siden -->
         <parsedisplaynames>true</parsedisplaynames>             <!-- OPTIONAL - displayname på hvert input felt sendes med til serveren, så man kan bruge dem i forbindelse med en generisk XSL. Sendes som parameteren urlparam+'_displayname' -->
         <localstore>true</localstore>                           <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false") -->
+        <log>true</log>                                         <!-- OPTIONAL - Skal fejl logges på serveren? For at se loggen kaldes http://hostnavn/spatialmap?page=formular.log.read (default er "false") -->
+        <messages>                                              <!-- OPTIONAL - Mulghed for at få vist sin egen tekst når brugeren er færdig -->
+            <message name="done">Mange tak for hjælpen! Hent kvittering &lt;a href="{{pdf}}"&gt;her&lt;/a&gt;</message>      <!-- OPTIONAL - Teksten, der vises hvis det går godt. {{pdf}} erstattes af stien til pdf-dokumentet -->
+            <message name="saving">Ansøgningen registreres. Vent venligst... (Det kan tage op til et par minutter)</message> <!-- OPTIONAL - Teksten, der vises mens serveren gemmer. -->
+            <message name="error">Der er opståer en fejl!</message>                                                          <!-- OPTIONAL - Teksten, der vises hvis det går galt -->
+        </messages>
         <content displayname="Første step">                     <!-- Der kan tilføjes flere content elementer for at få flere sider i sin formular -->
             <!-- content, kan bestå af et vilkårligt antal elementer i en vilkårlig rækkefølge. I følgende er de enkelte typer elementer beskrevet.
                  Generelt indeholder alle elementer, der indeholder noget, der skal sendes til serveren, atributten "urlparam". Dette er navnet på 
@@ -119,7 +140,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <!-- Et felt hvor brugeren kan søge en adresse vha. SpatialAddress. Adressesøgningen benyttes som udgangspunkt til at finde noget i kortet.
                  vejen eller Adressepunktet markeres ikke i kortet. Hvis "urlparam" atributten er defineret, sendes den tekst, der står i feltet, videre til servere.
                  Derudover sendes adressepunktets wkt også til serveren som urlparam+"_wkt". Hvis urlparam="adresse" så vil adressepunktet blive sendt til serveren med adresse_wkt=POINT(XXXX YYYY)
-                 Hvis der kun er valgt en vej, så vil adresse_wkt være tom! -->
+                 Hvis der kun er valgt en vej, så vil adresse_wkt være tom! 
+                 - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
+                 - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
+                 - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
+                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
+                 -->
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
 
             <!-- geosearch -->
@@ -130,15 +156,17 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - filter - OPTIONAL (default "") - find kun en delmængde ud fra en filter. Det kunne f.eks. være inden for en kommune filter="muncode0101"
                  - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
                  - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
+                 - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
+                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
             -->
             <geosearch urlparam="address" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true" usegeometry="false"/>
 
             <!-- input - type="date" -->
-            <!-- Datovælger felt hvor man kan skrive en dato eller vælge 
-                 Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
-                 Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
-                 en dato skal pt være f.eks. 22.01.2013 
-                 - onshow - OPTIONAL  - Funktion der kaldes når brugeren klikker på inputfeltet. Kan f.eks. bruges til at ændre datovælgeren. Skrives som et JavaScript udtryk.
+            <!-- Datovælger felt hvor man kan skrive en dato eller vælge.
+                 - limitfromdatasource  - OPTIONAL - Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
+                                                     Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
+                                                     en dato skal pt være f.eks. 22.01.2013. Datasourcen SKAL indeholde en command, der hedder "read-dates"!
+                 - onshow               - OPTIONAL - Funktion der kaldes når brugeren klikker på inputfeltet. Kan f.eks. bruges til at ændre datovælgeren. Skrives som et JavaScript udtryk.
             -->
             <input type="date" displayname="Dato:" urlparam="date" limitfromdatasource="ds_formular_booking"/>
 
@@ -204,6 +232,15 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
                     -->
                 </themes>
+                <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">
+                    <!-- Følgende atributter kan tilføjes til atributter:
+                        page          - OPTIONAL - Deafult "formular.geometry.save". Angiv den page, der skal kaldes for hver geometri
+                        datasource    - OPTIONAL - Angiv hvilken datasource geometrien skal gemmes i. Hvis man benytter sin egen page, kan datasource angives direkte på pagen, ellers skal den angives her!
+                        command       - OPTIONAL - Angiv hvilken command, der skal benyttes for at gemme hver enkelt geometri. Hvis man benytter sin egen page, kan command angives direkte på pagen, ellers skal den angives her!
+                    -->
+                    <!-- En liste af "input" element, der kan konfigureres på samme måde som alle andre input felter. Dog er der en række typer, der ikke kan benyttes, herunder adressesøgning m.m.
+                    <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
+                </attributes>
             </map>
             
             <!-- conflicts -->
@@ -211,6 +248,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  Resultatet af den spatielle søgning, vises på det sted hvor dette element er angivet.
                  Ud over "displayname" og "urlparam", kan der kan sættes en række andre atributter:
                  - "class"         - angiver den css class, som feltet skal have. Det kan f.eks. være "warning", der gør at feltet bliver rødt.
+                                     Følgende værdier kan med fordel anvendes: "warning-info", "warning-success", "warning-warning" eller "warning-danger"
                  - "targetset"     - angiver navnet på det targetset, som der skal søges i.
                  - "targetsetfile" - angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
                  - "onconflict"    - angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
@@ -278,6 +316,13 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2015.05.26 - Nyt skin
+* 2014.08.07 - Ny mulighed for at gemme flere geometrier med forskellige oplysninger
+* 2014.07.02 - Minscale eller minzoom tilføjet til søgefunktionerne
+* 2014.07.02 - Flere standard klasser til styling af konfliktsøgningsresultat
+* 2014.05.12 - Mulighed for at logge fejl fra klienten
+* 2014.05.02 - Mulighed for at angive beskeden, der skal vises når oplysningerne er registreret eller det er gået galt.
+* 2014.05.02 - Mulighed for at bestemme navnet på urlparameteren som en parser på en submitpage.
 * 2014.04.29 - localstore er tilføjet så det er muligt at få browseren til at gemme indtastede oplysninger til senere brug.
 * 2014.03.05 - onchange tilføjet til kortet, så man kan gøre noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i.
 * 2014.03.05 - Mulighed for at disable et maptool.

@@ -1,0 +1,50 @@
+<div class="top">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-xs-12">
+                <a href="http://virk.dk">
+                    <img src="/modules/formular/css/virk/v2.1/graphics/logo-top.png" height="57" width="240" alt="Virk / Indberetning - logo" class="logo" />
+                </a>
+            </div>
+            <div class="col-xs-4 align-right nav-tools hidden-xs">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="topbar hidden-xs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-8 info">
+                <a href="">Virk registrering &#8250;</a>
+                <xsl:choose>
+                    <xsl:when test="title">
+                        <p><xsl:value-of select="title" /></p>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <p><xsl:value-of select="header" /></p>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+            <div class="col-xs-4 align-right">
+                <div class="inner-details">
+                    <xsl:if test="contact">
+                        <xsl:element name="a">
+                            <xsl:attribute name="class">solution-author-link</xsl:attribute>
+                            <xsl:attribute name="href"><xsl:value-of select="contact/@link"/></xsl:attribute>
+                            <xsl:value-of select="contact" /> <span> &#8250;</span>
+                        </xsl:element>
+                        <div class="contact">
+                            Support: <span class="solution-author-phone"><xsl:value-of select="contact/@phone" /></span>
+                            <span class="divider">|</span>
+                            <xsl:element name="a">
+                                <xsl:attribute name="class">solution-author-email</xsl:attribute>
+                                <xsl:attribute name="href">mailto:<xsl:value-of select="contact/@email"/></xsl:attribute>
+                                E-mail <span>&#8250;</span>
+                            </xsl:element>
+                        </div>
+                    </xsl:if>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

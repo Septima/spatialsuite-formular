@@ -20,7 +20,83 @@
         <config version="4" requires="1">
             ALTER TABLE formulartest ADD COLUMN updated timestamp;
         </config>
+        
+        <config version="5" requires="1">
+	        CREATE TABLE poll
+			(
+			   id varchar(255), 
+               formular varchar(255), 
+			   journalnr varchar(255), 
+			   brugertype varchar(255), 
+			   formulartype smallint, 
+			   kontakttype smallint, 
+			   svar1_1 smallint, 
+			   svar1_2 smallint, 
+			   svar1_3 smallint, 
+			   svar1_4 smallint, 
+			   svar1_5 smallint, 
+			   svar2_1 smallint, 
+			   svar2_2 varchar(255), 
+			   svar2_3 smallint, 
+			   svar2_4 varchar(255), 
+			   svar2_5 smallint, 
+			   svar2_6 varchar(255), 
+			   svar2_7 smallint, 
+			   svar2_8 varchar(255), 
+			   svar2_9 varchar(255), 
+			   svar2_10 varchar(255), 
+			   svar2_11 smallint, 
+			   svar2_12 smallint, 
+			   kommentar varchar(255), 
+			   bilag varchar(255), 
+			   navn varchar(255), 
+			   string varchar(255), 
+			   email varchar(255), 
+			   oprettet timestamp
+			) 
+        </config>
+
+        <config version="6" requires="1">
+            CREATE TABLE dates
+            (
+                id varchar(255),
+                date timestamp
+            ) 
+        </config>
+
+        <config version="7" requires="1">
+            CREATE TABLE formulartest_geometry(id varchar(255), created timestamp, wkt CLOB);
+        </config>
+
+        <config version="8" requires="1">
+            CREATE TABLE validatetable
+            (
+                val1 varchar(255),
+                val2 varchar(255),
+                val3 varchar(255),
+                val4 varchar(255)
+            ) 
+        </config>
+
+        <onreload>
+            delete from dates;
+            insert into dates(id,date) values('a',DATEADD( 'dd', -4, now()));
+            insert into dates(id,date) values('b',DATEADD( 'dd', 4, now()));
+            insert into dates(id,date) values('c',DATEADD( 'dd', 14, now()));
+            insert into dates(id,date) values('d',DATEADD( 'dd', 18, now()));
+            insert into dates(id,date) values('f',DATEADD( 'dd', 24, now()));
+            delete from validatetable;
+            insert into validatetable(val1,val2,val3,val4) values('1','1','Der er tastet 1 og 1 i de to felter','Derfor står der her 2');
+        </onreload>
     </endpoint>
+
+    <datasource name="formular-test-validatetable" endpoint="formular-test" displayname="Formular test data (validate datasource)">
+        <sql command="read-validate">select val3, val4 from validatetable where val1 = [string: val1] AND val2 = [string: val2];</sql>
+    </datasource>
+
+    <datasource name="formular-test-dates" endpoint="formular-test" displayname="Formular test data (datelimit)">
+        <sql command="read-dates">select TO_CHAR(date, 'DD.MM.YYYY') as dates from dates;</sql>
+    </datasource>
 
     <datasource name="formular-test" endpoint="formular-test" displayname="Formular test data">
     
@@ -53,13 +129,17 @@
 
         <sql command="read-dropdown">select '' || name as value, name from formulartest where name &lt;&gt; ''</sql>
 
+        <sql command="read-time">select val1 as start, val2 as slut from formulartest where val3 = 'time' AND val0 = [string: date]</sql>
+
         <debug>false</debug>
     </datasource>
 
     <datasource name="formular-test-poll" endpoint="formular-test" displayname="Formular test data (poll)">
     
-        <sql command="write">insert into poll(journalnr, brugertype, formulartype, kontakttype, svar1_1, svar1_2, svar1_3, svar1_4, svar1_5, svar2_1, svar2_2, svar2_3, svar2_4, svar2_5, svar2_6, svar2_7, svar2_8, svar2_9, svar2_10, svar2_11, svar2_12, kommentar, bilag, navn, tlf, email, oprettet) 
+        <sql command="write">insert into poll(id, formular, journalnr, brugertype, formulartype, kontakttype, svar1_1, svar1_2, svar1_3, svar1_4, svar1_5, svar2_1, svar2_2, svar2_3, svar2_4, svar2_5, svar2_6, svar2_7, svar2_8, svar2_9, svar2_10, svar2_11, svar2_12, kommentar, bilag, navn, tlf, email, oprettet) 
                                                values(
+                                                   [string: sessionid],
+                                                   [string: formular], 
                                                    [string: journalnr],
                                                    [string: brugertype], 
                                                    [number: formulartype], 
@@ -87,6 +167,18 @@
                                                    [string: if IsDefined(tlf)            then tlf else '' endif], 
                                                    [string: if IsDefined(email)          then email else '' endif], 
                                                    [timestamp: SystemTime()]
+                                               );</sql>
+    </datasource>
+
+    <datasource name="formular-test-geometry" endpoint="formular-test" displayname="Formular test geometry">
+    
+        <sql command="read">select * from formulartest_geometry;</sql>
+        
+        <sql command="write">insert into formulartest_geometry(id, created, wkt) 
+                                               values(
+                                                   [string: sessionid],
+                                                   [timestamp: SystemTime()],
+                                                   [string: if IsDefined(wkt)          then wkt else null endif]
                                                );</sql>
 
         <debug>false</debug>

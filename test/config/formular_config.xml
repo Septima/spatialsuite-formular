@@ -1,5 +1,709 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+
+    <formular name="skin">
+        <title>Formular TEST</title>
+        <header>Formular TEST</header>
+        <headerhtml url="/modules/formular/test/html/virkheader.html">TEST</headerhtml>
+        <subheader>Formular TEST</subheader>
+        <reportprofile>demo01</reportprofile>
+        <tabs>true</tabs>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <content displayname="Anmelder">
+            <input type="text" displayname="Virksomheder skal anmelde farligt affald til Albertslund Kommune uanset mængden af det farlige affald som beskrevet i
+„&lt;a href='http://albertslund.dk/media/104629/Regulativ-for-erhvervsaffald.pdf'&gt;Regulativ for erhvervsaffald&lt;/a&gt;“ og i
+&lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Kap11'&gt;affaldsbekendtgørelsen kap. 11&lt;/a&gt;."></input>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="h1" class="section" displayname="Anmelder"/>
+            <input type="hidden" urlparam="about" defaultvalue="Anmeldelse af asbestaffald"/>
+            <columns>
+                <column class="col-sm-8">
+                    <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn" required="true" validate="Angiv et navn"/>
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="CVR.nr." urlparam="val1" placeholder="Indtast virksomheds CVR nr." required="true" validate="Angiv et CVR nummer"/>
+                </column>
+            </columns>
+            <address urlparam="val2" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <input type="input" displayname="Kontaktperson" urlparam="val3" placeholder="Indtast virksomheds kontaktperson" required="false" validate="Angiv et navn"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Telefonnummer" urlparam="val4" placeholder="" required="false" validate="Angiv et telefonnummer"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Email" urlparam="val5" placeholder="" required="true" validate="Angiv en email adresse"/>
+                </column>
+            </columns>
+        </content>
+        <content displayname="Hvor stammer affaldet fra?">
+            <input type="h1" class="section" displayname="Hvor stammer affaldet fra?"/>
+            <address urlparam="val6" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <columns>
+                <column>
+                    <input type="input" displayname="Matrikelnr" urlparam="val7"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Ejerlav" urlparam="val8"/>
+                </column>
+            </columns>
+            <input type="input" displayname="Ejer" urlparam="val9"/>
+
+            <input type="text" displayname=""/>
+            <input type="message" class="alert alert-warning" displayname="Asbestholdigt affald skal anmeldes senest 14 dage før affaldet fremkommer"/>
+
+            <columns>
+                <column>
+                    <input id="startdate" type="date" displayname="Forventet dato for arbejdets påbegyndelse" urlparam="val10" mindate="0" onchange="setDate('enddate',jQuery('#startdate').val(),0)"/>
+                </column>
+                <column>
+                    <input id="enddate"   type="date" displayname="Forventet dato for arbejdets afslutning"   urlparam="val11" mindate="0"/>
+                </column>
+            </columns>
+
+            <input type="textarea" displayname="Bemærkninger" urlparam="val12"/>
+
+        </content>    </formular>
+
+    <formular name="timerange">
+        <header>Dato og tidsvælger med begrænsning af muligt tidsinterval</header>
+        <reportprofile>demo01</reportprofile>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page>formular.save</page>
+        </submitpages>
+        <js>/modules/formular/test/js/timecheck.js</js>
+        <content>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="hidden" urlparam="val3" defaultvalue="time"/>
+            <input type="hidden" urlparam="command" defaultvalue="write"/>
+            <input type="hidden" urlparam="about" defaultvalue="Datovælger med begrænsninger"/>
+            <input id="date" type="date" displayname="Dato:" urlparam="val0" mindate="0" maxdate="+2" onchange="TimeCheck.checkDate('date','val1', 'formular-test')"/>
+            <input type="dropdown"  id="val1" displayname="Fra kl" urlparam="val1" required="true" onchange="TimeCheck.checkTime('val1', 'val2')" validate="Feltet skal udfyldes." condition="TimeCheck.date !== ''">
+                <option value="" name="Vælg"/>
+                <option value="0800" name="8:00"/>
+                <option value="0830" name="8:30"/>
+                <option value="0900" name="9:00"/>
+                <option value="0930" name="9:30"/>
+                <option value="1000" name="10:00"/>
+                <option value="1030" name="10:30"/>
+                <option value="1100" name="11:00"/>
+                <option value="1130" name="11:30"/>
+                <option value="1200" name="12:00"/>
+                <option value="1230" name="12:30"/>
+                <option value="1300" name="13:00"/>
+                <option value="1330" name="13:30"/>
+                <option value="1400" name="14:00"/>
+                <option value="1430" name="14:30"/>
+                <option value="1500" name="15:00"/>
+                <option value="1530" name="15:30"/>
+            </input>
+            <input type="dropdown"  id="val2" displayname="Til kl" urlparam="val2" required="true" validate="Feltet skal udfyldes." condition="TimeCheck.date !== '' &amp;&amp; TimeCheck.start !== ''">
+                <option value="" name="Vælg"/>
+                <option value="0830" name="8:30"/>
+                <option value="0900" name="9:00"/>
+                <option value="0930" name="9:30"/>
+                <option value="1000" name="10:00"/>
+                <option value="1030" name="10:30"/>
+                <option value="1100" name="11:00"/>
+                <option value="1130" name="11:30"/>
+                <option value="1200" name="12:00"/>
+                <option value="1230" name="12:30"/>
+                <option value="1300" name="13:00"/>
+                <option value="1330" name="13:30"/>
+                <option value="1400" name="14:00"/>
+                <option value="1430" name="14:30"/>
+                <option value="1500" name="15:00"/>
+                <option value="1530" name="15:30"/>
+                <option value="1600" name="16:00"/>
+            </input>
+        </content>
+    </formular>
+
+    <formular name="simple">
+        <title>Formular TEST</title>
+        <header>Formular TEST</header>
+        <subheader>Formular TEST</subheader>
+        <reportprofile>demo01</reportprofile>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <content>
+            <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn" required="true" validate="Angiv et navn"/>
+        </content>
+    </formular>
+
+    <formular name="asbestaffald">
+        <!--virkid test="true" presenter="Septima">TEST</virkid-->
+        <contact email="miljo@albertsund.dk" phone="-" link="http://www.albertsund.dk">Albertslund Kommune</contact>
+        <title>Anmeldelse af asbestaffald</title>
+        <header>Anmeldelse af asbestaffald</header>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportprofile>demo01</reportprofile>
+        <tabs>true</tabs>
+        <messages>
+            <message name="done"><![CDATA[<div class="header">Ansøgningen er nu registreret</div>Kommunen vender tilbage inden 14 dage, hvis der er brug for ydeligere oplysninger.]]></message>
+            <message name="saving"><![CDATA[<div class="header">Gemmer oplysninger...</div>Det kan tage lidt tid, så vær tålmodig.]]></message>
+            <message name="error"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+        </messages>
+        <content displayname="Anmelder">
+            <input type="text" displayname="Virksomheder skal anmelde farligt affald til Albertslund Kommune uanset mængden af det farlige affald som beskrevet i
+„&lt;a href='http://albertslund.dk/media/104629/Regulativ-for-erhvervsaffald.pdf'&gt;Regulativ for erhvervsaffald&lt;/a&gt;“ og i
+&lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Kap11'&gt;affaldsbekendtgørelsen kap. 11&lt;/a&gt;."></input>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="h1" class="section" displayname="Anmelder"/>
+            <input type="hidden" urlparam="about" defaultvalue="Anmeldelse af asbestaffald"/>
+            <columns>
+                <column class="col-sm-8">
+                    <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn" required="true" validate="Angiv et navn"/>
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="CVR.nr." urlparam="val1" placeholder="Indtast virksomheds CVR nr." required="true" validate="Angiv et CVR nummer"/>
+                </column>
+            </columns>
+            <address urlparam="val2" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <input type="input" displayname="Kontaktperson" urlparam="val3" placeholder="Indtast virksomheds kontaktperson" required="false" validate="Angiv et navn"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Telefonnummer" urlparam="val4" placeholder="" required="false" validate="Angiv et telefonnummer"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Email" urlparam="val5" placeholder="" required="true" validate="Angiv en email adresse"/>
+                </column>
+            </columns>
+        </content>
+        <content displayname="Hvor stammer affaldet fra?">
+            <input type="h1" class="section" displayname="Hvor stammer affaldet fra?"/>
+            <address urlparam="val6" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <columns>
+                <column>
+                    <input type="input" displayname="Matrikelnr" urlparam="val7"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Ejerlav" urlparam="val8"/>
+                </column>
+            </columns>
+            <input type="input" displayname="Ejer" urlparam="val9"/>
+
+            <input type="text" displayname=""/>
+            <input type="message" class="alert alert-warning" displayname="Asbestholdigt affald skal anmeldes senest 14 dage før affaldet fremkommer"/>
+
+            <columns>
+                <column>
+                    <input id="startdate" type="date" displayname="Forventet dato for arbejdets påbegyndelse" urlparam="val10" mindate="0" onchange="setDate('enddate',jQuery('#startdate').val(),0)"/>
+                </column>
+                <column>
+                    <input id="enddate"   type="date" displayname="Forventet dato for arbejdets afslutning"   urlparam="val11" mindate="0"/>
+                </column>
+            </columns>
+
+            <input type="textarea" displayname="Bemærkninger" urlparam="val12"/>
+
+        </content>
+        <content displayname="Asbestaffaldets type">
+            <input type="text" displayname="Affaldstyper og EAK-koder kan findes i &lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Bil2'&gt;affaldsbekendtgørelsens bilag 2&lt;/a&gt;."/>
+            <input type="h1" class="section" displayname="Asbestaffaldets type"/>
+
+            <input type="h2" displayname="Ikke støvende" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="textarea" displayname="Emballage" urlparam="val11"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Mængde (ton)" urlparam="val12"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Transportør" urlparam="val13"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Støvende" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="textarea" displayname="Emballage" urlparam="val21" disabled="true" defaultvalue="Befugtet i 2 lag kraftig plast
+mærket „ASBEST“"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Mængde (ton)" urlparam="val22"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Transportør" urlparam="val23"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Stærkt støvende" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="textarea" displayname="Emballage" urlparam="val31" defaultvalue="Befugtet i 2 lag kraftig plast
+mærket „ASBEST“" disabled="true"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Mængde (ton)" urlparam="val32"/>
+                </column>
+                <column>
+                    <input type="textarea" displayname="Transportør" urlparam="val33"/>
+                </column>
+            </columns>
+
+            <input type="text" displayname=""/>
+
+            <input type="h1" class="section" displayname="Eventuelt bilag kan vedhæftes her"/>
+            <input type="file" displayname="Vedhæft bilag" urlparam="bilag"/>
+        </content>
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview"/>
+        </content>
+    </formular>
+
+    <formular name="farligtaffald">
+        <!--virkid test="true" presenter="Septima">TEST</virkid-->
+        <contact email="miljo@albertsund.dk" phone="-" link="http://www.albertsund.dk">Albertslund Kommune</contact>
+        <title>Anmeldelse af farligt affald</title>
+        <header>Anmeldelse af farligt affald</header>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportprofile>demo01</reportprofile>
+        <tabs>true</tabs>
+        <messages>
+            <message name="done"><![CDATA[<div class="header">Ansøgningen er nu registreret</div>Kommunen vender tilbage inden 14 dage, hvis der er brug for ydeligere oplysninger.]]></message>
+            <message name="saving"><![CDATA[<div class="header">Gemmer oplysninger...</div>Det kan tage lidt tid, så vær tålmodig.]]></message>
+            <message name="error"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+        </messages>
+        <content displayname="Anmelder">
+            <input type="text" displayname="Virksomheder skal anmelde farligt affald til Albertslund Kommune uanset mængden af det farlige affald som beskrevet i
+„&lt;a href='http://albertslund.dk/media/104629/Regulativ-for-erhvervsaffald.pdf'&gt;Regulativ for erhvervsaffald&lt;/a&gt;“ og i
+&lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Kap11'&gt;affaldsbekendtgørelsen kap. 11&lt;/a&gt;."></input>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="h1" class="section" displayname="Anmelder"/>
+            <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
+            <columns>
+                <column class="col-sm-8">
+                    <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn" required="true" validate="Angiv et navn"/>
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="CVR.nr." urlparam="val1" placeholder="Indtast virksomheds CVR nr." required="true" validate="Angiv et CVR nummer"/>
+                </column>
+            </columns>
+            <address urlparam="val2" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true" placeholder="Virksomheds adresse" required="true"></address>
+            <input type="input" displayname="Kontaktperson" urlparam="val3" placeholder="Indtast virksomheds kontaktperson" required="false" validate="Angiv et navn"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Telefonnummer" urlparam="val4" placeholder="" required="false" validate="Angiv et telefonnummer"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Email" urlparam="val5" placeholder="" required="true" validate="Angiv en email adresse"/>
+                </column>
+            </columns>
+        </content>
+        <content displayname="Fraktioner">
+            <input type="h1" class="section" displayname="Fraktioner"/>
+            <input type="text" displayname="&lt;strong&gt;OBS!&lt;/strong&gt; Asbest og PCB-holdigt affald skal anmeldes i separate skemaer."/>
+            <input type="text" displayname=" Alt farligt affald skal afhentes af &lt;a href='http://www.smoka.dk'&gt;SMOKA&lt;/a&gt;, med mindre virksomheden har opnået
+fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;a href='http://albertslund.dk'&gt;www.albertlund.dk&lt;/a&gt;."/>
+            <input type="text" displayname=" Farligt affald, der fremkommer ved bygge- og anlægsarbejde eller andre aktiviteter, skal også anmeldes."/>
+            <input type="h2" displayname="Affaldet fremkommer"/>
+            <input type="radiobutton" displayname="Affaldet fremkommer" urlparam="val6">
+                <option value="Løbende" name="Løbende"/>
+                <option value="Ved aktivitet" name="Ved aktivitet"/>
+            </input>
+        </content>
+        <content displayname="Asbestaffaldets type">
+            <input type="text" displayname="Affaldstyper og EAK-koder kan findes i &lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Bil2'&gt;affaldsbekendtgørelsens bilag 2&lt;/a&gt;."/>
+            <input type="h1" class="section" displayname="Asbestaffaldets type"/>
+
+            <input type="h2" displayname="Affedtningsaffald (EAK-kode: 110113)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val11"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val12"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val13"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Batterier (EAK-kode: 200133)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val21"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val22"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val23"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Bilbatterier (EAK-kode: 160601)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val31"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val32"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val33"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Blyholdigt affald (EAK-kode: 170403)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val41"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val42"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val43"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Bremsevæske (EAK-kode: 160113)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val51"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val52"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val53"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Kemikalieaffald (EAK-kode: 160508)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val61"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val62"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val63"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Lysstofsrør/lavenergipærer (EAK-kode: 200121)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val71"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val72"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val73"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Oliefiltre (EAK-kode: 160107)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val81"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val82"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val83"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Opløsningsmiddel (EAK-kode: 140603)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val91"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val92"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val93"/>
+                </column>
+            </columns>
+
+            <input type="h2" displayname="Spildolie (EAK-kode: 130208)" urlparam="header"/>
+            <columns>
+                <column>
+                    <input type="input" displayname="Emballering" urlparam="val101"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Egenskaber" urlparam="val102"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Mængde pr. år eller akt. (kg)" urlparam="val103"/>
+                </column>
+            </columns>
+
+            <input type="text" displayname=""/>
+
+            <input type="h1" class="section" displayname="Eventuelt bilag kan vedhæftes her"/>
+            <input type="file" displayname="Vedhæft bilag" urlparam="bilag"/>
+        </content>
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview"/>
+        </content>
+    </formular>
+
+    <formular name="datasourcevalidation">
+        <title>Test - required</title>
+        <js>/modules/formular/js/misc/datasourceresponse.js</js>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportlayers>default</reportlayers>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs>true</tabs>
+        
+        <content displayname="Fane 1">  
+            <input type="text" displayname="&lt;strong&gt;Felter markeret med * skal udfyldes.&lt;/strong&gt;"/>
+        
+            <input type="input" id="val1" displayname="AnlægsID" required="true" urlparam="id" onkeyup="if (jQuery('#val1').val() !== '' &amp;&amp; jQuery('#val2').val() !== '') { datasourceResponse.check({datasource: 'formular-test-validatetable', command: 'read-validate', val1: jQuery('#val1').val(), val2: jQuery('#val2').val()}) } else {datasourceResponse.hide()}"/>
+            <input type="input" id="val2" displayname="Kode" required="true" urlparam="kode" onkeyup="if (jQuery('#val1').val() !== '' &amp;&amp; jQuery('#val2').val() !== '') { datasourceResponse.check({datasource: 'formular-test-validatetable', command: 'read-validate', val1: jQuery('#val1').val(), val2: jQuery('#val2').val()}) } else {datasourceResponse.hide()}"/>
+
+            <input type="text" displayname="Indtast de oplysninger, der fremgår af brevet." condition="datasourceResponse.valid === false"/>
+
+            <input type="text" id="data_val3" displayname="" condition="datasourceResponse.valid === true"/>
+            <input type="input" id="data_val4" displayname=""/>
+            <input type="input" displayname="Husk:"  urlparam="val5" condition="datasourceResponse.valid === true"/>
+        </content>
+        
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt; Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview" showempty="false"/>
+        </content>
+    </formular>
+
+    <formular name="test-required">
+        <virkid test="true">TEST</virkid>
+        <title>Test - required</title>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportlayers>default</reportlayers>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs>true</tabs>
+        
+        <content displayname="Fane 1">  
+            <input type="text" displayname="&lt;strong&gt;Felter markeret med * skal udfyldes.&lt;/strong&gt;"/>
+        
+            <input type="dropdown"  id="val1" displayname="Vælg?" urlparam="val1" required="true" validate="Feltet skal udfyldes.">
+                <option value="" name=""/>
+                <option value="1" name="1"/>
+                <option value="2" name="2"/>
+            </input>
+            
+            <input type="input" displayname="Skal være udfyldt (validation):"  regexp=".+" validate="Feltet skal udfyldes." urlparam="val2" condition="jQuery('#val1').val() === '2'"/>
+            <input type="input" displayname="Skal være udfyldt (required):"  required="true" urlparam="val3" condition="jQuery('#val1').val() === '2'"/>
+
+            <input type="input" displayname="Felt uden condition:"  urlparam="val4"/>
+            <input type="input" displayname="Felt med condition:"  urlparam="val5" condition="jQuery('#val1').val() === '1'"/>
+        </content>
+        
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt; Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview" showempty="false"/>
+        </content>
+    </formular>
+
+
+
+
+    <formular name="virk">
+        <virkid test="true" presenter="Septima">TEST</virkid>
+        <contact email="support@septima.dk" phone="91326941" link="http://www.ikast-brande.dk">Ikast-Brande Kommune</contact>
+        <header>Formular til Virk.dk</header>
+        <submitpagesXX>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.create-pdf.nomap</page>
+            <page>formular.save</page>
+            <page>formular.move.pdf</page>
+        </submitpagesXX>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.general.nomap</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs>true</tabs>
+        <messages>
+            <message name="done"><![CDATA[<div class="header">Ansøgningen er nu registreret</div>Kommunen vender tilbage inden 14 dage, hvis der er brug for ydeligere oplysninger.]]></message>
+            <message name="saving"><![CDATA[<div class="header">Gemmer oplysninger...</div>Det kan tage lidt tid, så vær tålmodig.]]></message>
+            <message name="error"><![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.]]></message>
+        </messages>
+        <content displayname="1. Første side">
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="h1" class="section" displayname="Dette er en overskrift"/>
+            <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
+            <input type="input" id="navn" displayname="Navn" urlparam="val0" defaultvalue="" placeholder="Indtast dit navn" required="true" validate="Angiv et navn"/>
+            <input type="input" id="navn2" displayname="Navn2" urlparam="val00" defaultvalue="" placeholder="Indtast dit navn" required="true" validate="Angiv et navn"/>
+            <input type="h2" displayname="Dette er en overskrift" condition="jQuery('#arr').val() !== 'udvidelse af sø'"/>
+            <input type="text" displayname="Dette er en tekst" urlparam="val2" condition="jQuery('#arr').val() !== 'udvidelse af sø'"/>
+            <input type="date" displayname="Dato:" urlparam="date"/>
+            <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
+            <input type="input" displayname="Postnr" urlparam="val2"/>
+            <input id="arr" type="dropdown" displayname="Hvad søges:" urlparam="hvad" defaultvalue="oprensning af sø">
+                <option value="ny sø" name="Ny sø"/>
+                <option value="oprensning af sø" name="Oprensning af sø"/>
+                <option value="udvidelse af sø" name="Udvidelse af sø"/>
+            </input>
+            <input type="dropdown" id="ansv" displayname="*Er du ansvarlig FØR arrangementet" urlparam="ansvarlig_foer"  condition="jQuery('#arr').val() == 'udvidelse af sø'"> 
+		        <option value="" name=""/> 
+		        <option value="1" name="Ja"/> 
+		        <option value="0" name="Nej"/> 
+    		</input>   
+            <input type="input" displayname="Val 10" urlparam="val10"/>
+            <input type="radiobutton" displayname="Brugertype" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
+                <option value="virksomhed" name="Virksomhed"/>
+                <option value="raadgiver" name="Rådgiver"/>
+                <option value="privat" name="Privat"/>
+            </input>
+            <input type="input" displayname="Val 11" urlparam="val11"/>
+        </content>
+        <content displayname="2. Kort">
+            <address id="address" urlparam="address" displayname="Adresse" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]" usegeometry="true"></address>
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
+            </maptools>
+            <map displayname="Angiv placering i kort" class="my_map_class" required="true">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <area urlparam="areal" displayname="Areal"/>
+            <conflicts class="alert alert-info" urlparam="konflikttekst1" displayname="&lt;h3&gt;Info&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="alert alert-success" urlparam="konflikttekst1" displayname="&lt;h3&gt;Success&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="alert alert-warning" urlparam="konflikttekst1" displayname="&lt;h3&gt;Warning&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="alert alert-danger" urlparam="konflikttekst1" displayname="&lt;h3&gt;Danger&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <input type="input" displayname="Ansøger" urlparam="val3" defaultvalue="Mig"/>
+            <input type="input" displayname="Hest" urlparam="val4"/>
+            <input type="input" displayname="Får" urlparam="val5"/>
+        </content>
+        <content displayname="3. Sidste side" condition="jQuery('#navn').val() !== '1'">
+            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="2" regexp=".+" validate="Noget nyt er ikke udfyldt"/>
+            <input type="file" displayname="Billede" urlparam="billede"/>
+            <input type="input" displayname="ABC" urlparam="val7"/>
+        </content>
+        <content displayname="4. Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du godkender din virksomhedsoprettelse."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview"/>
+        </content>
+    </formular>
+    <formular name="log">
+        <header>Log hvis der sker fejl</header>
+        <subheader>Når der opstår en fejl vil servere blive kaldt så fejlen registreres</subheader>
+        <submitpages>
+            <page parser="setFrid" errortype="info" errormessage="Dette er en fejl men ikke så slem!">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="warning" errormessage="Dette er en fejl og den er lidt værre!">formular.geometry.union</page>
+            <page parser="setFrid" errortype="info">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="error">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="error" errormessage="Den er helt gal og vi stopper her!">formular.create-frid-not-working</page>
+            <page parser="setFrid" errortype="info" errormessage="Dette bliver aldrig vist da det sker efter en ERROR!">formular.create-frid-not-working</page>
+<!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
+<!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
+<!--             <page>formular.save</page> -->
+<!--             <page>formular.move.pdf</page> -->
+        </submitpages>
+        <log>true</log>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Store"/>
+            <address id="address" urlparam="address" defaultvalue="Frederiksberggade 28, 1459 København K" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Flyt kortet" name="pan"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue="Septima"/>
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+            <input type="file" displayname="Billede:" urlparam="billede"/>
+            <input type="radiobutton" displayname="Brugertype:" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
+                <option value="virksomhed" name="Virksomhed"/>
+                <option value="raadgiver" name="Rådgiver"/>
+                <option value="privat" name="Privat"/>
+            </input>
+            <input type="checkbox" displayname="Er du sikker:" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
+
+            <confirm displayname="&lt;b&gt;Følgende oplysninger er indtastet. Er det korrekt?&lt;/b&gt;"/>
+            <submitbutton displayname="Opret ny" function="formular.start();"/>
+
+        </content>
+    </formular>
+    <formular name="htmltext">
+        <header>Vejledning i tekst med ikoner</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <css>/modules/formular/test/css/buttons.css</css>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="htmltext"/>
+            <input type="text" displayname="Tryk på &lt;div class='button_in_help button_pan'&gt;&lt;/div&gt; eller gør noget andet. Denne tekst kan godt være meget meget meget lang, men ikonerne skulle gerne stå rigtigt alligevel. Dette ikon står på en ny linie: &lt;div class='button_in_help button_modify'&gt;&lt;/div&gt; men står rigtigt alligevel."/>
+            <maptools>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Tegn en bygning" name="template4" options="polygon -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en vej" name="template2" options="line -1000,1000 2000,0 0,-2000 -2000,0"/>
+                <maptool displayname="Tegn en flagstang" name="template1" options="point -1000,1000"/>
+                <maptool displayname="Flyt kortet" name="pan" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+        </content>
+    </formular>
     <formular name="store">
         <header>Husk værdier til næste gang</header>
         <subheader>Når man udfylder sin formular bliver værdierne løbende gemt i browseren. Herved kan man forlade siden og genoptage indtastningen senere.</subheader>
@@ -84,46 +788,6 @@
                 <option value="2" name="Utilfreds"/>
                 <option value="1" name="Meget utilfreds"/>
             </input>
-
-
-
-
-
-            <!-- FORMULAR 2 - FANE 1 -->
-            <input type="text" displayname="Hvor tilfreds er du med sagens forløb?" condition="Poll.formulartype == 2"/>
-            <input type="radiobutton" displayname="" id="svar2_1" urlparam="svar2_1" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_1');">
-                <option value="4" name="Meget tilfreds"/>
-                <option value="3" name="Tilfreds"/>
-                <option value="2" name="Utilfreds"/>
-                <option value="1" name="Meget utilfreds"/>
-            </input>
-            <input type="text" displayname="Er du tilfreds med sagsbehandlingstiden?" condition="Poll.formulartype == 2"/>
-            <input type="radiobutton" displayname="" id="svar2_8" urlparam="svar2_8" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_8');">
-                <option value="ja" name="Ja"/>
-                <option value="nej" name="Nej"/>
-            </input>
-            <input type="text" displayname="Svarede sagsbehandlingstiden til det vi havde stillet dig i udsigt?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'"/>
-            <input type="radiobutton" displayname="" id="svar2_9" urlparam="svar2_9" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'" onchange="Poll.setFormularState('svar2_9');">
-                <option value="ja" name="Ja"/>
-                <option value="nej" name="Nej"/>
-            </input>
-            <input type="text" displayname="Hvilken sagsbehandlingstid havde vi lovet dig?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
-            <input type="input" displayname="" id="svar2_10" urlparam="svar2_10" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
-            
-            
-            
-            
-            
-            
-            
-
-
-        </content>
-        <content displayname="Information">
-        
-
-
-            <!-- FORMULAR 1 - FANE 2 -->
             <input type="text" displayname="Hvor tilfreds er du med kommunens medarbejder?" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar1_3" urlparam="svar1_3" defaultvalue="0" condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">
                 <option value="4" name="Meget tilfreds"/>
@@ -144,35 +808,19 @@
                 <option value="2" name="I mindre grad"/>
                 <option value="1" name="Slet ikke"/>
             </input>
-            
-            
 
 
 
-            <!-- FORMULAR 2 - FANE 2 -->
-            <input type="text" displayname="Søgte du information inden du sendte ansøgningen?" condition="Poll.formulartype == 2"/>
-            <input type="radiobutton" displayname="" id="svar2_2" urlparam="svar2_2" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_2');">
-                <option value="ja" name="Ja"/>
-                <option value="nej" name="Nej"/>
+
+
+            <!-- FORMULAR 2 - FANE 1 -->
+            <input type="text" displayname="Hvor tilfreds er du med sagens forløb?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_1" urlparam="svar2_1" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_1');">
+                <option value="4" name="Meget tilfreds"/>
+                <option value="3" name="Tilfreds"/>
+                <option value="2" name="Utilfreds"/>
+                <option value="1" name="Meget utilfreds"/>
             </input>
-            <input type="text" displayname="Hvordan søgte du information?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja'"/>
-            <input type="radiobutton" displayname="" id="svar2_3" urlparam="svar2_3" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja'" onchange="Poll.setFormularState('svar2_3');">
-                <option value="5" name="På kommunens hjemmeside"/>
-                <option value="4" name="Ved telefonisk henvendelse"/>
-                <option value="3" name="Via e-mail korrespondance"/>
-                <option value="2" name="Ved fremmøde på kommunen"/>
-                <option value="1" name="På anden måde"/>
-            </input>
-            <input type="input" id="svar2_4" displayname="Hvor/hvordan?" urlparam="svar2_4" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_2']=='ja' &amp;&amp; Poll.state['svar2_3']=='1'"/>
-
-            <input type="text" displayname="I hvilken grad havde du udbytte af informationen?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')" />
-            <input type="radiobutton" displayname="" id="svar2_5" urlparam="svar2_5" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')">
-                <option value="4" name="I høj grad"/>
-                <option value="3" name="I nogen grad"/>
-                <option value="2" name="I mindre grad"/>
-                <option value="1" name="Slet ikke"/>
-            </input>
-
             <input type="text" displayname="Hvor tilfreds er du med kommunens medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_7" urlparam="svar2_7" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="4" name="Meget tilfreds"/>
@@ -180,14 +828,12 @@
                 <option value="2" name="Utilfreds"/>
                 <option value="1" name="Meget utilfreds"/>
             </input>
-
             <input type="text" displayname="Hvor nemt var det at forstå vores brev?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_11" urlparam="svar2_11" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="3" name="Det var nemt at forstå"/>
                 <option value="2" name="Det var hverken nemt eller svært"/>
                 <option value="1" name="Det var svært at forstå"/>
             </input>
-            
             <input type="text" displayname="Svarer vores afgørelse til dine forventninger efter dialog med vores medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_12" urlparam="svar2_12" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="4" name="I høj grad"/>
@@ -195,12 +841,51 @@
                 <option value="2" name="I mindre grad"/>
                 <option value="1" name="Slet ikke"/>
             </input>
+            <input type="text" displayname="Er du tilfreds med sagsbehandlingstiden?" condition="Poll.formulartype == 2"/>
+            <input type="radiobutton" displayname="" id="svar2_8" urlparam="svar2_8" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_8');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Svarede sagsbehandlingstiden til det vi havde stillet dig i udsigt?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'"/>
+            <input type="radiobutton" displayname="" id="svar2_9" urlparam="svar2_9" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej'" onchange="Poll.setFormularState('svar2_9');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Hvilken sagsbehandlingstid havde vi lovet dig?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
+            <input type="input" displayname="" id="svar2_10" urlparam="svar2_10" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
+            
+            
+        </content>
+        <content displayname="Information">
+        
 
-            <input type="textarea" urlparam="svar2_6" displayname="Kommentar" condition="Poll.formulartype == 2"/>
-            
-            
-            
+            <!-- FORMULAR 1+2 - FANE 2 -->
 
+            <input type="text" displayname="Søgte du information inden du sendte ansøgningen?"/>
+            <input type="radiobutton" displayname="" id="svar2_2" urlparam="svar2_2" defaultvalue="0" onchange="Poll.setFormularState('svar2_2');">
+                <option value="ja" name="Ja"/>
+                <option value="nej" name="Nej"/>
+            </input>
+            <input type="text" displayname="Hvordan søgte du information?" condition="Poll.state['svar2_2']=='ja'"/>
+            <input type="radiobutton" displayname="" id="svar2_3" urlparam="svar2_3" defaultvalue="0" condition="Poll.state['svar2_2']=='ja'" onchange="Poll.setFormularState('svar2_3');">
+                <option value="5" name="På kommunens hjemmeside"/>
+                <option value="4" name="Ved telefonisk henvendelse"/>
+                <option value="3" name="Via e-mail korrespondance"/>
+                <option value="2" name="Ved fremmøde på kommunen"/>
+                <option value="1" name="På anden måde"/>
+            </input>
+            <input type="input" id="svar2_4" displayname="Hvor/hvordan?" urlparam="svar2_4" condition="Poll.state['svar2_2']=='ja' &amp;&amp; Poll.state['svar2_3']=='1'"/>
+
+            <input type="text" displayname="I hvilken grad havde du udbytte af informationen?" condition="Poll.state['svar2_2']=='ja'" />
+            <input type="radiobutton" displayname="" id="svar2_5" urlparam="svar2_5" defaultvalue="0" condition="Poll.state['svar2_2']=='ja'">
+                <option value="4" name="I høj grad"/>
+                <option value="3" name="I nogen grad"/>
+                <option value="2" name="I mindre grad"/>
+                <option value="1" name="Slet ikke"/>
+            </input>
+
+            <input type="textarea" urlparam="svar2_6" displayname="Kommentar"/>
+            
 
         </content>
         <content displayname="Uddybende bemærkninger">
@@ -405,6 +1090,40 @@
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
+    <formular name="multiple2">
+        <header>Tegn flere geometrier i kortet med attributter</header>
+        <subheader>Alle geometrierne sendes til servere og kan gemmes. Det er kun muligt at tegne flere geometrier af samme type. Hvis man tegner en geometri af en anden type, så slettes de forudgående geometrier.</subheader>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Location"/>
+            <maptools>
+                <maptool displayname="Tegn en polygon" name="polygon" default="true"/>
+<!--                 <maptool displayname="Tegn et punkt" name="point"/> -->
+<!--                 <maptool displayname="Tegn en linie" name="line"/> -->
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
+            </maptools>
+            <map class="my_map_class" multiplegeometries="true">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+                <attributes page="formular.geometry.save" datasource="formular-test-geometry" command="write">
+                    <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
+                    <input type="input" displayname="Nummer 2:" urlparam="nummer2" defaultvalue="22"/>
+                    <input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>
+                </attributes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <input type="input" displayname="Adresse:" urlparam="adr" defaultvalue=""/>
+            <input type="input" displayname="Postnummer:" urlparam="post" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="multiple">
         <header>Tegn flere geometrier i kortet</header>
         <subheader>Alle geometrierne sendes til servere og kan gemmes. Det er kun muligt at tegne flere geometrier af samme type. Hvis man tegner en geometri af en anden type, så slettes de forudgående geometrier.</subheader>
@@ -468,6 +1187,17 @@
             <input type="input" displayname="Postnr:" urlparam="val2"/>
         </content>
     </formular>
+    <formular name="submitpages2">
+        <header>Formular med flere submit pages (med custom id)</header>
+        <subheader>Man vil gerne have at det unikke ID sendes som i en specifik urlparameter og ikke i "frid"</subheader>
+        <submitpages>
+            <page parser="setFrid" urlparam="journalnummer">formular.create-frid</page>
+            <page parser="setPdf">formular.create-pdf.nomap</page>
+        </submitpages>
+        <content displayname="Detaljer">
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+        </content>
+    </formular>
     <formular name="confirm">
         <header>Formular med godkendelse af registrering</header>
         <submitpage>formular.send.general.nomap</submitpage>
@@ -497,9 +1227,26 @@
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
+    <formular name="geosearchmap2">
+        <header>Adressesøgning med GeoSeach og kort</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="GeoSearch med kort"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser,Matrikelnumre" filter="[module.spatialaddress.filter]" minzoom="6"/>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
     <formular name="geosearchmap">
         <header>Adressesøgning med GeoSeach og kort</header>
-        <subheader>Matrikelsøgning er IKKE muligt endnu!</subheader>
+        <subheader></subheader>
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="GeoSearch med kort"/>
@@ -520,6 +1267,23 @@
         <content>
             <input type="hidden" urlparam="about" defaultvalue="GeoSearch"/>
             <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" disablemap="true"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="address2">
+        <header>Adressesøgning med to GeoSeach hvor det kun er den ene der er knyttet til kortet</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="GeoSearch"/>
+            <geosearch urlparam="val0" displayname="Adresse:" resources="Adresser,Matrikelnumre" filter="[module.spatialaddress.filter]" regexp="[a-zæøå]" validate="Der skal være indtastet en adresse!" />
+            <geosearch disablemap="true" urlparam="val1" displayname="Forpagter/lejer adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" regexp="[a-zæøå]" validate="Der skal være indtastet en adresse!" />
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
@@ -574,7 +1338,36 @@
                     <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
-            <conflicts class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-info" urlparam="konflikttekst1" displayname="&lt;strong&gt;Info&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-success" urlparam="konflikttekst1" displayname="&lt;strong&gt;Success&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-warning" urlparam="konflikttekst1" displayname="&lt;strong&gt;Warning&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-danger" urlparam="konflikttekst1" displayname="&lt;strong&gt;Danger&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="conflict2">
+        <title>Konfliktsøgning med formatering</title>
+        <header>Konfliktsøgning med formatering</header>
+        <subheader>Formater resultatet så det stilles pænt op</subheader>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>pdf</reportxsl>
+        <css>/modules/formular/test/css/conflict.css</css>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Test af konfliktsøgning"/>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <conflicts class="warning-info" urlparam="konflikttekst1" displayname="" targerset="drikkevand2"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>
@@ -602,6 +1395,33 @@
             </map>
             <conflicts onconflict="alert('Conflict');" onnoconflict="alert('Np conflict')" class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+    <formular name="conflict-delete">
+        <header>Konfliktsøgning med slet af geometrier</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <submitgeometrypage>formular.send.general.nomap</submitgeometrypage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Location"/>
+            <maptools>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+                <maptool displayname="Ændre en geometri" name="modify"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme name="DRIKKEVANDS_INTER_SENEST" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <conflicts class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
         </content>
     </formular>
     <formular name="themeoptions">
@@ -736,6 +1556,13 @@
             <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato3"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="jQuery('#frist_startdato3_displayname').html('Vedligehold, der afsluttes '+jQuery('#frist_slutdato3').val()+' påbegyndes tidligst:')"/> 
             <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato3" urlparam="frist_startdato"/>
 
+            <input type="text" displayname="Begrænsede muligheder ud fra en datasource"/>
+            <input type="date" displayname="Vælg dato:" default="01.01.2013"  id="frist_dato4"  urlparam="frist_slutdato" limitfromdatasource="formular-test-dates" regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/> 
+
+            <input type="text" displayname="Begrænser datovælger ud fra valgt dato samt datasource"/>
+            <input type="date" displayname="Vælg først startdato:"   id="frist_startdato5"  urlparam="frist_startdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDateLimitSpan('frist_slutdato5',jQuery('#frist_startdato5').val())"/> 
+            <input type="date" displayname="Vælg slutdato"           id="frist_slutdato5" urlparam="frist_slutdato" condition="jQuery('#frist_startdato5').val() != ''" limitfromdatasource="formular-test-dates"/>
+
         </content>
     </formular>
     <formular name="daterange">
@@ -799,6 +1626,7 @@
             <input urlparam="val2" id="val27" type="checkbox" displayname="Er du sikker:" defaultvalue="false"/>
             <input urlparam="val3" type="checkbox" displayname="Send kvitering:" defaultvalue="false" condition="jQuery('#val27').is(':checked') == true"/>
             <input urlparam="val4" class="warning" type="text" displayname="Hej Bo" condition="jQuery('#navn').val() == 'Bo'"/>
+            <input urlparam="val6" type="date" displayname="Dato:" condition="jQuery('#udnyttelse').val() == 'udyrket areal'"/>
         </content>
     </formular>
     <formular name="tabs1">
@@ -891,6 +1719,43 @@
             <input type="file" displayname="Billede:" urlparam="billede"/>
         </content>
     </formular>
+    <formular name="tabs3">
+        <header>Tab med condition</header>
+        <submitpage>formular.send.general</submitpage>
+        <reportprofile>kbh_themestore</reportprofile>
+        <tabs class="testtab">true</tabs>
+        <content displayname="Første side">
+            <input type="hidden" urlparam="about" defaultvalue="Formular på flere sider med tabs"/>
+            <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
+            <input type="input" displayname="Adresse:" urlparam="val1"/>
+            <input type="input" displayname="Postnr:" urlparam="val2" id="postnr"/>
+        </content>
+        <content displayname="Kort">
+            <maptools>
+                <maptool displayname="Flyt kortet" name="pan"/>
+                <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
+                <maptool displayname="Tegn en polygon" name="polygon"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en cirkel" name="circle"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort-tiled" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Ansøger:" urlparam="val3" defaultvalue="Mig"/>
+            <input type="input" displayname="Hest:" urlparam="val4"/>
+            <input type="input" displayname="Får:" urlparam="val5"/>
+        </content>
+        <content displayname="Sidste side" condition="jQuery('#postnr').val() == '1'">
+            <input type="input" displayname="Noget nyt" urlparam="val6" defaultvalue="Paging"/>
+            <input type="input" displayname="ABC:" urlparam="val7"/>
+            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
+        </content>
+    </formular>
     <formular name="paging">
         <header>Formular over flere sider</header>
         <submitpage>formular.send.general</submitpage>
@@ -932,7 +1797,7 @@
         <header>Ansøgningsskema til &lt;br/&gt;vandhuller</header>
         <subheader>Ansøgning efter &lt;br/&gt;naturbeskyttelsesloven</subheader>
         <help displayname="Hjælp"><![CDATA[<b>Hjælp</b><br/>Her står der hvordan du kan bruge siden. Man kan skrive HTML ind i hjælpeteksten. Det kunne også være billeder og <a href="http://spatialmap.com">links</a>]]></help>
-        <submitpage>formular.send.general</submitpage>
+        <submitpage>formular.send.general.nomap</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <reportlayers>default</reportlayers>
         <reportxsl>pdf</reportxsl>
@@ -991,7 +1856,6 @@
             <input type="input" displayname="XTræffetid:" urlparam="traeffetid" id="trtid" onkeyup="jQuery('#tlf1').val((jQuery('#trtid').val()-0)*127)" regexp="[0-9]" validate="Det skal være et tal!"/> 
             <input type="file"  displayname="Vedlæg tegning:" urlparam="filnavn" extensions="pdf,gif"/>
             <input type="date" displayname="Opsættelses dato:" urlparam="date1" defaultvalue="08.04.2013"/>
-            <input type="date" displayname="Nedtagnings dato:" urlparam="date2" regexp="[0-3][0-9]\.[0-1][0-9]\.[2][0][0-1][0-9]" validate="Dato skal være på formen 29.04.2013"/>
             <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targerset="konflikt"/>
             <input type="textarea" urlparam="begrundelse" displayname="Begrundelse for ansøgning:"/>
             <input type="textarea" displayname="Yderligere kommentarer:" urlparam="kommentar" defaultvalue="ikke udfyldt"/>
@@ -1020,12 +1884,12 @@
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
             <input type="input" displayname="Adresse:" urlparam="val1"/>
             <columns class="test">
-	            <column class="col113">
+	            <column>
 		            <input type="input" displayname="Tlf" urlparam="val2"/>
 		            <input type="input" displayname="Email:" urlparam="val3"/>
 	                <input type="input" displayname="Hest:" urlparam="val6"/>
 	            </column>
-	            <column class="col115">
+	            <column>
 		            <input type="input" displayname="Postnr:" urlparam="val4"/>
 		            <input type="input" displayname="By:" urlparam="val5"/>
 	            </column>

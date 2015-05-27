@@ -9,6 +9,13 @@ body {
     line-height: 135%;
 }
 
+*:before, *:after {
+    box-sizing: border-box;
+}
+*:before, *:after {
+    box-sizing: border-box;
+}
+
 .message {
 	display:none;
 	position: absolute;
@@ -37,11 +44,48 @@ body {
     width: 60%;
     top: 40%
 }
-#message_done {
+.messagetext {
     margin-top: 24px;
     margin-left: 15%;
-    padding-left: 24px;
     width: 60%;
+}
+#message_done {
+    padding: 10px;
+    width: 100%;
+    margin: 3px;
+    border: 1px solid #fff;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  opacity: 1;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+    background-color: rgb(223, 240, 216);
+    border-color: rgb(214, 233, 198);
+    color: rgb(60, 118, 61);
+}
+
+#message_done > span {
+    padding-right: 10px;
+    font-size: 16px;
+}
+
+#message_done.message-info {
+    background-color: rgb(217, 237, 247);
+    border-color: rgb(188, 232, 241);
+    color: rgb(49, 112, 143);
+}
+#message_done.message-warning {
+    background-color: rgb(252, 248, 227);
+    border-color: rgb(250, 235, 204);
+    color: rgb(138, 109, 59);
+}
+#message_done.message-error {
+    background-color: rgb(242, 222, 222);
+    border-color: rgb(235, 204, 209);
+    color: rgb(169, 68, 66);
 }
 
 table#content {
@@ -101,6 +145,53 @@ td {
 	position: relative;
 }
 
+.features_attributes .labeldiv {
+    width: 140px;
+}
+.features_attributes .valuediv {
+    width: 420px;
+}
+.attributeswrapper {
+    box-sizing: border-box;
+    background-image: -webkit-linear-gradient(rgba( 238, 238, 238, 0), rgba( 238, 238, 238, 0));
+    background-image: linear-gradient(rgba( 238, 238, 238, 0),rgba( 238, 238, 238, 0));
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 3px;
+    -moz-box-sizing: border-box;    
+    margin: 5px;
+
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.attributeswrapper.active {
+    border-color: rgb(188, 232, 241);
+}
+.attributeswrapper > .attributesheader {
+    background-color: rgb(221, 221, 221);
+    padding: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    height: 24px;
+    line-height: 24px;
+}
+.attributeswrapper > .attributesheader > span.icon {
+    float: right;
+    padding: 5px;
+}
+.attributeswrapper > .attributesheader > span.icon:hover {
+    font-weight: bold;
+}
+.attributeswrapper.active > .attributesheader {
+    cursor: default;
+    background-color: rgb(217, 237, 247);
+    color: rgb(49, 112, 143);
+}
+.attributeswrapper > table.tablecontent {
+    margin: 5px;
+}
 
 
 .ui-autocomplete {
@@ -208,6 +299,79 @@ td {
 .warning {
 	color: #FF0000;
 }
+
+.warning-hidden {
+    display: none;
+}
+.warning-success {
+    padding: 10px;
+    width: 100%;
+    margin: -1px;
+    border: 1px solid #fff;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    opacity: 1;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    background-color: rgb(223, 240, 216);
+    border-color: rgb(214, 233, 198);
+    color: rgb(60, 118, 61);
+}
+.warning-info {
+    padding: 10px;
+    width: 100%;
+    margin: -1px;
+    border: 1px solid #fff;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    opacity: 1;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    background-color: rgb(217, 237, 247);
+    border-color: rgb(188, 232, 241);
+    color: rgb(49, 112, 143);
+}
+.warning-warning {
+    padding: 10px;
+    width: 100%;
+    margin: -1px;
+    border: 1px solid #fff;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    opacity: 1;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    background-color: rgb(252, 248, 227);
+    border-color: rgb(250, 235, 204);
+    color: rgb(138, 109, 59);
+}
+.warning-danger {
+    padding: 10px;
+    width: 100%;
+    margin: -1px;
+    border: 1px solid #fff;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    opacity: 1;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    background-color: rgb(242, 222, 222);
+    border-color: rgb(235, 204, 209);
+    color: rgb(169, 68, 66);
+}
+
 
 .help {
     color: #aaa;
@@ -376,6 +540,9 @@ div.helpbutton {
 .tabcontent > tbody > tr > td:first-child {
     width: 150px;
 }
+.tabcontent > tbody > tr > td.colspan2:first-child {
+    width: 600px;
+}
 .colcontainer2 {
     width: 1230px;
 }
@@ -422,4 +589,62 @@ div.helpbutton {
     padding: 25px; 
     background-color: #fff;
     z-index: 100;
+}
+
+
+
+@font-face {
+    font-family: 'icomoon';
+    src:url('fonts/icomoon.eot?ge2pc2');
+    src:url('fonts/icomoon.eot?#iefixge2pc2') format('embedded-opentype'),
+        url('fonts/icomoon.woff?ge2pc2') format('woff'),
+        url('fonts/icomoon.ttf?ge2pc2') format('truetype'),
+        url('fonts/icomoon.svg?ge2pc2#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-times:before {
+    content: "\f00d";
+}
+.icon-frame:before {
+    content: "\e600";
+}
+.icon-location:before {
+    content: "\e602";
+}
+.icon-search:before {
+    content: "\e603";
+}
+.icon-printer:before {
+    content: "\e604";
+}
+.icon-checkmark:before {
+    content: "\e605";
+}
+.icon-info:before {
+    content: "\e606";
+}
+.icon-info2:before {
+    content: "\e607";
+}
+.icon-warning:before {
+    content: "\e608";
+}
+.icon-flow-line:before {
+    content: "\e601";
 }

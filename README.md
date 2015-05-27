@@ -13,6 +13,10 @@ http://sandkasse.randers.dk/cbkort?page=formular&formular=soe
 
 Dette giver en side, der kan indlejres som en Iframe i et CMS system. Stylingen er derfor gjort meget enkelt, så den vil passe ind (næsten) hvor som helst.
 
+http://sandkasse.randers.dk/cbkort?page=formular.skin&formular=soe
+
+Dette giver en stand-alone side med et nyt og modernet design.
+
 Installer modulet:
 ```xml
 <module name="formular" dir="custom/formular" permissionlevel="public"/>
@@ -35,7 +39,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
     <formular name="soe">                                       <!-- name er navnet på formularen og refererer til værdien af URL-parameteren "formular" -->
         <title>Ansøgningsskema til vandhuller</title>           <!-- OPTIONAL - Angiver den tekst, der står som titel i browseren -->
         <header>Ansøgningsskema til vandhuller</header>         <!-- OPTIONAL - Angiver den tekst, der står øverst på siden -->
-        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader> <!-- OPTIONAL - Angiver den tekst, der står under overskriften på siden -->
+        <subheader>Ansøgning efter naturbeskyttelsesloven</subheader>            <!-- OPTIONAL - Angiver den tekst, der står under overskriften på siden -->
+        <headerhtml url="/modules/formularconfig/html/virkheader.html"></header> <!-- OPTIONAL - Bruges i forbindelse med "skin" for at tilføje en custom header til siden. HTML'en kan også tilføjes direkte som indhold til dette tag. -->
         <submitpage>formular.send.soe</submitpage>              <!-- DEPRECATED - BRUG SUBMITPAGES I STEDET - Den page, der skal kaldes for at gemme og danne kvitering - Denne page vil være specifik for hver formular. Se senere i dette dokument. -->
         <submitpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
             <page parser="setFrid">formular.create-frid</page>  <!-- Det er muligt at tilføje en "parser", der kan læse output'et fra en page og sende relevante parametre videre til de efterfølgende -->
@@ -311,6 +316,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2015.05.26 - Nyt skin
 * 2014.08.07 - Ny mulighed for at gemme flere geometrier med forskellige oplysninger
 * 2014.07.02 - Minscale eller minzoom tilføjet til søgefunktionerne
 * 2014.07.02 - Flere standard klasser til styling af konfliktsøgningsresultat

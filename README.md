@@ -4,7 +4,7 @@ spatialsuite-formular
 Dette modul giver brugeren en formular, som f.eks. kan bruges til ansøgninger.
 
 --------------------
-VEJLEDNING
+VEJLEDNING TIL FORMULARMODULET
 --------------------
 
 En formular er en page i CBkort. Indholdet af formularen styres vha. en parameter i URL'en, der refererer til en helt specifik navngivet konfiguration. Formularen kaldes med:

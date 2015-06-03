@@ -57,6 +57,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                                                                      Hvis log er aktiveret så logges alle fejl -->
             <page errormessage="Tekst">formular.save</page>     <!-- errormessage indeholder den tekst, der vises hvis der er en fejl. -->
         </submitpages>
+		<errorpages>                                           <!-- En liste af pages, der skal kaldes hvis der opstår en fejl i forbindelse med submitpages -->
+			<page>formular.send.errormail</page>				<!-- I den pages der kaldes, kan fejlbeskederne for hver enkel page, der er fejlet, hentes via parametren: errorpagemessage
+																<!-- eksempel:  hvis -->
+																<!--	<page errortype="warning" errormessage="Fejl i skrivning til databasen">formular.save</page> -->
+																<!-- fejler, vil errorpagemessage indeholde teksten: Fejl i skrivning til databasen. Derved er det muligt at sende et fejlbesked til en fælles postkasse med fejlbeskeden -->
+		</errorpages>                                           <!-- En liste af pages, der skal kaldes når der klikkes på "Send". Ved at det er en liste af pages, er det muligt at genbruge pages på tværs af formularer. -->
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
         <reportprofile>alt</reportprofile>                      <!-- OPTIONAL - Profil, der skal anvendes til at danne kortet i kviteringen (default er "alt") -->
         <reportlayers>default</reportlayers>                    <!-- OPTIONAL - Layers, der skal anvendes til at danne kortet i kviteringen. Det kan være en liste adskilt af mellemrum (default er "default", der gør at det er profilen default viste temaer, der vises) -->

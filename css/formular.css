@@ -127,8 +127,10 @@ td {
 	width: 150px;
 }
 .valuediv {
-	width: 450px;
+	width: 449px;
 }
+.valid  { width: 450px; background-color: #ffffff; }
+
 .input1, .textarea1, .select1 {
 	/*position: relative;*/
 	width:100%;

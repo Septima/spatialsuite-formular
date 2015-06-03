@@ -2,10 +2,10 @@
 <config>
 
     <formular name="skin">
-        <title>Formular TEST</title>
-        <header>Formular TEST</header>
-        <headerhtml url="/modules/formular/test/html/virkheader.html">TEST</headerhtml>
-        <subheader>Formular TEST</subheader>
+        <title>Formular med skin</title>
+        <header>Formular med skin</header>
+        <headerhtml url="/modules/formular/test/html/testheader.html">TEST</headerhtml>
+        <subheader>Formular med skin</subheader>
         <reportprofile>demo01</reportprofile>
         <tabs>true</tabs>
         <submitpages>

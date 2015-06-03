@@ -2148,6 +2148,11 @@ Formular = SpatialMap.Class ({
             var val = params[name];
             
             if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                if (val === 'true') {
+                    val = true;
+                } else if (val === 'false') {
+                    val = false;
+                }
                 jQuery('#'+this.postparams[name].id).prop('checked', val);
             } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
                 jQuery('input:radio[name='+this.postparams[name].id+'][value='+val+']').prop('checked', true);

@@ -1137,7 +1137,7 @@ Formular = SpatialMap.Class ({
                     },this,id));
                 } else if (type=='checkbox') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><div class="checkbox"><label><input type="checkbox" title="'+node.attr('displayname')+'" '+(postparam.disabled ? 'disabled':'')+' id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'>'+node.attr('displayname')+'</label></div>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div>');
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><div class="checkbox'+(req ? ' required-enabled':'')+'"><label><input type="checkbox" title="'+node.attr('displayname')+'" '+(postparam.disabled ? 'disabled':'')+' id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'>'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label></div>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname"></div></td><td><div class="valuediv"><label><input type="checkbox" id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'/>'+node.attr('displayname')+'</label></div></td></tr>');
                     }
@@ -1166,6 +1166,10 @@ Formular = SpatialMap.Class ({
                     if (req) {
                         this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
                             var valid = (jQuery('#'+id).val() !== '');
+                            var type = jQuery('#'+id).attr('type');
+                            //if (type === 'checkbox') {
+                            //    valid = jQuery('#'+id).is(":checked");
+                            //}
                             var map = jQuery('#'+id+'_row > .map');
                             jQuery('#'+id+'_row > .required-enabled').removeClass('error');
                             jQuery('#'+id+'ValidationMessage').remove();
@@ -1173,7 +1177,11 @@ Formular = SpatialMap.Class ({
                                 jQuery('#'+id+'_row > .required-enabled').addClass('error');
                                 var message = jQuery('#'+id+'ValidationMessage');
                                 if (message.length === 0) {
-                                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                                    if (type === 'checkbox') {
+                                        //jQuery('<span id="' + id + 'ValidationMessage" class="error validationMessage">' + errormessage + '</span>').insertAfter(jQuery('#'+id+'_row label'));
+                                    } else {
+                                        jQuery('<span id="' + id + 'ValidationMessage" class="error validationMessage">' + errormessage + '</span>').insertAfter(jQuery('#' + id));
+                                    }
                                 }
                             }
                             return valid;

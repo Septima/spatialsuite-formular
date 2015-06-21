@@ -34,6 +34,10 @@ fieldset .error .form-control-static {
     border: 4px solid #ce1415; 
 }
 
+fieldset .checkbox.error {
+    border: 4px solid #ce1415;
+}
+
 fieldset .error .validationMessage,
 fieldset .error.validationMessage { 
     padding:0.8em 0 0.8em 0.8em; 

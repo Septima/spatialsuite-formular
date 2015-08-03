@@ -1,6 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="skinikb">
+        <title>Formular til test</title>
+        <header>Formular til test</header>
+        <subheader></subheader>
+        <headerhtml url="/modules/formular/test/html/ikbheader.html">TEST</headerhtml>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.test</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportprofile>borgergis_formular_rapport</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>kvittering_test</reportxsl>
+        <tabs>true</tabs>
+
+        <content displayname="Test - Forkert indtastning">
+            <input type="text" displayname=""/>
+            <input type="text" displayname=""/>
+
+            <input type="text" displayname="&lt;strong&gt;Det er muligt at udfylde felterne forkert og alligevel sende formularen&lt;/strong&gt;"/>
+
+            <input type="text" displayname="&lt;g&gt;Felter markeret med * skal udfyldes.&lt;/g&gt;"/>
+
+            <input type="text" displayname=""/>
+
+            <input type="input"	displayname="Fornavn og efternavn:"	  urlparam="navn"	     required="true"  regexp=".+"	validate="Skal være udfyldt"/>
+
+            <columns >
+                <column class="col-sm-4">
+                    <input type="input"	 displayname="Telefonnummer:"   urlparam="telefon"    regexp="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]" required="true"  validate="Skal være udfyldt" />
+                </column>
+                <column class="col-sm-8">
+                    <input type="input"	 displayname="E-mail:"	        urlparam="email"	    required="true"  regexp="^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$" 	 validate="Skal være udfyldt"/>
+                </column>
+            </columns>
+            <columns >
+                <column class="col-sm-4">
+                    <input type="input"	 displayname="CVR-nummer:"   regexp="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"  required="true"  urlparam="cvr" />
+                </column>
+                <column class="col-sm-4">
+                    <input type="input"	 displayname="CPR-nummer:"	 regexp="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"  required="true"  urlparam="cpr" />
+                </column>
+            </columns>
+        </content>
+        <content displayname="Tidsramme" >
+
+            <input type="date"      displayname="Dato:"  urlparam="dato"	/>
+        </content>
+    </formular>
+
+
+    <formular name="regexp-validate">
+        <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Formular til test."/>
+        <title>Validering af regexp</title>
+        <header>Validering af regexp</header>
+        <subheader></subheader>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.send.test</page>
+            <page url="/jsp/modules/formular/final_json.jsp">move</page>
+        </submitpages>
+        <reportprofile>borgergis_formular_rapport</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>kvittering_test</reportxsl>
+        <tabs>true</tabs>
+
+        <content displayname="Test - Forkert indtastning">
+
+            <input type="text" displayname="&lt;strong&gt;Udfyldning af felter overholder &lt;/strong&gt;"/>
+
+            <input type="text" displayname="&lt;g&gt;Felter markeret med * skal udfyldes.&lt;/g&gt;"/>
+
+            <input type="input"	displayname="Fornavn og efternavn:"	urlparam="navn" required="true" defaultvalue="Septima"/>
+            <input type="input"	 displayname="CVR-nummer (skal være 8 tal):" defaultvalue="12"  regexp="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"  required="true"  urlparam="cvr" />
+            <input type="checkbox" displayname="Er du sikker?" id="godkendt" urlparam="godkendt" defaultvalue="true"  required="true"/>
+
+        </content>
+        <content displayname="Tidsramme" >
+
+            <input type="date"      displayname="Dato:"  urlparam="dato"	/>
+        </content>
+    </formular>
+
     <formular name="skin">
         <title>Formular med skin</title>
         <header>Formular med skin</header>

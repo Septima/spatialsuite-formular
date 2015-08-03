@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="pagecondition">
+        <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Formular til test."/>
+        <title>Page condition</title>
+        <header>Page condition</header>
+        <subheader></subheader>
+        <submitpages>
+            <page parser="setFrid" urlparam="test">formular.create-frid</page>
+            <page condition="!jQuery.isNumeric(formular.currentParams.test)">formular.create-frid</page>
+        </submitpages>
+        <reportprofile>demo01</reportprofile>
+        <reportlayers>default</reportlayers>
+        <tabs>true</tabs>
+
+        <content displayname="Test">
+
+            <input type="text" displayname="&lt;strong&gt;Udfyldning af felter overholder &lt;/strong&gt;"/>
+
+            <input type="text" displayname="&lt;g&gt;Felter markeret med * skal udfyldes.&lt;/g&gt;"/>
+
+            <input type="input"	displayname="Fornavn og efternavn:"	urlparam="navn" defaultvalue="Septima"/>
+            <input id="cvr" type="input"	 displayname="CVR-nummer (skal være 8 tal):" defaultvalue="12"  urlparam="cvr" />
+            <input type="checkbox" displayname="Er du sikker?" id="godkendt" urlparam="godkendt" defaultvalue="true"/>
+
+        </content>
+        <content displayname="Tidsramme" >
+            <input type="date"      displayname="Dato:"  urlparam="dato"	/>
+        </content>
+    </formular>
+
+
     <formular name="skinikb">
         <title>Formular til test</title>
         <header>Formular til test</header>

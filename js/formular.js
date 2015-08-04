@@ -19,7 +19,6 @@ Formular = SpatialMap.Class ({
 	errorPages: [],
 	errorMessages: [],
 	errorHandling: true,
-	handlingErrors : false,
     removeSessionPage: 'formular.clear',
     config: null,
     map: null,
@@ -463,7 +462,7 @@ Formular = SpatialMap.Class ({
 
                 }
 
-                //Bootstrap - fjern loading når filen er hentet
+                //Bootstrap - fjern loading nÃ¥r filen er hentet
                 jQuery('#content').removeClass('content-loading');
 
             },this)
@@ -1182,7 +1181,7 @@ Formular = SpatialMap.Class ({
                         required: req,
                         regexp: regexp,
                         tab: tab,
-                        message: node.attr('validate') || 'Indtast en valid værdi!'
+                        message: node.attr('validate') || 'Indtast en valid vÃ¦rdi!'
                     };
 
                     if (req) {
@@ -2333,7 +2332,7 @@ Formular = SpatialMap.Class ({
 
     submit: function () {
         if (this.map && this.feature.length === 0 && this.featureRequired === true) {
-            alert('Tegn på kortet og udfyld alle felter inden der trykkes på "Send"');
+            alert('Tegn pÃ¥ kortet og udfyld alle felter inden der trykkes pÃ¥ "Send"');
         } else {
             var params = {
                 sessionid: this.sessionid,
@@ -3034,7 +3033,7 @@ Formular = SpatialMap.Class ({
 			}
 		} else {
 			if (this.bootstrap === true) {
-				jQuery('#message').append('<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>');
+				jQuery('#message').append('<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansÃ¸gningen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>');
 			} else {
 				jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansÃ¸gningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
 			}

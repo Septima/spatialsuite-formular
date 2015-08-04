@@ -28,6 +28,7 @@ Formular = SpatialMap.Class ({
     
     currentMapState: null,
     currentMapTool: null,
+    currentParams: {},
     
     mapbuttons: {},
     spatialqueries: [],
@@ -2717,6 +2718,8 @@ Formular = SpatialMap.Class ({
     },
     
     execute: function (params, pages) {
+
+        this.currentParams = params;
         
         if (!(pages[0].condition instanceof Function)) {
             pages[0].condition = new Function ('return '+pages[0].condition);

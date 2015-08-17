@@ -159,7 +159,7 @@
     <page name="formular.save" contenttype="application/json" sessionrequired="true">  
         <data handler="datasource" operation="execute-command">
             <url-parameters>
-                <url-parameter name="command" value="write"/>
+                <url-parameter name="command">if IsDefined(command) then command else "write" endif</url-parameter>
             </url-parameters>
         </data>
     </page>

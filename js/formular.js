@@ -2153,22 +2153,24 @@ Formular = SpatialMap.Class ({
         }
         
         for (var name in this.postparams) {
-            var input = jQuery('#'+this.postparams[name].id);
-            var val = params[name];
-            
-            if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
-                if (val === 'true') {
-                    val = true;
-                } else if (val === 'false') {
-                    val = false;
+            if (typeof params[name] !== 'undefined') {
+                var input = jQuery('#' + this.postparams[name].id);
+                var val = params[name];
+
+                if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                    if (val === 'true') {
+                        val = true;
+                    } else if (val === 'false') {
+                        val = false;
+                    }
+                    jQuery('#' + this.postparams[name].id).prop('checked', val);
+                } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+                    jQuery('input:radio[name=' + this.postparams[name].id + '][value=' + val + ']').prop('checked', true);
+                } else if (this.postparams[name].type && this.postparams[name].type == 'file') {
+                    //Not available
+                } else {
+                    jQuery('#' + this.postparams[name].id).val(val);
                 }
-                jQuery('#'+this.postparams[name].id).prop('checked', val);
-            } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
-                jQuery('input:radio[name='+this.postparams[name].id+'][value='+val+']').prop('checked', true);
-            } else if (this.postparams[name].type && this.postparams[name].type == 'file') {
-                //Not available
-            } else {
-                jQuery('#'+this.postparams[name].id).val(val);
             }
         }
         

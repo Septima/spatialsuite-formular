@@ -131,6 +131,9 @@
 
         <sql command="read-time">select val1 as start, val2 as slut from formulartest where val3 = 'time' AND val0 = [string: date]</sql>
 
+        <sql command="read-row">select * from formulartest where id = '[id]'</sql>
+        <sql command="write-update-name">update formulartest set name='[name]' where id = '[id]'</sql>
+
         <debug>false</debug>
     </datasource>
 

@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="edit1">
+        <title>Redigér en eksisterende feature</title>
+        <header>Redigér en eksisterende feature</header>
+        <subheader>Kald med id=2 for at redigere</subheader>
+        <reportprofile>demo01</reportprofile>
+        <js>/modules/formular/test/js/setfromdatasource.js</js>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page>formular.save</page>
+        </submitpages>
+        <content>
+            <input id="datasource" type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input id="readcommand" type="hidden" defaultvalue="read-row"/>
+            <input id="command" type="hidden" urlparam="command" defaultvalue="write-update-name"/>
+            <input id="id" type="hidden" displayname="ID:" urlparam="id"/>
+            <input id="navn" type="input" displayname="Navn" urlparam="name" placeholder="Indtast navn" required="true" validate="Angiv et navn" onchange="if (jQuery('#id').val() !== '') { jQuery('#command').val('write-update-name'); } else { jQuery('#command').val('write'); }"/>
+        </content>
+    </formular>
+
+
     <formular name="pagecondition">
         <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Formular til test."/>
         <title>Page condition</title>

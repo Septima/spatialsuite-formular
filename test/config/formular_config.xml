@@ -1870,7 +1870,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         </content>
     </formular>
     <formular name="paging">
-        <header>Formular over flere sider</header>
+        <header>Formular over flere sider1 </header>
         <submitpage>formular.send.general</submitpage>
         <reportprofile>kbh_themestore</reportprofile>
         <content>
@@ -1979,7 +1979,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         </content>
     </formular>
     <formular name="help">
-        <header>Simpel formular med hjælp</header>
+        <header>Simpel formular med hjælp1 </header>
         <help displayname="Hjælp"><![CDATA[<b>Hjælp</b><br/>Her står der hvordan du kan bruge siden. Man kan skrive HTML ind i hjælpeteksten. Det kunne også være billeder og <a href="http://spatialmap.com">links</a>]]></help>
         <submitpage>formular.send.general.nomap</submitpage>
         <content>
@@ -2034,4 +2034,59 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
         </content>
     </formular>
+    <formular name="errorpages">
+        <title>ErrorPages</title>
+		<header>Simpel formular til test af ErrorPages</header>
+        <submitpages>
+			<page errortype="info" errormessage="Fejl i page - info">formular.test.deliberate.fail</page>
+			<!-- <page errortype="warning" errormessage="Fejl i page - warning">formular.test.deliberate.fail</page> -->
+			<!-- <page errortype="error" errormessage="Fejl i page - error">formular.test.deliberate.fail</page> -->
+		</submitpages>
+		<errorpages>
+			<page parser="setFrid">formular.create-frid</page>
+			<page parser="setPdf">formular.test.deliberate.fail.pdf</page>
+			<page>formular.move.pdf</page>
+		</errorpages>
+		<reportprofile>ekstern_all</reportprofile>
+        <reportlayers>default</reportlayers>
+		<showreport>false</showreport>
+		<messages>
+            <message name="done">Oplysningerne er nu registreret.</message>
+			<message name="saving">Oplysningerne gemmes.</message>
+            <message name="error">Der er desværre opstået en fejl!!!</message>
+        </messages>
+
+        <tabs class="testtab">true</tabs>
+		<content displayname="Send">
+			<input type="text" displayname="Tryk blot send"/>
+        </content>
+    </formular>
+    <formular name="errorpages_multi">
+        <title>ErrorPages</title>
+		<header>Simpel formular til test af ErrorPages</header>
+        <submitpages>
+			<page errortype="info" errormessage="Fejl i page - info">formular.test.deliberate.fail</page>
+			<page errortype="warning" errormessage="Fejl i page - warning">formular.test.deliberate.fail</page>
+			<page errortype="error" errormessage="Fejl i page - error">formular.test.deliberate.fail</page>
+		</submitpages>
+		<errorpages>
+			<page parser="setFrid">formular.create-frid</page>
+			<page parser="setPdf">formular.test.deliberate.fail.pdf</page>
+			<page>formular.move.pdf</page>
+		</errorpages>
+		<reportprofile>ekstern_all</reportprofile>
+        <reportlayers>default</reportlayers>
+		<showreport>false</showreport>
+		<messages>
+            <message name="done">Oplysningerne er nu registreret.</message>
+			<message name="saving">Oplysningerne gemmes.</message>
+            <message name="error">Der er desværre opstået en fejl - henvend dig til nærmeste kommunale instans</message>
+        </messages>
+
+        <tabs class="testtab">true</tabs>
+		<content displayname="Send">
+			<input type="text" displayname="Tryk blot send"/>
+        </content>
+    </formular>
+
 </config>

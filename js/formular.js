@@ -16,6 +16,9 @@ Formular = SpatialMap.Class ({
     configpage: 'formular.config',
     submitpage: 'formular.send',
     pages: [],
+	errorPages: [],
+	errorMessages: [],
+	errorHandling: true,
     removeSessionPage: 'formular.clear',
     config: null,
     map: null,
@@ -181,7 +184,24 @@ Formular = SpatialMap.Class ({
                         this.submitpage = jQuery(page[0]).text();
                     }
                 }
-
+				
+				var errorPages = jQuery(data).find('errorpages > page');
+				if (errorPages.length > 0) {
+                    this.errorPages = [];
+                    for (var i=0;i<errorPages.length;i++) {
+                        var p = {
+                            name: jQuery(errorPages[i]).text(),
+                            parser: jQuery(errorPages[i]).attr('parser'),
+                            url: jQuery(errorPages[i]).attr('url') || 'cbkort',
+                            type: jQuery(errorPages[i]).attr('type') || 'json',
+                            urlparam: jQuery(errorPages[i]).attr('urlparam'),
+                            condition: jQuery(errorPages[i]).attr('condition'),
+                            error: null
+                        };
+                        this.errorPages.push(p);
+                    }
+                }
+                
                 var showReport = jQuery(data).find('showreport').text();
                 if (showReport) {
                     this.showReport = showReport != 'false';
@@ -2717,12 +2737,12 @@ Formular = SpatialMap.Class ({
             
             params.page = pages[0].name;
             params.outputformat = pages[0].type;
-            
+            doAsync = this.errorHandling; //the errorpage handling must be synchronized - otherwise the pageDone method is called and therefor the session i invalidated before all errorpages are completed
             jQuery.ajax( {
                 url : pages[0].url,
                 dataType : pages[0].type,
                 type: 'POST',
-                async: true,
+                async: doAsync, 
                 data : params,
                 success : SpatialMap.Function.bind( function(params, pages, data, status) {
                     if (pages[0].parser) {
@@ -2730,23 +2750,29 @@ Formular = SpatialMap.Class ({
                     }
                     params = this.handleError(data, params, pages[0].error);
                     
-                    if (this.isErrorRespose(data)) {
+                    if (this.isErrorRespose(data) && this.errorHandling) {
                         if (pages[0].error) {
+							this.errorMessages.push(pages[0].error);
                             if (pages[0].error.type === 'info') {
                                 this.showErrorInfo(pages[0].error);
                             } else if (pages[0].error.type === 'warning') {
                                 this.showErrorWarning(pages[0].error);
                             } else if (pages[0].error.type === 'error') {
                                 this.showError(pages[0].error);
+								this.PageErrorHandling(params);
                                 this.pagesFail();
                                 return;
                             } else {
+								this.errorMessages.push('Der opstod en fejl');
                                 this.showError();
+								this.PageErrorHandling(params);
                                 this.pagesFail();
                                 return;
                             }
                         } else {
+							this.errorMessages.push('Der opstod en fejl');
                             this.showError();
+							this.PageErrorHandling(params);
                             this.pagesFail();
                             return;
                         }
@@ -2758,7 +2784,9 @@ Formular = SpatialMap.Class ({
                     if (pages.length > 0) {
                         this.execute(params, pages);
                     } else {
-                        this.pagesDone(params);
+						if (this.errorHandling){
+							this.pagesDone(params);
+						}
                     }
                 },this, params, pages),
                 error : SpatialMap.Function.bind( function(params, pages, data, status) {
@@ -2766,18 +2794,22 @@ Formular = SpatialMap.Class ({
                         params = this[pages[0].parser](data, params, pages[0].urlparam);
                     }
                     
-                    if (pages[0].error) {
+                    if (pages[0].error && this.errorHandling) {
                         var go = false;
+						this.errorMessages.push(pages[0].error);
                         if (pages[0].error.type === 'info') {
                             this.showErrorInfo(pages[0].error);
                         } else if (pages[0].error.type === 'warning') {
                             this.showErrorWarning(pages[0].error);
                         } else if (pages[0].error.type === 'error') {
                             this.showError(pages[0].error);
+							this.PageErrorHandling(params);
                             this.pagesFail();
                             return;
                         } else {
+							this.errorMessages.push('Der opstod en fejl');
                             this.showError();
+							this.PageErrorHandling(params);
                             this.pagesFail();
                             return;
                         }
@@ -2788,12 +2820,18 @@ Formular = SpatialMap.Class ({
                         if (pages.length > 0) {
                             this.execute(params, pages);
                         } else {
-                            this.pagesDone(params);
+							if (this.errorHandling){
+								this.pagesDone(params);
+							}
                         }
                         
                     } else {
-                        this.showError();
-                        this.pagesFail();
+						if (this.errorHandling) {
+							this.errorMessages.push('Der opstod en fejl');
+							this.showError();
+							this.PageErrorHandling(params);
+							this.pagesFail();
+						}
                     }
                 },this, params, pages)
             });
@@ -2802,7 +2840,8 @@ Formular = SpatialMap.Class ({
     
     pagesDone: function (params) {
         
-        if (this.multipleGeometriesAttributes.length > 0 && this.feature.length > 0) {
+        var frCounter = -1;
+		if (this.multipleGeometriesAttributes.length > 0 && this.feature.length > 0) {
             params.page = 'formular.geometry.save';
             if (typeof this.multipleGeometriesAttributesOptions.page !== 'undefined') {
                 params.page = this.multipleGeometriesAttributesOptions.page;
@@ -2838,9 +2877,7 @@ Formular = SpatialMap.Class ({
                                 this.showError();
                                 this.pagesFail();
                             } else {
-                                if (featureResponse.count === 0) {
-                                    this.showDone();
-                                }
+                                frCounter = featureResponse.count;
                             }
                         }
                     },this,featureResponse),
@@ -2855,10 +2892,33 @@ Formular = SpatialMap.Class ({
                 });                
             }
         } else {
-            this.showDone();
+			frCounter = 0;
+            //this.showDone();
         }
-        
+		this.PageErrorHandling(params);
+		if (frCounter == 0) {
+			this.showDone();
+		}
     },
+	
+	PageErrorHandling: function(params) {
+		if (this.errorMessages.length > 0 && this.errorPages.length > 0)
+		{
+			this.errorHandling = false;
+			var errpages = this.errorPages.slice(0);
+			var tmp = '';
+			for (var i=0; i<this.errorMessages.length; i++){
+				var obj = this.errorMessages[i].message;
+				tmp += obj + ', ';
+			}
+			if (tmp.length > 0)  {
+				tmp = tmp.substring(0,tmp.length-2);
+			}
+			params.errorpagemessage = tmp;
+            this.execute(params,errpages);
+		}
+	
+	},
 
     pagesFail: function () {
         jQuery('#messageloading').hide();
@@ -2966,21 +3026,21 @@ Formular = SpatialMap.Class ({
             } else {
                 jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
             }
-        } else {
-            if (this.messages.error) {
-                if (this.bootstrap === true) {
-                    jQuery('#message').append('<div class="alert alert-danger">'+this.messages.error+'</div>');
-                } else {
-                    jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
-                }
-            } else {
-                if (this.bootstrap === true) {
-                    jQuery('#message').append('<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>');
-                } else {
-                    jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
-                }
-            }
-        }
+        } 
+		if (this.messages.error) {
+			if (this.bootstrap === true) {
+				jQuery('#message').append('<div class="alert alert-danger">'+this.messages.error+'</div>');
+			} else {
+				jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+this.messages.error+'</div>');
+			}
+		} else {
+			if (this.bootstrap === true) {
+				jQuery('#message').append('<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Kontakt venligst kommunen for yderligere oplysninger.</div>');
+			} else {
+				jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>Der opstod en fejl i forbindelse med registreringen af ansøgningen. Kontakt venligst kommunen for yderligere oplysninger.</div>');
+			}
+		}
+        
         
     },
     

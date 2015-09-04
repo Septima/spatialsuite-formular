@@ -79,6 +79,22 @@
         <data handler="datasource" operation="execute-command"/>
     </page>
 
+    <page name="formular.test.deliberate.fail" contenttype="text/html" sessionreqiured="false">
+		<data handler="datasource" operation="execute-command">
+			<url-parameters>
+				<url-parameter name="datasource" value="nonexistent"/>
+				<url-parameter name="command" value="void"/>
+			</url-parameters>
+		</data>
+    </page>
+
+    <page name="formular.test.deliberate.fail.pdf" contenttype="text/html" sessionreqiured="false">
+        <data handler="PDFFormatter" operation="format-pdf">
+            <url-parameters>
+                <url-parameter name="stylesheet">"[module:formular-test.dir]/xsl/fail.xsl"</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
 
 
 </pages>

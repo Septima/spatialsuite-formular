@@ -764,9 +764,9 @@ Formular = SpatialMap.Class ({
                 this.mapId = id;
                 
                 if (this.bootstrap === true) {
-                    contentcontainer.append('<div id="'+id+'_row" class="form-group mapcontainer"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></div>');
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group mapcontainer"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div id="'+id+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></div>');
                 } else {
-                    contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div id="map_'+counter+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></td></tr>');
+                    contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div id="'+id+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></td></tr>');
                 }
                 
                 var extent = node.find('extent').text();
@@ -861,7 +861,7 @@ Formular = SpatialMap.Class ({
                     },this);
                 }
                 
-                this.map = new SpatialMap.Map ('map_'+counter,mapoptions);
+                this.map = new SpatialMap.Map (id,mapoptions);
                 
                 var attributesNode = node.find('attributes');
                 var children = jQuery(attributesNode).children();
@@ -2173,22 +2173,24 @@ Formular = SpatialMap.Class ({
         }
         
         for (var name in this.postparams) {
-            var input = jQuery('#'+this.postparams[name].id);
-            var val = params[name];
-            
-            if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
-                if (val === 'true') {
-                    val = true;
-                } else if (val === 'false') {
-                    val = false;
+            if (typeof params[name] !== 'undefined') {
+                var input = jQuery('#' + this.postparams[name].id);
+                var val = params[name];
+
+                if (this.postparams[name].type && this.postparams[name].type == 'checkbox') {
+                    if (val === 'true') {
+                        val = true;
+                    } else if (val === 'false') {
+                        val = false;
+                    }
+                    jQuery('#' + this.postparams[name].id).prop('checked', val);
+                } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
+                    jQuery('input:radio[name=' + this.postparams[name].id + '][value=' + val + ']').prop('checked', true);
+                } else if (this.postparams[name].type && this.postparams[name].type == 'file') {
+                    //Not available
+                } else {
+                    jQuery('#' + this.postparams[name].id).val(val);
                 }
-                jQuery('#'+this.postparams[name].id).prop('checked', val);
-            } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
-                jQuery('input:radio[name='+this.postparams[name].id+'][value='+val+']').prop('checked', true);
-            } else if (this.postparams[name].type && this.postparams[name].type == 'file') {
-                //Not available
-            } else {
-                jQuery('#'+this.postparams[name].id).val(val);
             }
         }
         

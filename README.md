@@ -245,6 +245,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         command       - OPTIONAL - Angiv hvilken command, der skal benyttes for at gemme hver enkelt geometri. Hvis man benytter sin egen page, kan command angives direkte på pagen, ellers skal den angives her!
                     -->
                     <!-- En liste af "input" element, der kan konfigureres på samme måde som alle andre input felter. Dog er der en række typer, der ikke kan benyttes, herunder adressesøgning m.m.
+                    -->
                     <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
                 </attributes>
             </map>

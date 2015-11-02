@@ -236,6 +236,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         format        - Default image/png. Brug f.eks. image/jpeg til ortofoto
                         layername     - Hvis laget ikke hedder det samme som temaet i CBkort
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
+                        useTicket     - Sættes til "true" hvis servicen kommer fra Kortfosyningen. Default er "false"
                     -->
                 </themes>
                 <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">

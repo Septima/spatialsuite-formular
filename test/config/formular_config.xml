@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="kortforsyningen">
+        <header>Kort fra Kortforsyningen</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Kort fra Kortforsyningen"/>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="dtk_skaermkort_daempet" host="http://kortforsyningen.kms.dk/topo_skaermkort"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+
     <formular name="edit1">
         <title>Redigér en eksisterende feature</title>
         <header>Redigér en eksisterende feature</header>

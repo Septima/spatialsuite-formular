@@ -834,6 +834,13 @@ Formular = SpatialMap.Class ({
                     } else {
                         l.sessionid = this.sessionid;
                     }
+                    var useTicket = jQuery(themes[j]).attr('useTicket');
+                    if (useTicket == 'false') {
+
+                    } else {
+                        l.ticket = this.getTicket (function () {}, true);
+                        l.host = l.host + (l.host.match(/[?]/) === null ? '?' : '&') + 'ticket='+l.ticket;
+                    }
                     layers.push(l);
                 }
                 
@@ -1580,26 +1587,35 @@ Formular = SpatialMap.Class ({
         }
     },
     
-    getTicket: function (callback) {
+    getTicket: function (callback, sync) {
         if (this.ticket) {
-            callback();
+            if (sync === true) {
+                return this.ticket;
+            } else {
+                callback();
+            }
         } else {
             var params = {
                 page: 'formular.get.ticket',
                 sessionid: this.sessionid
             };
     
-            jQuery.ajax( {
+            var req = jQuery.ajax( {
                 url : 'cbkort',
                 dataType : 'json',
                 type: 'POST',
-                async: true,
+                async: !sync,
                 data : params,
                 success : SpatialMap.Function.bind( function(callback, data, status) {
                     this.ticket = data.row[0].expressionresult;
                     callback();
                 },this,callback)
             });
+
+            if (sync === true) {
+                return this.ticket;
+            }
+
         }
     },
     

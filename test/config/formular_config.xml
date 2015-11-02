@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="submitbuttoncondition">
+        <header>Condition på submitbutton</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportprofile>demo01</reportprofile>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Condition på submitbutton"/>
+            <input id="test" type="input" displayname="Tast 1 eller 2" urlparam="name" defaultvalue=""/>
+            <submitbutton condition="jQuery('#test').val() === '1'" displayname="Du har tastet 1" function="formular.start();"/>
+            <submitbutton condition="jQuery('#test').val() !== '1'" displayname="Du har IKKE tastet 1" function="formular.start();"/>
+        </content>
+    </formular>
+
     <formular name="kortforsyningen">
         <header>Kort fra Kortforsyningen</header>
         <subheader></subheader>
         <submitpage>formular.send.general.nomap</submitpage>
+        <reportprofile>demo01</reportprofile>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Kort fra Kortforsyningen"/>
             <map class="my_map_class">

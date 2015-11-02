@@ -271,8 +271,13 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  til en ny formular eller en betalingsside.
                  Man skal skrive lige den funktion som man har lyst til. F.eks. "window.open('http://dmi.dk')" eller man kan bruge
                  nogle af de standard funktioner der er i modulet f.eks. "formular.start()" der starte samme formular igen. Eller
-                 "formular.load('http://dmi.dk/ref=')" der sørge for at sende en reference til lige præcis denne indberetning/ansøgning. -->
-            <submitbutton displayname="Opret ny" function="formular.start();"/>
+                 "formular.load('http://dmi.dk/ref=')" der sørge for at sende en reference til lige præcis denne indberetning/ansøgning. 
+                 Følgende atributter kan tilføjes til en submitbutton:
+                  - displayname
+                  - function         - Function til at ændre andre elementer. Skrives som et JavaScript udtryk.
+                  - condition        - Skal knappen vises? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.
+                 -->
+            <submitbutton displayname="Opret ny" function="formular.start();" condition="jQuery('#test').val() === '1'"/>
 
         </content>
     </formular>

@@ -1266,7 +1266,11 @@ Formular = SpatialMap.Class ({
                 if (func) {
                     button.click (new Function (func));
                 }
-                this.submitbuttons.push (button);
+                var b = {
+                    e: button,
+                    condition: node.attr('condition')
+                };
+                this.submitbuttons.push (b);
             break;
             case 'confirm':
                 this.confirm = node.attr('displayname');
@@ -2599,7 +2603,13 @@ Formular = SpatialMap.Class ({
             jQuery('#messagetext').empty();
             jQuery('#messagebuttons').empty();
             for (var i=0;i<this.submitbuttons.length;i++) {
-                jQuery('#messagebuttons').append(this.submitbuttons[i]);
+
+                if (!(this.submitbuttons[i].condition instanceof Function)) {
+                    this.submitbuttons[i].condition = new Function ('return '+this.submitbuttons[i].condition);
+                }
+                if (this.submitbuttons[i].condition() === true) {
+                    jQuery('#messagebuttons').append(this.submitbuttons[i].e);
+                }
             }
         }
         

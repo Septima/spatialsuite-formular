@@ -10,7 +10,8 @@
             <input type="hidden" urlparam="about" defaultvalue="Condition på submitbutton"/>
             <input id="test" type="input" displayname="Tast 1 eller 2" urlparam="name" defaultvalue=""/>
             <submitbutton condition="jQuery('#test').val() === '1'" displayname="Du har tastet 1" function="formular.start();"/>
-            <submitbutton condition="jQuery('#test').val() !== '1'" displayname="Du har IKKE tastet 1" function="formular.start();"/>
+            <submitbutton condition="jQuery('#test').val() === '2'" displayname="Du har tastet 2" function="formular.start();"/>
+            <submitbutton displayname="OK" function="formular.start();"/>
         </content>
     </formular>
 

@@ -7,6 +7,7 @@
 <%@page import="org.apache.commons.fileupload.FileItemFactory"%>
 <%@page import="org.apache.commons.fileupload.disk.DiskFileItemFactory"%>
 <%@page import="org.apache.commons.fileupload.FileItem"%>
+<%@page import="org.apache.commons.io.FilenameUtils"%>
 <%@page import="com.carlbro.cbinfo.global.GlobalRessources"%>
 <%@page import="com.carlbro.cbinfo.global.CBInfoParam"%>
 
@@ -30,7 +31,7 @@
     String formular = "formular";
     String orgFileName = "";
     FileItem fileUpload = null;
-    
+    request.setCharacterEncoding("UTF-8");
     ServletRequestContext src = new ServletRequestContext(request);
     boolean isMultipart = ServletFileUpload.isMultipartContent(src);
     
@@ -55,16 +56,15 @@
 
        if (!item.isFormField())
        {
-         String itemName = item.getName();
+         String itemName = org.apache.commons.io.FilenameUtils.getName(item.getName());
          
-         // IE er belastende som sædvanligt og sender hele stien med
+         // IE er belastende som sÃ¦dvanligt og sender hele stien med
          if (itemName.indexOf('\\') > 0)
          {
            int lastIndex = itemName.lastIndexOf('\\');
            itemName = itemName.substring(lastIndex+1, itemName.length());
          }
-         
-         uploadedFilename = itemName;
+		 uploadedFilename = itemName;
          fileUpload = item;
        }
        else

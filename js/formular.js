@@ -3299,7 +3299,7 @@ Formular = SpatialMap.Class ({
     },
     
     encodeParam: function (name,val) {
-        return encodeURIComponent(val);
+        return val;
     },
     
     log: function (logObj) {

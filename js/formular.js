@@ -414,7 +414,14 @@ Formular = SpatialMap.Class ({
                         this.currentMapTool = this.defaultMapTool;
                         this.activateTool (this.defaultMapTool);
                         var mapoptions = this.getParam('mapoptions');
-
+                        if (mapoptions !== null) {
+                            mapoptions = mapoptions.split(',');
+                            var mapstate = {
+                                center: [mapoptions[0],mapoptions[1]],
+                                zoomLevel: mapoptions[2]
+                            };
+                            this.setCurrentMap(mapstate);
+                        }
                     }
                     if (this.showTabs) {
 
@@ -3170,8 +3177,29 @@ Formular = SpatialMap.Class ({
         jQuery('#'+id+'_row .filupload-delete').show();
     },
     
-    start: function () {
-        document.location.reload();
+    start: function (options) {
+
+        var s = document.location.search;
+
+        if (typeof options !== 'undefined') {
+
+            if (typeof options.keepMap !== undefined && options.keepMap === true) {
+
+                if (typeof this.currentMapState !== 'undefiend') {
+                    var x = this.currentMapState.extent[0]+(this.currentMapState.extent[2]-this.currentMapState.extent[0])/2;
+                    var y = this.currentMapState.extent[1]+(this.currentMapState.extent[3]-this.currentMapState.extent[1])/2;
+                    var z = this.currentMapState.zoomLevel;
+                    var mapoptions = x+','+y+','+z;
+
+                    s = this.setParam(s, 'mapoptions', mapoptions);
+                }
+
+            }
+
+        }
+
+        document.location.search = s
+
     },
     
     load: function (url) {
@@ -3307,7 +3335,28 @@ Formular = SpatialMap.Class ({
     getParam: function (name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
     },
-    
+
+    setParam: function (str, name, value) {
+        name = encodeURI(name);
+        value = encodeURI(value);
+
+        var kvp = str.substr(1).split('&');
+        var i=kvp.length; var x; while(i--) {
+            x = kvp[i].split('=');
+
+            if (x[0]==name) {
+                x[1] = value;
+                kvp[i] = x.join('=');
+                break;
+            }
+        }
+
+        if(i<0) {
+            kvp[kvp.length] = [name,value].join('=');
+        }
+        return kvp.join('&');
+    },
+
     encodeParam: function (name,val) {
         return val;
     },

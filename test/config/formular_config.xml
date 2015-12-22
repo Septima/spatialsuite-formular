@@ -1,6 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="tilsyn">
+        <header>FFB selvbetjening-tilsyn</header>
+        <subheader>Formularens hovedformål er at medarbejderen i marken kan registrere de informationer som kulturarvsstyrelsen kræver.</subheader>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <reportprofile>demo01</reportprofile>
+        <tabs>true</tabs>
+        <content displayname="Hvor">
+            <geosearch urlparam="adresse" displayname="Adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" usegeometry="false"/>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+                <maptool displayname="Slet en geometri" name="delete"/>
+                <maptool displayname="Flyt/rotér en geometri" name="move"/>
+            </maptools>
+            <map multiplegeometries="false">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+                <!--<attributes page="formular.geometry.save" datasource="formular-test-geometry" command="write">-->
+                    <!--<input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>-->
+                    <!--<input type="input" displayname="Nummer 2:" urlparam="nummer2" defaultvalue="22"/>-->
+                    <!--<input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>-->
+                <!--</attributes>-->
+            </map>
+            <!--<conflicts class="alert alert-info" urlparam="konflikttekst1" displayname="&lt;h3&gt;Info&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>-->
+        </content>
+        <content displayname="Bygningskontruktion">
+
+            <input type="dropdown" displayname="Hovedplan:" urlparam="hovedplan" datasource="hovedplan"/>
+            <input type="dropdown" displayname="Sokkel:" urlparam="sokkel" datasource="sokkel"/>
+            <input type="dropdown" displayname="Ydermur:" urlparam="ydermur" datasource="ydermur"/>
+            <input type="dropdown" displayname="Tagkonstruktion:" urlparam="tagkonstruktion" datasource="tagkonstruktion"/>
+            <input type="dropdown" displayname="Gavlkonstruktion:" urlparam="gavlkonstruktion" datasource="gavlkonstruktion"/>
+            <input type="dropdown" displayname="Kvist:" urlparam="kvist" datasource="kvist"/>
+            <input type="dropdown" displayname="Gesims:" urlparam="gesims" datasource="gesims"/>
+            <input type="dropdown" displayname="Dør/port:" urlparam="dorport" datasource="dorport"/>
+            <input type="dropdown" displayname="Vindue:" urlparam="vindue" datasource="vindue"/>
+            <input type="dropdown" displayname="Bygningsdel:" urlparam="bygningsdel" datasource="bygningsdel"/>
+            <input type="dropdown" displayname="Udsmykning:" urlparam="udsmykning" datasource="udsmykning"/>
+            <input type="dropdown" displayname="Stilart:" urlparam="stilart" datasource="stilart"/>
+            <input type="dropdown" displayname="Oprindelig funktion:" urlparam="oprindeligfunktion" datasource="oprindeligfunktion"/>
+            <input type="dropdown" displayname="Nuværende funktion:" urlparam="nuvaerendefunktion" datasource="nuvaerendefunktion"/>
+
+        </content>
+        <content displayname="Bygningsomgivelser">
+
+            <input type="dropdown" displayname="Indre forhold:" urlparam="indreforhold" datasource="indreforhold"/>
+            <input type="dropdown" displayname="Ydre forhold:" urlparam="ydreforhold" datasource="ydreforhold"/>
+            <input type="textarea" displayname="Notat om indre og ydre forhold" urlparam="notatomindreogydreforhold"/>
+
+            <input type="dropdown" displayname="Omgivelser af særlig interesse:" urlparam="omgivelser" datasource="omgivelser"/>
+            <input type="textarea" displayname="Notat om omgivelser" urlparam="notatomomgivelser"/>
+
+            <input type="dropdown" displayname="Bebyggelsesmiljø:" urlparam="bebyggelsesmiljo" datasource="bebyggelsesmiljo"/>
+            <input type="textarea" displayname="Notat om bygningsmiljø" urlparam="notatombygningsmiljo"/>
+
+        </content>
+        <content displayname="SAVE-vurdering">
+
+            <input type="dropdown" displayname="Arkitektonisk værdi:" urlparam="arkitektoniskvaerdi" datasource="arkitektoniskvaerdi"/>
+            <input type="textarea" displayname="Arkitektonisk:" urlparam="arkitektonisk"/>
+
+            <input type="dropdown" displayname="Kulturhistorisk værdi:" urlparam="kulturhistoriskvaerdi" datasource="kulturhistoriskvaerdi"/>
+            <input type="textarea" displayname="Kulturhistorisk:" urlparam="kulturhistorisk"/>
+
+            <input type="dropdown" displayname="Miljømæssig værdi:" urlparam="miljømaessigvaerdi" datasource="miljømaessigvaerdi"/>
+            <input type="textarea" displayname="Miljømæssig:" urlparam="miljømaessig"/>
+
+            <input type="dropdown" displayname="Originalitetsværdi:" urlparam="originalitetsværdi" datasource="originalitetsværdi"/>
+            <input type="textarea" displayname="Originalitet:" urlparam="originalitets"/>
+
+            <input type="dropdown" displayname="Tilstandsværdi:" urlparam="tilstandsvaerdi" datasource="tilstandsvaerdi"/>
+            <input type="textarea" displayname="Tilstand:" urlparam="tilstand"/>
+
+            <input type="dropdown" displayname="Bevaringsmæssig værdi:" urlparam="bevaringsmaessigvaerdi" datasource="bevaringsmaessigvaerdi"/>
+            <input type="textarea" displayname="Bevaringsmæssig:" urlparam="bevaringsmaessig"/>
+
+        </content>
+        <content displayname="Foto">
+
+            <input type="text" displayname="--!!! Billeder skal tages liggende med kameraet i øberste venstre hjørne !!!--"/>
+
+            <input type="file" displayname="Indsæt foto" id="foto1" urlparam="foto1"/>
+            <input type="textarea" displayname="Evt. tekst til foto:" id="foto1_tekst" urlparam="foto1_tekst"/>
+
+            <input type="file" displayname="Indsæt foto" id="foto2" urlparam="foto2"/>
+            <input type="textarea" displayname="Evt. tekst til foto:" id="foto2_tekst" urlparam="foto2_tekst"/>
+
+            <input type="file" displayname="Indsæt foto" id="foto3" urlparam="foto3"/>
+            <input type="textarea" displayname="Evt. tekst til foto:" id="foto3_tekst" urlparam="foto3_tekst"/>
+
+            <input type="file" displayname="Indsæt foto" id="foto4" urlparam="foto4"/>
+            <input type="textarea" displayname="Evt. tekst til foto:" id="foto4_tekst" urlparam="foto4_tekst"/>
+
+            <input type="file" displayname="Indsæt foto" id="foto5" urlparam="foto5"/>
+            <input type="textarea" displayname="Evt. tekst til foto:" id="foto5_tekst" urlparam="foto5_tekst"/>
+
+            <input type="file" displayname="Indsæt foto" id="foto6" urlparam="foto6"/>
+            <input type="textarea" displayname="Evt. tekst til foto:" id="foto6_tekst" urlparam="foto6_tekst"/>
+
+            <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
+            <submitbutton displayname="Opret ny" function="formular.start({keepMap:true});"/>
+
+        </content>
+    </formular>
+
     <formular name="submitbuttoncondition">
         <header>Condition på submitbutton</header>
         <subheader></subheader>
@@ -45,9 +154,9 @@
         </submitpages>
         <content>
             <input id="datasource" type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
-            <input id="readcommand" type="hidden" defaultvalue="read-row"/>
+            <input id="readcommand" type="hidden" defaultvalue="read"/>
             <input id="command" type="hidden" urlparam="command" defaultvalue="write-update-name"/>
-            <input id="id" type="hidden" displayname="ID:" urlparam="id"/>
+            <input idXXX="idaaa" type="text" displayname="ID:" urlparam="id"/>
             <input id="navn" type="input" displayname="Navn" urlparam="name" placeholder="Indtast navn" required="true" validate="Angiv et navn" onchange="if (jQuery('#id').val() !== '') { jQuery('#command').val('write-update-name'); } else { jQuery('#command').val('write'); }"/>
         </content>
     </formular>

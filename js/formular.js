@@ -413,6 +413,8 @@ Formular = SpatialMap.Class ({
                     if (this.map) {
                         this.currentMapTool = this.defaultMapTool;
                         this.activateTool (this.defaultMapTool);
+                        var mapoptions = this.getParam('mapoptions');
+
                     }
                     if (this.showTabs) {
 
@@ -1022,26 +1024,26 @@ Formular = SpatialMap.Class ({
                     }
                 } else if (type=='h1') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<h1 id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h1>');
+                        contentcontainer.append('<h1 id="'+id+'_row" class="'+(className ? className : '')+'"><span id="'+id+'">'+node.attr('displayname')+'</span></h1>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><h1 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h1></td></tr>');
                     }
                 } else if (type=='h2') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<h2 id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</h2>');
+                        contentcontainer.append('<h2 id="'+id+'_row" class="'+(className ? className : '')+'"><span id="'+id+'">'+node.attr('displayname')+'</span></h2>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><h2 class="headerdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</h2></td></tr>');
                     }
                 } else if (type=='message') {
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<div id="'+id+'_row" class="'+(className ? className : '')+'">'+node.attr('displayname')+'</div>');
+                        contentcontainer.append('<div id="'+id+'_row" class="'+(className ? className : '')+'"><span id="'+id+'">'+node.attr('displayname')+'</span></div>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="'+(className ? className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
                     }
                 } else if (type=='preview') {
                     if (this.bootstrap === true) {
                         this.showEmptyInPreview = (node.attr('showempty') !== 'false');
-                        contentcontainer.append('<div id="'+id+'_row" class="preview'+(className ? ' '+className : '')+'"></div>');
+                        contentcontainer.append('<div id="'+id+'_row" class="preview'+(className ? ' '+className : '')+'"><span id="'+id+'"></span></div>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="preview'+(className ? ' '+className : '')+'" id="'+id+'"></div></td></tr>');
                     }
@@ -1061,7 +1063,7 @@ Formular = SpatialMap.Class ({
                     } else {
                         
                         if (this.bootstrap === true) {
-                            contentcontainer.append('<p id="'+id+'_row" class="'+(className ? ' '+className : '')+'">'+node.attr('displayname')+'</p>');
+                            contentcontainer.append('<p id="'+id+'_row" class="'+(className ? ' '+className : '')+'"><span id="'+id+'">'+node.attr('displayname')+'</span></p>');
                         } else {
                             contentcontainer.append('<tr id="'+id+'_row"><td colspan="2" class="colspan2"><div class="textdiv'+(className ? ' '+className : '')+'" id="'+id+'">'+node.attr('displayname')+'</div></td></tr>');
                         }
@@ -2220,8 +2222,14 @@ Formular = SpatialMap.Class ({
     
     setCurrentMap: function (mapState) {
         this.map.zoomTo(mapState.zoomLevel);
-        var x = mapState.extent[0]+(mapState.extent[2]-mapState.extent[0])/2;
-        var y = mapState.extent[1]+(mapState.extent[3]-mapState.extent[1])/2;
+        var x, y;
+        if (typeof mapState.center !== 'undefined') {
+            x = mapState.center[0];
+            y = mapState.center[1];
+        } else {
+            x = mapState.extent[0]+(mapState.extent[2]-mapState.extent[0])/2;
+            y = mapState.extent[1]+(mapState.extent[3]-mapState.extent[1])/2;
+        }
         this.map.panTo('POINT('+x+' '+y+')');
     },
     

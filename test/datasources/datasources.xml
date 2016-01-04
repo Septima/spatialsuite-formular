@@ -78,6 +78,62 @@
             ) 
         </config>
 
+        <config version="9" requires="1">
+            CREATE TABLE ffbtilsyn
+            (
+                id varchar(255),
+                formular varchar(255),
+                journalnr varchar(255),
+                konflikttekst1 varchar(255)
+                hovedplan varchar(255)
+                sokkel varchar(255)
+                ydermur varchar(255)
+                tagkonstruktion varchar(255)
+                gavlkonstruktion varchar(255)
+                kvist varchar(255)
+                gesims varchar(255)
+                dorport varchar(255)
+                vindue varchar(255)
+                bygningsdel varchar(255)
+                udsmykning varchar(255)
+                stilart varchar(255)
+                oprindeligfunktion varchar(255)
+                nuvaerendefunktion varchar(255)
+                indreforhold varchar(255)
+                ydreforhold varchar(255)
+                notatomindreogydreforhold varchar(255)
+                omgivelser varchar(255)
+                notatomomgivelser varchar(255)
+                bebyggelsesmiljo varchar(255)
+                notatombygningsmiljo varchar(255)
+                arkitektoniskvaerdi varchar(255)
+                arkitektonisk varchar(255)
+                kulturhistoriskvaerdi varchar(255)
+                kulturhistorisk varchar(255)
+                miljømaessigvaerdi varchar(255)
+                miljømaessig varchar(255)
+                originalitetsværdi varchar(255)
+                originalitets varchar(255)
+                tilstandsvaerdi varchar(255)
+                tilstand varchar(255)
+                bevaringsmaessigvaerdi varchar(255)
+                bevaringsmaessig varchar(255)
+                foto1 varchar(255)
+                foto1_tekst varchar(255)
+                foto2 varchar(255)
+                foto2_tekst varchar(255)
+                foto3 varchar(255)
+                foto3_tekst varchar(255)
+                foto4 varchar(255)
+                foto4_tekst varchar(255)
+                foto5 varchar(255)
+                foto5_tekst varchar(255)
+                foto6 varchar(255)
+                foto6_tekst varchar(255)
+                oprettet timestamp
+            )
+        </config>
+
         <onreload>
             delete from dates;
             insert into dates(id,date) values('a',DATEADD( 'dd', -4, now()));
@@ -186,5 +242,65 @@
 
         <debug>false</debug>
     </datasource>
+
+    <datasource name="formular-test-ffbtilsyn" endpoint="formular-test" displayname="Formular test data (ffbtilsyn)">
+
+        <sql command="read">select * from ffbtilsyn;</sql>
+
+        <sql command="write">insert into ffbtilsyn(id, formular, konflikttekst1,hovedplan,sokkel,ydermur,tagkonstruktion,gavlkonstruktion,kvist,gesims,dorport,vindue,bygningsdel,udsmykning,stilart,oprindeligfunktion,nuvaerendefunktion,indreforhold,ydreforhold,notatomindreogydreforhold,omgivelser,notatomomgivelser,bebyggelsesmiljo,notatombygningsmiljo,arkitektoniskvaerdi,arkitektonisk,kulturhistoriskvaerdi,kulturhistorisk,miljømaessigvaerdi,miljømaessig,originalitetsværdi,originalitets,tilstandsvaerdi,tilstand,bevaringsmaessigvaerdi,bevaringsmaessig,foto1,foto1_tekst,foto2,foto2_tekst,foto3,foto3_tekst,foto4,foto4_tekst,foto5,foto5_tekst,foto6,foto6_tekst, oprettet)
+            values(
+                [string: sessionid],
+                [string: formular],
+                [string: konflikttekst1],
+                [string: hovedplan],
+                [string: sokkel],
+                [string: ydermur],
+                [string: tagkonstruktion],
+                [string: gavlkonstruktion],
+                [string: kvist],
+                [string: gesims],
+                [string: dorport],
+                [string: vindue],
+                [string: bygningsdel],
+                [string: udsmykning],
+                [string: stilart],
+                [string: oprindeligfunktion],
+                [string: nuvaerendefunktion],
+                [string: indreforhold],
+                [string: ydreforhold],
+                [string: notatomindreogydreforhold],
+                [string: omgivelser],
+                [string: notatomomgivelser],
+                [string: bebyggelsesmiljo],
+                [string: notatombygningsmiljo],
+                [string: arkitektoniskvaerdi],
+                [string: arkitektonisk],
+                [string: kulturhistoriskvaerdi],
+                [string: kulturhistorisk],
+                [string: miljømaessigvaerdi],
+                [string: miljømaessig],
+                [string: originalitetsværdi],
+                [string: originalitets],
+                [string: tilstandsvaerdi],
+                [string: tilstand],
+                [string: bevaringsmaessigvaerdi],
+                [string: bevaringsmaessig],
+                [string: foto1],
+                [string: foto1_tekst],
+                [string: foto2],
+                [string: foto2_tekst],
+                [string: foto3],
+                [string: foto3_tekst],
+                [string: foto4],
+                [string: foto4_tekst],
+                [string: foto5],
+                [string: foto5_tekst],
+                [string: foto6],
+                [string: foto6_tekst],
+                [timestamp: SystemTime()]
+            );</sql>
+
+    </datasource>
+
 
 </datasources>

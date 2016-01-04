@@ -28,7 +28,7 @@
                     <!--<input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>-->
                 <!--</attributes>-->
             </map>
-            <!--<conflicts class="alert alert-info" urlparam="konflikttekst1" displayname="&lt;h3&gt;Info&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>-->
+            <conflicts class="alert alert-info" urlparam="konflikttekst1" displayname="&lt;h3&gt;Info&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
         </content>
         <content displayname="Bygningskontruktion">
 

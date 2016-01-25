@@ -453,7 +453,7 @@ Formular = SpatialMap.Class ({
                         if (this.localstore) {
                             this.readLocalStore();
                         }
-                        this.localstoreClear = localstore.attr('clear') === 'true';
+                        this.localstoreClear = (localstore.attr('clear') === 'false' ? false : true);
                     }
 
                     var log = jQuery(data).find('log').text();
@@ -3200,6 +3200,8 @@ Formular = SpatialMap.Class ({
                     s = this.setParam(s, 'mapoptions', mapoptions);
                 }
 
+            } else {
+                s = this.setParam(s, 'mapoptions', '');
             }
 
             if (typeof options.clear !== 'undefined' && options.clear === true) {

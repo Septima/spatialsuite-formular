@@ -9,6 +9,7 @@
         </submitpages>
         <reportprofile>demo01</reportprofile>
         <tabs>true</tabs>
+        <localstore clear="false">true</localstore>
         <content displayname="Hvor">
             <geosearch urlparam="adresse" displayname="Adresse:" resources="Adresser" filter="[module.spatialaddress.filter]" usegeometry="false"/>
             <maptools>
@@ -105,7 +106,8 @@
             <input type="textarea" displayname="Evt. tekst til foto:" id="foto6_tekst" urlparam="foto6_tekst"/>
 
             <confirm displayname="Følgende oplysninger er indtastet. Er det korrekt?"/>
-            <submitbutton displayname="Opret ny" function="formular.start({keepMap:true});"/>
+            <submitbutton displayname="Opret ny" function="formular.start({keepMap:true, clear: false});"/>
+            <submitbutton displayname="Forfra" function="formular.start({clear: true});"/>
 
         </content>
     </formular>

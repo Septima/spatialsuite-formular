@@ -74,6 +74,7 @@ Formular = SpatialMap.Class ({
     featureRequired: true,
     
     localstore: false,
+    localstoreClear: true,
     
     logActive: false,
     
@@ -446,12 +447,13 @@ Formular = SpatialMap.Class ({
                         }
                     }
 
-                    var localstore = jQuery(data).find('localstore').text();
+                    var localstore = jQuery(data).find('localstore');
                     if (localstore) {
-                        this.localstore = localstore != 'false';
+                        this.localstore = localstore.text() !== 'false';
                         if (this.localstore) {
                             this.readLocalStore();
                         }
+                        this.localstoreClear = localstore.attr('clear') === 'true';
                     }
 
                     var log = jQuery(data).find('log').text();
@@ -963,7 +965,8 @@ Formular = SpatialMap.Class ({
                     postparam: postparam,
                     displayname: node.attr('displayname'),
                     targetsetfile: node.attr('targetsetfile'),
-                    targerset: node.attr('targerset')
+                    targerset: node.attr('targerset'),
+                    page: node.attr('querypage')
                 };
                 if (node.attr('onconflict')) {
                     conflict.onconflict = new Function (node.attr('onconflict'));
@@ -2090,7 +2093,10 @@ Formular = SpatialMap.Class ({
                 if (this.spatialqueries[i].targetsetfile) {
                     params.targetsetfile = this.spatialqueries[i].targetsetfile;
                 }
-            
+                if (this.spatialqueries[i].page) {
+                    params.page = this.spatialqueries[i].page;
+                }
+
                 jQuery.ajax( {
                     url : 'cbkort',
                     dataType : 'xml',
@@ -3130,7 +3136,7 @@ Formular = SpatialMap.Class ({
     
     removeSession: function () {
         
-        if (this.localstore) {
+        if (this.localstore === true && this.localstoreClear === true) {
             this.clearLocalStore();
         }
         
@@ -3196,6 +3202,12 @@ Formular = SpatialMap.Class ({
 
             }
 
+            if (typeof options.clear !== 'undefined' && options.clear === true) {
+                this.clearLocalStore();
+            }
+
+        } else {
+            s = this.setParam(s, 'mapoptions', '');
         }
 
         document.location.search = s

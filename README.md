@@ -72,7 +72,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <js>/js/custom/my.js</css>                              <!-- OPTIONAL - Hvis man gerne vil have sin egen js på siden. Kan bruges til at tilføje sine egne funktioner så det ikke er nødvendigt at skrive det hele i konfigurationen -->
         <tabs>true</css>                                        <!-- OPTIONAL - Har man flere steps, kan man få vist de enkelte steps øverst på siden -->
         <parsedisplaynames>true</parsedisplaynames>             <!-- OPTIONAL - displayname på hvert input felt sendes med til serveren, så man kan bruge dem i forbindelse med en generisk XSL. Sendes som parameteren urlparam+'_displayname' -->
-        <localstore>true</localstore>                           <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false") -->
+        <localstore clear="true">true</localstore>              <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false"). 
+                                                                                Hvis atributten "clear" er sat til false, så slettes de gemte oplysninger ikke til næste gang man bruger siden. -->
         <log>true</log>                                         <!-- OPTIONAL - Skal fejl logges på serveren? For at se loggen kaldes http://hostnavn/spatialmap?page=formular.log.read (default er "false") -->
         <messages>                                              <!-- OPTIONAL - Mulghed for at få vist sin egen tekst når brugeren er færdig -->
             <message name="done">Mange tak for hjælpen! Hent kvittering &lt;a href="{{pdf}}"&gt;her&lt;/a&gt;</message>      <!-- OPTIONAL - Teksten, der vises hvis det går godt. {{pdf}} erstattes af stien til pdf-dokumentet -->
@@ -259,6 +260,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                                      Følgende værdier kan med fordel anvendes: "warning-info", "warning-success", "warning-warning" eller "warning-danger"
                  - "targetset"     - angiver navnet på det targetset, som der skal søges i.
                  - "targetsetfile" - angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
+                 - "querypage"     - angiver en alternativ page, der kaldes når det søges i denne konfliktsøgning. Det kan f.eks. bruges hvis man vil benytte en proxy datasource til at søge med.
                  - "onconflict"    - angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
                  - "onnoconflict"  - angiver det javascript der skal kaldes når der IKKE er ramt noget med denne konfliktsøgning.
                  På et targetset vil der typisk være anigvet ét target, men der kan godt være flere. På dette target er der knyttet en presentation. 

@@ -72,7 +72,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <js>/js/custom/my.js</css>                              <!-- OPTIONAL - Hvis man gerne vil have sin egen js på siden. Kan bruges til at tilføje sine egne funktioner så det ikke er nødvendigt at skrive det hele i konfigurationen -->
         <tabs>true</css>                                        <!-- OPTIONAL - Har man flere steps, kan man få vist de enkelte steps øverst på siden -->
         <parsedisplaynames>true</parsedisplaynames>             <!-- OPTIONAL - displayname på hvert input felt sendes med til serveren, så man kan bruge dem i forbindelse med en generisk XSL. Sendes som parameteren urlparam+'_displayname' -->
-        <localstore>true</localstore>                           <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false") -->
+        <localstore clear="true">true</localstore>              <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false"). 
+                                                                                Hvis atributten "clear" er sat til false, så slettes de gemte oplysninger ikke til næste gang man bruger siden. -->
         <log>true</log>                                         <!-- OPTIONAL - Skal fejl logges på serveren? For at se loggen kaldes http://hostnavn/spatialmap?page=formular.log.read (default er "false") -->
         <messages>                                              <!-- OPTIONAL - Mulghed for at få vist sin egen tekst når brugeren er færdig -->
             <message name="done">Mange tak for hjælpen! Hent kvittering &lt;a href="{{pdf}}"&gt;her&lt;/a&gt;</message>      <!-- OPTIONAL - Teksten, der vises hvis det går godt. {{pdf}} erstattes af stien til pdf-dokumentet -->
@@ -236,6 +237,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         format        - Default image/png. Brug f.eks. image/jpeg til ortofoto
                         layername     - Hvis laget ikke hedder det samme som temaet i CBkort
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
+                        useTicket     - Sættes til "true" hvis servicen kommer fra Kortfosyningen. Default er "false"
                     -->
                 </themes>
                 <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">
@@ -245,6 +247,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         command       - OPTIONAL - Angiv hvilken command, der skal benyttes for at gemme hver enkelt geometri. Hvis man benytter sin egen page, kan command angives direkte på pagen, ellers skal den angives her!
                     -->
                     <!-- En liste af "input" element, der kan konfigureres på samme måde som alle andre input felter. Dog er der en række typer, der ikke kan benyttes, herunder adressesøgning m.m.
+                    -->
                     <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
                 </attributes>
             </map>
@@ -257,6 +260,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                                      Følgende værdier kan med fordel anvendes: "warning-info", "warning-success", "warning-warning" eller "warning-danger"
                  - "targetset"     - angiver navnet på det targetset, som der skal søges i.
                  - "targetsetfile" - angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
+                 - "querypage"     - angiver en alternativ page, der kaldes når det søges i denne konfliktsøgning. Det kan f.eks. bruges hvis man vil benytte en proxy datasource til at søge med.
                  - "onconflict"    - angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
                  - "onnoconflict"  - angiver det javascript der skal kaldes når der IKKE er ramt noget med denne konfliktsøgning.
                  På et targetset vil der typisk være anigvet ét target, men der kan godt være flere. På dette target er der knyttet en presentation. 
@@ -269,8 +273,13 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  til en ny formular eller en betalingsside.
                  Man skal skrive lige den funktion som man har lyst til. F.eks. "window.open('http://dmi.dk')" eller man kan bruge
                  nogle af de standard funktioner der er i modulet f.eks. "formular.start()" der starte samme formular igen. Eller
-                 "formular.load('http://dmi.dk/ref=')" der sørge for at sende en reference til lige præcis denne indberetning/ansøgning. -->
-            <submitbutton displayname="Opret ny" function="formular.start();"/>
+                 "formular.load('http://dmi.dk/ref=')" der sørge for at sende en reference til lige præcis denne indberetning/ansøgning. 
+                 Følgende atributter kan tilføjes til en submitbutton:
+                  - displayname
+                  - function         - Function til at ændre andre elementer. Skrives som et JavaScript udtryk.
+                  - condition        - Skal knappen vises? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.
+                 -->
+            <submitbutton displayname="Opret ny" function="formular.start();" condition="jQuery('#test').val() === '1'"/>
 
         </content>
     </formular>

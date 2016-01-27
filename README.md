@@ -204,7 +204,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             -->
             <maptools>
                 <maptool displayname="" name="pan" default="true"/>
-                <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE"/>   <!-- Select udpager fra en datasource, der skal angives som attribut -->
+                <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE" buffer="<bufferværdi>"/>   <!-- Select udpeger fra en datasource, der skal angives som attribut. Med buffer er det muligt at lægge en buffer på udpegningen -->
                 <maptool displayname="" name="polygon"/>
                 <maptool displayname="" name="line"/>
                 <maptool displayname="" name="point"/>

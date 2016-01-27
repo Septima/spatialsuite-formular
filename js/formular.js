@@ -1683,12 +1683,16 @@ Formular = SpatialMap.Class ({
             case 'select':
                 this.map.panzoom();
                 var datasource = this.mapbuttons[type].config.attr('datasource').toString().toLowerCase();
+				var buffer = this.mapbuttons[type].config.attr('buffer');
+				if (typeof buffer === 'undefined' )	{
+					buffer = 0
+				}
                 if (!datasource || datasource == '') {
                     alert('Datasource missing!');
                     this.activateTool(this.currentMapTool);
                     return;
                 } else {
-                    this.map.setClickEvent(SpatialMap.Function.bind(this.selectFromDatasource,this,datasource));
+                    this.map.setClickEvent(SpatialMap.Function.bind(this.selectFromDatasource,this,buffer,datasource));
                 }
             break;
             case 'delete':
@@ -1982,14 +1986,14 @@ Formular = SpatialMap.Class ({
         event.params = params;
     },
     
-    selectFromDatasource: function (datasource,wkt) {
+    selectFromDatasource: function (buf,datasource,wkt) {
         var params = {
             page: 'getfeature-from-wkt',
             wkt: wkt.toString(),
             sessionid: this.sessionid,
             datasource: datasource,
             command: 'read-spatial',
-            buffer: 0
+            buffer: buf
         };
 
         jQuery.ajax( {

@@ -2898,7 +2898,7 @@ Formular = SpatialMap.Class ({
     
     pagesDone: function (params) {
         
-        var frCounter = -1;
+        var featureResp = 0;
 		if (this.multipleGeometriesAttributes.length > 0 && this.feature.length > 0) {
             params.page = 'formular.geometry.save';
             if (typeof this.multipleGeometriesAttributesOptions.page !== 'undefined') {
@@ -2925,7 +2925,7 @@ Formular = SpatialMap.Class ({
                     url : 'cbkort',
                     dataType : 'json',
                     type: 'POST',
-                    async: true,
+                    async: false,
                     data : p.params,
                     success : SpatialMap.Function.bind( function(featureResponse, data, status) {
                         featureResponse.count--;
@@ -2934,8 +2934,6 @@ Formular = SpatialMap.Class ({
                                 featureResponse.fail = true;
                                 this.showError();
                                 this.pagesFail();
-                            } else {
-                                frCounter = featureResponse.count;
                             }
                         }
                     },this,featureResponse),
@@ -2949,12 +2947,13 @@ Formular = SpatialMap.Class ({
                     },this,featureResponse)
                 });                
             }
-        } else {
-			frCounter = 0;
-            //this.showDone();
         }
+ 		if (typeof featureResponse !== 'undefined') {
+			featureResp = featureResponse.count;
+		}
+
 		this.PageErrorHandling(params);
-		if (frCounter == 0) {
+		if (featureResp == 0) {
 			this.showDone();
 		}
     },

@@ -58,7 +58,8 @@ Formular = SpatialMap.Class ({
     
     style: {
         strokeColor: '#FF0000',
-        fillColor: '#FFFFFF'
+        fillColor: '#FFFFFF',
+		label: ''
     },
     
     validAddress: false,
@@ -164,17 +165,17 @@ Formular = SpatialMap.Class ({
                             name: jQuery(pages[i]).text(),
                             parser: jQuery(pages[i]).attr('parser'),
                             url: jQuery(pages[i]).attr('url') || 'cbkort',
-                            type: jQuery(pages[i]).attr('type') || 'json',
+                            type: jQuery(pages[i]).attr('type') || 'json',
                             urlparam: jQuery(pages[i]).attr('urlparam'),
                             condition: jQuery(pages[i]).attr('condition'),
                             error: null
                         };
                         if (jQuery(pages[i]).attr('errortype')) {
-                            p.error = p.error || {};
+                            p.error = p.error || {};
                             p.error.type = jQuery(pages[i]).attr('errortype');
                         }
                         if (jQuery(pages[i]).attr('errormessage')) {
-                            p.error = p.error || {};
+                            p.error = p.error || {};
                             p.error.message = jQuery(pages[i]).attr('errormessage');
                         }
                         this.pages.push(p);
@@ -194,7 +195,7 @@ Formular = SpatialMap.Class ({
                             name: jQuery(errorPages[i]).text(),
                             parser: jQuery(errorPages[i]).attr('parser'),
                             url: jQuery(errorPages[i]).attr('url') || 'cbkort',
-                            type: jQuery(errorPages[i]).attr('type') || 'json',
+                            type: jQuery(errorPages[i]).attr('type') || 'json',
                             urlparam: jQuery(errorPages[i]).attr('urlparam'),
                             condition: jQuery(errorPages[i]).attr('condition'),
                             error: null
@@ -779,7 +780,13 @@ Formular = SpatialMap.Class ({
                 } else {
                     contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div id="'+id+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></td></tr>');
                 }
-                
+                var style = node.find('style');
+				if (typeof style !== 'undefiend' && style.length > 0) {
+					var styleNodes = jQuery(style[0]).children();
+					for (var j=0; j<styleNodes.length; j++) {
+						this.style[styleNodes[j].nodeName] = styleNodes[j].firstChild.nodeValue;
+					}
+				}
                 var extent = node.find('extent').text();
                 if (extent) {
                     extent = extent.split(',');
@@ -797,6 +804,12 @@ Formular = SpatialMap.Class ({
                 
                 this.multipleGeometries = (typeof node.attr('multiplegeometries') !== 'undefined' && node.attr('multiplegeometries') === 'true');
                 this.mergeGeometries = (typeof node.attr('mergegeometries') !== 'undefined' && node.attr('mergegeometries') === 'false');
+				
+				if (this.multipleGeometries === true) {
+					this.style.label = '';
+				} else {
+					delete this.style.label;
+				}
                 
                 var layers = [];
                 var themes = node.find('theme');
@@ -878,6 +891,13 @@ Formular = SpatialMap.Class ({
                         }
                     },this);
                 }
+
+                if (node.attr('featurechange')) {
+                    var featurechange = new Function (node.attr('featurechange'));
+					this.on('featureChanged',SpatialMap.Function.bind(function (handler) {
+						handler();
+					},this,featurechange));
+				}
                 
                 this.map = new SpatialMap.Map (id,mapoptions);
                 
@@ -1081,7 +1101,7 @@ Formular = SpatialMap.Class ({
                 } else if (type=='date') {
                     var today = (new Date()).toLocaleDateString().replace(/\//g,'.').replace(/^([0-9])\./,'0$1.').replace(/\.([0-9])\./,'.0$1.');
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" '+(postparam.disabled ? 'disabled':'')+' class="form-control" placeholder="'+(node.attr('placeholder') || 'ex. '+today)+'" type="text" value="'+(value || '')+'"/>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div></div>');
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><input id="'+id+'" '+(postparam.disabled ? 'disabled':'')+' class="form-control" placeholder="'+(node.attr('placeholder') || 'ex. '+today)+'" type="text" value="'+(value || '')+'"/>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div></div>');
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><input class="input1" id="'+id+'" placeholder="'+(node.attr('placeholder') || '')+'" value="'+(value || '')+'"/></div></td></tr>');
                     }
@@ -1802,6 +1822,12 @@ Formular = SpatialMap.Class ({
                 this.feature = [];
             }
         } else {
+
+			var id = (this.featureCount ? this.featureCount + 1 : 1);
+			setTimeout(SpatialMap.Function.bind(function(id) {
+				this.map.setFeatureStyle(event.id,{label: id});
+			},this,id),200);
+
             //Delete all others if not the same geometry type
             if (this.feature.length > 0 && event.wkt.CLASS_NAME.match(/Point|LineString|Polygon/)[0] !== this.feature[0].wkt.CLASS_NAME.match(/Point|LineString|Polygon/)[0]) {
                 var a = [];
@@ -1885,6 +1911,8 @@ Formular = SpatialMap.Class ({
         },this));
         
         this.validateMap();
+		
+		this.fireEvent('featureChanged');
         
         this.inputChanged();
         
@@ -3516,4 +3544,3 @@ function calculateDistance (a,b) {
         jQuery(".systemmessage_alarm").css({'color':'red', 'float':'right'});
     }
 }
-

@@ -221,8 +221,18 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 <!-- Følgende atributter kan tilføjes til et map:
                     multiplegeometries  - Default false. Skal man kunne tegne flere geometrier i kortet
                     onchange            - Hvis man gerne vil have at der sker noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i. 
+					featurechange		- Man kan kalde en javascript funktion, hver gang der sker en ændring i geometrierne i kortet
                 -->
-                <extent>539430.4,6237856,591859.2,6290284.8</extent>                <!-- OPTIONAL -->
+                <style>		<!-- OPTIONAL -->					
+					<!--
+					mulighed for at sætte stylen for de geometrier der tegnes. Anvend standard CSS (husk case sensitiv)
+					eks:
+					<strokeColor>#00f</strokeColor>
+					<fillColor>#f1a117</fillColor>
+					<fontColor>#21f117</fontColor>
+					-->
+				</style>
+				<extent>539430.4,6237856,591859.2,6290284.8</extent>                <!-- OPTIONAL -->
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions> <!-- OPTIONAL -->
                 <themes>
                     <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>

@@ -248,6 +248,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         layername     - Hvis laget ikke hedder det samme som temaet i CBkort
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
                         useTicket     - Sættes til "true" hvis servicen kommer fra Kortfosyningen. Default er "false"
+						displayname   - Ved at sætte displayname på et tema dukker en checkbox op under kortet, hvor laget kan tændes/slukkes
                     -->
                 </themes>
                 <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">

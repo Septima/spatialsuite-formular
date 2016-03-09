@@ -814,12 +814,27 @@ Formular = SpatialMap.Class ({
                 var layers = [];
                 var themes = node.find('theme');
                 for (var j=0;j<themes.length;j++) {
-                    var l = {
+                    var f = null;
+					var displayName = (jQuery(themes[j]).attr('displayname') ? jQuery(themes[j]).attr('displayname') : '');
+					var layerId = displayName.replace(/\s+/, "");
+					if (layerId != '') {
+						contentcontainer.append('<tr id="'+id+'_'+j+'_row"><td colspan="2"><div class="valuediv"><label><input type="checkbox" id="'+layerId+'" checked="checked"/>'+displayName+'</label></div></td></tr>');
+						jQuery('#'+layerId).change(SpatialMap.Function.bind(function (onchange,layerId) {
+							if (onchange) {
+								onchange();
+							}
+							this.mapLayerChanged(layerId);
+						},this,f,layerId));
+					}
+					
+					var l = {
                         layername: jQuery(themes[j]).attr('layername') || jQuery(themes[j]).attr('name'),
+						id: layerId,
                         host: jQuery(themes[j]).attr('host'),
                         basemap:false,
                         visible:true
                     };
+					
                     
                     var servicename = jQuery(themes[j]).attr('servicename');
                     if (servicename) {
@@ -1335,6 +1350,16 @@ Formular = SpatialMap.Class ({
         
         this.checkConditions();
     },
+	
+	mapLayerChanged: function (id) {
+		var checked = jQuery('#'+id).prop('checked');
+		if (checked) {
+			this.map.showLayer(id);
+		}
+		else {
+			this.map.hideLayer(id);
+		}
+	},
     
     checkConditions: function () {
         for (var i=0;i<this.conditions.length;i++) {

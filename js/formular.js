@@ -818,7 +818,13 @@ Formular = SpatialMap.Class ({
 					var displayName = (jQuery(themes[j]).attr('displayname') ? jQuery(themes[j]).attr('displayname') : '');
 					var layerId = displayName.replace(/\s+/, "");
 					if (layerId != '') {
-						contentcontainer.append('<tr id="'+id+'_'+j+'_row"><td colspan="2"><div class="valuediv"><label><input type="checkbox" id="'+layerId+'" checked="checked"/>'+displayName+'</label></div></td></tr>');
+
+                        if (this.bootstrap === true) {
+                            contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" checked="checked">'+displayName+'</label></div></div>');
+                        } else {
+                            contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="valuediv"><label><input type="checkbox" id="'+layerId+'" checked="checked"/>'+displayName+'</label></div></td></tr>');
+                        }
+
 						jQuery('#'+layerId).change(SpatialMap.Function.bind(function (onchange,layerId) {
 							if (onchange) {
 								onchange();

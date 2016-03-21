@@ -1615,10 +1615,10 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                     <theme name="DRIKKEVANDS_INTER" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
-            <conflicts class="warning-info" urlparam="konflikttekst1" displayname="&lt;strong&gt;Info&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
-            <conflicts class="warning-success" urlparam="konflikttekst1" displayname="&lt;strong&gt;Success&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
-            <conflicts class="warning-warning" urlparam="konflikttekst1" displayname="&lt;strong&gt;Warning&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
-            <conflicts class="warning-danger" urlparam="konflikttekst1" displayname="&lt;strong&gt;Danger&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
+            <conflicts class="warning-info" urlparam="konflikttekst1" displayname="&lt;strong&gt;Info&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targetset="ejendom"/>
+            <conflicts class="warning-success" urlparam="konflikttekst1" displayname="&lt;strong&gt;Success&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targetset="ejendom"/>
+            <conflicts class="warning-warning" urlparam="konflikttekst1" displayname="&lt;strong&gt;Warning&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targetset="ejendom"/>
+            <conflicts class="warning-danger" urlparam="konflikttekst1" displayname="&lt;strong&gt;Danger&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targetset="ejendom"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
         </content>
     </formular>

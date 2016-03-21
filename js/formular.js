@@ -86,6 +86,8 @@ Formular = SpatialMap.Class ({
     valid: true,
     validatedElements: {},
     mapId: null,
+	
+	groupedLayers: [],
     
     _listeners: [],
     
@@ -816,21 +818,42 @@ Formular = SpatialMap.Class ({
                 for (var j=0;j<themes.length;j++) {
                     var f = null;
 					var displayName = (jQuery(themes[j]).attr('displayname') ? jQuery(themes[j]).attr('displayname') : '');
-					var layerId = displayName.replace(/\s+/, "");
+					var layerGroup = (jQuery(themes[j]).attr('group') ? jQuery(themes[j]).attr('group') : '');
+					var layerClass = (jQuery(themes[j]).attr('class') ? jQuery(themes[j]).attr('class') : 'valuediv');
+					var layerId = layerGroup + displayName.replace(/\s+/, "");
+					var addEventHandler = false;
 					if (layerId != '') {
-
-                        if (this.bootstrap === true) {
-                            contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" checked="checked">'+displayName+'</label></div></div>');
-                        } else {
-                            contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="valuediv"><label><input type="checkbox" id="'+layerId+'" checked="checked"/>'+displayName+'</label></div></td></tr>');
-                        }
-
-						jQuery('#'+layerId).change(SpatialMap.Function.bind(function (onchange,layerId) {
-							if (onchange) {
-								onchange();
+						if (layerGroup != '') {
+							var existingGroup = this.groupedLayers[layerGroup];
+							if (typeof existingGroup === 'undefined') {
+								if (this.bootstrap === true) {
+									contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" checked="checked">'+displayName+'</label></div></div>');
+								} else {
+									contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="'+layerClass+'"><label><input type="checkbox" id="'+layerGroup+'" checked="checked"/>'+layerGroup+'</label></div></td></tr>');
+								}
+								this.groupedLayers[layerGroup] = [];
+								addEventHandler = true;
+								layerId = layerGroup;
 							}
-							this.mapLayerChanged(layerId);
-						},this,f,layerId));
+							this.groupedLayers[layerGroup].push(layerId);
+						}
+						else
+						{
+							if (this.bootstrap === true) {
+								contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" checked="checked">'+displayName+'</label></div></div>');
+							} else {
+								contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="'+layerClass+'"><label><input type="checkbox" id="'+layerId+'" checked="checked"/>'+displayName+'</label></div></td></tr>');
+							}
+							addEventHandler = true;
+						}
+						if (addEventHandler) {
+							jQuery('#'+layerId).change(SpatialMap.Function.bind(function (onchange,layerId) {
+								if (onchange) {
+									onchange();
+								}
+								this.mapLayerChanged(layerId);
+							},this,f,layerId));							
+						}
 					}
 					
 					var l = {
@@ -1359,11 +1382,28 @@ Formular = SpatialMap.Class ({
 	
 	mapLayerChanged: function (id) {
 		var checked = jQuery('#'+id).prop('checked');
+		var groupLayer = this.groupedLayers[id];
 		if (checked) {
-			this.map.showLayer(id);
+			if (typeof groupLayer === 'undefined') {
+				this.map.showLayer(id);
+			}
+			else {
+				for (i = 0; i<groupLayer.length; i++) {
+					var curId = groupLayer[i];
+					this.map.showLayer(curId);
+				}	
+			}
 		}
 		else {
-			this.map.hideLayer(id);
+			if (typeof groupLayer === 'undefined') {
+				this.map.hideLayer(id);
+			}
+			else {
+				for (i = 0; i<groupLayer.length; i++) {
+					var curId = groupLayer[i];
+					this.map.hideLayer(curId);
+				}
+			}
 		}
 	},
     

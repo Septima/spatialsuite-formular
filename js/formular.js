@@ -1030,8 +1030,13 @@ Formular = SpatialMap.Class ({
                     displayname: node.attr('displayname'),
                     targetsetfile: node.attr('targetsetfile'),
                     targerset: node.attr('targerset'),
+                    targetset: node.attr('targetset'),
                     page: node.attr('querypage')
                 };
+                if (!conflict.targetset) {
+                    //Tidligere har der været en slåfejl, der gjorde at targerset blev brugt. For at være bagudkombatipel er dette lavet:
+                    conflict.targetset = conflict.targerset;
+                }
                 if (node.attr('onconflict')) {
                     conflict.onconflict = new Function (node.attr('onconflict'));
                 }
@@ -2190,8 +2195,8 @@ Formular = SpatialMap.Class ({
                 
                 params.wkt = this.mergedFeature;
             
-                if (this.spatialqueries[i].targerset) {
-                    params.targetset = this.spatialqueries[i].targerset;
+                if (this.spatialqueries[i].targetset) {
+                    params.targetset = this.spatialqueries[i].targetset;
                 }
                 if (this.spatialqueries[i].targetsetfile) {
                     params.targetsetfile = this.spatialqueries[i].targetsetfile;

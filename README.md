@@ -279,7 +279,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  På et targetset vil der typisk være anigvet ét target, men der kan godt være flere. På dette target er der knyttet en presentation. 
                  Inholdet af denne presentation, vil blive vist for brugeren. Hvis presentation ikke indeholder nogen columns, så vil der ikke blive vist 
                  noget resultat, men "displayname" vises. Det kan f.eks. bruges til at vise at der er fundet noget, men det er ikke interessant hvad det præcist er -->
-            <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targerset="konflikt" targetsetfile="[cbinfo.queries.dir]/custom/mytargetsetfile.xml"/>
+            <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targetset="konflikt" targetsetfile="[cbinfo.queries.dir]/custom/mytargetsetfile.xml"/>
 
             <!-- submitbutton -->
             <!-- En knap, der vises når formularen er sendt og gået godt. Knappen kan f.eks. bruges til at sende brugeren videre

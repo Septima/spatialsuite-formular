@@ -805,7 +805,7 @@ Formular = SpatialMap.Class ({
                 }
                 
                 this.multipleGeometries = (typeof node.attr('multiplegeometries') !== 'undefined' && node.attr('multiplegeometries') === 'true');
-                this.mergeGeometries = (typeof node.attr('mergegeometries') !== 'undefined' && node.attr('mergegeometries') === 'false');
+                this.mergeGeometries = (typeof node.attr('mergegeometries') === 'undefined' || node.attr('mergegeometries') === 'true');
 				
 				if (this.multipleGeometries === true) {
 					this.style.label = '';
@@ -3024,6 +3024,9 @@ Formular = SpatialMap.Class ({
             
             for (var i=0;i<this.feature.length;i++) {
                 var p = this.getParams(this.feature[i].params, params);
+				if (!this.mergeGeometries) {
+					p.params.wkt = this.feature[i].wkt.toString();
+				}
                 
                 jQuery.ajax( {
                     url : 'cbkort',
@@ -3354,7 +3357,7 @@ Formular = SpatialMap.Class ({
             date2 = date2.split('.');
             date2 = new Date(date2[2],date2[1]-1,date2[0]);
             
-            count = (date2-date1)/1000/60/60/24;
+            count = Math.round((date2-date1)/1000/60/60/24);
             if (typeof nrOfAddedDays === 'number') {
                 count += nrOfAddedDays;
             }

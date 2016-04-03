@@ -220,6 +220,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <map>
                 <!-- Følgende atributter kan tilføjes til et map:
                     multiplegeometries  - Default false. Skal man kunne tegne flere geometrier i kortet
+					mergegeometries		- Default true. Sættes den til false, vil de multiple geometrier IKKE blive samlet (merged) til en multigeometi i forbindelse med lagring i databasen
                     onchange            - Hvis man gerne vil have at der sker noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i. 
 					featurechange		- Man kan kalde en javascript funktion, hver gang der sker en ændring i geometrierne i kortet
                 -->

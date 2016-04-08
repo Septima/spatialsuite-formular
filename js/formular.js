@@ -734,6 +734,87 @@ Formular = SpatialMap.Class ({
                 }
                 
             break;
+            case 'septimasearch':
+                var value = this.getParam(urlparam);
+                if (value == null) {
+                    value = node.attr('defaultvalue');
+                }
+                if (this.bootstrap === true) {
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><diw id="'+id+'"></diw><input type="hidden" id="'+id+'_wkt"/></div></div>');
+                } else {
+                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="septimasearchcontainer"><div id="'+id+'"></div><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                }
+
+
+                var options = {
+                    placeholder: node.attr('placeholder'),
+                    resources: node.attr('resources') || 'Adresser',
+                    area: node.attr('filter') || '',
+                    id: id,
+                    limit: node.attr('limit') || 10
+                };
+                if (node.attr('geometry_selected')) {
+                    options.geometrySelect = new Function (node.attr('geometry_selected'));
+                }
+                if (node.attr('disablemap')) {
+                    options.disablemap = node.attr('disablemap');
+                }
+                options.usegeometry = (typeof node.attr('usegeometry') !== 'undefined' && node.attr('usegeometry') === 'true');
+
+                if (node.attr('minzoom')) {
+                    options.minzoom = node.attr('minzoom')-0;
+                }
+                if (node.attr('minscale')) {
+                    options.minscale = node.attr('minscale')-0;
+                }
+
+                this.setSeptimaSearch(options);
+
+
+                if (urlparam) {
+                    this.postparams[urlparam+'_wkt'] = {
+                        id: id+'_wkt'
+                    };
+                }
+
+                //var regexp = node.attr('regexp');
+                //if (regexp || req === true) {
+                //    this.inputValidation[id] = {
+                //        validate: true,
+                //        required: req,
+                //        regexp: regexp,
+                //        tab: tab,
+                //        message: node.attr('validate') || 'Indtast en valid værdi!'
+                //    };
+                //
+                //    if (req) {
+                //        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                //            var valid = (jQuery('#'+id).val() !== '');
+                //            var map = jQuery('#'+id+'_row > .map');
+                //            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
+                //            jQuery('#'+id+'ValidationMessage').remove();
+                //            if (valid === false) {
+                //                jQuery('#'+id+'_row > .required-enabled').addClass('error');
+                //                var message = jQuery('#'+id+'ValidationMessage');
+                //                if (message.length === 0) {
+                //                    jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
+                //                }
+                //            }
+                //            return valid;
+                //        },this, id, this.inputValidation[id].message)  ;
+                //    }
+                //
+                //    if (regexp) {
+                //        jQuery('#'+id).valid8({
+                //            'regularExpressions': [
+                //                { expression: new RegExp(node.attr('regexp')), errormessage: this.inputValidation[id].message }
+                //            ]
+                //        });
+                //    }
+                //}
+
+
+            break;
             case 'maptools':
                 
                 if (this.bootstrap === true) {
@@ -1730,7 +1811,245 @@ Formular = SpatialMap.Class ({
 
         }
     },
-    
+
+    setSeptimaSearch: function (options) {
+        this.getTicket (SpatialMap.Function.bind(function (options) {
+            var calculateDistanceFunctionString = options.geometrySelect || null;
+            var disablemapValue = options.disablemap || null;
+            options.ticket = this.ticket;
+
+            var buildControllerOptions = {
+                controller: {blankBehavior: "search"},
+                searchers: [
+                    {
+                        type: "Septima.Search.DawaSearcher",
+                        title: "Adresser",
+                        options: {kommunekode: 101}
+                    },
+                    {
+                        type: "Septima.Search.GeoSearch",
+                        title: "geoSearch",
+                        options: {
+                            targets: ['matrikelnumre','stednavne_v2'],
+                            authParams: {
+                                login: 'septimatest',
+                                password: 'septimatest2U'
+                            },
+                            area: "muncode0101",
+                            "returnCentroid": true
+                        }
+                    },
+                    {
+                        type: "Septima.Search.PlanSearcher",
+                        title: "Vedtagne lokalplaner",
+                        options: {
+                            searchindexToken: 'septimaSEARCHDEMO-A7OLGHG2J4'
+                        }
+                    },
+                    {
+                        type: "Septima.Search.CVR_enhedSearcher",
+                        title: "Virksomheder",
+                        options: {
+                            searchindexToken: "septimaSEARCHDEMO-A7OLGHG2J4"
+                        }
+                    },
+                    {
+                        type: "Septima.Search.S4IndexSearcher",
+                        title: "S4Index",
+                        options: {
+                            host: "http://spatialsuite3102.kpc.asus:8080/",
+                            datasources: "*",
+                            blankBehavior: "search"
+                        }
+                    }
+                ]
+            };
+
+            new Septima.Search.ControllerBuilder().setOptions(buildControllerOptions).build().done(Septima.bind(function(options,calculateDistanceFunctionString,disablemapValue, controller){
+
+                var view = new Septima.Search.DefaultView({input: options.id, placeholder: options.placeholder, controller: controller});
+
+                controller.addOnSelectHandler(SpatialMap.Function.bind(this.septimaSearchSelected,this,options,calculateDistanceFunctionString,disablemapValue,view));
+
+            },this,options,calculateDistanceFunctionString,disablemapValue));
+
+
+
+
+
+
+
+
+            /*
+
+            jQuery('input#'+options.id).autocomplete({
+                selectFirst : true,
+                source: function(request, response) {
+                    jQuery.ajax( {
+                        scriptCharset: 'UTF-8',
+                        url: '//kortforsyningen.kms.dk/Geosearch?service=GEO&search='+ encodeURIComponent(request.term),
+                        dataType : "jsonp",
+                        autoFocus: true,
+                        data : options,
+                        success : function(result) {
+                            response(jQuery.map(result.data, function(item) {
+                                displayLabel = item.presentationString;
+                                displayValue = item.presentationString;
+                                return {
+                                    label: displayLabel,
+                                    value: displayValue,
+                                    data: item
+                                };
+                            }));
+                        }
+                    });
+                },
+                delay: 200,
+                minLength : 1,
+                select : SpatialMap.Function.bind(this.geoSearchSelected,this,options,calculateDistanceFunctionString,disablemapValue)
+            });
+
+            */
+
+        },this,options));
+    },
+
+    septimaSearchSelected: function (options,cdfs,disablemapValue,view,result) {
+
+        if ((typeof result.newquery === 'undefined' && typeof result.suggestion === 'undefined') || (result.data && result.data.type && result.data.type === "vej")){
+            var message = result.target + ": " + result.title + ". ";
+            if (result.geometry) {
+                message = message + "Geometry: " + JSON.stringify(result.geometry);
+                var geojson = new OpenLayers.Format.GeoJSON();
+                var olGeom = geojson.read(result.geometry, 'Geometry');
+                var wkt = olGeom.toString();
+                if (this.map && disablemapValue !== 'true') {
+                    var bounds = olGeom.getBounds();
+                    var extent =
+                    {  x1: bounds.left,
+                        y1: bounds.top,
+                        x2: bounds.right,
+                        y2: bounds.bottom
+                    };
+
+                    this.map.zoomToExtent(extent);
+
+                    if (options.minzoom) {
+                        var mapstate = this.map.getMapState();
+                        if (options.minzoom < mapstate.zoomLevel) {
+                            this.map.zoomTo(options.minzoom);
+                        }
+                    }
+                    if (options.minscale) {
+                        var mapstate = this.map.getMapState();
+                        if (options.minscale > mapstate.scale) {
+                            this.map.zoomToScale(options.minscale);
+                        }
+                    }
+                }
+                this.validAddress = true;
+                jQuery('#' + options.id + '_wkt').val(wkt);
+                if (this.map && options.usegeometry) {
+                    this.map.drawWKT(wkt, SpatialMap.Function.bind(this.featureDrawed, this), {styles: this.style});
+                }
+                if (jQuery('#' + options.id + '_wkt').attr('value') !== '') {
+                    if (cdfs) {
+                        cdfs();
+                    }
+                }
+            }
+            view.blur(true);
+        }
+
+        return;
+
+
+        var id = options.id;
+        if (ui.item.data.type == 'streetNameType' && disablemapValue != 'true') {
+            if (this.map) {
+                this.map.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
+
+                if (options.minzoom) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minzoom < mapstate.zoomLevel) {
+                        this.map.zoomTo(options.minzoom);
+                    }
+                }
+                if (options.minscale) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minscale > mapstate.scale) {
+                        this.map.zoomToScale(options.minscale);
+                    }
+                }
+            }
+            this.validAddress = false;
+            jQuery('#'+id+'_wkt').val ('');
+        } else if (ui.item.data.type == 'matrikelnummer' && disablemapValue != 'true') {
+            var x = [];
+            var y = [];
+            var p = ui.item.data.geometryWkt.replace('POLYGON((','').replace('))','').split(',');
+            for (var i=0;i<p.length;i++) {
+                var a = p[i].split(' ');
+                x.push(a[0]-0);
+                y.push(a[1]-0);
+            }
+
+            if (this.map && disablemapValue != 'true') {
+                this.map.zoomToExtent({x1:Math.min.apply(Math, x),y1:Math.min.apply(Math, y),x2:Math.max.apply(Math, x),y2:Math.max.apply(Math, y)});
+
+                if (options.minzoom) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minzoom < mapstate.zoomLevel) {
+                        this.map.zoomTo(options.minzoom);
+                    }
+                }
+                if (options.minscale) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minscale > mapstate.scale) {
+                        this.map.zoomToScale(options.minscale);
+                    }
+                }
+            }
+            this.validAddress = true;
+            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
+            if (this.map && options.usegeometry) {
+                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+            }
+
+
+            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
+        } else {
+            if (this.map && disablemapValue != 'true') {
+                this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
+
+                if (options.minzoom) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minzoom < mapstate.zoomLevel) {
+                        this.map.zoomTo(options.minzoom);
+                    }
+                }
+                if (options.minscale) {
+                    var mapstate = this.map.getMapState();
+                    if (options.minscale > mapstate.scale) {
+                        this.map.zoomToScale(options.minscale);
+                    }
+                }
+            }
+            this.validAddress = true;
+            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
+            if (this.map && options.usegeometry) {
+                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+            }
+            if (jQuery('#'+id+'_wkt').attr('value') != '') {
+                if (cdfs) {
+                    cdfs();
+                }
+            }
+        }
+    },
+
+
+
     setMap: function (options) {
     },
     

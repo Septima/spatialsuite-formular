@@ -648,3 +648,23 @@ div.helpbutton {
 .icon-flow-line:before {
     content: "\e601";
 }
+
+
+.septimasearchcontainer {
+    height: 45px;
+}
+.septimasearchcontainer > .septimasearch {
+    width: 450px;
+    position: absolute;
+    z-index: 100000;
+}
+.septimasearchcontainer > .septimasearch.active {
+    z-index: 100001;
+}
+.septimasearchcontainer > .septimasearch ul.better-autocomplete {
+    max-height: 540px;
+}
+.septimasearchcontainer > .septimasearch .targetbit .targetlabel,
+.septimasearchcontainer > .septimasearch .targetbit .targetclosebutton {
+    /*background-color: #8e44ad;*/
+}

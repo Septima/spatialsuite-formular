@@ -90,6 +90,13 @@
                 <script language="javascript" src="/modules/formular/js/json2.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
 
+                <xsl:if test="*//septimasearch">
+                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/septima.js"></script>
+                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/log.js"></script>
+                    <script type="text/javascript" src="//search.cdn.septima.dk/3.1.2/septimasearch.min.js"></script>
+                    <link rel="Stylesheet" type="text/css" href="//search.cdn.septima.dk/3.1.2/css/defaultView.css"></link>
+                </xsl:if>
+
                 <xsl:for-each select="js">
                     <xsl:element name="script">
                         <xsl:attribute name="language">javascript</xsl:attribute>

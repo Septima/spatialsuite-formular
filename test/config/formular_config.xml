@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="septimasearch">
+        <header>Septima Search</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse">
+
+            </septimasearch>
+            <map>
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+                <!--<attributes page="formular.geometry.save" datasource="formular-test-geometry" command="write">-->
+                <!--<input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>-->
+                <!--<input type="input" displayname="Nummer 2:" urlparam="nummer2" defaultvalue="22"/>-->
+                <!--<input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>-->
+                <!--</attributes>-->
+            </map>
+            <input type="input" displayname="Navn:" urlparam="navn"/>
+        </content>
+    </formular>
+
     <formular name="tilsyn">
         <header>FFB selvbetjening-tilsyn</header>
         <subheader>Formularens hovedformål er at medarbejderen i marken kan registrere de informationer som kulturarvsstyrelsen kræver.</subheader>

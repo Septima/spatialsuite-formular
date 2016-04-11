@@ -781,7 +781,15 @@ Formular = SpatialMap.Class ({
                         if (params[j].nodeName === 'options') {
                             var opt = jQuery(params[j]).children();
                             for (var k = 0; k < opt.length; k++) {
-                                obj.options[opt[k].nodeName] = opt[k].firstChild.nodeValue;
+                                if (opt[k].nodeName === 'targets') {
+                                    obj.options[opt[k].nodeName] = opt[k].firstChild.nodeValue.split(',');
+                                } else if (opt[k].nodeName === 'authParams') {
+                                    obj.options[opt[k].nodeName] = {
+                                        ticket: this.getTicket(function () {}, true)
+                                    }
+                                } else {
+                                    obj.options[opt[k].nodeName] = opt[k].firstChild.nodeValue;
+                                }
                             }
                         } else {
                             obj[params[j].nodeName] = params[j].firstChild.nodeValue;

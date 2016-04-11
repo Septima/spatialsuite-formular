@@ -185,17 +185,26 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                     </options>
                 </searcher>
                 <searcher>
+                    <type>Septima.Search.GeoSearch</type>
+                    <title>Matrikser og stednavne</title>
+                    <options>
+                        <area>muncode0101</area>
+                        <targets>matrikelnumre,stednavne_v2</targets>    <!-- Liste med targets adskilt af et komma -->
+                        <authParams></authParams>                        <!-- Angives for at sikre at der bliver oprettet en ticket.  -->
+                    </options>
+                </searcher>
+                <searcher>
                     <type>Septima.Search.PlanSearcher</type>
                     <title>Vedtagne lokalplaner</title>
                     <options>
-                        <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
+                        <searchindexToken>TOKEN TIL SEPTIMAS PLAN INDEX</searchindexToken> 
                     </options>
                 </searcher>
                 <searcher>
                     <type>Septima.Search.CVR_enhedSearcher</type>
                     <title>Virksomheder</title>
                     <options>
-                        <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
+                        <searchindexToken>TOKEN TIL SEPTIMAS CVR INDEX</searchindexToken>
                     </options>
                 </searcher>
                 <searcher>

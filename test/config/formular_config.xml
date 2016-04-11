@@ -15,6 +15,15 @@
                     </options>
                 </searcher>
                 <searcher>
+                    <type>Septima.Search.GeoSearch</type>
+                    <title>Matrikser og stednavne</title>
+                    <options>
+                        <area>muncode0101</area>
+                        <targets>matrikelnumre,stednavne_v2</targets>
+                        <authParams></authParams>
+                    </options>
+                </searcher>
+                <searcher>
                     <type>Septima.Search.PlanSearcher</type>
                     <title>Vedtagne lokalplaner</title>
                     <options>

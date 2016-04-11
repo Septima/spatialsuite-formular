@@ -168,6 +168,46 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             -->
             <geosearch urlparam="address" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true" usegeometry="false"/>
 
+            <!-- septimasearch -->
+            <!-- Et felt hvor brugeren kan søge bl.a. en adresse vha. DAWA. Søgningen benyttes som udgangspunkt til at finde noget i kortet.
+                 Geometrien for den valgte sendes til serveren som urlparam+"_wkt". Hvis urlparam="adresse" så vil adressepunktet blive sendt til serveren med adresse_wkt=POINT(XXXX YYYY)
+                 - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
+                 - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
+                 - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
+                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
+            -->
+            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse">
+                <searcher>
+                    <type>Septima.Search.DawaSearcher</type>
+                    <title>Adresser</title>
+                    <options>
+                        <kommunekode>101</kommunekode>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.PlanSearcher</type>
+                    <title>Vedtagne lokalplaner</title>
+                    <options>
+                        <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.CVR_enhedSearcher</type>
+                    <title>Virksomheder</title>
+                    <options>
+                        <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.S4IndexSearcher</type>
+                    <title>S4Index</title>
+                    <options>
+                        <host>http://spatialsuite3102.kpc.asus:8080/</host>
+                        <datasources>*</datasources>
+                    </options>
+                </searcher>
+            </septimasearch>
+
             <!-- input - type="date" -->
             <!-- Datovælger felt hvor man kan skrive en dato eller vælge.
                  - limitfromdatasource  - OPTIONAL - Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.

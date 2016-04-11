@@ -740,9 +740,9 @@ Formular = SpatialMap.Class ({
                     value = node.attr('defaultvalue');
                 }
                 if (this.bootstrap === true) {
-                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><diw id="'+id+'"></diw><input type="hidden" id="'+id+'_wkt"/></div></div>');
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><diw id="'+id+'_search"></diw><input type="hidden" id="'+id+'"/><input type="hidden" id="'+id+'_wkt"/></div></div>');
                 } else {
-                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="septimasearchcontainer"><div id="'+id+'"></div><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
+                    contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="septimasearchcontainer"><div id="'+id+'_search"></div><input type="hidden" id="'+id+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
                 }
 
 
@@ -766,6 +766,28 @@ Formular = SpatialMap.Class ({
                 }
                 if (node.attr('minscale')) {
                     options.minscale = node.attr('minscale')-0;
+                }
+
+                options.searchers = [];
+
+                var searchers = node.find('searcher');
+
+                for (var i = 0; i < searchers.length; i++) {
+                    var obj = {
+                        options: {}
+                    };
+                    var params = jQuery(searchers[i]).children();
+                    for (var j=0; j<params.length; j++) {
+                        if (params[j].nodeName === 'options') {
+                            var opt = jQuery(params[j]).children();
+                            for (var k = 0; k < opt.length; k++) {
+                                obj.options[opt[k].nodeName] = opt[k].firstChild.nodeValue;
+                            }
+                        } else {
+                            obj[params[j].nodeName] = params[j].firstChild.nodeValue;
+                        }
+                    }
+                    options.searchers.push(obj);
                 }
 
                 this.setSeptimaSearch(options);
@@ -1821,53 +1843,55 @@ Formular = SpatialMap.Class ({
             var buildControllerOptions = {
                 controller: {blankBehavior: "search"},
                 searchers: [
-                    {
-                        type: "Septima.Search.DawaSearcher",
-                        title: "Adresser",
-                        options: {kommunekode: 101}
-                    },
-                    {
-                        type: "Septima.Search.GeoSearch",
-                        title: "geoSearch",
-                        options: {
-                            targets: ['matrikelnumre','stednavne_v2'],
-                            authParams: {
-                                login: 'septimatest',
-                                password: 'septimatest2U'
-                            },
-                            area: "muncode0101",
-                            "returnCentroid": true
-                        }
-                    },
-                    {
-                        type: "Septima.Search.PlanSearcher",
-                        title: "Vedtagne lokalplaner",
-                        options: {
-                            searchindexToken: 'septimaSEARCHDEMO-A7OLGHG2J4'
-                        }
-                    },
-                    {
-                        type: "Septima.Search.CVR_enhedSearcher",
-                        title: "Virksomheder",
-                        options: {
-                            searchindexToken: "septimaSEARCHDEMO-A7OLGHG2J4"
-                        }
-                    },
-                    {
-                        type: "Septima.Search.S4IndexSearcher",
-                        title: "S4Index",
-                        options: {
-                            host: "http://spatialsuite3102.kpc.asus:8080/",
-                            datasources: "*",
-                            blankBehavior: "search"
-                        }
-                    }
+                    //{
+                    //    type: "Septima.Search.DawaSearcher",
+                    //    title: "Adresser",
+                    //    options: {kommunekode: 101}
+                    //},
+                    //{
+                    //    type: "Septima.Search.GeoSearch",
+                    //    title: "geoSearch",
+                    //    options: {
+                    //        targets: ['matrikelnumre','stednavne_v2'],
+                    //        authParams: {
+                    //            login: 'septimatest',
+                    //            password: 'septimatest2U'
+                    //        },
+                    //        area: "muncode0101",
+                    //        "returnCentroid": true
+                    //    }
+                    //},
+                    //{
+                    //    type: "Septima.Search.PlanSearcher",
+                    //    title: "Vedtagne lokalplaner",
+                    //    options: {
+                    //        searchindexToken: 'septimaSEARCHDEMO-A7OLGHG2J4'
+                    //    }
+                    //},
+                    //{
+                    //    type: "Septima.Search.CVR_enhedSearcher",
+                    //    title: "Virksomheder",
+                    //    options: {
+                    //        searchindexToken: "septimaSEARCHDEMO-A7OLGHG2J4"
+                    //    }
+                    //},
+                    //{
+                    //    type: "Septima.Search.S4IndexSearcher",
+                    //    title: "S4Index",
+                    //    options: {
+                    //        host: "http://spatialsuite3102.kpc.asus:8080/",
+                    //        datasources: "*",
+                    //        blankBehavior: "search"
+                    //    }
+                    //}
                 ]
             };
 
+            buildControllerOptions.searchers = options.searchers;
+
             new Septima.Search.ControllerBuilder().setOptions(buildControllerOptions).build().done(Septima.bind(function(options,calculateDistanceFunctionString,disablemapValue, controller){
 
-                var view = new Septima.Search.DefaultView({input: options.id, placeholder: options.placeholder, controller: controller});
+                var view = new Septima.Search.DefaultView({input: options.id+'_search', placeholder: options.placeholder, controller: controller});
 
                 controller.addOnSelectHandler(SpatialMap.Function.bind(this.septimaSearchSelected,this,options,calculateDistanceFunctionString,disablemapValue,view));
 
@@ -1918,8 +1942,8 @@ Formular = SpatialMap.Class ({
 
         if ((typeof result.newquery === 'undefined' && typeof result.suggestion === 'undefined') || (result.data && result.data.type && result.data.type === "vej")){
             var message = result.target + ": " + result.title + ". ";
+            jQuery('#' + options.id + '').val(result.title);
             if (result.geometry) {
-                message = message + "Geometry: " + JSON.stringify(result.geometry);
                 var geojson = new OpenLayers.Format.GeoJSON();
                 var olGeom = geojson.read(result.geometry, 'Geometry');
                 var wkt = olGeom.toString();

@@ -14,6 +14,7 @@
 <xsl:param name = "formular"/>
 <xsl:param name = "sessionid"/>
 <xsl:param name = "formular-css">/modules/formular/css/formular.css</xsl:param>
+<xsl:param name = "s4.version">[s4.version]</xsl:param>
 
 <xsl:decimal-format decimal-separator="," grouping-separator="." />
 
@@ -90,11 +91,11 @@
                 <script language="javascript" src="/modules/formular/js/json2.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
 
-                <xsl:if test="*//septimasearch">
+                <xsl:if test="*//septimasearch and not($s4.version = '['+'s4.version'+']')">
                     <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/septima.js"></script>
                     <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/log.js"></script>
-                    <script type="text/javascript" src="//search.cdn.septima.dk/3.1.2/septimasearch.min.js"></script>
-                    <link rel="Stylesheet" type="text/css" href="//search.cdn.septima.dk/3.1.2/css/defaultView.css"></link>
+                    <script type="text/javascript" src="//search.cdn.septima.dk/3.1.6/septimasearch.min.js"></script>
+                    <link rel="Stylesheet" type="text/css" href="//search.cdn.septima.dk/3.1.6/css/defaultView.css"></link>
                 </xsl:if>
 
                 <xsl:for-each select="js">
@@ -116,6 +117,7 @@
                 </script>
             </head>
             <body>
+                <div>###<xsl:value-of select="$s4.version"/>###</div>
                 <div class="formular_content">
                     <div id="message"><div id="messageloading" class="messagetext"></div><div id="messagetext" class="messagetext"></div><div id="messagebuttons" class="messagebuttons"></div></div>
                     <div id="content">

@@ -658,13 +658,13 @@ div.helpbutton {
     position: absolute;
     z-index: 100000;
 }
-.septimasearchcontainer > .septimasearch.active {
+.septimasearchcontainer > .septimasearch.ssActive {
     z-index: 100001;
 }
 .septimasearchcontainer > .septimasearch ul.better-autocomplete {
     max-height: 540px;
 }
-.septimasearchcontainer > .septimasearch .targetbit .targetlabel,
-.septimasearchcontainer > .septimasearch .targetbit .targetclosebutton {
+.septimasearchcontainer > .septimasearch .ssTargetbit .ssTargetLabel,
+.septimasearchcontainer > .septimasearch .ssTargetbit .ssTargetCloseButton {
     /*background-color: #8e44ad;*/
 }

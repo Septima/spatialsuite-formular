@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="septimasearch">
+        <header>Septima Search</header>
+        <subheader>Brug Septima Search til at finde ting med i en formular. Det er f.eks. adresser, planer, virksomhedder eller alle de data, som I selv har indekseret.</subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse">
+                <searcher>
+                    <type>Septima.Search.DawaSearcher</type>
+                    <title>Adresser</title>
+                    <options>
+                        <kommunekode>101</kommunekode>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.GeoSearch</type>
+                    <title>Matrikser og stednavne</title>
+                    <options>
+                        <area>muncode0101</area>
+                        <targets>matrikelnumre,stednavne_v2</targets>
+                        <authParams></authParams>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.PlanSearcher</type>
+                    <title>Vedtagne lokalplaner</title>
+                    <options>
+                        <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.CVR_enhedSearcher</type>
+                    <title>Virksomheder</title>
+                    <options>
+                        <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.S4IndexSearcher</type>
+                    <title>S4Index</title>
+                    <options>
+                        <host>http://spatialsuite3102.kpc.asus:8080/</host>
+                        <datasources>*</datasources>
+                    </options>
+                </searcher>
+            </septimasearch>
+            <map>
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="navn"/>
+        </content>
+    </formular>
+
     <formular name="tilsyn">
         <header>FFB selvbetjening-tilsyn</header>
         <subheader>Formularens hovedformål er at medarbejderen i marken kan registrere de informationer som kulturarvsstyrelsen kræver.</subheader>

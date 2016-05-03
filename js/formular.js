@@ -1135,6 +1135,7 @@ Formular = SpatialMap.Class ({
                     html += '<div class="conflictdiv" id="conflictdiv_'+id+'"/></div><input type="hidden" id="'+id+'" value=""/></td></tr>';
                     contentcontainer.append(html);
                 }
+				var conflictcondition = node.attr('conflictcondition') ? node.attr('conflictcondition') : null 
                 var conflict = {
                     id: id,
                     postparam: postparam,
@@ -1142,7 +1143,8 @@ Formular = SpatialMap.Class ({
                     targetsetfile: node.attr('targetsetfile'),
                     targerset: node.attr('targerset'),
                     targetset: node.attr('targetset'),
-                    page: node.attr('querypage')
+                    page: node.attr('querypage'),
+					conflictcondition: conflictcondition
                 };
                 if (!conflict.targetset) {
                     //Tidligere har der været en slåfejl, der gjorde at targerset blev brugt. For at være bagudkombatipel er dette lavet:
@@ -2532,6 +2534,15 @@ Formular = SpatialMap.Class ({
         
         for (var i=0;i<this.spatialqueries.length;i++) {
             
+            if (this.spatialqueries[i].conflictcondition != null) {
+				if (!(this.spatialqueries[i].conflictcondition instanceof Function)) {
+                        this.spatialqueries[i].conflictcondition = new Function ('return '+this.spatialqueries[i].conflictcondition);
+                    }
+                
+                if (this.spatialqueries[i].conflictcondition() === false) {
+					return;
+				}			
+			}
             if (this.bootstrap === true) {
                 jQuery('#'+this.spatialqueries[i].id+'_row').empty().hide().removeClass('hidden');
                 if (this.spatialqueries[i].displayname) {

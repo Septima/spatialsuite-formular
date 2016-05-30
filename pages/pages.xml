@@ -83,7 +83,7 @@
     <page name="formular.read.datasource" contenttype="json" sessionrequired="false">
         <data handler="datasource" operation="execute-command"/>
     </page>
-    <page name="formular.nemlogin.cpr.nummer" contenttype="text/xml" sessionrequired="true">  
+    <page name="formular.nemlogin.cpr.nummer" contenttype="json" sessionrequired="true">  
         <data handler="expression" operation="evaluate">
             <url-parameters>
                 <url-parameter name="expression">'GetOioSamlAttribute("SAML_CPR_NUMBER")'</url-parameter>

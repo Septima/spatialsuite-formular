@@ -1,0 +1,19 @@
+.col-custom {
+    width: 85px;
+    display: inline;
+}
+.col-custom input {
+    width: 80px;
+}
+
+.col-custom .labeldiv {
+    display: none;
+}
+
+.col-custom td {
+    padding: 0;
+}
+
+.col-custom.custom-header {
+    font-weight: 600;
+}

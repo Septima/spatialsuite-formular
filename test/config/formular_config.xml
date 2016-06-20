@@ -17,7 +17,8 @@
         <js>/modules/formular/test/js/foranst-indberet-timer.js</js>
         <js>https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js</js>
         <js>https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/locale/da.js</js>
-        <content>
+        <tabs>false</tabs>
+        <content displayname="Timer">
             <input type="hidden" urlparam="wkt" id="wkt" defaultvalue="POINT (10 10)" />
             <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Kvittering for indberetning af timer."/>
             <input type="input" displayname="Navn:" urlparam="navn"/>
@@ -56,7 +57,7 @@
                     <input type="text" displayname="Bemærkning"/>
                 </column>
             </columns>
-            <columns >
+            <columns class="row-custom">
                 <column class="col-custom">
                     <input id="fra_date1" type="date" displayname="Fra dato:" urlparam="fra_date1" onchange="timeCalc.change(1)" defaultvalue="02.04.2016"/>
                 </column>
@@ -79,7 +80,7 @@
                     <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning1"/>
                 </column>
             </columns>
-            <columns >
+            <columns class="row-custom">
                 <column class="col-custom">
                     <input id="fra_date2" type="date" displayname="Fra dato:" urlparam="fra_date2" onchange="timeCalc.change(2)"/>
                 </column>
@@ -102,7 +103,7 @@
                     <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning2"/>
                 </column>
             </columns>
-            <columns >
+            <columns class="row-custom">
                 <column class="col-custom">
                     <input id="fra_date3" type="date" displayname="Fra dato:" urlparam="fra_date3" onchange="timeCalc.change(3)"/>
                 </column>
@@ -125,7 +126,7 @@
                     <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning3"/>
                 </column>
             </columns>
-            <columns >
+            <columns class="row-custom">
                 <column class="col-custom">
                     <input id="fra_date4" type="date" displayname="Fra dato:" urlparam="fra_date4" onchange="timeCalc.change(4)"/>
                 </column>
@@ -148,7 +149,7 @@
                     <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning4"/>
                 </column>
             </columns>
-            <columns >
+            <columns class="row-custom">
                 <column class="col-custom">
                     <input type="text" displayname="Samlet"/>
                 </column>

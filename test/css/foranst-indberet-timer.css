@@ -1,11 +1,12 @@
 .col-custom {
-    width: 85px;
-    display: inline;
+    width: 14%;
+    display: inline-block;
 }
 .col-custom input {
     width: 80px;
 }
 
+.col-custom label,
 .col-custom .labeldiv {
     display: none;
 }
@@ -16,4 +17,18 @@
 
 .col-custom.custom-header {
     font-weight: 600;
+}
+
+
+.col-custom > div.form-group {
+    margin: 0;
+    padding: 0;
+}
+.col-custom > div.form-group input {
+    width: 100%;
+    border: 0;
+}
+
+.row.row-custom {
+    border-top: 1px solid #ddd;
 }

@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="skiftkortudsnit">
+        <header>Skift kortudsnit alt efter hvad der er valgt i en dropdown</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportprofile>demo01</reportprofile>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Skift kortudsnit alt efter hvad der er valgt i en dropdown"/>
+            <input type="dropdown" displayname="By" id="by" urlparam="by" onchange="var e = jQuery('#by').val().split(',');formular.map.zoomToExtent({x1:e[0],y1:e[1],x2:e[2],y2:e[3]});">
+                <option value="600599.590217,6227768.190217,609303.590217,6234168.190217" name="Ebeltoft"/>
+                <option value="612451.113703,6249947.64292,621155.113703,6256347.64292" name="Grenå"/>
+            </input>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="http://kortforsyningen.kms.dk/topo_skaermkort"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+
     <formular name="foranst-indberet-timer">
         <title>Foranstaltninger - Indberetning timeseddel</title>
         <header>Foranstaltninger - Indberetning timeseddel</header>

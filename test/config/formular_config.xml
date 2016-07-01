@@ -1,6 +1,222 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="skiftkortudsnit">
+        <header>Skift kortudsnit alt efter hvad der er valgt i en dropdown</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportprofile>demo01</reportprofile>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Skift kortudsnit alt efter hvad der er valgt i en dropdown"/>
+            <input type="dropdown" displayname="By" id="by" urlparam="by" onchange="var e = jQuery('#by').val().split(',');formular.map.zoomToExtent({x1:e[0],y1:e[1],x2:e[2],y2:e[3]});">
+                <option value="600599.590217,6227768.190217,609303.590217,6234168.190217" name="Ebeltoft"/>
+                <option value="612451.113703,6249947.64292,621155.113703,6256347.64292" name="Grenå"/>
+            </input>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="http://kortforsyningen.kms.dk/topo_skaermkort"/>
+                </themes>
+            </map>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+        </content>
+    </formular>
+
+    <formular name="foranst-indberet-timer">
+        <title>Foranstaltninger - Indberetning timeseddel</title>
+        <header>Foranstaltninger - Indberetning timeseddel</header>
+        <subheader>INDBERETNING BØRN og UNGE AFLASTNINGSSKEMA JF. § 52. Udfyldes 1 gang måpnedligt, senest d. 3. i måneden.</subheader>
+        <submitpages>
+            <page>formular.gemdata.foranstindbtimer</page>
+            <page>formular.skriv_pdf.foranstindbtimer</page>
+        </submitpages>
+        <reportprofile>all</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>foranstindbtimer</reportxsl>
+        <localstore clear="true">false</localstore>
+        <css>/modules/formular/test/css/foranst-indberet-timer.css</css>
+        <js>/modules/formular/test/js/foranst-indberet-timer.js</js>
+        <js>https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js</js>
+        <js>https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/locale/da.js</js>
+        <tabs>false</tabs>
+        <content displayname="Timer">
+            <input type="hidden" urlparam="wkt" id="wkt" defaultvalue="POINT (10 10)" />
+            <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Kvittering for indberetning af timer."/>
+            <input type="input" displayname="Navn:" urlparam="navn"/>
+            <input type="input" displayname="Adresse:" urlparam="adresse"/>
+            <input type="input" displayname="Cpr. nr.:" urlparam="cpr"/>
+            <input type="input" displayname="Medarbejder nr:" urlparam="medarbejdernr"/>
+            <input type="input" displayname="Barnets navn:" urlparam="barn_navn"/>
+            <input type="input" displayname="Barn Cpr. nr.:" urlparam="barn_cpr"/>
+
+            <input id="periode" type="dropdown" displayname="Lønperiode:" urlparam="periode">
+                <option value="05.2016" name="Maj 2016"/>
+            </input>
+
+            <input type="text" displayname="Herunder kan du udfylde antal timer, der skal indberettes for denne lønperiode."/>
+
+            <columns >
+                <column class="col-custom custom-header">
+                    <input type="text" displayname="Fra dato"/>
+                </column>
+                <column class="col-custom custom-header">
+                    <input type="text" displayname="Fra tid"/>
+                </column>
+                <column class="col-custom custom-header">
+                    <input type="text" displayname="Til dato"/>
+                </column>
+                <column class="col-custom custom-header">
+                    <input type="text" displayname="Til tid"/>
+                </column>
+                <column class="col-custom custom-header">
+                    <input type="text" displayname="Hele døgn"/>
+                </column>
+                <column class="col-custom custom-header">
+                    <input type="text" displayname="Rest timer"/>
+                </column>
+                <column class="col-custom custom-header">
+                    <input type="text" displayname="Bemærkning"/>
+                </column>
+            </columns>
+            <columns class="row-custom">
+                <column class="col-custom">
+                    <input id="fra_date1" type="date" displayname="Fra dato:" urlparam="fra_date1" onchange="timeCalc.change(1)" defaultvalue="02.04.2016"/>
+                </column>
+                <column class="col-custom">
+                    <input id="fra_tid1" type="input" displayname="Fra tid:" urlparam="fra_tid1" onchange="timeCalc.change(1)" defaultvalue="10:00"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_date1" type="date" displayname="Til dato:" urlparam="til_date1" onchange="timeCalc.change(1)" defaultvalue="03.05.2016"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_tid1" type="input" displayname="Til tid:" urlparam="til_tid1" onchange="timeCalc.change(1)" defaultvalue="15:30"/>
+                </column>
+                <column class="col-custom">
+                    <input id="doegn1" type="input" displayname="Hele døgn:" urlparam="doegn1"/>
+                </column>
+                <column class="col-custom">
+                    <input id="timer1" type="input" displayname="Rest timer:" urlparam="timer1"/>
+                </column>
+                <column class="col-custom">
+                    <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning1"/>
+                </column>
+            </columns>
+            <columns class="row-custom">
+                <column class="col-custom">
+                    <input id="fra_date2" type="date" displayname="Fra dato:" urlparam="fra_date2" onchange="timeCalc.change(2)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="fra_tid2" type="input" displayname="Fra tid:" urlparam="fra_tid2" onchange="timeCalc.change(2)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_date2" type="date" displayname="Til dato:" urlparam="til_date2" onchange="timeCalc.change(2)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_tid2" type="input" displayname="Til tid:" urlparam="til_tid2" onchange="timeCalc.change(2)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="doegn2" type="input" displayname="Hele døgn:" urlparam="doegn2"/>
+                </column>
+                <column class="col-custom">
+                    <input id="timer2" type="input" displayname="Rest timer:" urlparam="timer2"/>
+                </column>
+                <column class="col-custom">
+                    <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning2"/>
+                </column>
+            </columns>
+            <columns class="row-custom">
+                <column class="col-custom">
+                    <input id="fra_date3" type="date" displayname="Fra dato:" urlparam="fra_date3" onchange="timeCalc.change(3)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="fra_tid3" type="input" displayname="Fra tid:" urlparam="fra_tid3" onchange="timeCalc.change(3)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_date3" type="date" displayname="Til dato:" urlparam="til_date3" onchange="timeCalc.change(3)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_tid3" type="input" displayname="Til tid:" urlparam="til_tid3" onchange="timeCalc.change(3)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="doegn3" type="input" displayname="Hele døgn:" urlparam="doegn3"/>
+                </column>
+                <column class="col-custom">
+                    <input id="timer3" type="input" displayname="Rest timer:" urlparam="timer3"/>
+                </column>
+                <column class="col-custom">
+                    <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning3"/>
+                </column>
+            </columns>
+            <columns class="row-custom">
+                <column class="col-custom">
+                    <input id="fra_date4" type="date" displayname="Fra dato:" urlparam="fra_date4" onchange="timeCalc.change(4)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="fra_tid4" type="input" displayname="Fra tid:" urlparam="fra_tid4" onchange="timeCalc.change(4)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_date4" type="date" displayname="Til dato:" urlparam="til_date4" onchange="timeCalc.change(4)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="til_tid4" type="input" displayname="Til tid:" urlparam="til_tid4" onchange="timeCalc.change(4)"/>
+                </column>
+                <column class="col-custom">
+                    <input id="doegn4" type="input" displayname="Hele døgn:" urlparam="doegn4"/>
+                </column>
+                <column class="col-custom">
+                    <input id="timer4" type="input" displayname="Rest timer:" urlparam="timer4"/>
+                </column>
+                <column class="col-custom">
+                    <input type="input"  displayname="Bemærkning:" urlparam="bemaerkning4"/>
+                </column>
+            </columns>
+            <columns class="row-custom">
+                <column class="col-custom">
+                    <input type="text" displayname="Samlet"/>
+                </column>
+                <column class="col-custom col-custom-empty">
+                    <input type="text" displayname="&amp;nbsp;"/>
+                </column>
+                <column class="col-custom col-custom-empty">
+                    <input type="text" displayname="&amp;nbsp;"/>
+                </column>
+                <column class="col-custom col-custom-empty">
+                    <input type="text" displayname="&amp;nbsp;"/>
+                </column>
+                <column class="col-custom">
+                    <input id="sumdoegn" type="input" displayname="" urlparam="sumdoegn"/>
+                </column>
+                <column class="col-custom">
+                    <input id="sumtimer" type="input" displayname="" urlparam="sumtimer"/>
+                </column>
+                <column class="col-custom">
+                    <input type="text" displayname=""/>
+                </column>
+            </columns>
+
+
+            <input type="text" displayname="Herunder skal du vælge en fra begge lister."/>
+            <input type="dropdown" displayname="Vederlag:" urlparam="vederlag" regexp=".+" validate="Der skal vælges vederlagstype!">
+                <option value="1xvederlag (5963)" name="1xvederlag (5963)"/>
+                <option value="2xvederlag (5964)" name="2xvederlag (5964)"/>
+                <option value="3xvederlag (5965)" name="3xvederlag (5965)"/>
+                <option value="4xvederlag (5966)" name="4xvederlag (5966)"/>
+                <option value="5xvederlag (5967)" name="5xvederlag (5967)"/>
+                <option value="6xvederlag (5968)" name="6xvederlag (5968)"/>
+                <option value="7xvederlag (5969)" name="6xvederlag (5969)"/>
+            </input>
+            <input type="dropdown" displayname="Kost:" urlparam="kost" regexp=".+" validate="Der skal vælges kost!">
+                <option value="Kost  under 10år (5031)" name="Kost  under 10år (5031)"/>
+                <option value="Kost  over 10år (5032)" name="Kost  over 10år (5032)"/>
+            </input>
+            <input type="radiobutton" displayname="Andet" urlparam="andet" defaultvalue="Kost  3. barn (5033)">
+                <option value="Kost  3. barn (5033)" name="Kost 3. barn (5033)"/>
+            </input>
+            <input type="input" urlparam="signeret" displayname="Signeret dato:"/>
+        </content>
+    </formular>
+
     <formular name="septimasearch">
         <header>Septima Search</header>
         <subheader>Brug Septima Search til at finde ting med i en formular. Det er f.eks. adresser, planer, virksomhedder eller alle de data, som I selv har indekseret.</subheader>

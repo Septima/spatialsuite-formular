@@ -224,6 +224,12 @@ Formular = SpatialMap.Class ({
                         tabcontainer.addClass(className);
                         jQuery('div#content').append(tabcontainer);
                     }
+
+                    // Skjul menuen til venstre hvis man bevidst har valgt "tabs" fra
+                    if (this.showTabs === false && this.bootstrap === true) {
+                        jQuery('#form > .col-sm-3').hide();
+                        jQuery('#form > .col-sm-9').removeClass('col-sm-9').addClass('col-sm-12');
+                    }
                 }
                 var parseDisplaynames = jQuery(data).find('parsedisplaynames').text();
                 if (parseDisplaynames) {
@@ -448,6 +454,10 @@ Formular = SpatialMap.Class ({
                             } else {
                                 jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
                             }
+                        }
+                    } else {
+                        if (this.bootstrap) {
+                            jQuery('.buttons #submit').click(SpatialMap.Function.bind(this.submit,this));
                         }
                     }
 
@@ -1600,8 +1610,8 @@ Formular = SpatialMap.Class ({
     setButtons: function () {
         if (this.tabs.length < 2) {
             jQuery('.buttons button').hide();
+            jQuery('.buttons #submit').show();
         } else {
-            jQuery('.buttons #submit').hide();
             jQuery('.buttons #previous').show();
             jQuery('.buttons #next').show();
             if (this.currentTab === 0) {

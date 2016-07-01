@@ -117,7 +117,6 @@
                 </script>
             </head>
             <body>
-                <div>###<xsl:value-of select="$s4.version"/>###</div>
                 <div class="formular_content">
                     <div id="message"><div id="messageloading" class="messagetext"></div><div id="messagetext" class="messagetext"></div><div id="messagebuttons" class="messagebuttons"></div></div>
                     <div id="content">

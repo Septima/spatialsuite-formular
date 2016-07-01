@@ -24,6 +24,7 @@ Formular = SpatialMap.Class ({
     map: null,
     extent: [539430.4,6237856,591859.2,6290284.8],
     resolutions: [0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4],
+	geosearchOptions: null,
     
     currentMapState: null,
     currentMapTool: null,
@@ -655,7 +656,8 @@ Formular = SpatialMap.Class ({
                 if (node.attr('minscale')) {
                     options.minscale = node.attr('minscale')-0;
                 }
-
+				
+				this.geosearchOptions = options;
                 this.setGeoSearch(options);
                 if (urlparam) {
                     this.postparams[urlparam+'_wkt'] = {

@@ -10,6 +10,11 @@
     doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
     doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
 />
+<!-- nye nemlogin parametre som kommer fra signeringen-->
+<xsl:param name = "RequestId"/>
+<xsl:param name = "string_params"/>
+<xsl:param name = "SignedSignatureProof"/>
+<xsl:param name = "SignText"/>
 
 <xsl:param name = "formular"/>
 <xsl:param name = "sessionid"/>
@@ -107,6 +112,12 @@
                 </xsl:for-each>
 
                 <script type="text/javascript" language="javascript">
+				// javascript håndtering af nye nemlogin parametre der kommer fra signeringen
+				var nemlogin_ssp = '<xsl:value-of select="$SignedSignatureProof"/>';
+				var nemlogin_reqid = '<xsl:value-of select="$RequestId"/>';
+				var nemlogin_signtext = '<xsl:value-of select="$SignText"/>';
+				var url_params ='<xsl:value-of select="$string_params"/>';
+
                 var formular;
                 jQuery(function () {
                     formular = new Formular ({

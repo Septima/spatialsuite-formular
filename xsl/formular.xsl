@@ -113,11 +113,14 @@
 
                 <script type="text/javascript" language="javascript">
 				// javascript håndtering af nye nemlogin parametre der kommer fra signeringen
-				var nemlogin_ssp = '<xsl:value-of select="$SignedSignatureProof"/>';
-				var nemlogin_reqid = '<xsl:value-of select="$RequestId"/>';
-				var nemlogin_signtext = '<xsl:value-of select="$SignText"/>';
-				var url_params ='<xsl:value-of select="$string_params"/>';
-
+				
+					var nemlogin = {
+						ssp: '<xsl:value-of select="$SignedSignatureProof"/>',
+						reqid: '<xsl:value-of select="$RequestId"/>',
+						signtext: '<xsl:value-of select="$SignText"/>',
+						url_params: '<xsl:value-of select="$string_params"/>'
+					};
+				
                 var formular;
                 jQuery(function () {
                     formular = new Formular ({

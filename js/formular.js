@@ -133,7 +133,7 @@ Formular = SpatialMap.Class ({
 
                 var headerurl = jQuery(data).find('headerhtml').attr('url');
                 if (headerurl) {
-                    jQuery('header.navbar').load(headerurl);
+                    jQuery('header.navbar.skin').load(headerurl);
                 }
 
                 var profile = jQuery(data).find('reportprofile').text();

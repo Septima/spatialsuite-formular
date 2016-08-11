@@ -111,7 +111,7 @@
         <xsl:when test="headerhtml">
             <xsl:choose>
                 <xsl:when test="headerhtml[@url]">
-                    <header class="navbar"></header>
+                    <header class="navbar skin"></header>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="headerhtml" />

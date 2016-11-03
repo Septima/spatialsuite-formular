@@ -218,7 +218,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             </septimasearch>
 
             <!-- input - type="date" -->
-            <!-- Datovælger felt hvor man kan skrive en dato eller vælge.
+            <!-- Datovælger felt hvor man kan skrive en dato eller vælge. Ved at angive "today" som defaultvalue, så sættes værdien med dags dato.
                  - limitfromdatasource  - OPTIONAL - Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
                                                      Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
                                                      en dato skal pt være f.eks. 22.01.2013. Datasourcen SKAL indeholde en command, der hedder "read-dates"!

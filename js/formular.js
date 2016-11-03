@@ -2702,7 +2702,7 @@ Formular = SpatialMap.Class ({
                     }
                     jQuery('#' + this.postparams[name].id).prop('checked', val);
                 } else if (this.postparams[name].type && this.postparams[name].type == 'radiobutton') {
-                    jQuery('input:radio[name=' + this.postparams[name].id + '][value=' + val + ']').prop('checked', true);
+                    jQuery('input:radio[name=' + this.postparams[name].id + '][value="' + val + '"]').prop('checked', true);
                 } else if (this.postparams[name].type && (this.postparams[name].type == 'text' || this.postparams[name].type == 'h1' || this.postparams[name].type == 'h2')) {
                     jQuery('#' + this.postparams[name].id).html(val);
                 } else if (this.postparams[name].type && this.postparams[name].type == 'file') {

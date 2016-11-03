@@ -800,7 +800,7 @@ Formular = SpatialMap.Class ({
                                         ticket: this.getTicket(function () {}, true)
                                     }
                                 } else {
-                                    obj.options[opt[k].nodeName] = opt[k].firstChild.nodeValue;
+                                    obj.options[opt[k].nodeName] = (opt[k].firstChild === null ? '' : opt[k].firstChild.nodeValue);
                                 }
                             }
                         } else {
@@ -1822,6 +1822,9 @@ Formular = SpatialMap.Class ({
                 }
             }
         }
+
+        this.fireEvent('searchSelected', ui.item.data);
+
     },
     
     getTicket: function (callback, sync) {
@@ -1919,44 +1922,6 @@ Formular = SpatialMap.Class ({
 
             },this,options,calculateDistanceFunctionString,disablemapValue));
 
-
-
-
-
-
-
-
-            /*
-
-            jQuery('input#'+options.id).autocomplete({
-                selectFirst : true,
-                source: function(request, response) {
-                    jQuery.ajax( {
-                        scriptCharset: 'UTF-8',
-                        url: '//kortforsyningen.kms.dk/Geosearch?service=GEO&search='+ encodeURIComponent(request.term),
-                        dataType : "jsonp",
-                        autoFocus: true,
-                        data : options,
-                        success : function(result) {
-                            response(jQuery.map(result.data, function(item) {
-                                displayLabel = item.presentationString;
-                                displayValue = item.presentationString;
-                                return {
-                                    label: displayLabel,
-                                    value: displayValue,
-                                    data: item
-                                };
-                            }));
-                        }
-                    });
-                },
-                delay: 200,
-                minLength : 1,
-                select : SpatialMap.Function.bind(this.geoSearchSelected,this,options,calculateDistanceFunctionString,disablemapValue)
-            });
-
-            */
-
         },this,options));
     },
 
@@ -1998,6 +1963,9 @@ Formular = SpatialMap.Class ({
                 if (this.map && options.usegeometry) {
                     this.map.drawWKT(wkt, SpatialMap.Function.bind(this.featureDrawed, this), {styles: this.style});
                 }
+
+                this.fireEvent('searchSelected', result);
+
                 if (jQuery('#' + options.id + '_wkt').attr('value') !== '') {
                     if (cdfs) {
                         cdfs();
@@ -2007,91 +1975,6 @@ Formular = SpatialMap.Class ({
             view.blur(true);
         }
 
-        return;
-
-
-        var id = options.id;
-        if (ui.item.data.type == 'streetNameType' && disablemapValue != 'true') {
-            if (this.map) {
-                this.map.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
-
-                if (options.minzoom) {
-                    var mapstate = this.map.getMapState();
-                    if (options.minzoom < mapstate.zoomLevel) {
-                        this.map.zoomTo(options.minzoom);
-                    }
-                }
-                if (options.minscale) {
-                    var mapstate = this.map.getMapState();
-                    if (options.minscale > mapstate.scale) {
-                        this.map.zoomToScale(options.minscale);
-                    }
-                }
-            }
-            this.validAddress = false;
-            jQuery('#'+id+'_wkt').val ('');
-        } else if (ui.item.data.type == 'matrikelnummer' && disablemapValue != 'true') {
-            var x = [];
-            var y = [];
-            var p = ui.item.data.geometryWkt.replace('POLYGON((','').replace('))','').split(',');
-            for (var i=0;i<p.length;i++) {
-                var a = p[i].split(' ');
-                x.push(a[0]-0);
-                y.push(a[1]-0);
-            }
-
-            if (this.map && disablemapValue != 'true') {
-                this.map.zoomToExtent({x1:Math.min.apply(Math, x),y1:Math.min.apply(Math, y),x2:Math.max.apply(Math, x),y2:Math.max.apply(Math, y)});
-
-                if (options.minzoom) {
-                    var mapstate = this.map.getMapState();
-                    if (options.minzoom < mapstate.zoomLevel) {
-                        this.map.zoomTo(options.minzoom);
-                    }
-                }
-                if (options.minscale) {
-                    var mapstate = this.map.getMapState();
-                    if (options.minscale > mapstate.scale) {
-                        this.map.zoomToScale(options.minscale);
-                    }
-                }
-            }
-            this.validAddress = true;
-            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
-            if (this.map && options.usegeometry) {
-                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
-            }
-
-
-            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
-        } else {
-            if (this.map && disablemapValue != 'true') {
-                this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
-
-                if (options.minzoom) {
-                    var mapstate = this.map.getMapState();
-                    if (options.minzoom < mapstate.zoomLevel) {
-                        this.map.zoomTo(options.minzoom);
-                    }
-                }
-                if (options.minscale) {
-                    var mapstate = this.map.getMapState();
-                    if (options.minscale > mapstate.scale) {
-                        this.map.zoomToScale(options.minscale);
-                    }
-                }
-            }
-            this.validAddress = true;
-            jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
-            if (this.map && options.usegeometry) {
-                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
-            }
-            if (jQuery('#'+id+'_wkt').attr('value') != '') {
-                if (cdfs) {
-                    cdfs();
-                }
-            }
-        }
     },
 
 

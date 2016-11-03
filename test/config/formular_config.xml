@@ -221,8 +221,9 @@
         <header>Septima Search</header>
         <subheader>Brug Septima Search til at finde ting med i en formular. Det er f.eks. adresser, planer, virksomhedder eller alle de data, som I selv har indekseret.</subheader>
         <submitpage>formular.send.general.nomap</submitpage>
+        <js>/modules/formular/test/js/search_test.js</js>
         <content>
-            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse">
+            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse" onchange="console.log(111)">
                 <searcher>
                     <type>Septima.Search.DawaSearcher</type>
                     <title>Adresser</title>
@@ -257,7 +258,7 @@
                     <type>Septima.Search.S4IndexSearcher</type>
                     <title>S4Index</title>
                     <options>
-                        <host>http://spatialsuite3102.kpc.asus:8080/</host>
+                        <host></host>
                         <datasources>*</datasources>
                     </options>
                 </searcher>

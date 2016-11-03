@@ -436,6 +436,31 @@
         </content>
     </formular>
 
+    <formular name="addtablefromdatasource">
+        <title>Vis data afhængig af valg</title>
+        <header>Vis data afhængig af valg</header>
+        <subheader>Når brugeren vælger noget, hentes data fra en datasource og udfylder en tabel med værdierne</subheader>
+        <reportprofile>demo01</reportprofile>
+        <js>/modules/formular/test/js/tablefromdatasource.js</js>
+        <css>http://webkort.syddjurs.dk/modules/formular/css/foranst-indberet-timer.css</css>
+        <tabs class="smalltabs">true</tabs>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page>formular.save</page>
+        </submitpages>
+        <content>
+            <input id="datasource" type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input id="command" type="hidden" urlparam="command" defaultvalue="write-update-name"/>
+            <input id="navn" type="input" displayname="Navn" urlparam="name" placeholder="Indtast navn"/>
+            <input id="type" type="dropdown" displayname="Type:" urlparam="type" onchange="addTable(jQuery('#tabel_her'), 'tableviewtest_registrering',jQuery('#type').val())">
+                <option value="0" name="Vælg type"/>
+                <option value="1" name="1"/>
+                <option value="2" name="2"/>
+                <option value="3" name="3"/>
+            </input>
+            <input id="tabel_her" type="text" displayname="Tabel"/>
+        </content>
+    </formular>
 
     <formular name="pagecondition">
         <input type="hidden" urlparam="pdfheadertext1" defaultvalue="Formular til test."/>

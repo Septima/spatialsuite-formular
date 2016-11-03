@@ -752,7 +752,7 @@ Formular = SpatialMap.Class ({
                     value = node.attr('defaultvalue');
                 }
                 if (this.bootstrap === true) {
-                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="'+(req ? 'required-enabled':'')+'"><diw id="'+id+'_search"></diw><input type="hidden" id="'+id+'"/><input type="hidden" id="'+id+'_wkt"/></div></div>');
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div class="septimasearchcontainer'+(req ? ' required-enabled':'')+'"><diw id="'+id+'_search"></diw><input type="hidden" id="'+id+'"/><input type="hidden" id="'+id+'_wkt"/></div></div>');
                 } else {
                     contentcontainer.append('<tr id="'+id+'_row"><td><div class="labeldiv" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="septimasearchcontainer"><div id="'+id+'_search"></div><input type="hidden" id="'+id+'"/><input type="hidden" id="'+id+'_wkt"/></div></td></tr>');
                 }

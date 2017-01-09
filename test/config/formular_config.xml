@@ -7,7 +7,7 @@
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Validering af dropdown udfyldt fra en datasource"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
-            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="val0" datasource="formular-test-lookup" command="read" required="true" regexp=".+" validate="Der skal vælges en konsulent." condition="jQuery('#henvend_tekst').val() != '' || jQuery('#henvend_emne').val() != ''"/>
+            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="val0" datasource="formular-test-lookup" command="read" required="true" regexp=".+" validate="Arealets udnyttelse skal vælges!"/>
             <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1">
                 <option value="1" name="Bygninger"/>
                 <option value="2" name="Veje &amp; stier"/>

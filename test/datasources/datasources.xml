@@ -302,5 +302,43 @@
 
     </datasource>
 
+    <endpoint name="formular-test-lookup" endpointtype="memory" />
+    <datasource name="formular-test-lookup" endpoint="formular-test-lookup">
+        <table>
+            <metadata>
+                <name>string</name>
+                <value>string</value>
+            </metadata>
+            <row>
+                <name>Vælg</name>
+                <value></value>
+            </row>
+            <row>
+                <name>AAAA</name>
+                <value>2450</value>
+            </row>
+            <row>
+                <name>BBBBB</name>
+                <value>1599</value>
+            </row>
+            <row>
+                <name>CCCCC</name>
+                <value>2700</value>
+            </row>
+            <row>
+                <name>DDDDD</name>
+                <value>2300</value>
+            </row>
+            <row>
+                <name>EEEEE</name>
+                <value>2400</value>
+            </row>
+            <row>
+                <name>FFFFF</name>
+                <value>2850</value>
+            </row>
+        </table>
+    </datasource>
+
 
 </datasources>

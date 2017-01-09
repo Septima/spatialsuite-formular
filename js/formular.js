@@ -1186,7 +1186,11 @@ Formular = SpatialMap.Class ({
                     var option = node.find('option');
                     var list = [];
                     if (node.attr('datasource')) {
-                        list = this.dropdownFromDatasource(node.attr('datasource'));
+                        var customparams = {};
+                        if (node.attr('command')) {
+                            customparams.readcommand = node.attr('command');
+                        }
+                        list = this.dropdownFromDatasource(node.attr('datasource'), customparams);
                     } else {
                         for (var j=0;j<option.length;j++) {
                             list.push({

@@ -114,7 +114,7 @@
     <page name="formular.read.dropdown" contenttype="text/xml">
         <data handler="datasource" operation="execute-command">
            <url-parameters>
-                <url-parameter name="command" value="read-dropdown"/>
+               <url-parameter name="command">if IsDefined(readcommand) then readcommand else "read-dropdown" endif</url-parameter>
             </url-parameters>
         </data>
     </page>

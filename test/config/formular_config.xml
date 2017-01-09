@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="validatedropdown">
+        <header>Validering af dropdown udfyldt fra en datasource</header>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <content>
+            <input type="hidden" urlparam="about" defaultvalue="Validering af dropdown udfyldt fra en datasource"/>
+            <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
+            <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="val0" datasource="formular-test-lookup" command="read" required="true" regexp=".+" validate="Der skal vælges en konsulent." condition="jQuery('#henvend_tekst').val() != '' || jQuery('#henvend_emne').val() != ''"/>
+            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1">
+                <option value="1" name="Bygninger"/>
+                <option value="2" name="Veje &amp; stier"/>
+                <option value="3" name="Grønne områder"/>
+            </input>
+        </content>
+    </formular>
     <formular name="skiftkortudsnit">
         <header>Skift kortudsnit alt efter hvad der er valgt i en dropdown</header>
         <subheader></subheader>

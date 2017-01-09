@@ -122,8 +122,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             </input>
             <!-- Eller hent fra en datasource -->
             <!-- Tilføj en "datasource" attribut til input elementet.
-                 Datasourcen skal have en command, der hedder "read-dropdown".
-                 Command'en er hårdkodet for at begrænse adgangen.
+                 Tilføj en "command" attibut for at vælge hvordan data skal hentes.
                  Command'en skal returnere to colonner, der skal hedde hhv. "value" og "name". -->
             <input type="dropdown" displayname="Hvad søges:" urlparam="hvad" datasource="ds_mintabel"/>
             

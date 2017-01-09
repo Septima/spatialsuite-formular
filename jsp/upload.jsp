@@ -17,7 +17,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
-<% 
+<%
     GlobalRessources.getInstance().reloadIfNeeded();
     String wwwrootDir = GlobalRessources.getInstance().getCBInfoParam().getLocalStringValue("cbinfo.wwwroot.dir");
     String tmpDir = GlobalRessources.getInstance().getCBInfoParam().getLocalStringValue("module.formular.upload.dir");
@@ -90,16 +90,18 @@
        long n = Math.abs(rand.nextLong() % 1000000);
        orgFileName = uploadedFilename;
        filename = formular+"_" + n +"_"+uploadedFilename;
+       filename = filename.replaceAll(",", "_");
+       filename = filename.replaceAll(";", "_");
        uploadedFilename = tmpDir + File.separator + filename;
        File uploadedFile = new File(uploadedFilename);
-       fileUpload.write(uploadedFile);  
+       fileUpload.write(uploadedFile);
    }
-   
+
    if (callbackID == null)
 	   callbackID = "fileupload";
    if (callbackHandler == null)
          callbackHandler = "parent.uploadFilename";
-   
+
    out.println("<body onload=\"" + callbackHandler + "('" + filename.replace('\\', '/') + "','"+callbackID+"','"+orgFileName+"');\">");
 //    out.println("Fil uploadet og skrevet til: " + uploadedFilename);
    out.println("</body>");

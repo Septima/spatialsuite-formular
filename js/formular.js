@@ -2425,8 +2425,12 @@ Formular = SpatialMap.Class ({
     populateDropdown: function (dropdown, list) {
         dropdown.empty();
         for (var j=0;j<list.length;j++) {
-            var checked = (list[j].checked ? ' selected="selected"' : '');
-            dropdown.append('<option value="'+list[j].value+'"'+checked+' '+(list[j].disabled === true ? 'disabled="disabled' : '')+'>'+list[j].name+'</option>');
+            var checked = list[j].checked;
+            if (typeof list[j].selected !== 'undefined') {
+                checked = list[j].selected;
+            }
+            var selected = (checked ? ' selected="selected"' : '');
+            dropdown.append('<option value="'+list[j].value+'"'+selected+' '+(list[j].disabled === true ? 'disabled="disabled' : '')+'>'+list[j].name+'</option>');
         }
     },
     

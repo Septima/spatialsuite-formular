@@ -2092,8 +2092,9 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Test af checkbokse"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
-            <input type="checkbox" displayname="Er du sikker:" urlparam="godkendt" defaultvalue="true"/>
-            <input type="checkbox" displayname="Send kvitering:" urlparam="val0" defaultvalue="false"/>
+            <input type="checkbox" displayname="Er du sikker" urlparam="godkendt" defaultvalue="true"/>
+            <input type="checkbox" displayname="Vis/skjul" id="visskjul" urlparam="val0" defaultvalue="false"/>
+            <input type="checkbox" displayname="Send kvitering" urlparam="val0" defaultvalue="false" condition="jQuery('#visskjul').is(':checked')"/>
         </content>
     </formular>
     <formular name="encoding">

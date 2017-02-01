@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="table">
+        <title>Vis inputfelter som tabel</title>
+        <header>Vis inputfelter som tabel</header>
+        <subheader></subheader>
+        <submitpage>formular.send.general.nomap</submitpage>
+        <reportprofile>borgergis_formular_rapport</reportprofile>
+        <js>/modules/formular/test/js/addtabledata.js</js>
+        <css>/modules/formular/test/css/addtabledata.css</css>
+        <tabs>true</tabs>
+
+        <content displayname="Side 1">
+            <input type="text" displayname=""/>
+            <input type="text" displayname=""/>
+
+            <input type="text" displayname="&lt;strong&gt;Det er muligt at udfylde felterne forkert og alligevel sende formularen&lt;/strong&gt;"/>
+
+            <input type="text" displayname="&lt;g&gt;Felter markeret med * skal udfyldes.&lt;/g&gt;"/>
+
+            <input type="text" displayname=""/>
+
+            <input displayname="" id="tabel_aktivevirksomheder" type="text"/>
+
+            <input type="input"	displayname="Fornavn og efternavn:"	  urlparam="navn"	     required="true"  regexp=".+"	validate="Skal være udfyldt"/>
+
+            <columns >
+                <column class="col-sm-4">
+                    <input type="input"	 displayname="Telefonnummer:"   urlparam="telefon"    regexp="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]" required="true"  validate="Skal være udfyldt" />
+                </column>
+                <column class="col-sm-8">
+                    <input type="input"	 displayname="E-mail:"	        urlparam="email"	    required="true"  regexp="^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$" 	 validate="Skal være udfyldt"/>
+                </column>
+            </columns>
+            <columns >
+                <column class="col-sm-4">
+                    <input type="input"	 displayname="CVR-nummer:"   regexp="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"  required="true"  urlparam="cvr" />
+                </column>
+                <column class="col-sm-4">
+                    <input type="input"	 displayname="CPR-nummer:"	 regexp="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"  required="true"  urlparam="cpr" />
+                </column>
+            </columns>
+        </content>
+        <content displayname="Side 2" >
+
+            <input type="date"      displayname="Dato:"  urlparam="dato"	/>
+        </content>
+    </formular>
+
     <formular name="validatedropdown">
         <header>Validering af dropdown udfyldt fra en datasource</header>
         <submitpage>formular.send.general.nomap</submitpage>

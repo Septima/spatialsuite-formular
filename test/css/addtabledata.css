@@ -1,0 +1,187 @@
+.col-custom {
+    width: 20%;
+    display: inline-block;
+}
+.col-custom input {
+    width: 80px;
+}
+.col-custom label,
+.col-custom .labeldiv {
+    display: none;
+}
+.col-custom td {
+    padding: 0;
+}
+.col-custom > div.form-group {
+    margin: 0;
+    padding: 0;
+}
+.col-custom > div.form-group input {
+    width: 100%;
+    border: 0;
+    word-wrap: break-word;
+}
+div.col-custom-text > div.form-group > div {
+    padding: 6px;
+    color: #555;
+}
+
+.col-custom-10 {
+    width: 10%;
+    display: inline-block;
+    word-wrap: break-word;
+}
+.col-custom-10 input {
+    width: 80px;
+    word-wrap: break-word;
+}
+.col-custom-10 label,
+.col-custom .labeldiv {
+    display: none;
+    word-wrap: break-word;
+}
+.col-custom-10 td {
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-10 > div.form-group {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-10 > div.form-group input {
+    width: 100%;
+    border: 0;
+    word-wrap: break-word;
+}
+
+.col-custom-40 {
+    width: 40%;
+    display: inline-block;
+    word-wrap: break-word;
+}
+.col-custom-40 input {
+    width: 80px;
+    word-wrap: break-word;
+}
+.col-custom-40 label,
+.col-custom .labeldiv {
+    display: none;
+    word-wrap: break-word;
+}
+.col-custom-40 td {
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-40 > div.form-group {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-40 > div.form-group input {
+    width: 100%;
+    border: 0;
+    word-wrap: break-word;
+}
+
+.col-custom-30 {
+    width: 30%;
+    display: inline-block;
+    word-wrap: break-word;
+}
+.col-custom-30 input {
+    width: 80px;
+    word-wrap: break-word;
+}
+.col-custom-30 label,
+.col-custom .labeldiv {
+    display: none;
+    word-wrap: break-word;
+}
+.col-custom-30 td {
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-30 > div.form-group {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-30 > div.form-group input {
+    width: 100%;
+    border: 0;
+    word-wrap: break-word;
+}
+
+.col-custom-dato {
+    width: 15%;
+    display: inline-block;
+    word-wrap: break-word;
+}
+.col-custom-dato input {
+    width: 80px;
+    word-wrap: break-word;
+}
+.col-custom-dato label,
+.col-custom .labeldiv {
+    display: none;
+    word-wrap: break-word;
+}
+.col-custom-dato td {
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-dato > div.form-group {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+.col-custom-dato > div.form-group input {
+    width: 100%;
+    border: 0;
+    word-wrap: break-word;
+}
+
+.col-custom.custom-header {
+    font-weight: 600;
+}
+
+.custom-header {
+    cursor: pointer;
+}
+.custom-header span.sortable {
+    display: none;
+    background-image: url('arrow_drop_down.png');
+    width: 25px;
+    height: 10px;
+    background-size: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.custom-header.sort-asc {
+}
+.custom-header.sort-asc span.sortable {
+    /*display: inline-block;*/
+}
+.custom-header.sort-desc {
+}
+.custom-header.sort-desc span.sortable {
+    /*display: inline-block;*/
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+
+
+
+
+.row.row-custom {
+    border: 1px solid #C0C0C0;
+}
+
+.resizedTextbox textarea {
+    height: 250px;
+}

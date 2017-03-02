@@ -69,7 +69,7 @@
                                         <xsl:element name="a">
                                             <xsl:attribute name="class">list-group-item</xsl:attribute>
                                             <xsl:attribute name="role">button</xsl:attribute>
-                                            <xsl:attribute name="href">/cbkort?page=formular&amp;formular=<xsl:value-of select="@name"/>
+                                            <xsl:attribute name="href">/spatialmap?page=formular.skin&amp;formular=<xsl:value-of select="@name"/>
                                             </xsl:attribute>
                                             <h4 class="list-group-item-heading">
                                                 <xsl:value-of select="header"/>

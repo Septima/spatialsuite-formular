@@ -1675,6 +1675,8 @@ Formular = SpatialMap.Class ({
                 jQuery('.tabcontainer div#tabsep'+i).addClass('active');
             }
         }
+
+        this.searchUpdate();
     },
     
     setAddressSelect: function (options) {
@@ -1932,6 +1934,10 @@ Formular = SpatialMap.Class ({
             },this,options,calculateDistanceFunctionString,disablemapValue));
 
         },this,options));
+    },
+
+    searchUpdate: function () {
+        jQuery('.ssInput').css({width: '80%'});
     },
 
     septimaSearchSelected: function (options,cdfs,disablemapValue,view,result) {

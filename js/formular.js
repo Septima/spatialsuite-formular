@@ -780,6 +780,10 @@ Formular = SpatialMap.Class ({
                     options.minscale = node.attr('minscale')-0;
                 }
 
+                if (node.attr('onchange')) {
+                    options.change = new Function (node.attr('onchange'));
+                }
+
                 options.searchers = [];
 
                 var searchers = node.find('searcher');
@@ -1988,6 +1992,10 @@ Formular = SpatialMap.Class ({
                 }
             }
             view.blur(true);
+
+            if (typeof options.change !== 'undefined') {
+                options.change(result);
+            }
         }
 
     },

@@ -285,7 +285,7 @@
         <submitpage>formular.send.general.nomap</submitpage>
         <js>/modules/formular/test/js/search_test.js</js>
         <content>
-            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse" onchange="console.log(111)">
+            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse" onchange="search_change.apply(this,arguments)">
                 <searcher>
                     <type>Septima.Search.DawaSearcher</type>
                     <title>Adresser</title>

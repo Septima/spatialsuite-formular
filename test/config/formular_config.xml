@@ -1,6 +1,321 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="skimmelsvamp">
+        <title>Anmeld skimmelsvamp</title>
+        <header>Anmeld skimmelsvamp</header>
+        <subheader></subheader>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.skimmelsvamp.gemdata</page>
+            <!--             Se mails.txt for beskrivelse af mails -->
+            <!--             Udlejer er kontaktet og udlejers email er angivet -->
+            <page condition="jQuery('#ejerkontaktet_forstegang').val().length > '5' &amp;&amp; jQuery('#udlejer_email').val().length > '5'">formular.skimmelsvamp.send_mail_til_anmelder_1</page>
+            <page condition="jQuery('#ejerkontaktet_forstegang').val().length > '5' &amp;&amp; jQuery('#udlejer_email').val().length > '5'">formular.skimmelsvamp.send_mail_til_udlejer_1</page>
+            <page condition="jQuery('#ejerkontaktet_forstegang').val().length > '5' &amp;&amp; jQuery('#udlejer_email').val().length > '5'">formular.skimmelsvamp.send_mail_til_sagsbehandler_1</page>
+            <page condition="jQuery('#ejerkontaktet_forstegang').val().length > '5' &amp;&amp; jQuery('#udlejer_email').val().length == '0'">formular.skimmelsvamp.send_mail_til_anmelder_2</page>
+            <page condition="jQuery('#ejerkontaktet_forstegang').val().length > '5' &amp;&amp; jQuery('#udlejer_email').val().length == '0'">formular.skimmelsvamp.send_mail_til_sagsbehandler_2</page>
+            <page condition="jQuery('#ejerkontaktet_forstegang').val().length == '0'">formular.skimmelsvamp.send_mail_til_anmelder_3</page>
+            <page condition="jQuery('#ejerkontaktet_forstegang').val().length == '0'">formular.skimmelsvamp.send_mail_til_sagsbehandler_3</page>
+        </submitpages>
+
+        <reportprofile>demo01</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>kvittering</reportxsl>
+        <localstore clear="false">true</localstore>
+
+        <tabs>true</tabs>
+        <content displayname="Kontakt til udlejer">
+            <input type="date" displayname="Hvornår kontaktede du udlejer første gang?" id="ejerkontaktet_forstegang"
+                   urlparam="ejerkontaktet_forstegang" />
+            <input type="input" disabled="true" displayname="Hvor mange gange har du kontaktet udlejer?"
+                   urlparam="ejerkontaktet_antalgange" required="true" />
+            <input type="textarea" urlparam="ejer_handlinger"
+                   displayname="Hvad har din udlejer gjort for at udbedre skaderne?)"
+                   required="true" />
+            <input type="file" displayname="Bilag1: Seneste korrespondance med udlejer"
+                   urlparam="ejer_seneste_korrespondance" />
+            <input type="file" displayname="Vedhæft eventuelt anden korrespondance"
+                   urlparam="ejer_anden_korrespondance" />
+
+            <input type="text" displayname="Er boligen opsagt?" />
+            <input type="radiobutton" urlparam="bolig_opsagt" id="bolig_opsagt">
+                <option value="ja" name="Ja" />
+                <option value="nej" name="Nej" />
+            </input>
+            <input condition="jQuery('#bolig_opsagt:checked').val() === 'ja'"
+                   type="date" displayname="Hvornår er udflytningsdato?" urlparam="bolig_opsagt_udflytning_dato" />
+
+        </content>
+
+        <content displayname="Hvor/Hvad">
+            <septimasearch urlparam="address" displayname="Sted:"
+                           usegeometry="false" placeholder="Søg adresse" required="true">
+                <searcher>
+                    <type>Septima.Search.DawaSearcher</type>
+                    <title>Adresser</title>
+                    <options>
+                        <kommunekode>101</kommunekode>
+                    </options>
+                </searcher>
+            </septimasearch>
+            <input type="text" displayname="I hvilke(t) rum er der problemer?" />
+
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="Køkken" urlparam="problem_koekken"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Stue" urlparam="problem_stue"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Badeværelse" urlparam="problem_bad"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Soveværelse" urlparam="problem_sove"
+                           defaultvalue="false" />
+                </column>
+                <column class="col-sm-8">
+                    <input type="checkbox" displayname="Værelse 1" urlparam="problem_rum_1"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Værelse 2" urlparam="problem_rum_2"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Bryggers" urlparam="problem_bryggers"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Gang" urlparam="problem_gang"
+                           defaultvalue="false" />
+                </column>
+            </columns>
+
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="Andet" urlparam="problem_andet"
+                           defaultvalue="false" id="problem_andet" />
+                </column>
+                <column class="col-sm-8">
+                    <input condition="jQuery('#problem_andet').is(':checked') === true"
+                           type="textarea" urlparam="problem_andet_text" displayname="Hvilket andet rum?" />
+                </column>
+            </columns>
+
+            <input type="textarea" urlparam="hvordan_opdaget"
+                   displayname="Hvordan opdagede du problemet?" required="true" />
+            <input type="date" displayname="Hvornår opdagede du problemet?"
+                   urlparam="hvornaar_opdaget" required="true" />
+            <input type="textarea" urlparam="bemaerkning" displayname="Bemærkninger:" />
+        </content>
+
+        <content displayname="Uddybning">
+            <input type="text" displayname="I hvilke(t) rum har du oplevet lugtgener?" />
+
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="Ingen" urlparam="lugt_ingen"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Køkken" urlparam="lugt_koekken"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Stue" urlparam="lugt_stue"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Badeværelse" urlparam="lugt_bad"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Soveværelse" urlparam="lugt_sove"
+                           defaultvalue="false" />
+                </column>
+                <column class="col-sm-8">
+                    <input type="checkbox" displayname="Værelse 1" urlparam="lugt_rum_1"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Værelse 2" urlparam="lugt_rum_2"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Bryggers" urlparam="lugt_bryggers"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Gang" urlparam="lugt_gang"
+                           defaultvalue="false" />
+                </column>
+            </columns>
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="Andet" urlparam="lugt_andet"
+                           defaultvalue="false" id="lugt_andet" />
+                </column>
+                <column class="col-sm-8">
+                    <input condition="jQuery('#lugt_andet').is(':checked') === true"
+                           type="textarea" urlparam="lugt_andet_text" displayname="Hvilket andet rum?" />
+                </column>
+            </columns>
+
+
+            <input type="text" displayname="I hvilke(t) rum er der misfarvning eller vækst?" />
+
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="Ingen" urlparam="synligt_ingen"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Køkken" urlparam="synligt_koekken"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Stue" urlparam="synligt_stue"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Badeværelse" urlparam="synligt_bad"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Soveværelse" urlparam="synligt_sove"
+                           defaultvalue="false" />
+                </column>
+                <column class="col-sm-8">
+                    <input type="checkbox" displayname="Værelse 1" urlparam="synligt_rum_1"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Værelse 2" urlparam="synligt_rum_2"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Bryggers" urlparam="synligt_bryggers"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Gang" urlparam="synligt_gang"
+                           defaultvalue="false" />
+                </column>
+            </columns>
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="Andet" urlparam="synligt_andet"
+                           defaultvalue="false" id="synligt_andet" />
+                </column>
+                <column class="col-sm-8">
+                    <input condition="jQuery('#synligt_andet').is(':checked') === true"
+                           type="textarea" urlparam="synligt_andet_text" displayname="Hvilket andet rum?" />
+                </column>
+            </columns>
+
+            <input type="dropdown" displayname="Hvor store områder er misfarvede eller med vækst?"
+                   urlparam="areal_misfarvet_vaekst" required="true">
+                <option value="5cm gange 5cm" name="5cm gange 5cm" />
+                <option value="10cm gange 10cm" name="10cm gange 10cm" />
+                <option value="20cm gange 20cm" name="20cm gange 20cm" />
+                <option value="Større end 20cm gange 20cm" name="Større end 20cm gange 20cm" />
+            </input>
+
+            <input type="text"
+                   displayname="Fungerer alle friluftventiler og aftræk fra køkken og badeværelse?" />
+            <columns>
+                <column class="col-sm-4">
+                    <input type="radiobutton" id="fungerer_ventiler" urlparam="fungerer_ventiler"
+                           defaultvalue="ja">
+                        <option value="ja" name="Ja" />
+                        <option value="nej" name="Nej" />
+                    </input>
+                </column>
+                <column class="col-sm-8">
+                    <input condition="jQuery('#fungerer_ventiler:checked').val() === 'nej'"
+                           type="textarea" urlparam="fungerer_ventiler_bemaerkning"
+                           displayname="Hvad fungerer ikke?" />
+                </column>
+            </columns>
+
+            <input type="text" displayname="Fungerer dit varmeanlæg og radiatorer?" />
+            <columns>
+                <column class="col-sm-4">
+                    <input type="radiobutton" id="fungerer_varme" urlparam="fungerer_varme"
+                           defaultvalue="ja">
+                        <option value="ja" name="Ja" />
+                        <option value="nej" name="Nej" />
+                    </input>
+                </column>
+                <column class="col-sm-8">
+                    <input condition="jQuery('#fungerer_varme:checked').val() === 'nej'"
+                           type="textarea" urlparam="fungerer_varme_bemaerkning" displayname="Hvad fungerer ikke?" />
+                </column>
+            </columns>
+
+            <input type="textarea" urlparam="problemer_andre"
+                   displayname="Skriv her, hvis du har kendskab til andre problemer (Vandskade f.eks.)" />
+
+            <input type="file" displayname="Vedhæft billede:" urlparam="filnavn_1" />
+            <input type="file" displayname="Vedhæft billede:" urlparam="filnavn_2" />
+            <input type="file" displayname="Vedhæft billede:" urlparam="filnavn_3" />
+            <input type="file" displayname="Vedhæft billede:" urlparam="filnavn_4" />
+
+        </content>
+
+        <content displayname="Dine forhold">
+            <input type="dropdown" displayname="Hvor tit gør du rent?"
+                   urlparam="rengoring_frekvens" required="true">
+                <option value="Hver anden dag" name="Hver anden dag" />
+                <option value="Ugentligt" name="Ugentligt" />
+                <option value="Hver fjortende dag" name="Hver fjortende dag" />
+                <option value="Sjældnere end hver fjortende dag" name="Sjældnere" />
+            </input>
+
+            <input type="dropdown" displayname="Hvor tit lufter du ud?"
+                   urlparam="udluftning_frekvens" required="true">
+                <option value="Hver dag" name="Hver dag" />
+                <option value="Hver anden dag" name="Hver anden dag" />
+                <option value="Ugentligt" name="Ugentligt" />
+                <option value="To gange Ugentligt" name="To gange Ugentligt" />
+                <option value="Hver fjortende dag" name="Hver fjortende dag" />
+                <option value="Sjældnere end hver fjortende dag" name="Sjældnere" />
+            </input>
+
+            <input type="text" displayname="Tørrer du tøj inde?" />
+            <input type="radiobutton" urlparam="torretoj_inde">
+                <option value="ja" name="Ja" />
+                <option value="nej" name="Nej" />
+            </input>
+
+            <input type="text" displayname="Har du husdyr?" />
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="Ingen" urlparam="husdyr_ingen"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Kat" urlparam="husdyr_kat"
+                           defaultvalue="false" />
+                </column>
+                <column class="col-sm-8">
+                    <input type="checkbox" displayname="Hund" urlparam="husdyr_hund"
+                           defaultvalue="false" />
+                    <input type="checkbox" displayname="Akvarium" urlparam="husdyr_akvarium"
+                           defaultvalue="false" />
+                </column>
+            </columns>
+
+            <columns>
+                <column class="col-sm-4">
+                    <input type="checkbox" displayname="andet" urlparam="husdyr_andet"
+                           defaultvalue="false" id="husdyr_andet" />
+                </column>
+                <column class="col-sm-8">
+                    <input condition="jQuery('#husdyr_andet').is(':checked') === true"
+                           type="textarea" urlparam="husdyr_andet_text" displayname="Hvilket andet husdyr?" />
+                </column>
+            </columns>
+
+            <input type="input" displayname="Antal husdyr" urlparam="antal_husdyr" />
+
+            <input type="text" displayname="Hvilken temperatur har du typisk i følgende rum?" />
+            <columns>
+                <column class="col-sm-4">
+                    <input type="input" displayname="Køkken" urlparam="temperatur_koekken" />
+                    <input type="input" displayname="Stue" urlparam="temperatur_stue" />
+                    <input type="input" displayname="Badeværelse" urlparam="temperatur_bad" />
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="Soveværelse" urlparam="temperatur_sove" />
+                    <input type="input" displayname="Værelse 1" urlparam="temperatur_rum_1" />
+                    <input type="input" displayname="Værelse 2" urlparam="temperatur_rum_2" />
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="Bryggers" urlparam="temperatur_bryggers" />
+                    <input type="input" displayname="Gang" urlparam="temperatur_gang" />
+                </column>
+            </columns>
+
+        </content>
+
+        <content displayname="Kontaktoplysninger">
+            <input type="input" displayname="Dit navn" urlparam="navn_franemid" />
+            <input type="input" displayname="Din adresse" urlparam="anmelder_adresse" />
+            <input type="input" displayname="Dit telefonnummer" urlparam="anmelder_telefonnummer" />
+            <input type="input" displayname="Din email" urlparam="anmelder_email_1" id="anmelder_email_1"/>
+            <input type="input" displayname="Gentag din email" urlparam="anmelder_email_2" />
+
+            <input type="input" displayname="Udlejers navn" urlparam="udlejer_navn" />
+            <input type="input" displayname="Udlejers adresse" urlparam="udlejer_adresse" />
+            <input type="input" displayname="Udlejers telefonnummer" urlparam="udlejer_telefonnummer" />
+            <input type="input" displayname="Udlejers email" urlparam="udlejer_email" id="udlejer_email"/>
+        </content>
+    </formular>
+
     <formular name="table">
         <title>Vis inputfelter som tabel</title>
         <header>Vis inputfelter som tabel</header>

@@ -1627,6 +1627,7 @@ Formular = SpatialMap.Class ({
         } else {
             jQuery('.buttons #previous').show();
             jQuery('.buttons #next').show();
+	    jQuery('.buttons #submit').hide();
             if (this.currentTab === 0) {
                 jQuery('.buttons a#previous').hide();
             }

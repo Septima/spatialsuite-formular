@@ -323,6 +323,7 @@
         <submitpage>formular.send.general.nomap</submitpage>
         <reportprofile>borgergis_formular_rapport</reportprofile>
         <js>/modules/formular/test/js/addtabledata.js</js>
+        <js>https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js</js>
         <css>/modules/formular/test/css/addtabledata.css</css>
         <tabs>true</tabs>
 
@@ -358,8 +359,9 @@
             </columns>
         </content>
         <content displayname="Side 2" >
-
-            <input type="date"      displayname="Dato:"  urlparam="dato"	/>
+            <input type="h1" class="section" displayname="Tilfredshedsundersøgelse"/>
+            <input displayname="Dato for seneste tilfredshedsundersøgelse:" id="survey_sendt_dato" defaultvalue="10.01.2017" disabled="true"/>
+            <input type="checkbox" displayname="Send tilfredshedsundersøgelse." urlparam="send_survey" id="send_survey" defaultvalue="false" condition="moment().diff(moment(jQuery('#survey_sendt_dato').val(),'DD.MM.YYYY'),'days') &gt; 190"/>
         </content>
     </formular>
 

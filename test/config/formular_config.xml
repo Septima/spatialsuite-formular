@@ -1018,7 +1018,52 @@
 
             <input type="textarea" displayname="Bemærkninger" urlparam="val12"/>
 
-        </content>    </formular>
+        </content>
+    </formular>
+
+    <formular name="skin2">
+        <title>Formular (skin) med submitbutton</title>
+        <header>Formular (skin) med submitbutton</header>
+        <headerhtml url="/modules/formular/test/html/testheader.html">TEST</headerhtml>
+        <subheader>Formular med skin og custom submitbutton</subheader>
+        <reportprofile>demo01</reportprofile>
+        <tabs>true</tabs>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <submitbutton displayname="Næste fase" function="nextPhase();"/>
+        <js>/modules/formular/test/js/test.js</js>
+        <content displayname="Anmelder">
+            <input type="text" displayname="Virksomheder skal anmelde farligt affald til Albertslund Kommune uanset mængden af det farlige affald som beskrevet i
+„&lt;a href='http://albertslund.dk/media/104629/Regulativ-for-erhvervsaffald.pdf'&gt;Regulativ for erhvervsaffald&lt;/a&gt;“ og i
+&lt;a href='https://www.retsinformation.dk/Forms/R0710.aspx?id=144826#Kap11'&gt;affaldsbekendtgørelsen kap. 11&lt;/a&gt;."></input>
+            <input type="hidden" urlparam="datasource" defaultvalue="formular-test"/>
+            <input type="h1" class="section" displayname="Anmelder"/>
+            <input type="hidden" urlparam="about" defaultvalue="Anmeldelse af asbestaffald"/>
+            <columns>
+                <column class="col-sm-8">
+                    <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn"/>
+                </column>
+                <column class="col-sm-4">
+                    <input type="input" displayname="CVR.nr." urlparam="val1" placeholder="Indtast virksomheds CVR nr."/>
+                </column>
+            </columns>
+        </content>
+        <content displayname="Hvor stammer affaldet fra?">
+            <input type="h1" class="section" displayname="Hvor stammer affaldet fra?"/>
+            <columns>
+                <column>
+                    <input id="startdate" type="date" displayname="Forventet dato for arbejdets påbegyndelse" urlparam="val10" mindate="0" onchange="setDate('enddate',jQuery('#startdate').val(),0)"/>
+                </column>
+                <column>
+                    <input id="enddate"   type="date" displayname="Forventet dato for arbejdets afslutning"   urlparam="val11" mindate="0"/>
+                </column>
+            </columns>
+
+            <input type="textarea" displayname="Bemærkninger" urlparam="val12"/>
+
+        </content>
+    </formular>
 
     <formular name="timerange">
         <header>Dato og tidsvælger med begrænsning af muligt tidsinterval</header>

@@ -220,7 +220,16 @@
                         <div class="buttons">
                             <button id="previous" class="btn btn-primary button-prev pull-left">Forrige</button>
                             <button id="next" class="btn btn-primary button-next pull-right">Næste</button>
-                            <button id="submit" class="btn btn-primary pull-right">Indsend</button>
+                            <button id="submit" class="btn btn-primary pull-right">
+                                <xsl:choose>
+                                    <xsl:when test="submitbutton">
+                                        <xsl:value-of select="submitbutton/@displayname" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        Indsend
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </button>
                             <div class="clearfix"></div>
                         </div>
                     </div>

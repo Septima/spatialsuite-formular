@@ -441,7 +441,20 @@ Formular = SpatialMap.Class ({
                             jQuery('.buttons #next').click(SpatialMap.Function.bind(this.next,this));
                             this.setButtons();
 
-                            jQuery('.buttons #submit').click(SpatialMap.Function.bind(this.submit,this));
+                            var button = jQuery('.buttons #submit');
+                            var func = jQuery(data).find('submitbutton').attr('function');
+                            if (func) {
+                                func = (new Function ('return ' + func));
+                            }
+                            button.click(SpatialMap.Function.bind(function (func) {
+                                var resp = true;
+                                if(func) {
+                                    resp = func();
+                                }
+                                if (resp !== false) {
+                                    this.submit()
+                                }
+                            },this,func));
 
                         } else {
 

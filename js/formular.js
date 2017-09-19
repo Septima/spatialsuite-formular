@@ -442,7 +442,7 @@ Formular = SpatialMap.Class ({
                             this.setButtons();
 
                             var button = jQuery('.buttons #submit');
-                            var func = jQuery(data).find('submitbutton').attr('function');
+                            var func = jQuery(data).find(':root > submitbutton').attr('function');
                             if (func) {
                                 func = (new Function ('return ' + func));
                             }
@@ -1494,6 +1494,10 @@ Formular = SpatialMap.Class ({
             break;
             case 'submitbutton':
                 var button = jQuery('<button>'+node.attr('displayname')+'</button>');
+
+                if (this.bootstrap === true) {
+                    button.addClass('btn btn-primary pull-right');
+                }
                 var func = node.attr('function');
                 if (func) {
                     button.click (new Function (func));
@@ -3030,23 +3034,24 @@ Formular = SpatialMap.Class ({
             jQuery('#messageloading').append('<div id="message_loading">'+message+'</div>');
 
             jQuery('#messagetext').empty();
-            jQuery('#messagebuttons').empty();
-            for (var i=0;i<this.submitbuttons.length;i++) {
+        }
 
-                if (typeof this.submitbuttons[i].condition === 'undefined') {
-                    this.submitbuttons[i].condition = function () {return true};
-                } else {
-                    if (!(this.submitbuttons[i].condition instanceof Function)) {
-                        this.submitbuttons[i].condition = new Function ('return '+this.submitbuttons[i].condition);
-                    }
-                }
+        jQuery('#messagebuttons').empty();
+        for (var i=0;i<this.submitbuttons.length;i++) {
 
-                if (this.submitbuttons[i].condition() === true) {
-                    jQuery('#messagebuttons').append(this.submitbuttons[i].e);
+            if (typeof this.submitbuttons[i].condition === 'undefined') {
+                this.submitbuttons[i].condition = function () {return true};
+            } else {
+                if (!(this.submitbuttons[i].condition instanceof Function)) {
+                    this.submitbuttons[i].condition = new Function ('return '+this.submitbuttons[i].condition);
                 }
             }
+
+            if (this.submitbuttons[i].condition() === true) {
+                jQuery('#messagebuttons').append(this.submitbuttons[i].e);
+            }
         }
-        
+
         if (this.pages.length > 0) {
             
             var pages = this.pages.slice(0);

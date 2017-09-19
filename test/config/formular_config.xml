@@ -1031,7 +1031,7 @@
         <submitpages>
             <page parser="setFrid">formular.create-frid</page>
         </submitpages>
-        <submitbutton displayname="Næste fase" function="nextPhase();"/>
+        <submitbutton displayname="Send til Kommunen" function="alert('Tak for det...');"/>
         <js>/modules/formular/test/js/test.js</js>
         <content displayname="Anmelder">
             <input type="text" displayname="Virksomheder skal anmelde farligt affald til Albertslund Kommune uanset mængden af det farlige affald som beskrevet i
@@ -1045,7 +1045,7 @@
                     <input type="input" displayname="Virksomhed" urlparam="val0" placeholder="Indtast virksomheds navn"/>
                 </column>
                 <column class="col-sm-4">
-                    <input type="input" displayname="CVR.nr." urlparam="val1" placeholder="Indtast virksomheds CVR nr."/>
+                    <input type="input" displayname="CVR.nr." id="val1" urlparam="val1" placeholder="Indtast virksomheds CVR nr."/>
                 </column>
             </columns>
         </content>
@@ -1062,6 +1062,7 @@
 
             <input type="textarea" displayname="Bemærkninger" urlparam="val12"/>
 
+            <submitbutton displayname="Næste fase" function="nextPhase();" condition="jQuery('#val1').val() === ''"/>
         </content>
     </formular>
 

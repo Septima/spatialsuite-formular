@@ -255,6 +255,14 @@
                         <div id="messageloading" class="alert alert-warning"></div>
                         <div id="message"></div>
                         <div id="submessage"></div>
+
+                        <div id="messagebuttons" class="buttons">
+                            <button class="btn btn-primary pull-right">
+                                test
+                            </button>
+                            <div class="clearfix"></div>
+                        </div>
+
                     </div>
                 </div>
     

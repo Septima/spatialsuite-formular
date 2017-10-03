@@ -772,6 +772,7 @@ Formular = SpatialMap.Class ({
 
 
                 var options = {
+                    hideOnSelect: true,
                     placeholder: node.attr('placeholder'),
                     resources: node.attr('resources') || 'Adresser',
                     area: node.attr('filter') || '',
@@ -795,6 +796,10 @@ Formular = SpatialMap.Class ({
 
                 if (node.attr('onchange')) {
                     options.change = new Function (node.attr('onchange'));
+                }
+
+                if (node.attr('hideOnSelect')) {
+                    options.hideOnSelect = (node.attr('hideOnSelect') === 'true');
                 }
 
                 options.searchers = [];
@@ -2009,7 +2014,10 @@ Formular = SpatialMap.Class ({
                     }
                 }
             }
-            view.blur(true);
+
+            if (options.hideOnSelect === true) {
+                view.blur(true);
+            }
 
             if (typeof options.change !== 'undefined') {
                 options.change(result);

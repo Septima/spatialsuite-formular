@@ -2813,6 +2813,20 @@ Formular = SpatialMap.Class ({
             var confirmtext = result.confirmtext;
             params = result.params;
             
+	    /* Hook for at kalde en ekstern function inden data 
+             data bliver submittet.
+             i en ekstern fil skal man så gøre noget der ligner:
+
+             Formular.prototype.hook = function(params){
+                 params = filterAndCombine(params,data);
+                 return params
+             }
+             */
+            if(this.hook && typeof this.hook === "function"){
+                params = this.hook(params);
+            }
+            /* end of hook */	
+		
             jQuery('div#content').hide();
             jQuery('#message').show();
             jQuery('#messagetext').empty();

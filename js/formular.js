@@ -928,7 +928,7 @@ Formular = SpatialMap.Class ({
                     contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div id="'+id+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></td></tr>');
                 }
                 var style = node.find('style');
-				if (typeof style !== 'undefiend' && style.length > 0) {
+				if (typeof style !== 'undefined' && style.length > 0) {
 					var styleNodes = jQuery(style[0]).children();
 					for (var j=0; j<styleNodes.length; j++) {
 						this.style[styleNodes[j].nodeName] = styleNodes[j].firstChild.nodeValue;
@@ -3611,7 +3611,7 @@ Formular = SpatialMap.Class ({
 
             if (typeof options.keepMap !== undefined && options.keepMap === true) {
 
-                if (typeof this.currentMapState !== 'undefiend') {
+                if (typeof this.currentMapState !== 'undefined') {
                     var x = this.currentMapState.extent[0]+(this.currentMapState.extent[2]-this.currentMapState.extent[0])/2;
                     var y = this.currentMapState.extent[1]+(this.currentMapState.extent[3]-this.currentMapState.extent[1])/2;
                     var z = this.currentMapState.zoomLevel;

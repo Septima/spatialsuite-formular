@@ -3528,6 +3528,10 @@ Formular = SpatialMap.Class ({
             var message = 'Error from server';
             var type = 'error';
 
+            if ((typeof error === 'undefined' || error == null) && typeof data.exception !== 'undefined' && typeof data.exception.message !== 'undefined') {
+                message = data.exception.message;
+            }
+
             if (error && error.message) {
                 message = error.message;
             } else {
@@ -3868,7 +3872,7 @@ Formular.prototype.setFrid = function (data, params, urlparamname) {
 
 Formular.prototype.setPdf = function (data, params, urlparamname) {
     params = this.handleError(data, params);
-    if (params != null) {
+    if (params != null && typeof data.exception === 'undefined') {
         if (!urlparamname) {
             urlparamname = 'frpdf';
         }

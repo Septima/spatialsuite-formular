@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="skincondition">
+        <header>Faner med condition</header>
+        <subheader></subheader>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <tabs>true</tabs>
+        <content displayname="Fane 1">
+            <input type="h1" class="section" displayname="Tryk på næste..."/>
+        </content>
+        <content displayname="Fane 2" condition="false">
+            <input type="h1" class="section" displayname="Denne fane skulle ikke kunne ses!"/>
+        </content>
+        <content displayname="Fane 3">
+            <input type="h1" class="section" displayname="Tryk på forige..."/>
+        </content>
+    </formular>
+
+
     <formular name="skimmelsvamp">
         <title>Anmeld skimmelsvamp</title>
         <header>Anmeld skimmelsvamp</header>

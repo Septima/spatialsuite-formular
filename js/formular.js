@@ -1623,9 +1623,8 @@ Formular = SpatialMap.Class ({
     previous: function (current) {
         if (this.bootstrap === true) {
             var prev = this.currentTab-1;
-            for (var i=prev;i=0;i--) {
+            for (var i=prev;i>=0;i--) {
                 if (this.tabs[i].visible === true) {
-                    
                     break;
                 } else {
                     prev = i-1;
@@ -1635,7 +1634,7 @@ Formular = SpatialMap.Class ({
             if (prev >= 0) {
                 this.showTab(prev);
             }
-        
+
         } else {
             prev = current-1;
             this.showTab(prev);

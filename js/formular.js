@@ -108,7 +108,7 @@ Formular = SpatialMap.Class ({
             async: true,
             dataType: 'xml',
             data: params,
-            url: 'cbkort',
+            url: 'spatialmap',
             success: SpatialMap.Function.bind (function (data, textStatus, jqXHR) {
 
                 this.configData = data;
@@ -167,7 +167,7 @@ Formular = SpatialMap.Class ({
                         var p = {
                             name: jQuery(pages[i]).text(),
                             parser: jQuery(pages[i]).attr('parser'),
-                            url: jQuery(pages[i]).attr('url') || 'cbkort',
+                            url: jQuery(pages[i]).attr('url') || 'spatialmap',
                             type: jQuery(pages[i]).attr('type') || 'json',
                             urlparam: jQuery(pages[i]).attr('urlparam'),
                             condition: jQuery(pages[i]).attr('condition'),
@@ -197,7 +197,7 @@ Formular = SpatialMap.Class ({
                         var p = {
                             name: jQuery(errorPages[i]).text(),
                             parser: jQuery(errorPages[i]).attr('parser'),
-                            url: jQuery(errorPages[i]).attr('url') || 'cbkort',
+                            url: jQuery(errorPages[i]).attr('url') || 'spatialmap',
                             type: jQuery(errorPages[i]).attr('type') || 'json',
                             urlparam: jQuery(errorPages[i]).attr('urlparam'),
                             condition: jQuery(errorPages[i]).attr('condition'),
@@ -1335,7 +1335,7 @@ Formular = SpatialMap.Class ({
                     if (node.attr('limitfromdatasource')) {
                                                                     
                         var request = jQuery.ajax({
-                            url : 'cbkort',
+                            url : 'spatialmap',
                             dataType : 'xml',
                             type: 'POST',
                             async: false,
@@ -1879,7 +1879,7 @@ Formular = SpatialMap.Class ({
             };
     
             var req = jQuery.ajax( {
-                url : 'cbkort',
+                url : 'spatialmap',
                 dataType : 'json',
                 type: 'POST',
                 async: !sync,
@@ -2322,7 +2322,7 @@ Formular = SpatialMap.Class ({
         };
     
         jQuery.ajax({
-            url : 'cbkort',
+            url : 'spatialmap',
             dataType : 'json',
             type: 'POST',
             async: true,
@@ -2398,7 +2398,7 @@ Formular = SpatialMap.Class ({
         };
 
         jQuery.ajax( {
-            url : 'cbkort',
+            url : 'spatialmap',
             dataType : 'xml',
             type: 'POST',
             async: false,
@@ -2443,7 +2443,7 @@ Formular = SpatialMap.Class ({
         }
         var list = [];
         jQuery.ajax( {
-            url: 'cbkort',
+            url: 'spatialmap',
             dataType: 'xml',
             type: 'POST',
             async: false,
@@ -2516,7 +2516,7 @@ Formular = SpatialMap.Class ({
                 }
 
                 jQuery.ajax( {
-                    url : 'cbkort',
+                    url : 'spatialmap',
                     dataType : 'xml',
                     type: 'POST',
                     async: false,
@@ -3070,7 +3070,7 @@ Formular = SpatialMap.Class ({
             params.page = this.submitpage;
             
             jQuery.ajax( {
-                url : 'cbkort',
+                url : 'spatialmap',
                 dataType : 'xml',
                 type: 'POST',
                 async: true,
@@ -3340,7 +3340,7 @@ Formular = SpatialMap.Class ({
 				}
                 
                 jQuery.ajax( {
-                    url : 'cbkort',
+                    url : 'spatialmap',
                     dataType : 'json',
                     type: 'POST',
                     async: false,
@@ -3567,7 +3567,7 @@ Formular = SpatialMap.Class ({
         }
         this.sessionid = null;
         jQuery.ajax( {
-            url : '/cbkort',
+            url : '/spatialmap',
             dataType : 'xml',
             type: 'POST',
             async: true,
@@ -3749,7 +3749,7 @@ Formular = SpatialMap.Class ({
         }
 
         jQuery.ajax( {
-            url : 'cbkort',
+            url : 'spatialmap',
             dataType : 'json',
             type: 'POST',
             async: true,
@@ -3809,7 +3809,7 @@ Formular = SpatialMap.Class ({
             }
             
             jQuery.ajax( {
-                url : 'cbkort',
+                url : 'spatialmap',
                 dataType : 'json',
                 type: 'POST',
                 async: true,
@@ -3911,7 +3911,7 @@ function calculateDistance (a,b) {
         
         jQuery.ajax({
             data: params,
-            url: '/cbkort',
+            url: '/spatialmap',
             dataType: 'XML',
             type: 'POST',
             success: function (data) {

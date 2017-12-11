@@ -94,7 +94,7 @@ var TimeCheck = {
         };
         var list = [];
         jQuery.ajax( {
-            url: 'cbkort',
+            url: 'spatialmap',
             dataType: 'json',
             type: 'POST',
             async: false,

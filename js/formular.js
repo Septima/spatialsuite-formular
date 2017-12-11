@@ -3209,6 +3209,7 @@ Formular = SpatialMap.Class ({
             
             params.page = pages[0].name;
             params.outputformat = pages[0].type;
+            params['jdaf.error.contenttype'] = pages[0].type;
             doAsync = this.errorHandling; //the errorpage handling must be synchronized - otherwise the pageDone method is called and therefor the session i invalidated before all errorpages are completed
             jQuery.ajax( {
                 url : pages[0].url,
@@ -3567,7 +3568,7 @@ Formular = SpatialMap.Class ({
         var params = {
             sessionid: this.sessionid,
             page: this.removeSessionPage
-        }
+        };
         this.sessionid = null;
         jQuery.ajax( {
             url : '/spatialmap',

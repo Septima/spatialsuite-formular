@@ -1634,7 +1634,7 @@ Formular = SpatialMap.Class ({
             if (prev >= 0) {
                 this.showTab(prev);
             }
-
+            this.setButtons()
         } else {
             prev = current-1;
             this.showTab(prev);
@@ -1648,9 +1648,9 @@ Formular = SpatialMap.Class ({
         } else {
             jQuery('.buttons #previous').show();
             jQuery('.buttons #next').show();
-	    jQuery('.buttons #submit').hide();
+            jQuery('.buttons #submit').hide();
             if (this.currentTab === 0) {
-                jQuery('.buttons a#previous').hide();
+                jQuery('.buttons #previous').hide();
             }
             if (this.currentTab === this.tabs.length-1) {
                 jQuery('.buttons #next').hide();

@@ -21,7 +21,7 @@ var datasourceResponse = {
         }
         
         jQuery.ajax( {
-            url : 'cbkort',
+            url : 'spatialmap',
             dataType : 'json',
             type: 'POST',
             async: true,

@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="pdftest">
+        <header>Test fejlhåndtering i PDF</header>
+
+        <submitpages>
+            <page parser="setPdf">formular.skin.pdf</page>
+            <page>formular.move.pdf</page>
+        </submitpages>
+
+        <reportprofile>demo01</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>pdftest</reportxsl>
+
+        <messages>
+            <message name="done">Tak for tilbagemeldingen</message>
+            <message name="saving">Danner PDF. Vent venligst... (Det kan tage op til et par minutter)</message>
+            <message name="error">Der er desværre opstået en fejl! Prøv igen...</message>
+        </messages>
+
+        <tabs class="smalltabs">true</tabs>
+        <content displayname="tab1">
+            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="kategori">
+                <option value="Bygninger" name="Bygninger"/>
+                <option value="Veje og stier" name="Veje &amp; stier"/>
+            </input>
+        </content>
+        <content displayname="tab2">
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+            </maptools>
+            <map multiplegeometries="false" id="map1" required="true" mergegeometries="true" displayname="test">
+                <style>
+                    <strokeColor>#00f</strokeColor>
+                    <fillColor>#f1a117</fillColor>
+                    <fontColor>#21f117</fontColor>
+                </style>
+                <extent>562880,6250516,577187,6262785</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://kortforsyningen.kms.dk/topo_skaermkort"/>
+                </themes>
+            </map>
+        </content>
+        <content displayname="tab3">
+            <input type="input" displayname="Andet" urlparam="andet"/>
+        </content>
+        <content displayname="Opsummering og godkendelse" type="confirm">
+            <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt;&lt;br/&gt;Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
+            <input type="h1" displayname="Opsummering og godkendelse"/>
+            <input type="text" displayname="Nedenfor finder du dine indtastninger fra de foregående sider. Kig indtastningerne grundigt igennem, før du trykker på 'Indsend'."/>
+            <input type="h1" class="section" displayname="Stamdata"/>
+            <input type="preview"/>
+        </content>
+
+    </formular>
+
+    <formular name="skincondition">
+        <header>Faner med condition</header>
+        <subheader></subheader>
+        <submitpages>
+            <page parser="setFrid">formular.create-frid</page>
+        </submitpages>
+        <tabs>true</tabs>
+        <content displayname="Fane 1">
+            <input type="h1" class="section" displayname="Tryk på næste..."/>
+        </content>
+        <content displayname="Fane 2" condition="false">
+            <input type="h1" class="section" displayname="Denne fane skulle ikke kunne ses!"/>
+        </content>
+        <content displayname="Fane 3">
+            <input type="h1" class="section" displayname="Tryk på forige..."/>
+        </content>
+    </formular>
+
+
     <formular name="skimmelsvamp">
         <title>Anmeld skimmelsvamp</title>
         <header>Anmeld skimmelsvamp</header>

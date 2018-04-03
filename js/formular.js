@@ -3848,8 +3848,15 @@ Formular = SpatialMap.Class ({
                 }
             }
         }
-    }
+    },
 
+    paramHasValue: function (param) {
+        var curParam = this.currentParams[param];
+        if (typeof curParam !== 'undefined' && curParam != null && curParam.length > 0) {
+            return true;
+        }
+        return false;
+    }
 });
 
 

@@ -30,6 +30,8 @@
     String callbackID = "";
     String formular = "formular";
     String orgFileName = "";
+	double fileSize = -1;
+	int maxFileSize = 0;
     FileItem fileUpload = null;
     request.setCharacterEncoding("UTF-8");
     ServletRequestContext src = new ServletRequestContext(request);
@@ -80,21 +82,29 @@
              sessionID = value;
          if (name.equalsIgnoreCase("formular"))
              formular = value;
+         if (name.equalsIgnoreCase("maxfilesize"))
+             maxFileSize = Integer.parseInt(value);
        }
      }
    }
    
    if(fileUpload != null)
    {
-       Random rand = new Random(System.currentTimeMillis()) ;
-       long n = Math.abs(rand.nextLong() % 1000000);
-       orgFileName = uploadedFilename;
-       filename = formular+"_" + n +"_"+uploadedFilename;
-       filename = filename.replaceAll(",", "_");
-       filename = filename.replaceAll(";", "_");
-       uploadedFilename = tmpDir + File.separator + filename;
-       File uploadedFile = new File(uploadedFilename);
-       fileUpload.write(uploadedFile);
+	   //1024*1024 is the size for megbytes
+	   if (fileUpload.getSize() <= (maxFileSize *1024 *1024)) {
+		   Random rand = new Random(System.currentTimeMillis()) ;
+		   long n = Math.abs(rand.nextLong() % 1000000);
+		   orgFileName = uploadedFilename;
+		   filename = formular+"_" + n +"_"+uploadedFilename;
+		   filename = filename.replaceAll(",", "_");
+		   filename = filename.replaceAll(";", "_");
+		   uploadedFilename = tmpDir + File.separator + filename;
+		   File uploadedFile = new File(uploadedFilename);
+		   fileUpload.write(uploadedFile);
+		   fileSize = uploadedFile.length()/(1024*1024); 
+	   } else {
+		   fileSize = fileUpload.getSize();
+	   }
    }
 
    if (callbackID == null)
@@ -102,7 +112,7 @@
    if (callbackHandler == null)
          callbackHandler = "parent.uploadFilename";
 
-   out.println("<body onload=\"" + callbackHandler + "('" + filename.replace('\\', '/') + "','"+callbackID+"','"+orgFileName+"');\">");
+   out.println("<body onload=\"" + callbackHandler + "('" + filename.replace('\\', '/') + "','"+callbackID+"','"+orgFileName+"','" + fileSize + "');\">");
 //    out.println("Fil uploadet og skrevet til: " + uploadedFilename);
    out.println("</body>");
 %>

@@ -3604,10 +3604,7 @@ Formular = SpatialMap.Class ({
     },
 
     removeInvalidFileNotice: function (id) {
-        var invalidFileDiv = jQuery('#'+id+'_invalidfile');
-        if (invalidFileDiv.length > 0) {
-            invalidFileDiv.remove();
-        }
+        jQuery('#'+id+'_invalidfile').remove();
     },
 
     fileupload: function (filename,id,orgfilename,filesize) {

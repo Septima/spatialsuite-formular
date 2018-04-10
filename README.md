@@ -227,7 +227,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
 
             <!-- input - type="file" -->
             <!-- Felt til at vedhæfte en fil -->
-            <input type="file" displayname="Vedhæft tegning:" urlparam="filnavn"/>
+			<!-- maxfilesize angiver i Mb, hvor stor filen maksimalt må være --> 
+            <input type="file" displayname="Vedhæft tegning:" urlparam="filnavn" maxfilesize="5"/>
 
             <!-- input - type="checkbox" -->
             <!-- En check boks hvor brugeren kan vælge til eller fra. Serveren modtager "true", hvis brugeren har valgt at klikke den til, ellers sendes "false".

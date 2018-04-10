@@ -91,6 +91,7 @@ Formular = SpatialMap.Class ({
 	groupedLayers: [],
     
     _listeners: [],
+    maxUploadFileSize: 100,
     
     initialize: function (options) {
         SpatialMap.Util.extend (this, options);
@@ -1390,11 +1391,12 @@ Formular = SpatialMap.Class ({
                     jQuery('#'+id).datepicker(options);
                     
                 } else if (type=='file') {
+                    this.maxUploadFileSize = typeof node.attr('maxfilesize') === 'undefined' ? 100 : parseInt(node.attr('maxfilesize'));
                     if (this.bootstrap === true) {
-                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="fileupload'+(req ? ' required-enabled':'')+'"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input '+(postparam.disabled ? 'disabled':'')+' type="file" name="file_'+id+'" id="file_'+id+'" /><span class="filupload-delete" title="Fjern vedhæftet fil"></span><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></div>');
+                        contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="fileupload'+(req ? ' required-enabled':'')+'"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input '+(postparam.disabled ? 'disabled':'')+' type="file" name="file_'+id+'" id="file_'+id+'" /><span class="filupload-delete" title="Fjern vedhæftet fil"></span><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/> <input type="hidden" name="maxfilesize" value="'+this.maxUploadFileSize+'"/> </form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></div>');
                         contentcontainer.find('#'+id+'_row .filupload-delete').click(SpatialMap.Function.bind(this.deleteFileUpload,this,id)).hide();
                     } else {
-                        contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/></form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
+                        contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/> <input type="hidden" name="maxfilesize" value="'+this.maxUploadFileSize+'"/> </form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
                     }
                     jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
                         this.startFileUpload(id);
@@ -3601,11 +3603,27 @@ Formular = SpatialMap.Class ({
         jQuery('#'+id+'_row .filupload-delete').hide();
     },
 
-    fileupload: function (filename,id,orgfilename) {
+    removeInvalidFileNotice: function (id) {
+        jQuery('#'+id+'_invalidfile').remove();
+    },
+
+    fileupload: function (filename,id,orgfilename,filesize) {
         this.endFileUpload();
-        jQuery('#'+id).val(filename);
-        jQuery('#'+id+'_org').val(orgfilename);
-        jQuery('#'+id+'_row .filupload-delete').show();
+        this.removeInvalidFileNotice(id);
+        if (typeof filesize !== 'undefined' && (parseInt(filesize) <= this.maxUploadFileSize)) {
+            jQuery('#'+id).val(filename);
+            jQuery('#'+id+'_org').val(orgfilename);
+            jQuery('#'+id+'_row .filupload-delete').show();
+        } else {
+            this.deleteFileUpload(id);
+            var inputRow = jQuery('#'+id+'_row');
+            var destinationTd = inputRow.children()[1];
+            jQuery('<div/>', {
+                id: id+'_invalidfile',
+                text: 'Filen overskride den maksimale størrelse!'
+            }).appendTo(destinationTd)
+
+        }
     },
     
     start: function (options) {
@@ -3848,8 +3866,15 @@ Formular = SpatialMap.Class ({
                 }
             }
         }
-    }
+    },
 
+    paramHasValue: function (param) {
+        var curParam = this.currentParams[param];
+        if (typeof curParam !== 'undefined' && curParam != null && curParam.length > 0) {
+            return true;
+        }
+        return false;
+    }
 });
 
 

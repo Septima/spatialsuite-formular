@@ -2,9 +2,17 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output method="html" indent="yes" encoding="[cbinfo.html.encoding]" />
+
+    <!-- nye nemlogin parametre som kommer fra signeringen-->
+    <xsl:param name = "RequestId"></xsl:param>
+    <xsl:param name = "string_params"/>
+    <xsl:param name = "SignedSignatureProof"/>
+    <xsl:param name = "SignText"/>
+
     <xsl:param name = "formular"/>
     <xsl:param name = "sessionid"/>
     <xsl:param name = "formular-css">/modules/formular/css/formular.css</xsl:param>
+    <xsl:param name = "s4.version">[s4.version]</xsl:param>
     <xsl:template match="/">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
@@ -83,6 +91,13 @@
                 <script language="javascript" src="/modules/formular/js/json2.js" type="text/javascript"></script>
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
 
+                <xsl:if test="*//septimasearch and not($s4.version = '['+'s4.version'+']')">
+                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/septima.js"></script>
+                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/log.js"></script>
+                    <script type="text/javascript" src="//search.cdn.septima.dk/3.1.6/septimasearch.min.js"></script>
+                    <link rel="Stylesheet" type="text/css" href="//search.cdn.septima.dk/3.1.6/css/defaultView.css"></link>
+                </xsl:if>
+
                 <xsl:for-each select="js">
                     <xsl:element name="script">
                         <xsl:attribute name="language">javascript</xsl:attribute>
@@ -111,7 +126,7 @@
         <xsl:when test="headerhtml">
             <xsl:choose>
                 <xsl:when test="headerhtml[@url]">
-                    <header class="navbar"></header>
+                    <header class="navbar skin"></header>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="headerhtml" />
@@ -205,7 +220,16 @@
                         <div class="buttons">
                             <button id="previous" class="btn btn-primary button-prev pull-left">Forrige</button>
                             <button id="next" class="btn btn-primary button-next pull-right">Næste</button>
-                            <button id="submit" class="btn btn-primary pull-right">Indsend</button>
+                            <button id="submit" class="btn btn-primary pull-right">
+                                <xsl:choose>
+                                    <xsl:when test="submitbutton">
+                                        <xsl:value-of select="submitbutton/@displayname" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        Indsend
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </button>
                             <div class="clearfix"></div>
                         </div>
                     </div>
@@ -231,6 +255,14 @@
                         <div id="messageloading" class="alert alert-warning"></div>
                         <div id="message"></div>
                         <div id="submessage"></div>
+
+                        <div id="messagebuttons" class="buttons">
+                            <button class="btn btn-primary pull-right">
+                                test
+                            </button>
+                            <div class="clearfix"></div>
+                        </div>
+
                     </div>
                 </div>
     

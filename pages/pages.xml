@@ -83,5 +83,32 @@
     <page name="formular.read.datasource" contenttype="json" sessionrequired="false">
         <data handler="datasource" operation="execute-command"/>
     </page>
-
+    <page name="formular.nemlogin.cpr.nummer" contenttype="json" sessionrequired="true">  
+        <data handler="expression" operation="evaluate">
+            <url-parameters>
+                <url-parameter name="expression">'GetOioSamlAttribute("SAML_CPR_NUMBER")'</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+    <page name="formular.nemlogin.cpr.navn" contenttype="json" sessionrequired="true">  
+        <data handler="expression" operation="evaluate">
+            <url-parameters>
+                <url-parameter name="expression">'GetOioSamlAttribute("OID_COMMON_NAME")'</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+    <page name="formular.nemlogin.cvr.nummer" contenttype="json" sessionrequired="true">  
+        <data handler="expression" operation="evaluate">
+            <url-parameters>
+                <url-parameter name="expression">'GetOioSamlAttribute("SAML_CVR_NUMBER")'</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
+    <page name="formular.nemlogin.cvr.id" contenttype="json" sessionrequired="true">  
+        <data handler="expression" operation="evaluate">
+            <url-parameters>
+                <url-parameter name="expression">'GetOioSamlAttribute("SAML_RID_NUMBER")'</url-parameter>
+            </url-parameters>
+        </data>
+    </page>
 </pages>

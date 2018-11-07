@@ -4,7 +4,7 @@ spatialsuite-formular
 Dette modul giver brugeren en formular, som f.eks. kan bruges til ansøgninger.
 
 --------------------
-VEJLEDNING
+VEJLEDNING TIL FORMULARMODULET
 --------------------
 
 En formular er en page i CBkort. Indholdet af formularen styres vha. en parameter i URL'en, der refererer til en helt specifik navngivet konfiguration. Formularen kaldes med:
@@ -57,6 +57,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                                                                      Hvis log er aktiveret så logges alle fejl -->
             <page errormessage="Tekst">formular.save</page>     <!-- errormessage indeholder den tekst, der vises hvis der er en fejl. -->
         </submitpages>
+        <errorpages>                                           <!-- En liste af pages, der skal kaldes hvis der opstår en fejl i forbindelse med submitpages -->
+            <page>formular.send.errormail</page>                <!-- I den pages der kaldes, kan fejlbeskederne for hver enkel page, der er fejlet, hentes via parametren: errorpagemessage
+                                                                <!-- eksempel:  hvis -->
+                                                                <!--    <page errortype="warning" errormessage="Fejl i skrivning til databasen">formular.save</page> -->
+                                                                <!-- fejler, vil errorpagemessage indeholde teksten: Fejl i skrivning til databasen. Derved er det muligt at sende et fejlbesked til en fælles postkasse med fejlbeskeden -->
+        </errorpages>                                           
         <showreport>true</showreport>                           <!-- OPTIONAL - Skal der genereres et PDF-dokument når brugeren trykker på send (default er "true"). Hvis "false", så vises en simpel tekst hvis det er gået godt -->
         <reportprofile>alt</reportprofile>                      <!-- OPTIONAL - Profil, der skal anvendes til at danne kortet i kviteringen (default er "alt") -->
         <reportlayers>default</reportlayers>                    <!-- OPTIONAL - Layers, der skal anvendes til at danne kortet i kviteringen. Det kan være en liste adskilt af mellemrum (default er "default", der gør at det er profilen default viste temaer, der vises) -->
@@ -66,7 +72,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
         <js>/js/custom/my.js</css>                              <!-- OPTIONAL - Hvis man gerne vil have sin egen js på siden. Kan bruges til at tilføje sine egne funktioner så det ikke er nødvendigt at skrive det hele i konfigurationen -->
         <tabs>true</css>                                        <!-- OPTIONAL - Har man flere steps, kan man få vist de enkelte steps øverst på siden -->
         <parsedisplaynames>true</parsedisplaynames>             <!-- OPTIONAL - displayname på hvert input felt sendes med til serveren, så man kan bruge dem i forbindelse med en generisk XSL. Sendes som parameteren urlparam+'_displayname' -->
-        <localstore>true</localstore>                           <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false") -->
+        <localstore clear="true">true</localstore>              <!-- OPTIONAL - Skal browseren huske seneste indtastede værdier hvis formularen forlades inden der er trykker på "Send". Når brugeren trykker på "Semd" slettes de gemte værdier. Alle værdier bliver gemt, dog ikke uploaded filer! (default er "false"). 
+                                                                                Hvis atributten "clear" er sat til false, så slettes de gemte oplysninger ikke til næste gang man bruger siden. -->
         <log>true</log>                                         <!-- OPTIONAL - Skal fejl logges på serveren? For at se loggen kaldes http://hostnavn/spatialmap?page=formular.log.read (default er "false") -->
         <messages>                                              <!-- OPTIONAL - Mulghed for at få vist sin egen tekst når brugeren er færdig -->
             <message name="done">Mange tak for hjælpen! Hent kvittering &lt;a href="{{pdf}}"&gt;her&lt;/a&gt;</message>      <!-- OPTIONAL - Teksten, der vises hvis det går godt. {{pdf}} erstattes af stien til pdf-dokumentet -->
@@ -115,8 +122,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             </input>
             <!-- Eller hent fra en datasource -->
             <!-- Tilføj en "datasource" attribut til input elementet.
-                 Datasourcen skal have en command, der hedder "read-dropdown".
-                 Command'en er hårdkodet for at begrænse adgangen.
+                 Tilføj en "command" attibut for at vælge hvordan data skal hentes.
                  Command'en skal returnere to colonner, der skal hedde hhv. "value" og "name". -->
             <input type="dropdown" displayname="Hvad søges:" urlparam="hvad" datasource="ds_mintabel"/>
             
@@ -161,8 +167,57 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             -->
             <geosearch urlparam="address" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true" usegeometry="false"/>
 
+            <!-- septimasearch -->
+            <!-- Et felt hvor brugeren kan søge bl.a. en adresse vha. DAWA. Søgningen benyttes som udgangspunkt til at finde noget i kortet.
+                 Geometrien for den valgte sendes til serveren som urlparam+"_wkt". Hvis urlparam="adresse" så vil adressepunktet blive sendt til serveren med adresse_wkt=POINT(XXXX YYYY)
+                 - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
+                 - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
+                 - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
+                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
+            -->
+            <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse">
+                <searcher>
+                    <type>Septima.Search.DawaSearcher</type>
+                    <title>Adresser</title>
+                    <options>
+                        <kommunekode>101</kommunekode>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.GeoSearch</type>
+                    <title>Matrikser og stednavne</title>
+                    <options>
+                        <area>muncode0101</area>
+                        <targets>matrikelnumre,stednavne_v2</targets>    <!-- Liste med targets adskilt af et komma -->
+                        <authParams></authParams>                        <!-- Angives for at sikre at der bliver oprettet en ticket.  -->
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.PlanSearcher</type>
+                    <title>Vedtagne lokalplaner</title>
+                    <options>
+                        <searchindexToken>TOKEN TIL SEPTIMAS PLAN INDEX</searchindexToken> 
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.CVR_enhedSearcher</type>
+                    <title>Virksomheder</title>
+                    <options>
+                        <searchindexToken>TOKEN TIL SEPTIMAS CVR INDEX</searchindexToken>
+                    </options>
+                </searcher>
+                <searcher>
+                    <type>Septima.Search.S4IndexSearcher</type>
+                    <title>S4Index</title>
+                    <options>
+                        <host>http://spatialsuite3102.kpc.asus:8080/</host>
+                        <datasources>*</datasources>
+                    </options>
+                </searcher>
+            </septimasearch>
+
             <!-- input - type="date" -->
-            <!-- Datovælger felt hvor man kan skrive en dato eller vælge.
+            <!-- Datovælger felt hvor man kan skrive en dato eller vælge. Ved at angive "today" som defaultvalue, så sættes værdien med dags dato.
                  - limitfromdatasource  - OPTIONAL - Hvis man angiver en "limitfromdatasource" attribut, så hentes der en liste af datoer ud fra den angivede datasource.
                                                      Datasourcen skal returnere flere rækker med en kolonne, der skal indeholde datoer, der ikke kan vælges. Formatet på
                                                      en dato skal pt være f.eks. 22.01.2013. Datasourcen SKAL indeholde en command, der hedder "read-dates"!
@@ -172,7 +227,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
 
             <!-- input - type="file" -->
             <!-- Felt til at vedhæfte en fil -->
-            <input type="file" displayname="Vedhæft tegning:" urlparam="filnavn"/>
+			<!-- maxfilesize angiver i Mb, hvor stor filen maksimalt må være --> 
+            <input type="file" displayname="Vedhæft tegning:" urlparam="filnavn" maxfilesize="5"/>
 
             <!-- input - type="checkbox" -->
             <!-- En check boks hvor brugeren kan vælge til eller fra. Serveren modtager "true", hvis brugeren har valgt at klikke den til, ellers sendes "false".
@@ -197,7 +253,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             -->
             <maptools>
                 <maptool displayname="" name="pan" default="true"/>
-                <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE"/>   <!-- Select udpager fra en datasource, der skal angives som attribut -->
+                <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE" buffer="<bufferværdi>"/>   <!-- Select udpeger fra en datasource, der skal angives som attribut. Med buffer er det muligt at lægge en buffer på udpegningen -->
                 <maptool displayname="" name="polygon"/>
                 <maptool displayname="" name="line"/>
                 <maptool displayname="" name="point"/>
@@ -213,9 +269,20 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <map>
                 <!-- Følgende atributter kan tilføjes til et map:
                     multiplegeometries  - Default false. Skal man kunne tegne flere geometrier i kortet
+					mergegeometries		- Default true. Sættes den til false, vil de multiple geometrier IKKE blive samlet (merged) til en multigeometi i forbindelse med lagring i databasen
                     onchange            - Hvis man gerne vil have at der sker noget afhængigt af hvilket udsnit man ser eller hvilket zoomlevel man er i. 
+					featurechange		- Man kan kalde en javascript funktion, hver gang der sker en ændring i geometrierne i kortet
                 -->
-                <extent>539430.4,6237856,591859.2,6290284.8</extent>                <!-- OPTIONAL -->
+                <style>		<!-- OPTIONAL -->					
+					<!--
+					mulighed for at sætte stylen for de geometrier der tegnes. Anvend standard CSS (husk case sensitiv)
+					eks:
+					<strokeColor>#00f</strokeColor>
+					<fillColor>#f1a117</fillColor>
+					<fontColor>#21f117</fontColor>
+					-->
+				</style>
+				<extent>539430.4,6237856,591859.2,6290284.8</extent>                <!-- OPTIONAL -->
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions> <!-- OPTIONAL -->
                 <themes>
                     <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>
@@ -230,6 +297,10 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         format        - Default image/png. Brug f.eks. image/jpeg til ortofoto
                         layername     - Hvis laget ikke hedder det samme som temaet i CBkort
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
+                        useTicket     - Sættes til "true" hvis servicen kommer fra Kortfosyningen. Default er "false"
+						displayname   - Ved at sætte displayname på et tema dukker en checkbox op under kortet, hvor laget kan tændes/slukkes
+						group		  - Hvis displayname er sat, kan flere temaer grupperes til en checkbox. Matrikelkort, baggrundskort, veje, stier mm. kan grupperes til eksempelvis "grundkort"
+						class		  - Mulighed for at sætte css stil.
                     -->
                 </themes>
                 <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">
@@ -239,6 +310,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         command       - OPTIONAL - Angiv hvilken command, der skal benyttes for at gemme hver enkelt geometri. Hvis man benytter sin egen page, kan command angives direkte på pagen, ellers skal den angives her!
                     -->
                     <!-- En liste af "input" element, der kan konfigureres på samme måde som alle andre input felter. Dog er der en række typer, der ikke kan benyttes, herunder adressesøgning m.m.
+                    -->
                     <input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>
                 </attributes>
             </map>
@@ -247,24 +319,32 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <!-- Når der er angivet et "conflicts" element, betyder det at der foretages en spatiel søgning når der tegnes i kortet.
                  Resultatet af den spatielle søgning, vises på det sted hvor dette element er angivet.
                  Ud over "displayname" og "urlparam", kan der kan sættes en række andre atributter:
-                 - "class"         - angiver den css class, som feltet skal have. Det kan f.eks. være "warning", der gør at feltet bliver rødt.
-                                     Følgende værdier kan med fordel anvendes: "warning-info", "warning-success", "warning-warning" eller "warning-danger"
-                 - "targetset"     - angiver navnet på det targetset, som der skal søges i.
-                 - "targetsetfile" - angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
-                 - "onconflict"    - angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
-                 - "onnoconflict"  - angiver det javascript der skal kaldes når der IKKE er ramt noget med denne konfliktsøgning.
+                 - "class"         		- angiver den css class, som feltet skal have. Det kan f.eks. være "warning", der gør at feltet bliver rødt.
+											Følgende værdier kan med fordel anvendes: "warning-info", "warning-success", "warning-warning" eller "warning-danger"
+                 - "targetset"     		- angiver navnet på det targetset, som der skal søges i.
+                 - "targetsetfile" 		- angiver hvilken fil targetsettet ligger i. Default er [module:formular.dir]/queries/spatialqueries.xml
+                 - "querypage"     		- angiver en alternativ page, der kaldes når det søges i denne konfliktsøgning. Det kan f.eks. bruges hvis man vil benytte en proxy datasource til at søge med.
+                 - "onconflict"    		- angiver det javascript der skal kaldes når der er ramt noget med denne konfliktsøgning.
+                 - "onnoconflict"  		- angiver det javascript der skal kaldes når der IKKE er ramt noget med denne konfliktsøgning.
+				 - "conflictcondition"	- hvis anvendt vil konfliktsøgning kun blive gennemført, hvis denne condtion er opfyldt. Eksempelvis conflictcondition="formular.currentMapTool === 'select'" sikre,
+											at konfiktsøgningen kun gennemføres, hvis det aktive korttool er 'select'
                  På et targetset vil der typisk være anigvet ét target, men der kan godt være flere. På dette target er der knyttet en presentation. 
                  Inholdet af denne presentation, vil blive vist for brugeren. Hvis presentation ikke indeholder nogen columns, så vil der ikke blive vist 
                  noget resultat, men "displayname" vises. Det kan f.eks. bruges til at vise at der er fundet noget, men det er ikke interessant hvad det præcist er -->
-            <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targerset="konflikt" targetsetfile="[cbinfo.queries.dir]/custom/mytargetsetfile.xml"/>
+            <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targetset="konflikt" targetsetfile="[cbinfo.queries.dir]/custom/mytargetsetfile.xml"/>
 
             <!-- submitbutton -->
             <!-- En knap, der vises når formularen er sendt og gået godt. Knappen kan f.eks. bruges til at sende brugeren videre
                  til en ny formular eller en betalingsside.
                  Man skal skrive lige den funktion som man har lyst til. F.eks. "window.open('http://dmi.dk')" eller man kan bruge
                  nogle af de standard funktioner der er i modulet f.eks. "formular.start()" der starte samme formular igen. Eller
-                 "formular.load('http://dmi.dk/ref=')" der sørge for at sende en reference til lige præcis denne indberetning/ansøgning. -->
-            <submitbutton displayname="Opret ny" function="formular.start();"/>
+                 "formular.load('http://dmi.dk/ref=')" der sørge for at sende en reference til lige præcis denne indberetning/ansøgning. 
+                 Følgende atributter kan tilføjes til en submitbutton:
+                  - displayname
+                  - function         - Function til at ændre andre elementer. Skrives som et JavaScript udtryk.
+                  - condition        - Skal knappen vises? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.
+                 -->
+            <submitbutton displayname="Opret ny" function="formular.start();" condition="jQuery('#test').val() === '1'"/>
 
         </content>
     </formular>

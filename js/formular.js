@@ -172,6 +172,8 @@ Formular = SpatialMap.Class ({
                             type: jQuery(pages[i]).attr('type') || 'json',
                             urlparam: jQuery(pages[i]).attr('urlparam'),
                             condition: jQuery(pages[i]).attr('condition'),
+                            delay: jQuery(pages[i]).attr('delay')-0 || 0,
+                            loadingmessage: jQuery(pages[i]).attr('loadingmessage') || null,
                             error: null
                         };
                         if (jQuery(pages[i]).attr('errortype')) {
@@ -3222,7 +3224,7 @@ Formular = SpatialMap.Class ({
         this.currentParams = params;
 
         if (!(pages[0].condition instanceof Function)) {
-            pages[0].condition = new Function ('return '+pages[0].condition);
+            pages[0].condition = new Function('return ' + pages[0].condition);
         }
         if (pages[0].condition() === false) {
             pages.shift();
@@ -3233,69 +3235,33 @@ Formular = SpatialMap.Class ({
                 this.pagesDone(params);
             }
         } else {
+            if (pages[0].loadingmessage) {
+                var message = pages[0].loadingmessage;
+                jQuery('#messageloading').html(message);
+            }
+            setTimeout(SpatialMap.Function.bind(this.executeFinal, this, params, pages), pages[0].delay)
+        }
+    },
 
-            params.page = pages[0].name;
-            params.outputformat = pages[0].type;
-            params['jdaf.error.contenttype'] = pages[0].type;
-            doAsync = this.errorHandling; //the errorpage handling must be synchronized - otherwise the pageDone method is called and therefor the session i invalidated before all errorpages are completed
-            jQuery.ajax( {
-                url : pages[0].url,
-                dataType : pages[0].type,
-                type: 'POST',
-                async: doAsync,
-                data : params,
-                success : SpatialMap.Function.bind( function(params, pages, data, status) {
-                    if (pages[0].parser) {
-                        params = this[pages[0].parser](data, params, pages[0].urlparam);
-                    }
-                    params = this.handleError(data, params, pages[0].error);
+    executeFinal: function (params, pages) {
+        params.page = pages[0].name;
+        params.outputformat = pages[0].type;
+        params['jdaf.error.contenttype'] = pages[0].type;
+        doAsync = this.errorHandling; //the errorpage handling must be synchronized - otherwise the pageDone method is called and therefor the session i invalidated before all errorpages are completed
+        jQuery.ajax( {
+            url : pages[0].url,
+            dataType : pages[0].type,
+            type: 'POST',
+            async: doAsync,
+            data : params,
+            success : SpatialMap.Function.bind( function(params, pages, data, status) {
+                if (pages[0].parser) {
+                    params = this[pages[0].parser](data, params, pages[0].urlparam);
+                }
+                params = this.handleError(data, params, pages[0].error);
 
-                    if (this.isErrorRespose(data) && this.errorHandling) {
-                        if (pages[0].error) {
-                            this.errorMessages.push(pages[0].error);
-                            if (pages[0].error.type === 'info') {
-                                this.showErrorInfo(pages[0].error);
-                            } else if (pages[0].error.type === 'warning') {
-                                this.showErrorWarning(pages[0].error);
-                            } else if (pages[0].error.type === 'error') {
-                                this.showError(pages[0].error);
-                                this.PageErrorHandling(params);
-                                this.pagesFail();
-                                return;
-                            } else {
-                                this.errorMessages.push('Der opstod en fejl');
-                                this.showError();
-                                this.PageErrorHandling(params);
-                                this.pagesFail();
-                                return;
-                            }
-                        } else {
-                            this.errorMessages.push('Der opstod en fejl');
-                            this.showError();
-                            this.PageErrorHandling(params);
-                            this.pagesFail();
-                            return;
-                        }
-                    }
-
-                    //Remove from list
-                    pages.shift();
-
-                    if (pages.length > 0) {
-                        this.execute(params, pages);
-                    } else {
-                        if (this.errorHandling){
-                            this.pagesDone(params);
-                        }
-                    }
-                },this, params, pages),
-                error : SpatialMap.Function.bind( function(params, pages, data, status) {
-                    if (pages[0].parser) {
-                        params = this[pages[0].parser](data, params, pages[0].urlparam);
-                    }
-
-                    if (pages[0].error && this.errorHandling) {
-                        var go = false;
+                if (this.isErrorRespose(data) && this.errorHandling) {
+                    if (pages[0].error) {
                         this.errorMessages.push(pages[0].error);
                         if (pages[0].error.type === 'info') {
                             this.showErrorInfo(pages[0].error);
@@ -3313,29 +3279,72 @@ Formular = SpatialMap.Class ({
                             this.pagesFail();
                             return;
                         }
-
-                        //Remove from list
-                        pages.shift();
-
-                        if (pages.length > 0) {
-                            this.execute(params, pages);
-                        } else {
-                            if (this.errorHandling){
-                                this.pagesDone(params);
-                            }
-                        }
-
                     } else {
-                        if (this.errorHandling) {
-                            this.errorMessages.push('Der opstod en fejl');
-                            this.showError();
-                            this.PageErrorHandling(params);
-                            this.pagesFail();
+                        this.errorMessages.push('Der opstod en fejl');
+                        this.showError();
+                        this.PageErrorHandling(params);
+                        this.pagesFail();
+                        return;
+                    }
+                }
+
+                //Remove from list
+                pages.shift();
+
+                if (pages.length > 0) {
+                    this.execute(params, pages);
+                } else {
+                    if (this.errorHandling){
+                        this.pagesDone(params);
+                    }
+                }
+            },this, params, pages),
+            error : SpatialMap.Function.bind( function(params, pages, data, status) {
+                if (pages[0].parser) {
+                    params = this[pages[0].parser](data, params, pages[0].urlparam);
+                }
+
+                if (pages[0].error && this.errorHandling) {
+                    var go = false;
+                    this.errorMessages.push(pages[0].error);
+                    if (pages[0].error.type === 'info') {
+                        this.showErrorInfo(pages[0].error);
+                    } else if (pages[0].error.type === 'warning') {
+                        this.showErrorWarning(pages[0].error);
+                    } else if (pages[0].error.type === 'error') {
+                        this.showError(pages[0].error);
+                        this.PageErrorHandling(params);
+                        this.pagesFail();
+                        return;
+                    } else {
+                        this.errorMessages.push('Der opstod en fejl');
+                        this.showError();
+                        this.PageErrorHandling(params);
+                        this.pagesFail();
+                        return;
+                    }
+
+                    //Remove from list
+                    pages.shift();
+
+                    if (pages.length > 0) {
+                        this.execute(params, pages);
+                    } else {
+                        if (this.errorHandling){
+                            this.pagesDone(params);
                         }
                     }
-                },this, params, pages)
-            });
-        }
+
+                } else {
+                    if (this.errorHandling) {
+                        this.errorMessages.push('Der opstod en fejl');
+                        this.showError();
+                        this.PageErrorHandling(params);
+                        this.pagesFail();
+                    }
+                }
+            },this, params, pages)
+        });
     },
 
     pagesDone: function (params) {

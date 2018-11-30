@@ -2263,9 +2263,22 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
     <formular name="submitpages2">
         <header>Formular med flere submit pages (med custom id)</header>
         <subheader>Man vil gerne have at det unikke ID sendes som i en specifik urlparameter og ikke i "frid"</subheader>
+        <reportprofile>septima</reportprofile>
         <submitpages>
             <page parser="setFrid" urlparam="journalnummer">formular.create-frid</page>
             <page parser="setPdf">formular.create-pdf.nomap</page>
+        </submitpages>
+        <content displayname="Detaljer">
+            <input type="textarea" displayname="Tekst:" urlparam="val8"/>
+        </content>
+    </formular>
+    <formular name="submitpages3">
+        <header>Formular med flere submit pages (med loading besked + delay)</header>
+        <subheader>Giv brugeren en mere detaljeret besked om hvad der sker ved hvert page kald</subheader>
+        <reportprofile>septima</reportprofile>
+        <submitpages>
+            <page parser="setFrid" urlparam="journalnummer" delay="2000" loadingmessage="Henter journalnummer...">formular.create-frid</page>
+            <page parser="setPdf" delay="3000" loadingmessage="Genererer PDF dokument...">formular.create-pdf.nomap</page>
         </submitpages>
         <content displayname="Detaljer">
             <input type="textarea" displayname="Tekst:" urlparam="val8"/>

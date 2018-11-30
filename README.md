@@ -50,7 +50,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <page parser="setPdf">formular.create-pdf</page>    
             <page condition="false">formular.save</page>        <!-- Skal pagen kaldes? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.-->
             <page type="json">mypage</page>                     <!-- Angiv "type" for at fortælle hvad pagen returnere. Default er "json" men det kan også være "xml" -->
-            <page>formular.save</page>
+            <page loadingmessage="Gemmer...">                   <!-- Vis en bestemt besked mens en page kaldes. Dette kan bruges til at give brugeren en mere detaljeret information om hvad der sker -->
+                formular.save
+            </page>
             <page>formular.move.pdf</page>                      <!-- Med denne metode bliver PDF-dokumentet ikke flyttet væk fra tmp-mappen. Benyt derfor pagen "formular.move.pdf". Denne page kræver at parameteren "module.formular.site.url" er sat -->
             <page errortype="info">formular.save</page>         <!-- errortype definere hvilken type fejlen er hvis pagen returnere en fejl. Mulige værdier er: "info", "warning" og "error". Hvis errortype er "error" så stopper alt. 
                                                                      Hvis errortype er "info" eller "warning" fortsættes der men brugeren bliver informeret om at der er sket en fejl hvis der også er angivet en errormessage.
@@ -58,7 +60,7 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
             <page errormessage="Tekst">formular.save</page>     <!-- errormessage indeholder den tekst, der vises hvis der er en fejl. -->
         </submitpages>
         <errorpages>                                           <!-- En liste af pages, der skal kaldes hvis der opstår en fejl i forbindelse med submitpages -->
-            <page>formular.send.errormail</page>                <!-- I den pages der kaldes, kan fejlbeskederne for hver enkel page, der er fejlet, hentes via parametren: errorpagemessage
+            <page>formular.send.errormail</page>                <!-- I den pages der kaldes, kan fejlbeskederne for hver enkel page, der er fejlet, hentes via parametren: errorpagemessage -->
                                                                 <!-- eksempel:  hvis -->
                                                                 <!--    <page errortype="warning" errormessage="Fejl i skrivning til databasen">formular.save</page> -->
                                                                 <!-- fejler, vil errorpagemessage indeholde teksten: Fejl i skrivning til databasen. Derved er det muligt at sende et fejlbesked til en fælles postkasse med fejlbeskeden -->
@@ -397,6 +399,7 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2018.11.30 - Loading besked kan nu angives for hver page så man kan fortælle brugeren lidt mere om hvor langt man er nået.
 * 2018.11.30 - Mulighed for at sætte condition på et maptool
 
 * Der er sket en masse...

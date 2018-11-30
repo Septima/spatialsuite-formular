@@ -250,12 +250,13 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 default     - OPTIONAL - Den viste tekst når musen holdes over knappen
                 displayname - OPTIONAL - Angiv hvilket tool, der skal være aktivt fra start. Det gøres ved at tilføje default="true" på et maptool
                 disable     - OPTIONAL - Knappen er deaktiveret ved start. Kan ændres med formular.disableButton(['point'],false) ud fra valg i inputfelter eller skift i zoomlevel.
+                condition   - Skal knappen disabled? Afhængigt af om noget bestemt er valgt i et eller flere andre felter. Skrives som et JavaScript udtryk og skal returnere true eller false.
             -->
             <maptools>
                 <maptool displayname="" name="pan" default="true"/>
                 <maptool displayname="" name="select" datasource="NAVN_PÅ_DATASOURCE" buffer="<bufferværdi>"/>   <!-- Select udpeger fra en datasource, der skal angives som attribut. Med buffer er det muligt at lægge en buffer på udpegningen -->
                 <maptool displayname="" name="polygon"/>
-                <maptool displayname="" name="line"/>
+                <maptool displayname="" name="line" condition="jQuery('#navn').val() !== '1'"/>
                 <maptool displayname="" name="point"/>
                 <maptool displayname="" name="circle"/>
                 <maptool displayname="" name="location"/>
@@ -396,6 +397,10 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 
 
 Nyheder:
+* 2018.11.30 - Mulighed for at sætte condition på et maptool
+
+* Der er sket en masse...
+
 * 2015.05.26 - Nyt skin
 * 2014.08.07 - Ny mulighed for at gemme flere geometrier med forskellige oplysninger
 * 2014.07.02 - Minscale eller minzoom tilføjet til søgefunktionerne

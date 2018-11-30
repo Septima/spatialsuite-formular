@@ -904,6 +904,11 @@ Formular = SpatialMap.Class ({
                         options: null,
                         config: jQuery(maptools[j])
                     }
+
+                    if (jQuery(maptools[j]).attr('condition')) {
+                        this.mapbuttons[name].condition = jQuery(maptools[j]).attr('condition');
+                    }
+
                     if (jQuery(maptools[j]).attr('options')) {
                         this.mapbuttons[name].options = jQuery(maptools[j]).attr('options').toString().toLowerCase();
                     }
@@ -1601,6 +1606,20 @@ Formular = SpatialMap.Class ({
                 }
             }
         }
+
+        for (var name in this.mapbuttons) {
+            var b = this.mapbuttons[name]
+            if (typeof b.condition !== 'undefined') {
+                if (!(b.condition instanceof Function)) {
+                    b.condition = new Function ('return '+b.condition);
+                }
+                var disabled = !b.condition();
+                var isDisabled = b.element.hasClass('button_disabled');
+                if (disabled !== isDisabled) {
+                    this.disableButton(name, disabled);
+                }
+            }
+        }
     },
 
     next: function (current) {
@@ -2043,13 +2062,19 @@ Formular = SpatialMap.Class ({
             types = [types];
         }
         for (var i=0;i<types.length;i++) {
+            var name = types[i];
+            var b = this.mapbuttons[name];
             if (disable === true) {
-                this.mapbuttons[types[i]].element.addClass ('button_disabled');
-                if (this.mapbuttons[types[i]].element.hasClass('button_'+types[i]+'_active')) {
-                    this.activateTool(this.defaultMapTool)
+                b.element.addClass ('button_disabled');
+                if (b.element.hasClass('button_'+name+'_active')) {
+                    if (name !== this.defaultMapTool) {
+                        this.activateTool(this.defaultMapTool)
+                    } else {
+                        this.activateTool('pan')
+                    }
                 }
             } else {
-                this.mapbuttons[types[i]].element.removeClass ('button_disabled');
+                b.element.removeClass ('button_disabled');
             }
         }
     },

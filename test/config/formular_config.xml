@@ -750,9 +750,9 @@
                     <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
                 </themes>
                 <!--<attributes page="formular.geometry.save" datasource="formular-test-geometry" command="write">-->
-                    <!--<input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>-->
-                    <!--<input type="input" displayname="Nummer 2:" urlparam="nummer2" defaultvalue="22"/>-->
-                    <!--<input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>-->
+                <!--<input type="input" displayname="Nummer:" urlparam="nummer" defaultvalue=""/>-->
+                <!--<input type="input" displayname="Nummer 2:" urlparam="nummer2" defaultvalue="22"/>-->
+                <!--<input type="input" displayname="Nummer 3:" urlparam="nummer3" defaultvalue="3333"/>-->
                 <!--</attributes>-->
             </map>
             <conflicts class="alert alert-info" urlparam="konflikttekst1" displayname="&lt;h3&gt;Info&lt;/h3&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
@@ -1552,10 +1552,10 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         <reportlayers>default</reportlayers>
         <reportprofile>kbh_themestore</reportprofile>
         <tabs>true</tabs>
-        
-        <content displayname="Fane 1">  
+
+        <content displayname="Fane 1">
             <input type="text" displayname="&lt;strong&gt;Felter markeret med * skal udfyldes.&lt;/strong&gt;"/>
-        
+
             <input type="input" id="val1" displayname="AnlægsID" required="true" urlparam="id" onkeyup="if (jQuery('#val1').val() !== '' &amp;&amp; jQuery('#val2').val() !== '') { datasourceResponse.check({datasource: 'formular-test-validatetable', command: 'read-validate', val1: jQuery('#val1').val(), val2: jQuery('#val2').val()}) } else {datasourceResponse.hide()}"/>
             <input type="input" id="val2" displayname="Kode" required="true" urlparam="kode" onkeyup="if (jQuery('#val1').val() !== '' &amp;&amp; jQuery('#val2').val() !== '') { datasourceResponse.check({datasource: 'formular-test-validatetable', command: 'read-validate', val1: jQuery('#val1').val(), val2: jQuery('#val2').val()}) } else {datasourceResponse.hide()}"/>
 
@@ -1565,7 +1565,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="input" id="data_val4" displayname=""/>
             <input type="input" displayname="Husk:"  urlparam="val5" condition="datasourceResponse.valid === true"/>
         </content>
-        
+
         <content displayname="Opsummering og godkendelse" type="confirm">
             <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt; Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
             <input type="h1" displayname="Opsummering og godkendelse"/>
@@ -1586,23 +1586,23 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         <reportlayers>default</reportlayers>
         <reportprofile>kbh_themestore</reportprofile>
         <tabs>true</tabs>
-        
-        <content displayname="Fane 1">  
+
+        <content displayname="Fane 1">
             <input type="text" displayname="&lt;strong&gt;Felter markeret med * skal udfyldes.&lt;/strong&gt;"/>
-        
+
             <input type="dropdown"  id="val1" displayname="Vælg?" urlparam="val1" required="true" validate="Feltet skal udfyldes.">
                 <option value="" name=""/>
                 <option value="1" name="1"/>
                 <option value="2" name="2"/>
             </input>
-            
+
             <input type="input" displayname="Skal være udfyldt (validation):"  regexp=".+" validate="Feltet skal udfyldes." urlparam="val2" condition="jQuery('#val1').val() === '2'"/>
             <input type="input" displayname="Skal være udfyldt (required):"  required="true" urlparam="val3" condition="jQuery('#val1').val() === '2'"/>
 
             <input type="input" displayname="Felt uden condition:"  urlparam="val4"/>
             <input type="input" displayname="Felt med condition:"  urlparam="val5" condition="jQuery('#val1').val() === '1'"/>
         </content>
-        
+
         <content displayname="Opsummering og godkendelse" type="confirm">
             <input type="message" class="alert alert-danger" displayname="&lt;strong&gt;Manglende oplysninger&lt;/strong&gt; Det er markeret nedenfor, hvor der mangler oplysninger" condition="formular.valid === false"/>
             <input type="h1" displayname="Opsummering og godkendelse"/>
@@ -1653,11 +1653,11 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <option value="oprensning af sø" name="Oprensning af sø"/>
                 <option value="udvidelse af sø" name="Udvidelse af sø"/>
             </input>
-            <input type="dropdown" id="ansv" displayname="*Er du ansvarlig FØR arrangementet" urlparam="ansvarlig_foer"  condition="jQuery('#arr').val() == 'udvidelse af sø'"> 
-		        <option value="" name=""/> 
-		        <option value="1" name="Ja"/> 
-		        <option value="0" name="Nej"/> 
-    		</input>   
+            <input type="dropdown" id="ansv" displayname="*Er du ansvarlig FØR arrangementet" urlparam="ansvarlig_foer"  condition="jQuery('#arr').val() == 'udvidelse af sø'">
+                <option value="" name=""/>
+                <option value="1" name="Ja"/>
+                <option value="0" name="Nej"/>
+            </input>
             <input type="input" displayname="Val 10" urlparam="val10"/>
             <input type="radiobutton" displayname="Brugertype" urlparam="brugertype" id="brugertype" defaultvalue="raadgiver">
                 <option value="virksomhed" name="Virksomhed"/>
@@ -1671,9 +1671,9 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <maptools>
                 <maptool displayname="Flyt kortet" name="pan"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="ds_jordstykke"/>
-                <maptool displayname="Tegn en polygon" name="polygon"/>
-                <maptool displayname="Tegn et punkt" name="point" default="true"/>
-                <maptool displayname="Tegn en linie" name="line"/>
+                <maptool displayname="Tegn en polygon" name="polygon" disable="true"/>
+                <maptool displayname="Tegn et punkt" name="point" default="true" condition="jQuery('#navn').val() !== '1'"/>
+                <maptool displayname="Tegn en linie" name="line" condition="jQuery('#navn').val() !== '1'"/>
                 <maptool displayname="Tegn en cirkel" name="circle"/>
                 <maptool displayname="Slet en geometri" name="delete"/>
             </maptools>
@@ -1682,7 +1682,6 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
                     <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
-                    <theme name="DRIKKEVANDS_INTER" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
                 </themes>
             </map>
             <area urlparam="areal" displayname="Areal"/>
@@ -1717,10 +1716,10 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <page parser="setFrid" errortype="error">formular.create-frid-not-working</page>
             <page parser="setFrid" errortype="error" errormessage="Den er helt gal og vi stopper her!">formular.create-frid-not-working</page>
             <page parser="setFrid" errortype="info" errormessage="Dette bliver aldrig vist da det sker efter en ERROR!">formular.create-frid-not-working</page>
-<!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
-<!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
-<!--             <page>formular.save</page> -->
-<!--             <page>formular.move.pdf</page> -->
+            <!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
+            <!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
+            <!--             <page>formular.save</page> -->
+            <!--             <page>formular.move.pdf</page> -->
         </submitpages>
         <log>true</log>
         <content>
@@ -1821,10 +1820,10 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         <subheader></subheader>
         <submitpages>
             <page parser="setFrid">formular.create-frid</page>
-<!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
-<!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
-<!--             <page>formular.save</page> -->
-<!--             <page>formular.move.pdf</page> -->
+            <!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
+            <!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
+            <!--             <page>formular.save</page> -->
+            <!--             <page>formular.move.pdf</page> -->
         </submitpages>
         <js>/modules/formular/test/js/poll.js</js>
         <tabs class="testtab">true</tabs>
@@ -1833,7 +1832,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <message name="done">Mange tak for hjælpen!</message>
         </messages>
         <content displayname="Hvor tilfreds er du">
-<!--             <input type="input" id="journalnr" displayname="Indtast Jounalnummer" urlparam="journalnr" defaultvalue="09.02.01-P19" onkeyup="Poll.setFormularType(jQuery('#journalnr').val());"/> -->
+            <!--             <input type="input" id="journalnr" displayname="Indtast Jounalnummer" urlparam="journalnr" defaultvalue="09.02.01-P19" onkeyup="Poll.setFormularType(jQuery('#journalnr').val());"/> -->
             <input type="input" id="journalnr" displayname="Indtast Jounalnummer" urlparam="journalnr" defaultvalue="09.20.02-K08" onkeyup="Poll.setFormularType(jQuery('#journalnr').val());"/>
             <input type="radiobutton" displayname="Er du *" urlparam="brugertype" id="brugertype" defaultvalue="none" onchange="Poll.setFormularType(jQuery('#journalnr').val());">
                 <option value="virksomhed" name="Virksomhed"/>
@@ -1927,11 +1926,11 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             </input>
             <input type="text" displayname="Hvilken sagsbehandlingstid havde vi lovet dig?" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
             <input type="input" displayname="" id="svar2_10" urlparam="svar2_10" condition="Poll.formulartype == 2 &amp;&amp; Poll.state['svar2_8']=='nej' &amp;&amp; Poll.state['svar2_9']=='nej'"/>
-            
-            
+
+
         </content>
         <content displayname="Information">
-        
+
 
             <!-- FORMULAR 1+2 - FANE 2 -->
 
@@ -1959,7 +1958,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             </input>
 
             <input type="textarea" urlparam="svar2_6" displayname="Kommentar"/>
-            
+
 
         </content>
         <content displayname="Uddybende bemærkninger">
@@ -1971,16 +1970,16 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="input" displayname="Email" urlparam="email" condition="(Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')) || (Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2'))"/>
         </content>
     </formular>
-    
+
     <formular name="poll1">
         <header>Spørgeskemaundersøgelse</header>
         <subheader></subheader>
         <submitpages>
             <page parser="setFrid">formular.create-frid</page>
-<!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
-<!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
-<!--             <page>formular.save</page> -->
-<!--             <page>formular.move.pdf</page> -->
+            <!--             <page condition="Poll.formulartype == 1 &amp;&amp; (Poll.state['svar1_1']=='1' || Poll.state['svar1_1']=='2')">formular.mail.1</page> -->
+            <!--             <page condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">formular.mail.2</page> -->
+            <!--             <page>formular.save</page> -->
+            <!--             <page>formular.move.pdf</page> -->
         </submitpages>
         <js>/modules/formular/test/js/poll.js</js>
         <tabs class="testtab">true</tabs>
@@ -1999,7 +1998,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="hidden" id="kontakttype" urlparam="kontakttype" defaultvalue="0"/>
         </content>
         <content displayname="Information">
-        
+
             <input type="text" displayname="Hvor tilfreds har du været med vores tilsyn?" condition="Poll.formulartype == 1"/>
             <input type="radiobutton" displayname="" id="svar1_1" urlparam="svar1_1" defaultvalue="0" condition="Poll.formulartype == 1" onchange="Poll.setFormularState('svar1_1');">
                 <option value="4" name="Meget tilfreds"/>
@@ -2034,8 +2033,8 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <option value="2" name="I mindre grad"/>
                 <option value="1" name="Slet ikke"/>
             </input>
-            
-            
+
+
             <input type="text" displayname="Hvor tilfreds er du med sagens forløb?" condition="Poll.formulartype == 2"/>
             <input type="radiobutton" displayname="" id="svar2_1" urlparam="svar2_1" defaultvalue="0" condition="Poll.formulartype == 2" onchange="Poll.setFormularState('svar2_1');">
                 <option value="4" name="Meget tilfreds"/>
@@ -2066,7 +2065,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <option value="1" name="Slet ikke"/>
             </input>
             <input type="textarea" urlparam="svar2_6" displayname="Kommentar" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_2']=='ja')"/>
-            
+
             <input type="text" displayname="Hvor tilfreds er du med kommunens medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_7" urlparam="svar2_7" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="4" name="Meget tilfreds"/>
@@ -2094,7 +2093,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <option value="2" name="Det var hverken nemt eller svært"/>
                 <option value="1" name="Det var svært at forstå"/>
             </input>
-            
+
             <input type="text" displayname="Svarer vores afgørelse til dine forventninger efter dialog med vores medarbejder?" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')" />
             <input type="radiobutton" displayname="" id="svar2_12" urlparam="svar2_12" defaultvalue="0" condition="Poll.formulartype == 2 &amp;&amp; (Poll.state['svar2_1']=='1' || Poll.state['svar2_1']=='2')">
                 <option value="4" name="I høj grad"/>
@@ -2174,8 +2173,8 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="hidden" urlparam="about" defaultvalue="Location"/>
             <maptools>
                 <maptool displayname="Tegn en polygon" name="polygon" default="true"/>
-<!--                 <maptool displayname="Tegn et punkt" name="point"/> -->
-<!--                 <maptool displayname="Tegn en linie" name="line"/> -->
+                <!--                 <maptool displayname="Tegn et punkt" name="point"/> -->
+                <!--                 <maptool displayname="Tegn en linie" name="line"/> -->
                 <maptool displayname="Slet en geometri" name="delete"/>
                 <maptool displayname="Flyt/rotér en geometri" name="move"/>
                 <maptool displayname="Ændre en geometri" name="modify"/>
@@ -2616,26 +2615,26 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="hidden" urlparam="about" defaultvalue="Datovælger med begrænsninger"/>
 
             <input type="text" displayname="Sætter dato til 21 dage tidligere"/>
-            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDate('frist_startdato',jQuery('#frist_slutdato').val(),-21)"/> 
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDate('frist_startdato',jQuery('#frist_slutdato').val(),-21)"/>
             <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato" urlparam="frist_startdato"/>
 
             <input type="text" displayname="Sætter dato til 21 dage tidligere samt begrænser til ikke mere end 21 dage tidligere"/>
-            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato1"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato1',jQuery('#frist_slutdato1').val(),-21); setDateLimit('frist_startdato1',d)"/> 
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato1"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato1',jQuery('#frist_slutdato1').val(),-21); setDateLimit('frist_startdato1',d)"/>
             <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato1" urlparam="frist_startdato"/>
 
             <input type="text" displayname="Sætter dato til 21 dage tidligere samt begrænser til ikke mere end 21 dage tidligere samt ikke efter valgt dato"/>
-            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato2"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/> 
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato2"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/>
             <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato2" urlparam="frist_startdato"/>
 
             <input type="text" displayname="Udfyld en ledetekst efter valg"/>
-            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato3"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="jQuery('#frist_startdato3_displayname').html('Vedligehold, der afsluttes '+jQuery('#frist_slutdato3').val()+' påbegyndes tidligst:')"/> 
+            <input type="date" displayname="*Vedligehold gennemføres senest:"   id="frist_slutdato3"  urlparam="frist_slutdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="jQuery('#frist_startdato3_displayname').html('Vedligehold, der afsluttes '+jQuery('#frist_slutdato3').val()+' påbegyndes tidligst:')"/>
             <input type="date" displayname="*Vedligehold p åbegyndes tidligst:" id="frist_startdato3" urlparam="frist_startdato"/>
 
             <input type="text" displayname="Begrænsede muligheder ud fra en datasource"/>
-            <input type="date" displayname="Vælg dato:" default="01.01.2013"  id="frist_dato4"  urlparam="frist_slutdato" limitfromdatasource="formular-test-dates" regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/> 
+            <input type="date" displayname="Vælg dato:" default="01.01.2013"  id="frist_dato4"  urlparam="frist_slutdato" limitfromdatasource="formular-test-dates" regexp=".+" validate="Datoen er ikke udfyldt" onchange="var d = setDate('frist_startdato2',jQuery('#frist_slutdato2').val(),-21); setDateLimit('frist_startdato2',d,jQuery('#frist_slutdato2').val())"/>
 
             <input type="text" displayname="Begrænser datovælger ud fra valgt dato samt datasource"/>
-            <input type="date" displayname="Vælg først startdato:"   id="frist_startdato5"  urlparam="frist_startdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDateLimitSpan('frist_slutdato5',jQuery('#frist_startdato5').val())"/> 
+            <input type="date" displayname="Vælg først startdato:"   id="frist_startdato5"  urlparam="frist_startdato"  regexp=".+" validate="Datoen er ikke udfyldt" onchange="setDateLimitSpan('frist_slutdato5',jQuery('#frist_startdato5').val())"/>
             <input type="date" displayname="Vælg slutdato"           id="frist_slutdato5" urlparam="frist_slutdato" condition="jQuery('#frist_startdato5').val() != ''" limitfromdatasource="formular-test-dates"/>
 
         </content>
@@ -2874,7 +2873,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="input" displayname="ABC:" urlparam="val7"/>
         </content>
     </formular>
-    
+
     <formular name="soe-test">
         <title>Ansøgningsskema til vandhuller</title>
         <header>Ansøgningsskema til &lt;br/&gt;vandhuller</header>
@@ -2936,7 +2935,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="input" displayname="Tlf. nr.:" id="tlf1" urlparam="tlf"/>
             <input type="input" displayname="Tlf. nr.:" id="tlf2" urlparam="tlf" onkeyup="formular.compare('tlf1','tlf2','De to skal være ens')"/>
             <!-- input type="input" displayname="Træffetid:" urlparam="traeffetid" id="trtid" onkeyup="if (jQuery('#trtid').val() == 'a') {jQuery('#tlfnr').val('abc')} else {jQuery('#tlfnr').val('123')}"/-->
-            <input type="input" displayname="XTræffetid:" urlparam="traeffetid" id="trtid" onkeyup="jQuery('#tlf1').val((jQuery('#trtid').val()-0)*127)" regexp="[0-9]" validate="Det skal være et tal!"/> 
+            <input type="input" displayname="XTræffetid:" urlparam="traeffetid" id="trtid" onkeyup="jQuery('#tlf1').val((jQuery('#trtid').val()-0)*127)" regexp="[0-9]" validate="Det skal være et tal!"/>
             <input type="file"  displayname="Vedlæg tegning:" urlparam="filnavn" extensions="pdf,gif"/>
             <input type="date" displayname="Opsættelses dato:" urlparam="date1" defaultvalue="08.04.2013"/>
             <conflicts class="warning" displayname="Vær opmærksom på at arealet ligger inden for 10 meter fra et §3 område" targerset="konflikt"/>
@@ -2967,15 +2966,15 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="input" displayname="Navn:" urlparam="val0" defaultvalue="Paging"/>
             <input type="input" displayname="Adresse:" urlparam="val1"/>
             <columns class="test">
-	            <column>
-		            <input type="input" displayname="Tlf" urlparam="val2"/>
-		            <input type="input" displayname="Email:" urlparam="val3"/>
-	                <input type="input" displayname="Hest:" urlparam="val6"/>
-	            </column>
-	            <column>
-		            <input type="input" displayname="Postnr:" urlparam="val4"/>
-		            <input type="input" displayname="By:" urlparam="val5"/>
-	            </column>
+                <column>
+                    <input type="input" displayname="Tlf" urlparam="val2"/>
+                    <input type="input" displayname="Email:" urlparam="val3"/>
+                    <input type="input" displayname="Hest:" urlparam="val6"/>
+                </column>
+                <column>
+                    <input type="input" displayname="Postnr:" urlparam="val4"/>
+                    <input type="input" displayname="By:" urlparam="val5"/>
+                </column>
             </columns>
         </content>
         <content displayname="Kort">
@@ -3006,56 +3005,56 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
     </formular>
     <formular name="errorpages">
         <title>ErrorPages</title>
-		<header>Simpel formular til test af ErrorPages</header>
+        <header>Simpel formular til test af ErrorPages</header>
         <submitpages>
-			<page errortype="info" errormessage="Fejl i page - info">formular.test.deliberate.fail</page>
-			<!-- <page errortype="warning" errormessage="Fejl i page - warning">formular.test.deliberate.fail</page> -->
-			<!-- <page errortype="error" errormessage="Fejl i page - error">formular.test.deliberate.fail</page> -->
-		</submitpages>
-		<errorpages>
-			<page parser="setFrid">formular.create-frid</page>
-			<page parser="setPdf">formular.test.deliberate.fail.pdf</page>
-			<page>formular.move.pdf</page>
-		</errorpages>
-		<reportprofile>ekstern_all</reportprofile>
+            <page errortype="info" errormessage="Fejl i page - info">formular.test.deliberate.fail</page>
+            <!-- <page errortype="warning" errormessage="Fejl i page - warning">formular.test.deliberate.fail</page> -->
+            <!-- <page errortype="error" errormessage="Fejl i page - error">formular.test.deliberate.fail</page> -->
+        </submitpages>
+        <errorpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.test.deliberate.fail.pdf</page>
+            <page>formular.move.pdf</page>
+        </errorpages>
+        <reportprofile>ekstern_all</reportprofile>
         <reportlayers>default</reportlayers>
-		<showreport>false</showreport>
-		<messages>
+        <showreport>false</showreport>
+        <messages>
             <message name="done">Oplysningerne er nu registreret.</message>
-			<message name="saving">Oplysningerne gemmes.</message>
+            <message name="saving">Oplysningerne gemmes.</message>
             <message name="error">Der er desværre opstået en fejl!!!</message>
         </messages>
 
         <tabs class="testtab">true</tabs>
-		<content displayname="Send">
-			<input type="text" displayname="Tryk blot send"/>
+        <content displayname="Send">
+            <input type="text" displayname="Tryk blot send"/>
         </content>
     </formular>
     <formular name="errorpages_multi">
         <title>ErrorPages</title>
-		<header>Simpel formular til test af ErrorPages</header>
+        <header>Simpel formular til test af ErrorPages</header>
         <submitpages>
-			<page errortype="info" errormessage="Fejl i page - info">formular.test.deliberate.fail</page>
-			<page errortype="warning" errormessage="Fejl i page - warning">formular.test.deliberate.fail</page>
-			<page errortype="error" errormessage="Fejl i page - error">formular.test.deliberate.fail</page>
-		</submitpages>
-		<errorpages>
-			<page parser="setFrid">formular.create-frid</page>
-			<page parser="setPdf">formular.test.deliberate.fail.pdf</page>
-			<page>formular.move.pdf</page>
-		</errorpages>
-		<reportprofile>ekstern_all</reportprofile>
+            <page errortype="info" errormessage="Fejl i page - info">formular.test.deliberate.fail</page>
+            <page errortype="warning" errormessage="Fejl i page - warning">formular.test.deliberate.fail</page>
+            <page errortype="error" errormessage="Fejl i page - error">formular.test.deliberate.fail</page>
+        </submitpages>
+        <errorpages>
+            <page parser="setFrid">formular.create-frid</page>
+            <page parser="setPdf">formular.test.deliberate.fail.pdf</page>
+            <page>formular.move.pdf</page>
+        </errorpages>
+        <reportprofile>ekstern_all</reportprofile>
         <reportlayers>default</reportlayers>
-		<showreport>false</showreport>
-		<messages>
+        <showreport>false</showreport>
+        <messages>
             <message name="done">Oplysningerne er nu registreret.</message>
-			<message name="saving">Oplysningerne gemmes.</message>
+            <message name="saving">Oplysningerne gemmes.</message>
             <message name="error">Der er desværre opstået en fejl - henvend dig til nærmeste kommunale instans</message>
         </messages>
 
         <tabs class="testtab">true</tabs>
-		<content displayname="Send">
-			<input type="text" displayname="Tryk blot send"/>
+        <content displayname="Send">
+            <input type="text" displayname="Tryk blot send"/>
         </content>
     </formular>
 

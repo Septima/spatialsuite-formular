@@ -2209,7 +2209,24 @@ Formular = SpatialMap.Class ({
         this.currentMapTool = type;
     },
 
+    isGeometryValid: function (wkt) {
+        if (wkt.match(/POLYGON/i) && wkt.split(',').length < 4) {
+            // Polygons with only two nodes
+            return false;
+        }
+        if (wkt.match(/LINESTRING/i) && wkt.split(',').length < 2) {
+            // Lines with only one node
+            return false;
+        }
+        return true;
+    },
+
     featureDrawed: function (event) {
+
+        if (!this.isGeometryValid(event.wkt.toString())) {
+            return false;
+        }
+
         if (this.multipleGeometries === false) {
             if (this.feature.length > 0) {
                 var a = [];
@@ -2650,7 +2667,11 @@ Formular = SpatialMap.Class ({
     setCurrentValues: function (params) {
 
         if (this.map && params.wkt) {
-            this.map.drawWKT (params.wkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+            if (this.isGeometryValid(params.wkt)) {
+                this.map.drawWKT(params.wkt, SpatialMap.Function.bind(this.featureDrawed, this), {styles: this.style});
+            } else {
+                delete params.wkt;
+            }
         }
 
         for (var name in this.postparams) {

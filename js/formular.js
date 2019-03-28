@@ -3195,7 +3195,7 @@ Formular = SpatialMap.Class ({
                                 type: 'error',
                                 name: 'submitFinal',
                                 message: m,
-                                obj: JSON.stringify(params)
+                                obj: JSON.stringify(params).substring(0,10000)
                             });
 
                             if (this.bootstrap === true) {
@@ -3226,7 +3226,7 @@ Formular = SpatialMap.Class ({
                         type: 'error',
                         name: 'submitFinal',
                         message: 'No respose from server',
-                        obj: JSON.stringify(params)
+                        obj: JSON.stringify(params).substring(0,10000)
                     });
                     if (this.bootstrap === true) {
                         var html = '<div class="alert alert-danger"><div class="header">Der opstod en fejl i forbindelse med registreringen af ansøgningen</div>Prøv igen eller kontakt kommunen.</div></div>'+
@@ -3611,7 +3611,7 @@ Formular = SpatialMap.Class ({
                 type: type,
                 name: params.page,
                 message: message,
-                obj: JSON.stringify(params)
+                obj: JSON.stringify(params).substring(0,10000)
             });
         }
         return params;

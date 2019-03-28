@@ -1724,7 +1724,6 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         <log>true</log>
         <content>
             <input type="hidden" urlparam="about" defaultvalue="Store"/>
-            <address id="address" urlparam="address" defaultvalue="Frederiksberggade 28, 1459 København K" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="[module.spatialaddress.filter]"></address>
             <maptools>
                 <maptool displayname="Tegn et punkt" name="point" default="true"/>
                 <maptool displayname="Flyt kortet" name="pan"/>

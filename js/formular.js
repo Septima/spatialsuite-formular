@@ -931,7 +931,8 @@ Formular = SpatialMap.Class ({
                 this.mapId = id;
 
                 if (this.bootstrap === true) {
-                    contentcontainer.append('<div id="'+id+'_row" class="form-group mapcontainer"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><div id="'+id+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></div>');
+                    var label = node.attr('displayname') || ''
+                    contentcontainer.append('<div id="'+id+'_row" class="form-group mapcontainer"><label for="'+id+'">'+label+(req ? ' <span class="required">*</span>':'')+'</label><div id="'+id+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></div>');
                 } else {
                     contentcontainer.append('<tr id="'+id+'_row"><td colspan="2"><div id="'+id+'" class="map'+(className ? ' '+className : '')+'"></div><div class="features_attributes"></div></td></tr>');
                 }

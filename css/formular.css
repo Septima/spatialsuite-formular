@@ -202,7 +202,7 @@ td {
 }
 .button {
     float: right;
-    background-image: url("/images/standard/editing_tool_bar.png");
+    background-image: url("/modules/formular/images/editing_tool_bar.png");
     background-repeat: no-repeat;
     background-position: -467px 0;
     cursor: pointer;

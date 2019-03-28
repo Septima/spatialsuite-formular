@@ -2179,7 +2179,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <maptool displayname="Ændre en geometri" name="modify"/>
                 <maptool displayname="Udpeg en matrikel" name="select" datasource="kms_matrikelregister"/>
             </maptools>
-            <map class="my_map_class" multiplegeometries="true">
+            <map class="my_map_class" multiplegeometries="true" mergegeometries="false">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>

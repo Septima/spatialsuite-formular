@@ -42,7 +42,7 @@ Formular = SpatialMap.Class ({
 
     inputOptions: {},
 
-    reportprofile: 'alt',
+    reportprofile: 'septima',
     reportlayers: 'default',
     reportxsl: 'kvittering',
     reportmapscale: null,
@@ -1528,6 +1528,21 @@ Formular = SpatialMap.Class ({
                 break;
         }
 
+        postparam.set = SpatialMap.Function.bind(function (id, type, val) {
+            if (type === 'checkbox') {
+                if (val === 'true') {
+                    val = true;
+                } else if (val === 'false') {
+                    val = false;
+                }
+                jQuery('#' + id).prop('checked', val);
+            } else if (type === 'radiobutton') {
+                jQuery('input:radio[name=' + id + '][value="' + val + '"]').prop('checked', true);
+            } else {
+                jQuery('#'+id).val(val);
+            }
+        }, this, id, type)
+
         return postparam;
 
     },
@@ -2241,8 +2256,12 @@ Formular = SpatialMap.Class ({
                 this.feature = [];
             }
         } else {
+            if (typeof this.featureCount === 'undefined') {
+                this.featureCount = 0;
+            }
+            this.featureCount++;
 
-            var id = (this.featureCount ? this.featureCount + 1 : 1);
+            var id = this.featureCount;
             setTimeout(SpatialMap.Function.bind(function(id) {
                 this.map.setFeatureStyle(event.id,{label: id});
             },this,id),200);
@@ -2388,16 +2407,12 @@ Formular = SpatialMap.Class ({
     },
 
     addFeatureAttributes: function (event) {
-        if (typeof this.featureCount === 'undefined') {
-            this.featureCount = 0;
-        }
-        this.featureCount++;
         var w = jQuery('<div class="attributeswrapper"></div>');
         var h = jQuery('<div class="attributesheader"><span class="text">Geometri '+this.featureCount+'</span></div>');
         w.append(h);
         event.element = w;
 
-        var d = jQuery('<span class="icon icon-times"></span>');
+        var d = jQuery('<span class="icon icon-times" title="Slet denne geometri"></span>');
         d.click(SpatialMap.Function.bind(function (feature) {
             feature.element.remove();
             this.map.deleteFeature(feature.id);
@@ -2667,14 +2682,6 @@ Formular = SpatialMap.Class ({
 
     setCurrentValues: function (params) {
 
-        if (this.map && params.wkt) {
-            if (this.isGeometryValid(params.wkt)) {
-                this.map.drawWKT(params.wkt, SpatialMap.Function.bind(this.featureDrawed, this), {styles: this.style});
-            } else {
-                delete params.wkt;
-            }
-        }
-
         for (var name in this.postparams) {
             if (typeof params[name] !== 'undefined') {
                 var input = jQuery('#' + this.postparams[name].id);
@@ -2701,6 +2708,27 @@ Formular = SpatialMap.Class ({
 
     },
 
+    setCurrentFeatures: function (features) {
+        console.log(features);
+        this.map.deleteFeature();
+        for (var i = 0; i < features.length; i++) {
+            var feature = features[i];
+            if (this.isGeometryValid(feature.wkt)) {
+                feature.id = this.map.drawWKT(feature.wkt, SpatialMap.Function.bind(this.featureDrawed, this), {styles: this.style});
+                var f = this.getFeature(feature.id);
+                for (var name in feature) {
+                    if (name !== 'wkt' && f.params) {
+                        if (typeof f.params[name] !== 'undefined') {
+                            f.params[name].set(feature[name])
+                        }
+                    }
+                }
+            } else {
+                delete feature.wkt;
+            }
+        }
+    },
+
     setCurrentMap: function (mapState) {
         this.map.zoomTo(mapState.zoomLevel);
         var x, y;
@@ -2712,6 +2740,16 @@ Formular = SpatialMap.Class ({
             y = mapState.extent[1]+(mapState.extent[3]-mapState.extent[1])/2;
         }
         this.map.panTo('POINT('+x+' '+y+')');
+    },
+
+    getFeature: function(id) {
+        for (var i = 0; i < this.feature.length; i++) {
+            var f = this.feature[i];
+            if (f.id === id) {
+                return f;
+            }
+        }
+        return null;
     },
 
     validateMap: function () {
@@ -2726,9 +2764,25 @@ Formular = SpatialMap.Class ({
     writeLocalStore: function () {
         if (store.enabled) {
             var params = this.getCurrentValues();
+
+            var features = []
+            for (var i = 0; i < this.feature.length; i++) {
+                var f = this.feature[i];
+                var p = this.getParams(f.params, {});
+                var o = {
+                    index: i,
+                    wkt: f.wkt.toString()
+                }
+                for (var name in p.params) {
+                    o[name] = p.params[name]
+                }
+                features.push(o)
+            }
+
             var o = {
                 params: params,
-                map: this.currentMapState
+                map: this.currentMapState,
+                features: features
             }
             store.set(this.name,o);
         }
@@ -2740,6 +2794,9 @@ Formular = SpatialMap.Class ({
             if (o) {
                 if (o.params) {
                     this.setCurrentValues(o.params);
+                }
+                if (o.features) {
+                    this.setCurrentFeatures(o.features);
                 }
                 if (o.map) {
                     this.setCurrentMap(o.map);
@@ -3838,6 +3895,9 @@ Formular = SpatialMap.Class ({
                     var rows = data.row[0].row;
                     if (rows.length > 0) {
                         this.setCurrentValues(rows[0]);
+                        if (typeof rows[0].wkt !== 'undefined') {
+                            this.setCurrentFeatures([rows[0]]);
+                        }
                     }
                 }
 

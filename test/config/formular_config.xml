@@ -446,11 +446,17 @@
             <input type="hidden" urlparam="about" defaultvalue="Validering af dropdown udfyldt fra en datasource"/>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
             <input id="udnyttelse" type="dropdown" displayname="Arealets udnyttelse pt.:" urlparam="val0" datasource="formular-test-lookup" command="read" required="true" regexp=".+" validate="Arealets udnyttelse skal vælges!"/>
-            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1" regexp="^.+$" required="true">
+            <input id="kategori" type="dropdown" displayname="Kategori:" urlparam="val1" regexp="['1','2','3']" validate="Vælg noget rigtigt" required="true">
                 <option value="" name=""/>
-                <option value="1" name="Bygninger"/>
+                <option value="1" name="Bygninger 1"/>
                 <option value="2" name="Veje &amp; stier"/>
                 <option value="3" name="Grønne områder"/>
+            </input>
+            <input type="dropdown" displayname="*Vedligeholdelses-metode:" urlparam="metode_vedligehold" regexp="['1','2','3','4']" validate="Der skal vælges en metode">
+                <option value="1" name="Manuelt"/>
+                <option value="2" name="Mejekurv"/>
+                <option value="3" name="Grødeskærebåd"/>
+                <option value="4" name="Gennemgang for væltede træer"/>
             </input>
         </content>
     </formular>

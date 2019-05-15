@@ -2709,7 +2709,9 @@ Formular = SpatialMap.Class ({
     },
 
     setCurrentFeatures: function (features) {
-        this.map.deleteFeature();
+        if (this.map) {
+            this.map.deleteFeature();
+        }
         for (var i = 0; i < features.length; i++) {
             var feature = features[i];
             if (this.isGeometryValid(feature.wkt)) {

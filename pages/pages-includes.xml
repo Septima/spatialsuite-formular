@@ -59,7 +59,7 @@
                 <url-parameter name="remove" value="false"/> 
             </url-parameters>
         </data>
-        <data handler="datasource" operation="execute-command">
+        <!-- <data handler="datasource" operation="execute-command">
             <url-parameters>
                 <url-parameter name="datasource" value="userdatasource"/>
                 <url-parameter name="command" value="write"/>
@@ -67,7 +67,7 @@
                 <url-parameter name="dynamiclayer" value="user*"/>
                 <url-parameter name="geometrycolumn" value="shape_wkt"/>
             </url-parameters>
-        </data>
+        </data> -->
         <data handler="session" operation="show-all-dynamiclayers"/>
         <data handler="map" operation="get-map-data">
             <url-parameters>

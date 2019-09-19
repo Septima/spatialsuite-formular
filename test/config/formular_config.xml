@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <formular name="testv4">
+        <title>Formular til test</title>
+        <header>Formular til test</header>
+        <subheader></subheader>
+        <submitpages>
+            <page parser="setPdf">formular.send.a</page>
+        </submitpages>
+        <reportprofile>septima</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>kvitering</reportxsl>
+        <tabs>true</tabs>
+
+        <content displayname="Tidsramme" >
+            <input type="input" displayname="Andet" urlparam="time" defaultvalue="2"/>
+            <maptools>
+                <maptool displayname="Tegn et punkt" name="point" default="true"/>
+            </maptools>
+            <map class="my_map_class">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="http://kortforsyningen.kms.dk/topo_skaermkort"/>
+                </themes>
+            </map>
+        </content>
+    </formular>
+
     <formular name="pdftest">
         <header>Test fejlhåndtering i PDF</header>
 

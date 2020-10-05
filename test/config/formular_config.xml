@@ -489,12 +489,12 @@
         </content>
     </formular>
     <formular name="skiftkortudsnit">
-        <header>Skift kortudsnit alt efter hvad der er valgt i en dropdown</header>
+        <header>Skift kortudsnit/lag alt efter hvad der er valgt i en dropdown</header>
         <subheader></subheader>
         <submitpage>formular.send.general.nomap</submitpage>
         <reportprofile>demo01</reportprofile>
         <content>
-            <input type="hidden" urlparam="about" defaultvalue="Skift kortudsnit alt efter hvad der er valgt i en dropdown"/>
+            <input type="hidden" urlparam="about" defaultvalue="Skift kortudsnit/lag alt efter hvad der er valgt i en dropdown"/>
             <input type="dropdown" displayname="By" id="by" urlparam="by" onchange="var e = jQuery('#by').val().split(',');formular.map.zoomToExtent({x1:e[0],y1:e[1],x2:e[2],y2:e[3]});">
                 <option value="600599.590217,6227768.190217,609303.590217,6234168.190217" name="Ebeltoft"/>
                 <option value="612451.113703,6249947.64292,621155.113703,6256347.64292" name="Grenå"/>

@@ -290,7 +290,9 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                 <themes>
                     <theme name="theme-grundkort_2007" host="http://tile.randers.dk/service/wms"/>
                     <!-- Følgende atributter kan tilføjes til et theme:
+                        id            - Optional ID, der f.eks. kan bruges hvis man æøsker at tænde/slukke for et lag programmatisk
                         host          - Url til WMS service. Hvis man vil bruge en intern URL, tilføjes blot host="/wms"
+                        visible       - true | false
                         singleTile    - true | false
                         ratio         - Kun ved brug af singleTile. Default 1,5
                         opacity       - Skal laget være gennemsigtigt. Default 1 (ikke gennemsigtigt)
@@ -304,6 +306,8 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
 						displayname   - Ved at sætte displayname på et tema dukker en checkbox op under kortet, hvor laget kan tændes/slukkes
 						group		  - Hvis displayname er sat, kan flere temaer grupperes til en checkbox. Matrikelkort, baggrundskort, veje, stier mm. kan grupperes til eksempelvis "grundkort"
 						class		  - Mulighed for at sætte css stil.
+                        type          - Kan have værdien "layer" eller "baselayer". Default er "layer".
+                        image         - Bruges pt. til baggrundskortvælgeren. Hvis type="baselayer" og image er angivet, tilfæjes laget til baggrundskortvælgeren, der er placeret inde i kortet.
                     -->
                 </themes>
                 <atributter page="formular.geometry.save" datasource="min-datasource" command="min-command">

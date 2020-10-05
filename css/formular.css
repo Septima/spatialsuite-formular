@@ -9,6 +9,10 @@ body {
     line-height: 135%;
 }
 
+.hidden {
+    display: none !important;
+}
+
 *:before, *:after {
     box-sizing: border-box;
 }
@@ -102,6 +106,9 @@ td {
 .formular_content {
 }
 
+div.olMap.map {
+    position: relative;
+}
 .map {
     width:600px;
     height:600px;
@@ -668,4 +675,23 @@ div.helpbutton {
 .septimasearchcontainer > .septimasearch .ssTargetbit .ssTargetLabel,
 .septimasearchcontainer > .septimasearch .ssTargetbit .ssTargetCloseButton {
     /*background-color: #8e44ad;*/
+}
+
+
+
+ul.layertoggle {
+    position: absolute;
+    z-index: 10000000;
+    right: 8px;
+    top: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    cursor: pointer;
+}
+ul.layertoggle > li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
 }

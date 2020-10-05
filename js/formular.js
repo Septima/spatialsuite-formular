@@ -968,45 +968,59 @@ Formular = SpatialMap.Class ({
                 }
 
                 var layers = [];
+                var baselayers = [];
                 var themes = node.find('theme');
                 for (var j=0;j<themes.length;j++) {
                     var f = null;
+                    var visible = jQuery(themes[j]).attr('visible') !== 'false';
+                    var type = (jQuery(themes[j]).attr('type') ? jQuery(themes[j]).attr('type') : 'layer');
+                    var image = (jQuery(themes[j]).attr('image') ? jQuery(themes[j]).attr('image') : null);
                     var displayName = (jQuery(themes[j]).attr('displayname') ? jQuery(themes[j]).attr('displayname') : '');
                     var layerGroup = (jQuery(themes[j]).attr('group') ? jQuery(themes[j]).attr('group') : '');
                     var layerClass = (jQuery(themes[j]).attr('class') ? jQuery(themes[j]).attr('class') : 'valuediv');
-                    var layerId = layerGroup + displayName.replace(/\s+/, "");
+                    var layerId = jQuery(themes[j]).attr('id') || layerGroup + displayName.replace(/\s+/, "");
                     var addEventHandler = false;
-                    if (layerId != '') {
-                        if (layerGroup != '') {
-                            var existingGroup = this.groupedLayers[layerGroup];
-                            if (typeof existingGroup === 'undefined') {
-                                if (this.bootstrap === true) {
-                                    contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" checked="checked">'+displayName+'</label></div></div>');
-                                } else {
-                                    contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="'+layerClass+'"><label><input type="checkbox" id="'+layerGroup+'" checked="checked"/>'+layerGroup+'</label></div></td></tr>');
+
+                    console.log(layerId);
+
+                    if (type === 'baselayer' && image) {
+                        baselayers.push({
+                            id: layerId,
+                            image: image,
+                            text: displayName,
+                            visible: visible
+                        });
+                    } else {
+                        if (layerId != '') {
+                            if (layerGroup != '') {
+                                var existingGroup = this.groupedLayers[layerGroup];
+                                if (typeof existingGroup === 'undefined') {
+                                    if (this.bootstrap === true) {
+                                        contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" '+(visible ? 'checked="checked"' : '')+'>'+displayName+'</label></div></div>');
+                                    } else {
+                                        contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="'+layerClass+'"><label><input type="checkbox" id="'+layerGroup+'" '+(visible ? 'checked="checked"' : '')+'/>'+layerGroup+'</label></div></td></tr>');
+                                    }
+                                    this.groupedLayers[layerGroup] = [];
+                                    addEventHandler = true;
+                                    layerId = layerGroup;
                                 }
-                                this.groupedLayers[layerGroup] = [];
-                                addEventHandler = true;
-                                layerId = layerGroup;
-                            }
-                            this.groupedLayers[layerGroup].push(layerId);
-                        }
-                        else
-                        {
-                            if (this.bootstrap === true) {
-                                contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" checked="checked">'+displayName+'</label></div></div>');
+                                this.groupedLayers[layerGroup].push(layerId);
                             } else {
-                                contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="'+layerClass+'"><label><input type="checkbox" id="'+layerId+'" checked="checked"/>'+displayName+'</label></div></td></tr>');
-                            }
-                            addEventHandler = true;
-                        }
-                        if (addEventHandler) {
-                            jQuery('#'+layerId).change(SpatialMap.Function.bind(function (onchange,layerId) {
-                                if (onchange) {
-                                    onchange();
+                                if (this.bootstrap === true) {
+                                    contentcontainer.append('<div id="'+layerId+'_row_theme"><div class="checkbox"><label><input type="checkbox" title="'+displayName+'" id="'+layerId+'" '+(visible ? 'checked="checked"' : '')+'>'+displayName+'</label></div></div>');
+                                } else {
+                                    contentcontainer.append('<tr id="'+layerId+'_row_theme"><td colspan="2"><div class="'+layerClass+'"><label><input type="checkbox" id="'+layerId+'" '+(visible ? 'checked="checked"' : '')+'/>'+displayName+'</label></div></td></tr>');
                                 }
-                                this.mapLayerChanged(layerId);
-                            },this,f,layerId));
+                                addEventHandler = true;
+                            }
+                            if (addEventHandler) {
+                                jQuery('#'+layerId).change(SpatialMap.Function.bind(function (onchange,layerId) {
+                                    if (onchange) {
+                                        onchange();
+                                    }
+                                    this.mapLayerChanged(layerId);
+                                },this,f,layerId));
+                            }
                         }
                     }
 
@@ -1015,7 +1029,7 @@ Formular = SpatialMap.Class ({
                         id: layerId,
                         host: jQuery(themes[j]).attr('host'),
                         basemap:false,
-                        visible:true
+                        visible:visible
                     };
 
 
@@ -1145,6 +1159,36 @@ Formular = SpatialMap.Class ({
                     };
                 }
 
+                if (baselayers.length > 1) {
+                    var ul = jQuery('<ul class="layertoggle"></ul>');
+                    jQuery('#'+this.mapId).append(ul);
+                    var next = null;
+                    for (var layerIndex = 0; layerIndex < baselayers.length; layerIndex++) {
+                        var bl = baselayers[layerIndex];
+                        var li = jQuery('<li title="'+bl.text+'"><img src="'+bl.image+'"/></li>');
+                        li.addClass('hidden');
+                        ul.append(li);
+                        bl.li = li;
+                        if (bl.visible) {
+                            next = layerIndex+1;
+                        }
+                        li.on('click', function (clicked, baselayers) {
+                            var selectedIndex = null
+                            for (var i=0; i<baselayers.length; i++) {
+                                this.map.hideLayer(baselayers[i].id);
+                                baselayers[i].li.addClass('hidden');
+                                if (baselayers[i].id === clicked.id) {
+                                    selectedIndex = i;
+                                }
+                            }
+                            this.map.showLayer(clicked.id);
+                            var nextLayer = baselayers[selectedIndex+1] || baselayers[0]
+                            nextLayer.li.removeClass('hidden');
+                        }.bind(this, bl, baselayers))
+                    }
+                    var nextLayer = baselayers[next] || baselayers[0]
+                    nextLayer.li.removeClass('hidden');
+                }
 
                 break;
             case 'area':
@@ -1568,6 +1612,14 @@ Formular = SpatialMap.Class ({
         }
 
         this.checkConditions();
+    },
+
+    showLayer: function (id) {
+        this.map.showLayer(id);
+    },
+
+    hideLayer: function (id) {
+        this.map.hideLayer(id);
     },
 
     mapLayerChanged: function (id) {

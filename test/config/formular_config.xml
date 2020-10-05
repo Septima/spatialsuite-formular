@@ -22,7 +22,8 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="http://kortforsyningen.kms.dk/topo_skaermkort"/>
+                    <theme type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme type="baselayer" image="https://septima.dk/widget/img/ortofoto.png" visible="false" displayname="Ortofoto" name="orto_foraar" host="https://services.kortforsyningen.dk/service?servicename=orto_foraar"/>
                 </themes>
             </map>
         </content>
@@ -66,7 +67,7 @@
                 <extent>562880,6250516,577187,6262785</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://kortforsyningen.kms.dk/topo_skaermkort"/>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
                 </themes>
             </map>
         </content>
@@ -498,11 +499,18 @@
                 <option value="600599.590217,6227768.190217,609303.590217,6234168.190217" name="Ebeltoft"/>
                 <option value="612451.113703,6249947.64292,621155.113703,6256347.64292" name="Grenå"/>
             </input>
+            <input type="dropdown" displayname="Type" id="type" urlparam="type" onchange="var t = jQuery('#type').val();if (t==='3') { formular.showLayer('besk'); } else { formular.hideLayer('besk'); }">
+                <option value="1" name="Type 1"/>
+                <option value="2" name="Type 2"/>
+                <option value="3" name="Type 3 - Beskyttede naturtyper er kun tændt når denne er valgt"/>
+                <option value="4" name="Type 4"/>
+            </input>
             <map class="my_map_class">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="http://kortforsyningen.kms.dk/topo_skaermkort"/>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme id="besk" visible="false" displayname="Beskyttede naturtyper" name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -896,8 +904,8 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="http://kortforsyningen.kms.dk/topo_skaermkort"/>
-                    <theme displayname="Drikkevandsinteresse" name="DRIKKEVANDS_INTER" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme displayname="Beskyttede naturtyper" name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -2453,7 +2461,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
                     <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
-                    <theme name="DRIKKEVANDS_INTER" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                    <theme name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
             <conflicts class="warning-info" urlparam="konflikttekst1" displayname="&lt;strong&gt;Info&lt;/strong&gt; Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targetset="ejendom"/>
@@ -2482,7 +2490,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
                     <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
-                    <theme name="DRIKKEVANDS_INTER" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                    <theme name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
             <conflicts class="warning-info" urlparam="konflikttekst1" displayname="" targerset="drikkevand2"/>
@@ -2508,7 +2516,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
                     <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
-                    <theme name="DRIKKEVANDS_INTER" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                    <theme name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
             <conflicts onconflict="alert('Conflict');" onnoconflict="alert('Np conflict')" class="warning" urlparam="konflikttekst1" displayname="Det udpegede område har drikkevandsinteresser og du vil derfor få afslag på en ansøgning om at udlede kvælstoffer. Hvis du alligevel ønsker at ansøge, så tryk på 'Send'." targerset="drikkevand"/>
@@ -2535,7 +2543,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
                     <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
-                    <theme name="DRIKKEVANDS_INTER" opacity=".3" host="http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"/>
+                    <theme name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>

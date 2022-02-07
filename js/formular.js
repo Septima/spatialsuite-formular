@@ -959,6 +959,7 @@ Formular = SpatialMap.Class ({
                 } else {
                     resolutions = this.resolutions;
                 }
+                resolutions = resolutions.sort(function(a, b){return b-a});
 
                 this.multipleGeometries = (typeof node.attr('multiplegeometries') !== 'undefined' && node.attr('multiplegeometries') === 'true');
                 this.mergeGeometries = (typeof node.attr('mergegeometries') === 'undefined' || node.attr('mergegeometries') === 'true');
@@ -969,6 +970,17 @@ Formular = SpatialMap.Class ({
                     delete this.style.label;
                 }
 
+                // Projection
+                proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+                proj4.defs('urn:x-ogc:def:crs:EPSG:25832', proj4.defs('EPSG:25832'));
+                ol.proj.proj4.register(proj4);
+                var projection = new ol.proj.Projection({
+                    code: 'EPSG:25832',
+                    extent: [120000, 5661139.2, 958860.8, 6500000],
+                    units: 'm'
+                });
+                ol.proj.addProjection(projection);
+                
                 var layers = [];
                 var baselayers = [];
                 var themes = node.find('theme');
@@ -1027,12 +1039,17 @@ Formular = SpatialMap.Class ({
                     var l = {
                         layername: jQuery(themes[j]).attr('layername') || jQuery(themes[j]).attr('name'),
                         id: layerId,
+                        version: '1.1.0',
                         host: jQuery(themes[j]).attr('host'),
                         basemap:false,
                         visible:visible
                     };
 
 
+                    var version = jQuery(themes[j]).attr('version');
+                    if (version) {
+                        l.version = version;
+                    }
                     var servicename = jQuery(themes[j]).attr('servicename');
                     if (servicename) {
                         l.servicename = servicename;
@@ -1069,7 +1086,7 @@ Formular = SpatialMap.Class ({
                     var sourceOptions = {
                         url: l.host,
                         params: {
-                            'VERSION': '1.3.0',
+                            'VERSION': l.version,
                             'FORMAT': 'image/png',
                             'TRANSPARENT': 'TRUE',
                             'LAYERS': l.layername
@@ -1097,6 +1114,10 @@ Formular = SpatialMap.Class ({
                         }
                         wmslayer = new ol.layer.Image(layeroptions)
                     } else {
+                        sourceOptions.tileGrid = new ol.tilegrid.TileGrid({
+                            origin: ol.extent.getTopLeft([120000, 5661139.2, 958860.8, 6500000]),
+                            resolutions: resolutions
+                        });
                         var wmssource = new ol.source.TileWMS(sourceOptions)
                         var layeroptions = {
                             opacity: l.opacity || 1,
@@ -1125,16 +1146,6 @@ Formular = SpatialMap.Class ({
                 // }
                 // this.map = new SpatialMap.Map (id,mapoptions);
 
-                // Projection
-                proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-                proj4.defs('urn:x-ogc:def:crs:EPSG:25832', proj4.defs('EPSG:25832'));
-                ol.proj.proj4.register(proj4);
-                var projection = new ol.proj.Projection({
-                    code: 'EPSG:25832',
-                    extent: [120000, 5661139.2, 958860.8, 6500000],
-                    units: 'm'
-                });
-                ol.proj.addProjection(projection);
 
                 var controls = [
                     new ol.control.ScaleLine({})
@@ -1170,6 +1181,8 @@ Formular = SpatialMap.Class ({
                     logo: false,
                     layers: layers,
                     view: new ol.View({
+                        // resolutions: resolutions,
+                        maxResolution: resolutions[0],
                         minZoom: 0,
                         maxZoom: 16,
                         zoom: 7,

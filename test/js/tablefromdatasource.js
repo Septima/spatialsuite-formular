@@ -18,7 +18,7 @@ function addTable (container, datasource, val) {
             type: 'POST',
             async: true,
             data : params,
-            success : SpatialMap.Function.bind( function(container, data) {
+            success : function(container, data) {
 
                 if (typeof data.row !== 'undefined' && typeof data.row[0] !== 'undefined' && typeof data.row[0].row !== 'undefined') {
                     var rows = data.row[0].row;
@@ -62,7 +62,7 @@ function addTable (container, datasource, val) {
                     }
                 }
 
-            },this, container),
+            }.bind(this, container),
             error: function () {
             }
         });

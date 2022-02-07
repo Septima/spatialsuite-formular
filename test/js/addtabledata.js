@@ -12,7 +12,7 @@ function addTableData (container, datasource) {
         dataType: "json",
         url: '/modules/formular/test/js/tabledata.json',
         data: {},
-        success: SpatialMap.Function.bind( function(container, data) {
+        success: function(container, data) {
 
             if (typeof data.row !== 'undefined' && typeof data.row[0] !== 'undefined' && typeof data.row[0].row !== 'undefined') {
                 var rows = data.row[0].row;
@@ -24,27 +24,27 @@ function addTableData (container, datasource) {
                     // Dette er overskrifterne for hver kolonne
 
                     var th1 = jQuery('<div class="col-custom-30 custom-header"><p><span>Navn</span><span class="sortable"></span></p></div>');
-                    th1.click(SpatialMap.Function.bind(sortRows, this, container, 'colnum-1', th1));
+                    th1.click(sortRows.bind(this, container, 'colnum-1', th1));
                     table.append(th1);
 
                     var th2 = jQuery('<div class="col-custom-dato custom-header"><p><span>Adresse</span><span class="sortable"></span></p></div>');
-                    th2.click(SpatialMap.Function.bind(sortRows, this, container, 'colnum-2', th2));
+                    th2.click(sortRows.bind(this, container, 'colnum-2', th2));
                     table.append(th2);
 
                     var th3 = jQuery('<div class="col-custom-dato custom-header"><p><span>Postby</span><span class="sortable"></span></p></div>');
-                    th3.click(SpatialMap.Function.bind(sortRows, this, container, 'colnum-3', th3));
+                    th3.click(sortRows.bind(this, container, 'colnum-3', th3));
                     table.append(th3);
 
                     var th4 = jQuery('<div class="col-custom-dato custom-header"><p><span>P-nummer</span><span class="sortable"></span></p></div>');
-                    th4.click(SpatialMap.Function.bind(sortRows, this, container, 'colnum-4', th4));
+                    th4.click(sortRows.bind(this, container, 'colnum-4', th4));
                     table.append(th4);
 
                     var th5 = jQuery('<div class="col-custom-dato custom-header"><p><span>Seneste kontakt</span><span class="sortable"></span></p></div>');
-                    th5.click(SpatialMap.Function.bind(sortRows, this, container, 'colnum-5', th5));
+                    th5.click(sortRows.bind(this, container, 'colnum-5', th5));
                     table.append(th5);
 
                     var th6 = jQuery('<div class="col-custom-10 custom-header"><p><span>Konsulent</span><span class="sortable"></span></p></div>');
-                    th6.click(SpatialMap.Function.bind(sortRows, this, container, 'colnum-6', th6));
+                    th6.click(sortRows.bind(this, container, 'colnum-6', th6));
                     table.append(th6);
 
                     container.append(table);
@@ -83,7 +83,7 @@ function addTableData (container, datasource) {
                 }
             }
 
-        },this, container),
+        }.bind(this, container),
         error: function () {
             console.log('ERROR');
         }

@@ -54,7 +54,7 @@ function setDateLimitSpan (id, startdate) {
             end: null
         };
         
-        jQuery('#'+id).datepicker('option', 'beforeShowDay', SpatialMap.Function.bind(function (id, date) {
+        jQuery('#'+id).datepicker('option', 'beforeShowDay', function (id, date) {
 
             if (orgBeforeShowDay[id].start && date <= orgBeforeShowDay[id].start) {
                 return [false];
@@ -72,7 +72,7 @@ function setDateLimitSpan (id, startdate) {
                 return [false];
             }
             return [true];
-        },formular,id));
+        }.bind(formular,id));
 
     } else {
         orgBeforeShowDay[id] = { 

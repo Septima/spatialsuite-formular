@@ -61,8 +61,8 @@ Formular = SpatialMap.Class ({
     showTabs: false,
 
     style: {
-        strokeColor: '#FF0000',
-        fillColor: '#FFFFFF',
+        strokeColor: 'rgba(255,0,0,1)',
+        fillColor: 'rgba(255,255,255,0.3)',
         label: ''
     },
 

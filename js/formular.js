@@ -2448,6 +2448,63 @@ Formular = SpatialMap.Class ({
         }
     },
 
+    geolocation: null,
+    activateGeolocation: function () {
+        if (this.geolocation === null) {
+            this.geolocation = new ol.Geolocation({
+                // enableHighAccuracy must be set to true to have the heading value.
+                trackingOptions: {
+                    enableHighAccuracy: true,
+                },
+                projection: this.map.getView().getProjection()
+            });
+                        
+            var accuracyFeature = new ol.Feature(accuracyFeature);
+            this.geolocation.on('change:accuracyGeometry', function () {
+                console.log('change:accuracyGeometry');
+                accuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
+            }.bind(this, accuracyFeature));
+            
+            var positionFeature = new ol.Feature();
+            positionFeature.setStyle(
+                new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 6,
+                    fill: new ol.style.Fill({
+                        color: '#3399CC',
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: '#fff',
+                        width: 2,
+                    }),
+                }),
+                })
+            );
+            
+            this.geolocation.on('change:position', function (positionFeature) {
+                console.log('change:position');
+                var coordinates = this.geolocation.getPosition();
+                positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+            }.bind(this, positionFeature));
+            
+            this.geolocationLayer = new ol.layer.Vector({
+                map: this.map,
+                source: new ol.source.Vector({
+                    features: [accuracyFeature, positionFeature],
+                }),
+            });
+        }
+        this.geolocation.setTracking(true);
+        this.geolocationLayer.setVisible(true);
+        console.log('start');
+    },
+
+    deactivateGeolocation: function () {
+        this.geolocation.setTracking(false);
+        this.geolocationLayer.setVisible(false);
+        console.log('end');
+    },
+
     activateTool: function (type) {
 
         if (this.mapbuttons[type] && this.mapbuttons[type].element && this.mapbuttons[type].element.hasClass ('button_disabled')) {
@@ -2458,7 +2515,7 @@ Formular = SpatialMap.Class ({
         this.setClickEvent();
         this.panzoom();
         if (this.locateActive) {
-            this.map.locateRemove();
+            this.deactivateGeolocation();
             this.locateActive = false;
         }
         if (this.mapbuttons[type] && this.mapbuttons[type].element) {
@@ -2507,7 +2564,7 @@ Formular = SpatialMap.Class ({
             case 'location':
 
                 this.locateActive = true;
-                this.map.locate({watch: true});
+                this.activateGeolocation();
 
                 break;
             case 'template1':

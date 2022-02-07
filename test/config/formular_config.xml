@@ -2275,9 +2275,8 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             </maptools>
             <map class="my_map_class">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
-                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme version="1.3.0" type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>

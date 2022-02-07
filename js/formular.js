@@ -1152,7 +1152,7 @@ Formular = SpatialMap.Class ({
                 ];
 
                 this.drawSource = new ol.source.Vector();
-                var vector = new ol.layer.Vector({
+                this.drawVector = new ol.layer.Vector({
                     source: this.drawSource,
                     visible: true,
                     style: new ol.style.Style({
@@ -1175,6 +1175,7 @@ Formular = SpatialMap.Class ({
                         })
                     })
                 });
+                layers.push(this.drawVector);
 
                 this.map = new ol.Map({
                     target: id,
@@ -1194,8 +1195,6 @@ Formular = SpatialMap.Class ({
                     }).extend(controls)
                 });
                 this.map.getView().fit(extent);
-
-                this.map.addLayer(vector);
 
                 if (node.attr('onchange')) {
                     var mapchange = new Function (node.attr('onchange'));
@@ -2336,6 +2335,21 @@ Formular = SpatialMap.Class ({
         return id;
     },
 
+    drawDelete: function (handler) {
+        this.panzoom();
+        this.drawInteraction = new ol.interaction.Select({
+            layers: [this.drawVector]
+        });
+        this.drawInteraction.on('select', function (event) {
+            var features = event.target.getFeatures().getArray()
+            if (features.length > 0) {
+                var id = features[0].get('_id');
+                this.deleteFeature(id);
+            }
+        }.bind(this));
+        this.map.addInteraction(this.drawInteraction);
+    },
+
     deleteFeature: function (id) {
         if (!id) {
             this.drawSource.clear();
@@ -2398,7 +2412,7 @@ Formular = SpatialMap.Class ({
                 }
                 break;
             case 'delete':
-                this.map.drawDelete(this.featureDeleted.bind(this));
+                this.drawDelete(this.featureDeleted.bind(this));
                 break;
             case 'move':
                 this.map.drawMove(this.featureModified.bind(this));

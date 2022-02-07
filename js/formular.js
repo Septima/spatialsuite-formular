@@ -2281,21 +2281,26 @@ Formular = SpatialMap.Class ({
             source: this.drawSource,
             type: type
         });
-        this.drawInteraction.on('drawend', function (handler, event) {
+        this.drawInteraction.on('drawend', function (handler, type, event) {
             if (handler) {
                 var id = this.createID();
                 event.feature.setProperties({
                     _id: id,
                     _label: ''
                 });
-                var wkt = (new ol.format.WKT()).writeFeature(event.feature);
+                var geometry = event.feature.getGeometry();
+                if (type === 'Circle') {
+                    var newGeometry = new ol.geom.Polygon.fromCircle(geometry, 40);
+                    event.feature.setGeometry(newGeometry);
+                }
+                wkt = (new ol.format.WKT()).writeFeature(event.feature);
                 handler({
                     _feature: event.feature,
                     id: id,
                     wkt: wkt
                 });
             }
-        }.bind(this, handler));
+        }.bind(this, handler, type));
         this.map.addInteraction(this.drawInteraction);
     },
 
@@ -2309,6 +2314,10 @@ Formular = SpatialMap.Class ({
 
     drawPolygon: function (handler) {
         this.addInteraction('Polygon', handler)
+    },
+
+    drawCircle: function (handler) {
+        this.addInteraction('Circle', handler);
     },
 
     drawWKT: function (wkt, handler) {
@@ -2398,13 +2407,13 @@ Formular = SpatialMap.Class ({
                 this.map.drawModify(this.featureModified.bind(this));
                 break;
             case 'polygon':
-                this.drawPolygon(this.featureDrawed.bind(this),{styles: this.style});
+                this.drawPolygon(this.featureDrawed.bind(this));
                 break;
             case 'line':
-                this.drawLine(this.featureDrawed.bind(this),{styles: this.style});
+                this.drawLine(this.featureDrawed.bind(this));
                 break;
             case 'circle':
-                this.map.drawRegularPolygon(this.featureDrawed.bind(this),{draw: {sides: 40},styles: this.style});
+                this.drawCircle(this.featureDrawed.bind(this));
                 break;
             case 'point':
                 this.drawPoint(this.featureDrawed.bind(this));

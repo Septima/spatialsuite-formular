@@ -9,7 +9,23 @@ var formular = {
     }
 };
 
-Formular = SpatialMap.Class ({
+function Formular(options) {
+    this.extend (this, formularOptions);
+    this.extend (this, options);
+    this.getConfig();
+}
+
+Formular.prototype.extend = function (modifiedProps, withProps) {
+    if (withProps) {
+        for (var name in withProps) {
+            modifiedProps[name] = withProps[name];
+        }
+    }
+    return modifiedProps;
+}
+
+
+var formularOptions = {
 
     name: null,
     sessionid: null,
@@ -96,8 +112,17 @@ Formular = SpatialMap.Class ({
     _listeners: [],
     maxUploadFileSize: 100,
 
+    extend: function (modifiedProps, withProps) {
+        if (withProps) {
+            for (var name in withProps) {
+                modifiedProps[name] = withProps[name];
+            }
+        }
+        return modifiedProps;
+    },
+
     initialize: function (options) {
-        SpatialMap.Util.extend (this, options);
+        this.extend (this, options);
         this.getConfig();
     },
 
@@ -113,7 +138,7 @@ Formular = SpatialMap.Class ({
             dataType: 'xml',
             data: params,
             url: 'spatialmap',
-            success: SpatialMap.Function.bind (function (data, textStatus, jqXHR) {
+            success: function (data, textStatus, jqXHR) {
 
                 this.configData = data;
 
@@ -508,7 +533,7 @@ Formular = SpatialMap.Class ({
                 //Bootstrap - fjern loading når filen er hentet
                 jQuery('#content').removeClass('content-loading');
 
-            },this)
+            }.bind(this)
         });
 
         jQuery('#loading').hide();
@@ -2925,7 +2950,7 @@ Formular = SpatialMap.Class ({
             datasource: datasource
         };
         if (customparams) {
-            params = SpatialMap.Util.extend (params,customparams);
+            params = this.extend (params,customparams);
         }
         var list = [];
         jQuery.ajax( {
@@ -4430,7 +4455,7 @@ Formular = SpatialMap.Class ({
         }
         return false;
     }
-});
+};
 
 
 

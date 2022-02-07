@@ -47,15 +47,6 @@
                 <script type="text/javascript" charset="ISO-8859-1" src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
 
                 <script type="text/javascript" src="/modules/formular/js/jquery.ui.datepicker-[cbinfo.locale].js"></script>
-                <xsl:variable name="cbinfo.spatialmap.jslib">[cbinfo.spatialmap.jslib]</xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="substring($cbinfo.spatialmap.jslib,0,2) = '['">
-                        <script type="text/javascript" src="/js/standard/spatialmap/1.3.0/api/SpatialMap.js?modules=map,events"></script>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <script type="text/javascript" src="[cbinfo.spatialmap.jslib]"></script>
-                    </xsl:otherwise>
-                </xsl:choose>
 
                 <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v[module.formular.olversion]/build/ol.js"></script>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v[module.formular.olversion]/css/ol.css" type="text/css"></link>

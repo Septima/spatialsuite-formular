@@ -1989,12 +1989,6 @@ Formular = SpatialMap.Class ({
                         this.zoomTo(options.minzoom);
                     }
                 }
-                if (options.minscale) {
-                    var mapstate = this.getMapState();
-                    if (options.minscale > mapstate.scale) {
-                        this.map.zoomToScale(options.minscale);
-                    }
-                }
             }
             this.validAddress = false;
             jQuery('#'+id+'_wkt').val ('');
@@ -2017,12 +2011,6 @@ Formular = SpatialMap.Class ({
                         this.zoomTo(options.minzoom);
                     }
                 }
-                if (options.minscale) {
-                    var mapstate = this.getMapState();
-                    if (options.minscale > mapstate.scale) {
-                        this.map.zoomToScale(options.minscale);
-                    }
-                }
             }
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
@@ -2040,12 +2028,6 @@ Formular = SpatialMap.Class ({
                     var mapstate = this.getMapState();
                     if (options.minzoom < mapstate.zoomLevel) {
                         this.zoomTo(options.minzoom);
-                    }
-                }
-                if (options.minscale) {
-                    var mapstate = this.getMapState();
-                    if (options.minscale > mapstate.scale) {
-                        this.map.zoomToScale(options.minscale);
                     }
                 }
             }
@@ -2201,12 +2183,6 @@ Formular = SpatialMap.Class ({
                         var mapstate = this.getMapState();
                         if (options.minzoom < mapstate.zoomLevel) {
                             this.zoomTo(options.minzoom);
-                        }
-                    }
-                    if (options.minscale) {
-                        var mapstate = this.getMapState();
-                        if (options.minscale > mapstate.scale) {
-                            this.map.zoomToScale(options.minscale);
                         }
                     }
                 }
@@ -2519,7 +2495,7 @@ Formular = SpatialMap.Class ({
 
     featureDrawed: function (event) {
 
-        if (!this.isGeometryValid(event.wkt.toString())) {
+        if (!this.isGeometryValid(event.wkt)) {
             return false;
         }
 
@@ -2543,7 +2519,7 @@ Formular = SpatialMap.Class ({
 
             var id = this.featureCount;
             setTimeout(function(id) {
-                this.map.setFeatureLabel(event.id, id);
+                this.setFeatureLabel(event.id, id);
             }.bind(this,id),200);
 
             //Delete all others if not the same geometry type
@@ -2612,7 +2588,10 @@ Formular = SpatialMap.Class ({
         if (this.areaid != null) {
             var area = 0;
             for (var i=0;i<this.feature.length;i++) {
-                area += parseInt(this.feature[i].wkt.getArea());
+                var geometry = this.feature[i]._feature.getGeometry();
+                if (geometry.getArea) {
+                    area += parseInt(geometry.getArea());
+                }
             }
             jQuery('#areaspan_'+this.areaid).html(area);
             jQuery('#'+this.areaid).val(area);
@@ -2641,14 +2620,14 @@ Formular = SpatialMap.Class ({
             this.mergedFeature = null;
             callback();
         } else if (features.length === 1) {
-            this.mergedFeature = features[0].wkt.toString();
+            this.mergedFeature = features[0].wkt;
             callback();
         } else {
-            this.mergedFeature = features[0].wkt.toString();
+            this.mergedFeature = features[0].wkt;
 
             var a = [];
             for (var i=1;i<features.length;i++) {
-                a.push(features[i].wkt.toString());
+                a.push(features[i].wkt);
             }
 
             this.merge(a,function (callback,wkt) {
@@ -2731,7 +2710,7 @@ Formular = SpatialMap.Class ({
     selectFromDatasource: function (buf,datasource,wkt) {
         var params = {
             page: 'getfeature-from-wkt',
-            wkt: wkt.toString(),
+            wkt: wkt,
             sessionid: this.sessionid,
             datasource: datasource,
             command: 'read-spatial',
@@ -2752,7 +2731,7 @@ Formular = SpatialMap.Class ({
                         var add = true;
                         //If two features are identical then the two features are removed
                         for (var i=0;i<this.feature.length;i++) {
-                            if (this.feature[i].wkt.toString() === event.wkt.toString()) {
+                            if (this.feature[i].wkt === event.wkt) {
                                 this.deleteFeature (this.feature[i].id);
                                 this.feature.splice(i,1);
                                 add = false;
@@ -3065,7 +3044,7 @@ Formular = SpatialMap.Class ({
                 var p = this.getParams(f.params, {});
                 var o = {
                     index: i,
-                    wkt: f.wkt.toString()
+                    wkt: f.wkt
                 }
                 for (var name in p.params) {
                     o[name] = p.params[name]
@@ -3745,7 +3724,7 @@ Formular = SpatialMap.Class ({
             for (var i=0;i<this.feature.length;i++) {
                 var p = this.getParams(this.feature[i].params, params);
                 if (!this.mergeGeometries) {
-                    p.params.wkt = this.feature[i].wkt.toString();
+                    p.params.wkt = this.feature[i].wkt;
                 }
 
                 jQuery.ajax( {

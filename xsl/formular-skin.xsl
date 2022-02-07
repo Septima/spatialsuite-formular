@@ -57,6 +57,11 @@
                     </xsl:otherwise>
                 </xsl:choose>
 
+                <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v[module.formular.olversion]/build/ol.js"></script>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v[module.formular.olversion]/css/ol.css" type="text/css"></link>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.min.js"></script>
+
+
                 <link href="/modules/formular/css/virk/v2.1/css/bootstrap.min.css" rel="stylesheet" media="screen" />
                 <link href="/modules/formular/css/virk/v2.1/css/designmanual.css" rel="stylesheet" media="screen, print" />
                 <link href="/modules/formular/css/virk/v2.1/css/component.css" rel="stylesheet" media="screen" />

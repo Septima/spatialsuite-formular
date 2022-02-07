@@ -24,6 +24,9 @@ Formular = SpatialMap.Class ({
     map: null,
     extent: [539430.4,6237856,591859.2,6290284.8],
     resolutions: [0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4],
+
+    layers: {},
+
     geosearchOptions: null,
 
     currentMapState: null,
@@ -282,16 +285,16 @@ Formular = SpatialMap.Class ({
                             if (this.bootstrap === true) {
 
                                 tab.element = jQuery('<li id="tab'+k+'"><a title="'+displayname+'" href="#'+displayname+'">'+displayname+'</a></li>');
-                                tab.element.click(SpatialMap.Function.bind(function (tab) {
+                                tab.element.click(function (tab) {
                                     var count = this.validateTab(this.currentTab);
                                     this.showTab(tab.id);
-                                },this,tab));
+                                }.bind(this,tab));
                                 jQuery('.navlist').append(tab.element);
 
                             } else {
 
                                 tab.element = jQuery('<div id="tab'+k+'" class="arrow_box">'+displayname+'</div>');
-                                tab.element.click(SpatialMap.Function.bind(this.showTab,this,tab.id));
+                                tab.element.click(this.showTab.bind(this,tab.id));
                                 jQuery('.tabcontainer').append(tab.element);
                                 if (k < this.config.length-1) {
                                     jQuery('.tabcontainer').append('<div id="tabsep'+(k+1)+'" class="sep"/>');
@@ -412,13 +415,13 @@ Formular = SpatialMap.Class ({
                             var s = (k==this.config.length-1);
                             contentcontainer.append('<tr><td colspan="2" align="right"><div>'+(p?'<button id="previous'+k+'">Forrige</button>':'')+(n?'<button id="next'+k+'">Næste</button>':'')+(s?'<button id="sendbutton">Send</button>':'')+'</div></td></tr>');
                             if (p) {
-                                jQuery('button#previous'+k).click(SpatialMap.Function.bind(this.previous,this,k));
+                                jQuery('button#previous'+k).click(this.previous.bind(this,k));
                             }
                             if (n) {
-                                jQuery('button#next'+k).click(SpatialMap.Function.bind(this.next,this,k));
+                                jQuery('button#next'+k).click(this.next.bind(this,k));
                             }
                             if (s) {
-                                jQuery('button#sendbutton').click(SpatialMap.Function.bind(this.submit,this));
+                                jQuery('button#sendbutton').click(this.submit.bind(this));
                             }
 
                         }
@@ -440,8 +443,8 @@ Formular = SpatialMap.Class ({
                     if (this.showTabs) {
 
                         if (this.bootstrap) {
-                            jQuery('.buttons #previous').click(SpatialMap.Function.bind(this.previous,this));
-                            jQuery('.buttons #next').click(SpatialMap.Function.bind(this.next,this));
+                            jQuery('.buttons #previous').click(this.previous.bind(this));
+                            jQuery('.buttons #next').click(this.next.bind(this));
                             this.setButtons();
 
                             var button = jQuery('.buttons #submit');
@@ -449,7 +452,7 @@ Formular = SpatialMap.Class ({
                             if (func) {
                                 func = (new Function ('return ' + func));
                             }
-                            button.click(SpatialMap.Function.bind(function (func) {
+                            button.click(function (func) {
                                 var resp = true;
                                 if(func) {
                                     resp = func();
@@ -457,7 +460,7 @@ Formular = SpatialMap.Class ({
                                 if (resp !== false) {
                                     this.submit()
                                 }
-                            },this,func));
+                            }.bind(this,func));
 
                         } else {
 
@@ -465,7 +468,6 @@ Formular = SpatialMap.Class ({
                                 var c = 'confirm';
                                 jQuery('.tabcontainer').append('<div id="tabsep'+c+'" class="sep"/>');
                                 var item = jQuery('<div id="tab'+c+'">Godkend</div>');
-                                //item.click(SpatialMap.Function.bind(this.showTab,this,k));
                                 jQuery('.tabcontainer').append(item);
                             } else {
                                 jQuery('.tabcontainer div:last-child').removeClass('arrow_box');
@@ -473,7 +475,7 @@ Formular = SpatialMap.Class ({
                         }
                     } else {
                         if (this.bootstrap) {
-                            jQuery('.buttons #submit').click(SpatialMap.Function.bind(this.submit,this));
+                            jQuery('.buttons #submit').click(this.submit.bind(this));
                         }
                     }
 
@@ -493,7 +495,7 @@ Formular = SpatialMap.Class ({
 
                     this.checkConditions();
                     this.showTab(0);
-//                    setTimeout(SpatialMap.Function.bind(function () {this.next(-1)},this),1);
+//                    setTimeout(function () {this.next(-1)}.bind(this),1);
 
 //                    this.log({
 //                        type: 'info',
@@ -600,7 +602,7 @@ Formular = SpatialMap.Class ({
                     };
 
                     if (req) {
-                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                        this.inputValidation[id].handler = function (id,errormessage) {
                             var valid = (jQuery('#'+id).val() !== '');
                             var map = jQuery('#'+id+'_row > .map');
                             jQuery('#'+id+'_row > .required-enabled').removeClass('error');
@@ -610,7 +612,7 @@ Formular = SpatialMap.Class ({
                                 jQuery('<span id="'+id+'ValidationMessage" class="error validationMessage">'+errormessage+'</span>').insertAfter(jQuery('#'+id));
                             }
                             return valid;
-                        },this, id, this.inputValidation[id].message)  ;
+                        }.bind(this, id, this.inputValidation[id].message)  ;
                     }
 
                     if (regexp) {
@@ -634,7 +636,7 @@ Formular = SpatialMap.Class ({
                         url : '//smartadresse.dk/service/locations/2/detect/json/'+ value,
                         dataType : "jsonp",
                         data : o,
-                        success : SpatialMap.Function.bind(function(options,result) {
+                        success : function(options,result) {
                             if (result.data.length > 0) {
                                 var a = result.data[0];
                                 jQuery('input#'+options.id).val(a.presentationString);
@@ -647,7 +649,7 @@ Formular = SpatialMap.Class ({
                                 var disablemapValue = options.disablemap || null;
                                 this.addressSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
                             }
-                        },this,options)
+                        }.bind(this,options)
                     });
                 }
 
@@ -702,7 +704,7 @@ Formular = SpatialMap.Class ({
                     };
 
                     if (req) {
-                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                        this.inputValidation[id].handler = function (id,errormessage) {
                             var valid = (jQuery('#'+id).val() !== '');
                             var map = jQuery('#'+id+'_row > .map');
                             jQuery('#'+id+'_row > .required-enabled').removeClass('error');
@@ -715,7 +717,7 @@ Formular = SpatialMap.Class ({
                                 }
                             }
                             return valid;
-                        },this, id, this.inputValidation[id].message)  ;
+                        }.bind(this, id, this.inputValidation[id].message)  ;
                     }
 
                     if (regexp) {
@@ -734,7 +736,7 @@ Formular = SpatialMap.Class ({
                     }
                     o.limit = 1;
 
-                    this.getTicket (SpatialMap.Function.bind(function (options,value) {
+                    this.getTicket (function (options,value) {
                         options.ticket = this.ticket;
                         options.service = 'GEO';
                         options.search = value;
@@ -743,7 +745,7 @@ Formular = SpatialMap.Class ({
                             url: '//kortforsyningen.kms.dk/Geosearch',
                             dataType : "jsonp",
                             data : options,
-                            success : SpatialMap.Function.bind(function(options,result) {
+                            success : function(options,result) {
                                 if (result.data.length > 0) {
                                     var a = result.data[0];
                                     jQuery('input#'+options.id).val(a.presentationString);
@@ -756,9 +758,9 @@ Formular = SpatialMap.Class ({
                                     var disablemapValue = options.disablemap || null;
                                     this.geoSearchSelected (options,calculateDistanceFunctionString,disablemapValue,{target: jQuery('input#'+options.id)},ui);
                                 }
-                            },this,options)
+                            }.bind(this,options)
                         });
-                    },this,o,value));
+                    }.bind(this,o,value));
                 }
 
                 break;
@@ -855,7 +857,7 @@ Formular = SpatialMap.Class ({
                 //    };
                 //
                 //    if (req) {
-                //        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                //        this.inputValidation[id].handler = function (id,errormessage) {
                 //            var valid = (jQuery('#'+id).val() !== '');
                 //            var map = jQuery('#'+id+'_row > .map');
                 //            jQuery('#'+id+'_row > .required-enabled').removeClass('error');
@@ -868,7 +870,7 @@ Formular = SpatialMap.Class ({
                 //                }
                 //            }
                 //            return valid;
-                //        },this, id, this.inputValidation[id].message)  ;
+                //        }.bind(this, id, this.inputValidation[id].message)  ;
                 //    }
                 //
                 //    if (regexp) {
@@ -900,7 +902,7 @@ Formular = SpatialMap.Class ({
                     }
                     var id = 'mapbutton_'+counter+'_'+j;
                     var button = jQuery('<div id="'+id+'" class="button button_'+name+'" title="'+title+'"><div></div></div>')
-                    button.click(SpatialMap.Function.bind(this.activateTool,this,name));
+                    button.click(this.activateTool.bind(this,name));
                     this.mapbuttons[name] = {
                         element: button,
                         options: null,
@@ -981,8 +983,6 @@ Formular = SpatialMap.Class ({
                     var layerId = jQuery(themes[j]).attr('id') || layerGroup + displayName.replace(/\s+/, "");
                     var addEventHandler = false;
 
-                    console.log(layerId);
-
                     if (type === 'baselayer' && image) {
                         baselayers.push({
                             id: layerId,
@@ -1014,12 +1014,12 @@ Formular = SpatialMap.Class ({
                                 addEventHandler = true;
                             }
                             if (addEventHandler) {
-                                jQuery('#'+layerId).change(SpatialMap.Function.bind(function (onchange,layerId) {
+                                jQuery('#'+layerId).change(function (onchange,layerId) {
                                     if (onchange) {
                                         onchange();
                                     }
                                     this.mapLayerChanged(layerId);
-                                },this,f,layerId));
+                                }.bind(this,f,layerId));
                             }
                         }
                     }
@@ -1041,10 +1041,6 @@ Formular = SpatialMap.Class ({
                     if (singleTile && singleTile == 'true') {
                         l.singleTile = true;
                     }
-                    var buffer = jQuery(themes[j]).attr('buffer');
-                    if (buffer) {
-                        l.buffer = buffer-0;
-                    }
                     var ratio = jQuery(themes[j]).attr('ratio');
                     if (ratio) {
                         l.ratio = ratio-0;
@@ -1052,14 +1048,6 @@ Formular = SpatialMap.Class ({
                     var opacity = jQuery(themes[j]).attr('opacity');
                     if (opacity) {
                         l.opacity = opacity-0;
-                    }
-                    var maxScale = jQuery(themes[j]).attr('maxScale');
-                    if (maxScale) {
-                        l.maxScale = maxScale-0;
-                    }
-                    var minScale = jQuery(themes[j]).attr('minScale');
-                    if (minScale) {
-                        l.minScale = minScale-0;
                     }
                     var format = jQuery(themes[j]).attr('format');
                     if (format) {
@@ -1077,41 +1065,146 @@ Formular = SpatialMap.Class ({
                         l.ticket = this.getTicket (function () {}, true);
                         l.host = l.host + (l.host.match(/[?]/) === null ? '?' : '&') + 'ticket='+l.ticket;
                     }
-                    layers.push(l);
+
+                    var sourceOptions = {
+                        url: l.host,
+                        params: {
+                            'VERSION': '1.3.0',
+                            'FORMAT': 'image/png',
+                            'TRANSPARENT': 'TRUE',
+                            'LAYERS': l.layername
+                        }
+                    };
+                    if (typeof l.servicename !== 'undefined') {
+                        sourceOptions.params.servicename = l.servicename;
+                    }
+                    if (typeof l.sessionid !== 'undefined') {
+                        sourceOptions.params.sessionid = l.sessionid;
+                    }
+                    if (typeof l.format !== 'undefined') {
+                        sourceOptions.params.format = l.format;
+                    }
+
+                    var wmslayer
+                    if (typeof l.singleTile !== 'undefined' && l.singleTile === true) {
+                        var wmssource = new ol.source.ImageWMS(sourceOptions)
+                        var layeroptions = {
+                            opacity: l.opacity || 1,
+                            visible: visible,
+                            extent: [420000, 6025000, 905000, 6450000],
+                            ratio: l.ratio || 1,
+                            source: wmssource
+                        }
+                        wmslayer = new ol.layer.Image(layeroptions)
+                    } else {
+                        var wmssource = new ol.source.TileWMS(sourceOptions)
+                        var layeroptions = {
+                            opacity: l.opacity || 1,
+                            visible: visible,
+                            extent: [420000, 6025000, 905000, 6450000],
+                            source: wmssource
+                        }
+                        wmslayer = new ol.layer.Tile(layeroptions)
+                    }
+                    layers.push(wmslayer);
+                    this.layers[layerId] = wmslayer;
                 }
 
-                var mapoptions = {
-                    extent: {x1:extent[0],y1:extent[1],x2:extent[2],y2:extent[3]},
-                    resolutions: resolutions,
-                    layers: layers
+
+                if (node.attr('featurechange')) {
+                    var featurechange = new Function (node.attr('featurechange'));
+                    this.on('featureChanged',function (handler) {
+                        handler();
+                    }.bind(this,featurechange));
                 }
+
+                // var mapoptions = {
+                //     extent: {x1:extent[0],y1:extent[1],x2:extent[2],y2:extent[3]},
+                //     resolutions: resolutions,
+                //     layers: layers
+                // }
+                // this.map = new SpatialMap.Map (id,mapoptions);
+
+                // Projection
+                proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+                proj4.defs('urn:x-ogc:def:crs:EPSG:25832', proj4.defs('EPSG:25832'));
+                ol.proj.proj4.register(proj4);
+                var projection = new ol.proj.Projection({
+                    code: 'EPSG:25832',
+                    extent: [120000, 5661139.2, 958860.8, 6500000],
+                    units: 'm'
+                });
+                ol.proj.addProjection(projection);
+
+                var controls = [
+                    new ol.control.ScaleLine({})
+                ];
+
+                this.drawSource = new ol.source.Vector();
+                var vector = new ol.layer.Vector({
+                    source: this.drawSource,
+                    visible: true,
+                    style: new ol.style.Style({
+                        fill: new ol.style.Fill({
+                            color: this.style.fillColor
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: this.style.strokeColor,
+                            width: 2
+                        }),
+                        image: new ol.style.Circle({
+                            radius: 7,
+                            stroke: new ol.style.Stroke({
+                                color: this.style.strokeColor,
+                                width: 2
+                            }),
+                            fill: new ol.style.Fill({
+                                color: this.style.fillColor
+                            })
+                        })
+                    })
+                });
+
+                this.map = new ol.Map({
+                    target: id,
+                    logo: false,
+                    layers: layers,
+                    view: new ol.View({
+                        minZoom: 0,
+                        maxZoom: 16,
+                        zoom: 7,
+                        center: [711000, 6167500],
+                        projection: projection
+                    }),
+                    controls: ol.control.defaults({
+                        attribution: false
+                    }).extend(controls)
+                });
+                this.map.getView().fit(extent);
+
+                this.map.addLayer(vector);
 
                 if (node.attr('onchange')) {
                     var mapchange = new Function (node.attr('onchange'));
-                    mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (handler,map) {
+                    this.map.on('moveend', function (handler) {
+                        var map = this.getMapState();
                         this.currentMapState = map;
                         if (this.localstore) {
                             this.writeLocalStore();
                         }
                         handler(map);
-                    },this,mapchange);
+                    }.bind(this, mapchange));
                 } else {
-                    mapoptions.mapChangeHandler = SpatialMap.Function.bind(function (map) {
+                    this.map.on('moveend', function () {
+                        var map = this.getMapState();
                         this.currentMapState = map;
                         if (this.localstore) {
                             this.writeLocalStore();
                         }
-                    },this);
+                    }.bind(this));
                 }
 
-                if (node.attr('featurechange')) {
-                    var featurechange = new Function (node.attr('featurechange'));
-                    this.on('featureChanged',SpatialMap.Function.bind(function (handler) {
-                        handler();
-                    },this,featurechange));
-                }
 
-                this.map = new SpatialMap.Map (id,mapoptions);
 
                 var attributesNode = node.find('attributes');
                 var children = jQuery(attributesNode).children();
@@ -1141,7 +1234,7 @@ Formular = SpatialMap.Class ({
                         validate: true,
                         tab: tab,
                         message: errormessage,
-                        handler: SpatialMap.Function.bind(function (id,errormessage) {
+                        handler: function (id,errormessage) {
                             var valid = this.feature.length > 0;
                             var map = jQuery('#'+id+'_row > .map');
                             map.removeClass('error');
@@ -1155,7 +1248,7 @@ Formular = SpatialMap.Class ({
                             }
 
                             return valid;
-                        },this, id, errormessage)
+                        }.bind(this, id, errormessage)
                     };
                 }
 
@@ -1175,13 +1268,13 @@ Formular = SpatialMap.Class ({
                         li.on('click', function (clicked, baselayers) {
                             var selectedIndex = null
                             for (var i=0; i<baselayers.length; i++) {
-                                this.map.hideLayer(baselayers[i].id);
+                                this.hideLayer(baselayers[i].id);
                                 baselayers[i].li.addClass('hidden');
                                 if (baselayers[i].id === clicked.id) {
                                     selectedIndex = i;
                                 }
                             }
-                            this.map.showLayer(clicked.id);
+                            this.showLayer(clicked.id);
                             var nextLayer = baselayers[selectedIndex+1] || baselayers[0]
                             nextLayer.li.removeClass('hidden');
                         }.bind(this, bl, baselayers))
@@ -1204,7 +1297,7 @@ Formular = SpatialMap.Class ({
 
                 //For localstore
                 if (this.localstore) {
-                    jQuery('#'+id).change(SpatialMap.Function.bind(this.writeLocalStore,this));
+                    jQuery('#'+id).change(this.writeLocalStore.bind(this));
                 }
                 break;
             case 'conflicts':
@@ -1369,7 +1462,7 @@ Formular = SpatialMap.Class ({
                     }
                     var options = {
                         dateFormat: 'dd.mm.yy',
-                        onSelect: SpatialMap.Function.bind( function (id,changehandler) {
+                        onSelect: function (id,changehandler) {
                             if (typeof this.inputValidation[id] !== 'undefined' && this.inputValidation[id].validate === true) {
                                 jQuery('#'+id).isValid();
                             }
@@ -1377,7 +1470,7 @@ Formular = SpatialMap.Class ({
                             if (changehandler) {
                                 changehandler (jQuery('#'+id));
                             }
-                        },this,id, change),
+                        }.bind(this,id, change),
                         onClose: change
                     };
                     if (node.attr('onshow')) {
@@ -1422,7 +1515,7 @@ Formular = SpatialMap.Class ({
                         this.inputOptions[id] = this.inputOptions[id] || {};
                         this.inputOptions[id].disabledDays = disabledDays;
                         options.constrainInput = true;
-                        options.beforeShowDay = SpatialMap.Function.bind( function (disabledDays, mindate, maxdate, date) {
+                        options.beforeShowDay = function (disabledDays, mindate, maxdate, date) {
                             if (mindate && date < mindate) {
                                 return [false];
                             }
@@ -1437,7 +1530,7 @@ Formular = SpatialMap.Class ({
                                 return [false];
                             }
                             return [true];
-                        }, this, disabledDays, mindate, maxdate);
+                        }.bind(this, disabledDays, mindate, maxdate);
                     }
 
                     jQuery('#'+id).datepicker(options);
@@ -1446,14 +1539,14 @@ Formular = SpatialMap.Class ({
                     this.maxUploadFileSize = typeof node.attr('maxfilesize') === 'undefined' ? 100 : parseInt(node.attr('maxfilesize'));
                     if (this.bootstrap === true) {
                         contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><label for="'+id+'">'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="fileupload'+(req ? ' required-enabled':'')+'"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input '+(postparam.disabled ? 'disabled':'')+' type="file" name="file_'+id+'" id="file_'+id+'" /><span class="filupload-delete" title="Fjern vedhæftet fil"></span><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/> <input type="hidden" name="maxfilesize" value="'+this.maxUploadFileSize+'"/> </form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></div>');
-                        contentcontainer.find('#'+id+'_row .filupload-delete').click(SpatialMap.Function.bind(this.deleteFileUpload,this,id)).hide();
+                        contentcontainer.find('#'+id+'_row .filupload-delete').click(this.deleteFileUpload.bind(this,id)).hide();
                     } else {
                         contentcontainer.append('<tr id="'+id+'_row"><td><input type="hidden" id="'+id+'" value="'+(value || '')+'"/><input type="hidden" id="'+id+'_org" value="'+(value || '')+'"/><div class="labeldiv'+(className ? ' '+className : '')+'" id="'+id+'_displayname">'+node.attr('displayname')+'</div></td><td><div class="valuediv"><form id="form_'+id+'" method="POST" target="uploadframe_'+id+'" enctype="multipart/form-data" action="/jsp/modules/formular/upload.jsp"><input type="file" name="file_'+id+'" id="file_'+id+'" /><input type="hidden" name="callbackhandler" value="parent.formular.fileupload"/><input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="sessionid" value="'+this.sessionid+'"/><input type="hidden" name="formular" value="'+this.name+'"/> <input type="hidden" name="maxfilesize" value="'+this.maxUploadFileSize+'"/> </form><iframe name="uploadframe_'+id+'" id="uploadframe_'+id+'" frameborder="0" style="display:none;"></iframe></div></td></tr>');
                     }
-                    jQuery('#file_'+id).change (SpatialMap.Function.bind(function (id) {
+                    jQuery('#file_'+id).change (function (id) {
                         this.startFileUpload(id);
                         jQuery('#form_'+id).submit();
-                    },this,id));
+                    }.bind(this,id));
                 } else if (type=='checkbox') {
                     if (this.bootstrap === true) {
                         contentcontainer.append('<div id="'+id+'_row" class="form-group'+(className ? ' '+className : '')+'"><div class="checkbox'+(req ? ' required-enabled':'')+'"><label><input type="checkbox" title="'+node.attr('displayname')+'" '+(postparam.disabled ? 'disabled':'')+' id="'+id+'"'+(value=='false' ? '' : ' checked="checked"')+'>'+node.attr('displayname')+(req ? ' <span class="required">*</span>':'')+'</label></div>'+(postparam.description ? '<div class="description">'+postparam.description+'</div>':'')+'</div>');
@@ -1483,7 +1576,7 @@ Formular = SpatialMap.Class ({
                     };
 
                     if (req) {
-                        this.inputValidation[id].handler = SpatialMap.Function.bind(function (id,errormessage) {
+                        this.inputValidation[id].handler = function (id,errormessage) {
                             var valid = (jQuery('#'+id).val() !== '');
                             var type = jQuery('#'+id).attr('type');
                             //if (type === 'checkbox') {
@@ -1504,7 +1597,7 @@ Formular = SpatialMap.Class ({
                                 }
                             }
                             return valid;
-                        },this, id, this.inputValidation[id].message)  ;
+                        }.bind(this, id, this.inputValidation[id].message)  ;
                     }
 
                     if (regexp) {
@@ -1520,31 +1613,31 @@ Formular = SpatialMap.Class ({
                     var f = new Function (node.attr('onchange'));
                 }
                 if (type === 'radiobutton') {
-                    jQuery('input:radio[name='+id+']').change(SpatialMap.Function.bind(function (onchange,id) {
+                    jQuery('input:radio[name='+id+']').change(function (onchange,id) {
                         if (onchange) {
                             onchange();
                         }
                         this.inputChanged(id);
-                    },this,f,id));
+                    }.bind(this,f,id));
                 } else {
-                    jQuery('#'+id).change(SpatialMap.Function.bind(function (onchange,id) {
+                    jQuery('#'+id).change(function (onchange,id) {
                         if (onchange) {
                             onchange();
                         }
                         this.inputChanged(id);
-                    },this,f,id));
+                    }.bind(this,f,id));
                 }
 
                 var f = null;
                 if (node.attr('onkeyup')) {
                     var f = new Function (node.attr('onkeyup'));
                 }
-                jQuery('#'+id).keyup(SpatialMap.Function.bind(function (onkeyup,id) {
+                jQuery('#'+id).keyup(function (onkeyup,id) {
                     if (onkeyup) {
                         onkeyup();
                     }
                     this.inputChanged(id);
-                },this,f,id));
+                }.bind(this,f,id));
 
 //                if (node.attr('onkeyup')) {
 //                    jQuery('#'+id).keyup(new Function (node.attr('onkeyup')));
@@ -1572,7 +1665,7 @@ Formular = SpatialMap.Class ({
                 break;
         }
 
-        postparam.set = SpatialMap.Function.bind(function (id, type, val) {
+        postparam.set = function (id, type, val) {
             if (type === 'checkbox') {
                 if (val === 'true') {
                     val = true;
@@ -1585,7 +1678,7 @@ Formular = SpatialMap.Class ({
             } else {
                 jQuery('#'+id).val(val);
             }
-        }, this, id, type)
+        }.bind(this, id, type)
 
         return postparam;
 
@@ -1615,11 +1708,15 @@ Formular = SpatialMap.Class ({
     },
 
     showLayer: function (id) {
-        this.map.showLayer(id);
+        if (this.layers[id]) {
+            this.layers[id].setVisible(true);
+        }
     },
 
     hideLayer: function (id) {
-        this.map.hideLayer(id);
+        if (this.layers[id]) {
+            this.layers[id].setVisible(false);
+        }
     },
 
     mapLayerChanged: function (id) {
@@ -1627,23 +1724,23 @@ Formular = SpatialMap.Class ({
         var groupLayer = this.groupedLayers[id];
         if (checked) {
             if (typeof groupLayer === 'undefined') {
-                this.map.showLayer(id);
+                this.showLayer(id);
             }
             else {
                 for (i = 0; i<groupLayer.length; i++) {
                     var curId = groupLayer[i];
-                    this.map.showLayer(curId);
+                    this.showLayer(curId);
                 }
             }
         }
         else {
             if (typeof groupLayer === 'undefined') {
-                this.map.hideLayer(id);
+                this.hideLayer(id);
             }
             else {
                 for (i = 0; i<groupLayer.length; i++) {
                     var curId = groupLayer[i];
-                    this.map.hideLayer(curId);
+                    this.hideLayer(curId);
                 }
             }
         }
@@ -1768,9 +1865,9 @@ Formular = SpatialMap.Class ({
             jQuery('div#content fieldset').hide();
             this.tabs[i].contentElement.show();
 
-            setTimeout(SpatialMap.Function.bind(function (tab) {
+            setTimeout(function (tab) {
                 window.location.hash = tab.displayname;
-            },this,this.tabs[i]),100);
+            }.bind(this,this.tabs[i]),100);
 
             this.currentTab = i;
             this.tabs[i].active = true;
@@ -1824,12 +1921,12 @@ Formular = SpatialMap.Class ({
             },
             delay: 200,
             minLength : 1,
-            select : SpatialMap.Function.bind(this.addressSelected,this,options,calculateDistanceFunctionString,disablemapValue)
+            select : this.addressSelected.bind(this,options,calculateDistanceFunctionString,disablemapValue)
         });
     },
 
     setGeoSearch: function (options) {
-        this.getTicket (SpatialMap.Function.bind(function (options) {
+        this.getTicket (function (options) {
             var calculateDistanceFunctionString = options.geometrySelect || null;
             var disablemapValue = options.disablemap || null;
             options.ticket = this.ticket;
@@ -1858,9 +1955,9 @@ Formular = SpatialMap.Class ({
                 },
                 delay: 200,
                 minLength : 1,
-                select : SpatialMap.Function.bind(this.geoSearchSelected,this,options,calculateDistanceFunctionString,disablemapValue)
+                select : this.geoSearchSelected.bind(this,options,calculateDistanceFunctionString,disablemapValue)
             });
-        },this,options));
+        }.bind(this,options));
     },
 
     addressSelected: function (options,cdfs,disablemapValue,event,ui) {
@@ -1871,16 +1968,16 @@ Formular = SpatialMap.Class ({
         var id = jQuery(event.target).attr('id');
         if (ui.item.data.type == 'streetNameType' && disablemapValue != 'true') {
             if (this.map) {
-                this.map.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
+                this.zoomToExtent({x1:ui.item.data.xMin,y1:ui.item.data.yMin,x2:ui.item.data.xMax,y2:ui.item.data.yMax});
 
                 if (options.minzoom) {
-                    var mapstate = this.map.getMapState();
+                    var mapstate = this.getMapState();
                     if (options.minzoom < mapstate.zoomLevel) {
-                        this.map.zoomTo(options.minzoom);
+                        this.zoomTo(options.minzoom);
                     }
                 }
                 if (options.minscale) {
-                    var mapstate = this.map.getMapState();
+                    var mapstate = this.getMapState();
                     if (options.minscale > mapstate.scale) {
                         this.map.zoomToScale(options.minscale);
                     }
@@ -1899,16 +1996,16 @@ Formular = SpatialMap.Class ({
             }
 
             if (this.map && disablemapValue != 'true') {
-                this.map.zoomToExtent({x1:Math.min.apply(Math, x),y1:Math.min.apply(Math, y),x2:Math.max.apply(Math, x),y2:Math.max.apply(Math, y)});
+                this.zoomToExtent({x1:Math.min.apply(Math, x),y1:Math.min.apply(Math, y),x2:Math.max.apply(Math, x),y2:Math.max.apply(Math, y)});
 
                 if (options.minzoom) {
-                    var mapstate = this.map.getMapState();
+                    var mapstate = this.getMapState();
                     if (options.minzoom < mapstate.zoomLevel) {
-                        this.map.zoomTo(options.minzoom);
+                        this.zoomTo(options.minzoom);
                     }
                 }
                 if (options.minscale) {
-                    var mapstate = this.map.getMapState();
+                    var mapstate = this.getMapState();
                     if (options.minscale > mapstate.scale) {
                         this.map.zoomToScale(options.minscale);
                     }
@@ -1917,23 +2014,23 @@ Formular = SpatialMap.Class ({
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
             if (this.map && options.usegeometry) {
-                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+                this.drawWKT (ui.item.data.geometryWkt,this.featureDrawed.bind(this),{styles: this.style});
             }
 
 
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
         } else {
             if (this.map && disablemapValue != 'true') {
-                this.map.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
+                this.zoomToExtent({x1:ui.item.data.x-1,y1:ui.item.data.y-1,x2:ui.item.data.x+1,y2:ui.item.data.y+1});
 
                 if (options.minzoom) {
-                    var mapstate = this.map.getMapState();
+                    var mapstate = this.getMapState();
                     if (options.minzoom < mapstate.zoomLevel) {
-                        this.map.zoomTo(options.minzoom);
+                        this.zoomTo(options.minzoom);
                     }
                 }
                 if (options.minscale) {
-                    var mapstate = this.map.getMapState();
+                    var mapstate = this.getMapState();
                     if (options.minscale > mapstate.scale) {
                         this.map.zoomToScale(options.minscale);
                     }
@@ -1942,7 +2039,7 @@ Formular = SpatialMap.Class ({
             this.validAddress = true;
             jQuery('#'+id+'_wkt').val (ui.item.data.geometryWkt);
             if (this.map && options.usegeometry) {
-                this.map.drawWKT (ui.item.data.geometryWkt,SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+                this.drawWKT (ui.item.data.geometryWkt,this.featureDrawed.bind(this),{styles: this.style});
             }
             if (jQuery('#'+id+'_wkt').attr('value') != '') {
                 if (cdfs) {
@@ -1953,6 +2050,16 @@ Formular = SpatialMap.Class ({
 
         this.fireEvent('searchSelected', ui.item.data);
 
+    },
+
+    getMapState: function () {
+        var view = this.map.getView();
+
+        return {
+            zoomLevel: view.getZoom(),
+            extent: view.calculateExtent(this.map.getSize()),
+            center: view.getCenter()
+        }
     },
 
     getTicket: function (callback, sync) {
@@ -1974,10 +2081,10 @@ Formular = SpatialMap.Class ({
                 type: 'POST',
                 async: !sync,
                 data : params,
-                success : SpatialMap.Function.bind( function(callback, data, status) {
+                success : function(callback, data, status) {
                     this.ticket = data.row[0].expressionresult;
                     callback();
-                },this,callback)
+                }.bind(this,callback)
             });
 
             if (sync === true) {
@@ -1988,7 +2095,7 @@ Formular = SpatialMap.Class ({
     },
 
     setSeptimaSearch: function (options) {
-        this.getTicket (SpatialMap.Function.bind(function (options) {
+        this.getTicket (function (options) {
             var calculateDistanceFunctionString = options.geometrySelect || null;
             var disablemapValue = options.disablemap || null;
             options.ticket = this.ticket;
@@ -2046,11 +2153,11 @@ Formular = SpatialMap.Class ({
 
                 var view = new Septima.Search.DefaultView({input: options.id+'_search', placeholder: options.placeholder, controller: controller});
 
-                controller.addOnSelectHandler(SpatialMap.Function.bind(this.septimaSearchSelected,this,options,calculateDistanceFunctionString,disablemapValue,view));
+                controller.addOnSelectHandler(this.septimaSearchSelected.bind(this,options,calculateDistanceFunctionString,disablemapValue,view));
 
             },this,options,calculateDistanceFunctionString,disablemapValue));
 
-        },this,options));
+        }.bind(this,options));
     },
 
     searchUpdate: function () {
@@ -2075,16 +2182,16 @@ Formular = SpatialMap.Class ({
                             y2: bounds.bottom
                         };
 
-                    this.map.zoomToExtent(extent);
+                    this.zoomToExtent(extent);
 
                     if (options.minzoom) {
-                        var mapstate = this.map.getMapState();
+                        var mapstate = this.getMapState();
                         if (options.minzoom < mapstate.zoomLevel) {
-                            this.map.zoomTo(options.minzoom);
+                            this.zoomTo(options.minzoom);
                         }
                     }
                     if (options.minscale) {
-                        var mapstate = this.map.getMapState();
+                        var mapstate = this.getMapState();
                         if (options.minscale > mapstate.scale) {
                             this.map.zoomToScale(options.minscale);
                         }
@@ -2093,7 +2200,7 @@ Formular = SpatialMap.Class ({
                 this.validAddress = true;
                 jQuery('#' + options.id + '_wkt').val(wkt);
                 if (this.map && options.usegeometry) {
-                    this.map.drawWKT(wkt, SpatialMap.Function.bind(this.featureDrawed, this), {styles: this.style});
+                    this.drawWKT(wkt, this.featureDrawed.bind(this), {styles: this.style});
                 }
 
                 this.fireEvent('searchSelected', result);
@@ -2149,6 +2256,114 @@ Formular = SpatialMap.Class ({
         }
     },
 
+    clickHandler: null,
+    clickEventAdded: false,
+    setClickEvent: function (handler) {
+        if (!this.clickEventAdded) {
+            this.map.on('singleclick', function (evt) {
+                if (evt.dragging) {
+                    return;
+                }
+                if (this.clickHandler) {
+                    var point = this.map.getEventCoordinate(evt.originalEvent);
+                    this.clickHandler('POINT('+point[0]+' '+point[0]+')');
+                }
+            }.bind(this));
+        }
+        this.clickHandler = handler;
+    },
+
+    createID: function () {
+        return (Math.random()+1).toString(36).substring(2,8);
+    },
+
+    drawInteraction: null,
+
+    panzoom: function () {
+        if (this.drawInteraction !== null) {
+            this.map.removeInteraction(this.drawInteraction);
+            this.drawInteraction = null;
+        }
+    },
+
+    addInteraction: function (type, handler, options) {
+        this.panzoom();
+        this.drawInteraction = new ol.interaction.Draw({
+            source: this.drawSource,
+            type: type
+        });
+        this.drawInteraction.on('drawend', function (handler, event) {
+            if (handler) {
+                var id = this.createID();
+                event.feature.setProperties({
+                    _id: id,
+                    _label: ''
+                });
+                var wkt = (new ol.format.WKT()).writeFeature(event.feature);
+                handler({
+                    _feature: event.feature,
+                    id: id,
+                    wkt: wkt
+                });
+            }
+        }.bind(this, handler));
+        this.map.addInteraction(this.drawInteraction);
+    },
+
+    drawPoint: function (handler) {
+        this.addInteraction('Point', handler)
+    },
+
+    drawLine: function (handler) {
+        this.addInteraction('LineString', handler)
+    },
+
+    drawPolygon: function (handler) {
+        this.addInteraction('Polygon', handler)
+    },
+
+    drawWKT: function (wkt, handler) {
+        var id = this.createID();
+        var feature = (new ol.format.WKT()).readFeature(wkt);
+        feature.setProperties({
+            _id: id,
+            _label: ''
+        });
+        this.drawSource.addFeature(feature);
+        handler({
+            _feature: feature,
+            id: id,
+            wkt: wkt
+        })
+        return id;
+    },
+
+    deleteFeature: function (id) {
+        if (!id) {
+            this.drawSource.clear();
+        } else {
+            if (typeof id === 'string') {
+                id = [id];
+            }
+            for (var i=0;i<id.length;i++) {
+                var f = this.getFeature(id[i]);
+                if (f) {
+                    this.drawSource.removeFeature(f._feature);
+                }
+            }
+        }
+    },
+
+    setFeatureLabel: function (id, label) {
+        var f = this.getFeature(id);
+        if (f) {
+            var props = f._feature.getProperties()
+            props.label = label;
+            f._feature.setProperties(props);
+            // TODO: perhaps force repaint
+        }
+    },
+
     activateTool: function (type) {
 
         if (this.mapbuttons[type] && this.mapbuttons[type].element && this.mapbuttons[type].element.hasClass ('button_disabled')) {
@@ -2156,8 +2371,8 @@ Formular = SpatialMap.Class ({
         }
 
         this.resetButtons();
-        this.map.setClickEvent();
-        this.map.panzoom();
+        this.setClickEvent();
+        this.panzoom();
         if (this.locateActive) {
             this.map.locateRemove();
             this.locateActive = false;
@@ -2167,10 +2382,10 @@ Formular = SpatialMap.Class ({
         }
         switch(type) {
             case 'pan':
-                this.map.panzoom();
+                this.panzoom();
                 break;
             case 'select':
-                this.map.panzoom();
+                this.panzoom();
                 var datasource = this.mapbuttons[type].config.attr('datasource').toString().toLowerCase();
                 var buffer = this.mapbuttons[type].config.attr('buffer');
                 if (typeof buffer === 'undefined' )	{
@@ -2181,29 +2396,29 @@ Formular = SpatialMap.Class ({
                     this.activateTool(this.currentMapTool);
                     return;
                 } else {
-                    this.map.setClickEvent(SpatialMap.Function.bind(this.selectFromDatasource,this,buffer,datasource));
+                    this.setClickEvent(this.selectFromDatasource.bind(this,buffer,datasource));
                 }
                 break;
             case 'delete':
-                this.map.drawDelete(SpatialMap.Function.bind(this.featureDeleted,this));
+                this.map.drawDelete(this.featureDeleted.bind(this));
                 break;
             case 'move':
-                this.map.drawMove(SpatialMap.Function.bind(this.featureModified,this));
+                this.map.drawMove(this.featureModified.bind(this));
                 break;
             case 'modify':
-                this.map.drawModify(SpatialMap.Function.bind(this.featureModified,this));
+                this.map.drawModify(this.featureModified.bind(this));
                 break;
             case 'polygon':
-                this.map.drawPolygon(SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+                this.drawPolygon(this.featureDrawed.bind(this),{styles: this.style});
                 break;
             case 'line':
-                this.map.drawLine(SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+                this.drawLine(this.featureDrawed.bind(this),{styles: this.style});
                 break;
             case 'circle':
-                this.map.drawRegularPolygon(SpatialMap.Function.bind(this.featureDrawed,this),{draw: {sides: 40},styles: this.style});
+                this.map.drawRegularPolygon(this.featureDrawed.bind(this),{draw: {sides: 40},styles: this.style});
                 break;
             case 'point':
-                this.map.drawPoint(SpatialMap.Function.bind(this.featureDrawed,this),{styles: this.style});
+                this.drawPoint(this.featureDrawed.bind(this));
                 break;
             case 'location':
 
@@ -2266,9 +2481,9 @@ Formular = SpatialMap.Class ({
                     wkt = 'POINT('+start.x+' '+start.y+')';
                 }
 
-                this.map.drawWKT(wkt,SpatialMap.Function.bind(function (event) {
+                this.drawWKT(wkt,function (event) {
                     this.featureDrawed(event);
-                },this),{styles: this.style});
+                }.bind(this),{styles: this.style});
 
                 this.activateTool(this.currentMapTool);
                 return;
@@ -2304,7 +2519,7 @@ Formular = SpatialMap.Class ({
                         this.feature[i].element.remove();
                     }
                 }
-                this.map.deleteFeature (a);
+                this.deleteFeature (a);
                 this.feature = [];
             }
         } else {
@@ -2314,12 +2529,12 @@ Formular = SpatialMap.Class ({
             this.featureCount++;
 
             var id = this.featureCount;
-            setTimeout(SpatialMap.Function.bind(function(id) {
-                this.map.setFeatureStyle(event.id,{label: id});
-            },this,id),200);
+            setTimeout(function(id) {
+                this.map.setFeatureLabel(event.id, id);
+            }.bind(this,id),200);
 
             //Delete all others if not the same geometry type
-            if (this.feature.length > 0 && event.wkt.CLASS_NAME.match(/Point|LineString|Polygon/)[0] !== this.feature[0].wkt.CLASS_NAME.match(/Point|LineString|Polygon/)[0]) {
+            if (this.feature.length > 0 && event.wkt.match(/Point|LineString|Polygon/i)[0] !== this.feature[0].wkt.match(/Point|LineString|Polygon/i)[0]) {
                 var a = [];
                 for (var i=0;i<this.feature.length;i++) {
                     a.push(this.feature[i].id);
@@ -2327,7 +2542,7 @@ Formular = SpatialMap.Class ({
                         this.feature[i].element.remove();
                     }
                 }
-                this.map.deleteFeature (a);
+                this.deleteFeature (a);
                 this.feature = [];
             }
         }
@@ -2391,14 +2606,14 @@ Formular = SpatialMap.Class ({
             jQuery('#'+this.areaid).change();
         }
 
-        this.setMergedGeometry (this.feature, SpatialMap.Function.bind(function () {
+        this.setMergedGeometry (this.feature, function () {
 
             if (this.localstore) {
                 this.writeLocalStore();
             }
 
             this.query (this.feature);
-        },this));
+        }.bind(this));
 
         this.validateMap();
 
@@ -2423,9 +2638,9 @@ Formular = SpatialMap.Class ({
                 a.push(features[i].wkt.toString());
             }
 
-            this.merge(a,SpatialMap.Function.bind(function (callback,wkt) {
+            this.merge(a,function (callback,wkt) {
                 callback();
-            },this,callback));
+            }.bind(this,callback));
 
         }
     },
@@ -2444,17 +2659,17 @@ Formular = SpatialMap.Class ({
             type: 'POST',
             async: true,
             data : params,
-            success : SpatialMap.Function.bind(function (wktarray,callback,data) {
+            success : function (wktarray,callback,data) {
                 this.mergedFeature = data.row[0].expressionresult;
                 if (wktarray.length > 0) {
                     this.merge(wktarray, callback);
                 } else {
                     callback(this.mergedFeature);
                 }
-            },this,wktarray,callback),
-            error : SpatialMap.Function.bind(function (callback) {
+            }.bind(this,wktarray,callback),
+            error : function (callback) {
                 callback();
-            },this,callback)
+            }.bind(this,callback)
         });
     },
 
@@ -2465,21 +2680,21 @@ Formular = SpatialMap.Class ({
         event.element = w;
 
         var d = jQuery('<span class="icon icon-times" title="Slet denne geometri"></span>');
-        d.click(SpatialMap.Function.bind(function (feature) {
+        d.click(function (feature) {
             feature.element.remove();
-            this.map.deleteFeature(feature.id);
+            this.deleteFeature(feature.id);
             feature.type = 'DELETE';
             this.featureDeleted(feature);
             return false;
-        },this,event));
+        }.bind(this,event));
         h.append(d);
 
-        h.click(SpatialMap.Function.bind(function (feature) {
+        h.click(function (feature) {
             jQuery('.attributeswrapper').removeClass('active');
             feature.element.addClass('active');
             this.map.deselectFeatures();
             this.map.selectFeature(feature.id)
-        },this,event))
+        }.bind(this,event))
 
         var t = jQuery('<table class="tablecontent"><tbody></tbody></table>');
         w.append(t);
@@ -2516,16 +2731,16 @@ Formular = SpatialMap.Class ({
             type: 'POST',
             async: false,
             data : params,
-            success : SpatialMap.Function.bind( function(data, status) {
+            success : function(data, status) {
                 var wkt = jQuery(data).find('col[name="shape_wkt"]').text();
                 if (this.map && wkt) {
-                    this.map.drawWKT(wkt,SpatialMap.Function.bind(function (event) {
+                    this.drawWKT(wkt,function (event) {
 
                         var add = true;
                         //If two features are identical then the two features are removed
                         for (var i=0;i<this.feature.length;i++) {
                             if (this.feature[i].wkt.toString() === event.wkt.toString()) {
-                                this.map.deleteFeature (this.feature[i].id);
+                                this.deleteFeature (this.feature[i].id);
                                 this.feature.splice(i,1);
                                 add = false;
                                 break;
@@ -2536,12 +2751,12 @@ Formular = SpatialMap.Class ({
                         } else {
                             //The feature is deleted
                             this.featureChanged ();
-                            setTimeout(SpatialMap.Function.bind(function (e) {this.map.deleteFeature (e.id);},this,event),200);
+                            setTimeout(function (e) {this.deleteFeature (e.id);}.bind(this,event),200);
                         }
 
-                    },this),{styles: this.style});
+                    }.bind(this),{styles: this.style});
                 }
-            },this)
+            }.bind(this)
         });
     },
 
@@ -2634,7 +2849,7 @@ Formular = SpatialMap.Class ({
                     type: 'POST',
                     async: false,
                     data : params,
-                    success : SpatialMap.Function.bind( function(spatialquery, data, status) {
+                    success : function(spatialquery, data, status) {
                         var id = spatialquery.id;
                         var targets = jQuery(data).find('pcomposite[name="presentation"]');
                         var displayname = [];
@@ -2683,7 +2898,7 @@ Formular = SpatialMap.Class ({
                                 spatialquery.onnoconflict();
                             }
                         }
-                    },this,this.spatialqueries[i])
+                    }.bind(this,this.spatialqueries[i])
                 });
             } else {
                 this.spatialqueries[i].postparam.visible = false;
@@ -2762,12 +2977,12 @@ Formular = SpatialMap.Class ({
 
     setCurrentFeatures: function (features) {
         if (this.map) {
-            this.map.deleteFeature();
+            this.deleteFeature();
         }
         for (var i = 0; i < features.length; i++) {
             var feature = features[i];
             if (this.isGeometryValid(feature.wkt)) {
-                feature.id = this.map.drawWKT(feature.wkt, SpatialMap.Function.bind(this.featureDrawed, this), {styles: this.style});
+                feature.id = this.drawWKT(feature.wkt, this.featureDrawed.bind(this), {styles: this.style});
                 var f = this.getFeature(feature.id);
                 for (var name in feature) {
                     if (name !== 'wkt' && f.params) {
@@ -2782,8 +2997,21 @@ Formular = SpatialMap.Class ({
         }
     },
 
+    zoomTo: function (zoom) {
+        this.map.getView().setZoom(zoom);
+    },
+
+    zoomToExtent: function (options) {
+        var extent = [options.x1, options.y1, options.x2, options.y2];
+        this.map.getView().fit(extent);
+    },
+
+    zoomToPoint: function (p) {
+        this.map.getView().setCenter(p);
+    },
+
     setCurrentMap: function (mapState) {
-        this.map.zoomTo(mapState.zoomLevel);
+        this.zoomTo(mapState.zoomLevel);
         var x, y;
         if (typeof mapState.center !== 'undefined') {
             x = mapState.center[0];
@@ -2792,7 +3020,7 @@ Formular = SpatialMap.Class ({
             x = mapState.extent[0]+(mapState.extent[2]-mapState.extent[0])/2;
             y = mapState.extent[1]+(mapState.extent[3]-mapState.extent[1])/2;
         }
-        this.map.panTo('POINT('+x+' '+y+')');
+        this.zoomToPoint([x,y]);
     },
 
     getFeature: function(id) {
@@ -3006,15 +3234,15 @@ Formular = SpatialMap.Class ({
             if (this.confirm) {
                 jQuery('#messagetext').append('<div id="message_done">'+this.confirm+confirmtext+'</div>');
                 var confirmbutton = jQuery('<button>Godkend</button>');
-                confirmbutton.click (SpatialMap.Function.bind(function (params) {
+                confirmbutton.click (function (params) {
                     jQuery('#messagebuttons').hide();
                     this.submitFinal(params);
-                },this,params));
+                }.bind(this,params));
                 var backbutton = jQuery('<button>Ret</button>');
-                backbutton.click (SpatialMap.Function.bind(function (params) {
+                backbutton.click (function (params) {
                     jQuery('div#content').show();
                     jQuery('#message').hide();
-                },this,params));
+                }.bind(this,params));
                 jQuery('#messagebuttons').append(backbutton);
                 jQuery('#messagebuttons').append(confirmbutton);
                 jQuery('#messagebuttons').show();
@@ -3125,13 +3353,13 @@ Formular = SpatialMap.Class ({
                         e = jQuery('<div class="form-group'+(valid ? '' : ' error')+'"><span class="label">'+t+(req ? ' <span class="required">*</span>':'')+'</span><span class="form-control-static">'+(val ? textVal : '&nbsp;')+'</span>'+(valid ? '' : '<span class="validationMessage">'+this.inputValidation[param.id].message+'</span>')+'</div>');
                     }
                     if (!valid && click == true) {
-                        e.click(SpatialMap.Function.bind(function (input) {
+                        e.click(function (input) {
                             this.showTab(input.tab.id);
                             var element = document.getElementById(input.id);
                             if (element) {
                                 element.focus();
                             }
-                        },this,param));
+                        }.bind(this,param));
                     }
                 } else {
                     if (val) {
@@ -3235,7 +3463,7 @@ Formular = SpatialMap.Class ({
                 type: 'POST',
                 async: true,
                 data : params,
-                success : SpatialMap.Function.bind( function(params, data, status) {
+                success : function(params, data, status) {
                     if (this.showReport) {
                         var pdf = jQuery(data).find('col[name="url"]');
                         if (pdf.length) {
@@ -3249,7 +3477,7 @@ Formular = SpatialMap.Class ({
                                     formular: this.name,
                                     sessionid: this.sessionid
                                 },
-                                success: SpatialMap.Function.bind( function (pdf,data) {
+                                success: function (pdf,data) {
                                     if(data.result!='OK') {
                                         if (this.messages.done) {
                                             if (this.bootstrap) {
@@ -3272,7 +3500,7 @@ Formular = SpatialMap.Class ({
                                         }
                                     }
                                     this.removeSession();
-                                },this,pdf)
+                                }.bind(this,pdf)
                             });
                             jQuery('#message').show();
                             jQuery('#messageloading').hide();
@@ -3330,8 +3558,8 @@ Formular = SpatialMap.Class ({
                         }
                         this.removeSession();
                     }
-                },this, params),
-                error : SpatialMap.Function.bind( function(params, data, status) {
+                }.bind(this, params),
+                error : function(params, data, status) {
                     this.log({
                         type: 'error',
                         name: 'submitFinal',
@@ -3345,7 +3573,7 @@ Formular = SpatialMap.Class ({
                         jQuery('#messageloading').hide();
                         jQuery('#message').show().html('<div id="message_done" class="message-error"><span class="icon-warning">Der opstod en fejl i forbindelse med registreringen af ansøgningen. Prøv igen eller kontakt kommunen.</div>');
                     }
-                },this, params)
+                }.bind(this, params)
             });
 
         }
@@ -3371,7 +3599,7 @@ Formular = SpatialMap.Class ({
                 var message = pages[0].loadingmessage;
                 jQuery('#messageloading').html(message);
             }
-            setTimeout(SpatialMap.Function.bind(this.executeFinal, this, params, pages), pages[0].delay)
+            setTimeout(this.executeFinal.bind(this, params, pages), pages[0].delay)
         }
     },
 
@@ -3386,7 +3614,7 @@ Formular = SpatialMap.Class ({
             type: 'POST',
             async: doAsync,
             data : params,
-            success : SpatialMap.Function.bind( function(params, pages, data, status) {
+            success : function(params, pages, data, status) {
                 if (pages[0].parser) {
                     params = this[pages[0].parser](data, params, pages[0].urlparam);
                 }
@@ -3430,8 +3658,8 @@ Formular = SpatialMap.Class ({
                         this.pagesDone(params);
                     }
                 }
-            },this, params, pages),
-            error : SpatialMap.Function.bind( function(params, pages, data, status) {
+            }.bind(this, params, pages),
+            error : function(params, pages, data, status) {
                 if (pages[0].parser) {
                     params = this[pages[0].parser](data, params, pages[0].urlparam);
                 }
@@ -3475,7 +3703,7 @@ Formular = SpatialMap.Class ({
                         this.pagesFail();
                     }
                 }
-            },this, params, pages)
+            }.bind(this, params, pages)
         });
     },
 
@@ -3513,7 +3741,7 @@ Formular = SpatialMap.Class ({
                     type: 'POST',
                     async: false,
                     data : p.params,
-                    success : SpatialMap.Function.bind( function(featureResponse, data, status) {
+                    success : function(featureResponse, data, status) {
                         featureResponse.count--;
                         if (featureResponse.fail === false) {
                             if (this.isErrorRespose(data)) {
@@ -3522,15 +3750,15 @@ Formular = SpatialMap.Class ({
                                 this.pagesFail();
                             }
                         }
-                    },this,featureResponse),
-                    error : SpatialMap.Function.bind( function(featureResponse, data, status) {
+                    }.bind(this,featureResponse),
+                    error : function(featureResponse, data, status) {
                         featureResponse.count--;
                         if (featureResponse.fail !== false) {
                             featureResponse.fail = true;
                             this.showError();
                             this.pagesFail();
                         }
-                    },this,featureResponse)
+                    }.bind(this,featureResponse)
                 });
             }
         }
@@ -3886,7 +4114,7 @@ Formular = SpatialMap.Class ({
 
         jQuery('#'+id).datepicker('option', 'constrainInput', true );
 
-        jQuery('#'+id).datepicker('option', 'beforeShowDay', SpatialMap.Function.bind( function (options, date) {
+        jQuery('#'+id).datepicker('option', 'beforeShowDay', function (options, date) {
             var m = date.getMonth()+1, d = date.getDate(), y = date.getFullYear();
             m = (m<10?'0'+m:m);
             d = (d<10?'0'+d:d);
@@ -3916,7 +4144,7 @@ Formular = SpatialMap.Class ({
             }
 
             return [true];
-        }, this, options) );
+        }.bind(this, options) );
 
 
     },
@@ -3942,7 +4170,7 @@ Formular = SpatialMap.Class ({
             type: 'POST',
             async: true,
             data : params,
-            success : SpatialMap.Function.bind( function(data) {
+            success : function(data) {
 
                 if (typeof data.row !== 'undefined' && typeof data.row[0] !== 'undefined' && typeof data.row[0].row !== 'undefined') {
                     var rows = data.row[0].row;
@@ -3954,7 +4182,7 @@ Formular = SpatialMap.Class ({
                     }
                 }
 
-            },this)
+            }.bind(this)
         });
     },
 

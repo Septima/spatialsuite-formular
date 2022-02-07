@@ -22,8 +22,8 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
-                    <theme type="baselayer" image="https://septima.dk/widget/img/ortofoto.png" visible="false" displayname="Ortofoto" name="orto_foraar" host="https://services.kortforsyningen.dk/service?servicename=orto_foraar"/>
+                    <theme type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
+                    <theme type="baselayer" image="https://septima.dk/widget/img/ortofoto.png" visible="false" displayname="Ortofoto" name="orto_foraar" host="https://api.dataforsyningen.dk/orto_foraar_DAF"/>
                 </themes>
             </map>
         </content>
@@ -67,7 +67,7 @@
                 <extent>562880,6250516,577187,6262785</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                 </themes>
             </map>
         </content>
@@ -509,7 +509,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                     <theme id="besk" visible="false" displayname="Beskyttede naturtyper" name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
@@ -904,7 +904,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                     <theme displayname="Beskyttede naturtyper" name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>

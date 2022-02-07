@@ -2266,11 +2266,21 @@ Formular = SpatialMap.Class ({
     },
 
     drawInteraction: null,
+    selectInteraction: null,
+    modifyInteraction: null,
 
     panzoom: function () {
         if (this.drawInteraction !== null) {
             this.map.removeInteraction(this.drawInteraction);
             this.drawInteraction = null;
+        }
+        if (this.selectInteraction !== null) {
+            this.map.removeInteraction(this.selectInteraction);
+            this.selectInteraction = null;
+        }
+        if (this.modifyInteraction !== null) {
+            this.map.removeInteraction(this.modifyInteraction);
+            this.modifyInteraction = null;
         }
     },
 
@@ -2319,35 +2329,81 @@ Formular = SpatialMap.Class ({
         this.addInteraction('Circle', handler);
     },
 
-    drawWKT: function (wkt, handler) {
-        var id = this.createID();
-        var feature = (new ol.format.WKT()).readFeature(wkt);
-        feature.setProperties({
-            _id: id,
-            _label: ''
+    drawModify: function (handler) {
+        this.panzoom();
+        this.selectInteraction = new ol.interaction.Select({
+            layers: [this.drawVector]
         });
-        this.drawSource.addFeature(feature);
-        handler({
-            _feature: feature,
-            id: id,
-            wkt: wkt
-        })
-        return id;
+        this.map.addInteraction(this.selectInteraction);
+        this.modifyInteraction = new ol.interaction.Modify({
+            // source: this.drawSource
+            features: this.selectInteraction.getFeatures()
+        });
+        this.modifyInteraction.on('modifyend', function (handler, event) {
+            var features = event.features.getArray();
+            if (features.length > 0) {
+                for (var i=0;i<features.length;i++) {
+                    var feature = features[i]
+                    var id = feature.get('_id');
+                    handler({
+                        type: 'MODIFY',
+                        _feature: feature,
+                        id: id,
+                        wkt: (new ol.format.WKT()).writeFeature(feature)
+                    });
+                }
+            }
+        }.bind(this, handler));
+        this.map.addInteraction(this.modifyInteraction);
+    },
+
+    drawMove: function (handler) {
+        this.panzoom();
+        this.selectInteraction = new ol.interaction.Select({
+            layers: [this.drawVector]
+        });
+        this.map.addInteraction(this.selectInteraction);
+        this.modifyInteraction = new ol.interaction.Translate({
+            // source: this.drawSource
+            features: this.selectInteraction.getFeatures()
+        });
+        this.modifyInteraction.on('translateend', function (handler, event) {
+            var features = event.features.getArray();
+            if (features.length > 0) {
+                for (var i=0;i<features.length;i++) {
+                    var feature = features[i]
+                    var id = feature.get('_id');
+                    handler({
+                        type: 'MODIFY',
+                        _feature: feature,
+                        id: id,
+                        wkt: (new ol.format.WKT()).writeFeature(feature)
+                    });
+                }
+            }
+        }.bind(this, handler));
+        this.map.addInteraction(this.modifyInteraction);
     },
 
     drawDelete: function (handler) {
         this.panzoom();
-        this.drawInteraction = new ol.interaction.Select({
+        this.selectInteraction = new ol.interaction.Select({
             layers: [this.drawVector]
         });
-        this.drawInteraction.on('select', function (event) {
+        this.selectInteraction.on('select', function (handler, event) {
             var features = event.target.getFeatures().getArray()
             if (features.length > 0) {
                 var id = features[0].get('_id');
                 this.deleteFeature(id);
+                handler({
+                    type: 'DELETE',
+                    _feature: features[0],
+                    id: id,
+                    wkt: (new ol.format.WKT()).writeFeature(features[0])
+                });
             }
-        }.bind(this));
-        this.map.addInteraction(this.drawInteraction);
+        }.bind(this, handler));
+        this.map.addInteraction(this.selectInteraction);
     },
 
     deleteFeature: function (id) {
@@ -2364,6 +2420,22 @@ Formular = SpatialMap.Class ({
                 }
             }
         }
+    },
+
+    drawWKT: function (wkt, handler) {
+        var id = this.createID();
+        var feature = (new ol.format.WKT()).readFeature(wkt);
+        feature.setProperties({
+            _id: id,
+            _label: ''
+        });
+        this.drawSource.addFeature(feature);
+        handler({
+            _feature: feature,
+            id: id,
+            wkt: wkt
+        })
+        return id;
     },
 
     setFeatureLabel: function (id, label) {
@@ -2415,10 +2487,10 @@ Formular = SpatialMap.Class ({
                 this.drawDelete(this.featureDeleted.bind(this));
                 break;
             case 'move':
-                this.map.drawMove(this.featureModified.bind(this));
+                this.drawMove(this.featureModified.bind(this));
                 break;
             case 'modify':
-                this.map.drawModify(this.featureModified.bind(this));
+                this.drawModify(this.featureModified.bind(this));
                 break;
             case 'polygon':
                 this.drawPolygon(this.featureDrawed.bind(this));

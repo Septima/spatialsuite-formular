@@ -1139,41 +1139,55 @@ Formular = SpatialMap.Class ({
                     }.bind(this,featurechange));
                 }
 
-                // var mapoptions = {
-                //     extent: {x1:extent[0],y1:extent[1],x2:extent[2],y2:extent[3]},
-                //     resolutions: resolutions,
-                //     layers: layers
-                // }
-                // this.map = new SpatialMap.Map (id,mapoptions);
-
-
                 var controls = [
                     new ol.control.ScaleLine({})
                 ];
+
+                this.vectorStyle = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: this.style.fillColor
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: this.style.strokeColor,
+                        width: 2
+                    }),
+                    image: new ol.style.Circle({
+                        radius: 7,
+                        stroke: new ol.style.Stroke({
+                            color: this.style.strokeColor,
+                            width: 2
+                        }),
+                        fill: new ol.style.Fill({
+                            color: this.style.fillColor
+                        })
+                    }),
+                })
+
+                this.vectorStyleLabel = new ol.style.Style({
+                    text: new ol.style.Text({
+                        font: '12px Calibri,sans-serif',
+                        overflow: true,
+                        fill: new ol.style.Fill({
+                            color: '#000',
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#fff',
+                            width: 3,
+                        })
+                    })
+                })
 
                 this.drawSource = new ol.source.Vector();
                 this.drawVector = new ol.layer.Vector({
                     source: this.drawSource,
                     visible: true,
-                    style: new ol.style.Style({
-                        fill: new ol.style.Fill({
-                            color: this.style.fillColor
-                        }),
-                        stroke: new ol.style.Stroke({
-                            color: this.style.strokeColor,
-                            width: 2
-                        }),
-                        image: new ol.style.Circle({
-                            radius: 7,
-                            stroke: new ol.style.Stroke({
-                                color: this.style.strokeColor,
-                                width: 2
-                            }),
-                            fill: new ol.style.Fill({
-                                color: this.style.fillColor
-                            })
-                        })
-                    })
+                    style: function (feature) {
+                        const label = (feature.get('_label') || '').toString();
+                        if (label) {
+                            this.vectorStyleLabel.getText().setText(label);
+                        }
+                        return [this.vectorStyle, this.vectorStyleLabel];
+                    }.bind(this)
                 });
                 layers.push(this.drawVector);
 
@@ -2442,7 +2456,7 @@ Formular = SpatialMap.Class ({
         var f = this.getFeature(id);
         if (f) {
             var props = f._feature.getProperties()
-            props.label = label;
+            props._label = label;
             f._feature.setProperties(props);
             // TODO: perhaps force repaint
         }

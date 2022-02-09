@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output method="html" indent="yes" encoding="[cbinfo.html.encoding]" />
+
     <!-- nye nemlogin parametre som kommer fra signeringen-->
     <xsl:param name = "RequestId"></xsl:param>
     <xsl:param name = "string_params"/>
@@ -12,6 +13,8 @@
     <xsl:param name = "sessionid"/>
     <xsl:param name = "formular-css">/modules/formular/css/formular.css</xsl:param>
     <xsl:param name = "s4.version">[s4.version]</xsl:param>
+    <xsl:param name = "s4.search.script">[s4.search.script]</xsl:param>
+    <xsl:param name = "s4.search.css">[s4.search.css]</xsl:param>
     <xsl:template match="/">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
@@ -92,8 +95,16 @@
                 <xsl:if test="*//septimasearch and not($s4.version = '['+'s4.version'+']')">
                     <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/septima.js"></script>
                     <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/log.js"></script>
-                    <script type="text/javascript" src="//search.cdn.septima.dk/3.1.6/septimasearch.min.js"></script>
-                    <link rel="Stylesheet" type="text/css" href="//search.cdn.septima.dk/3.1.6/css/defaultView.css"></link>
+                    <xsl:element name="script">
+                        <xsl:attribute name="language">javascript</xsl:attribute>
+                        <xsl:attribute name="src"><xsl:value-of select="$s4.search.script"/></xsl:attribute>
+                        <xsl:attribute name="type">text/javascript</xsl:attribute>
+                    </xsl:element>
+                    <xsl:element name="script">
+                        <xsl:attribute name="rel">Stylesheet</xsl:attribute>
+                        <xsl:attribute name="href"><xsl:value-of select="$s4.search.css"/></xsl:attribute>
+                        <xsl:attribute name="type">text/css</xsl:attribute>
+                    </xsl:element>
                 </xsl:if>
 
                 <xsl:for-each select="js">

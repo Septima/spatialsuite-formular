@@ -695,3 +695,60 @@ ul.layertoggle > li {
     margin: 0;
     line-height: 0;
 }
+
+
+
+
+
+/* OpenLayers */
+.formular-mouse-position {
+    bottom: 0;
+    right: 0;
+    left: auto;
+    background-color: rgba(255,255,255,0.3);
+    position: absolute;
+    font-family: Arial;
+    font-size: smaller;
+    padding: 0px 5px;
+}
+.ol-control {
+    background-color: transparent;
+    padding: 0;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+}
+.ol-control>button {
+    font-size: 1.7rem;
+    height: 1.2em;
+    width: 1.2em;
+    font-weight: 500;
+    background-color: #fff;
+    color: #003127;
+    margin: 0;
+    border-radius: 0.25rem!important;
+}
+.ol-control>button:first-child {
+    border-bottom-left-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+    border-bottom: 1px solid #d9e0df;
+}
+.ol-control>button:last-child {
+    border-top-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+}
+.ol-control>button:focus,
+.ol-control>button:hover {
+    text-decoration: none;
+    background-color: rgba(200,200,200,1);
+}
+.ol-scale-line {
+    background-color: transparent;
+    padding: 0;
+}
+.ol-scale-line-inner {
+    color: #212529;
+    font-weight: 600;
+    border: 2px solid #212529;
+    border-top: 0;
+    height: 1.5em;
+    line-height: .75em;
+}

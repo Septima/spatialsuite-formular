@@ -1165,7 +1165,12 @@ var formularOptions = {
                 }
 
                 var controls = [
-                    new ol.control.ScaleLine({})
+                    new ol.control.ScaleLine({}),
+                    new ol.control.MousePosition({
+                        coordinateFormat: ol.coordinate.createStringXY(),
+                        projection: 'EPSG:25832',
+                        className: 'formular-mouse-position',
+                    })
                 ];
 
                 this.vectorStyle = new ol.style.Style({

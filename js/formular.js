@@ -1190,8 +1190,8 @@ var formularOptions = {
                         fill: new ol.style.Fill({
                             color: this.style.fillColor
                         })
-                    }),
-                })
+                    })
+                });
 
                 this.vectorStyleLabel = new ol.style.Style({
                     text: new ol.style.Text({
@@ -1205,18 +1205,38 @@ var formularOptions = {
                             width: 3,
                         })
                     })
-                })
+                });
+
+                this.vectorStyleSelected = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: this.style.strokeColor,
+                        width: 5
+                    }),
+                    image: new ol.style.Circle({
+                        radius: 7,
+                        stroke: new ol.style.Stroke({
+                            color: this.style.strokeColor,
+                            width: 5
+                        })
+                    })
+                });
 
                 this.drawSource = new ol.source.Vector();
                 this.drawVector = new ol.layer.Vector({
                     source: this.drawSource,
                     visible: true,
                     style: function (feature) {
+                        var styles = [this.vectorStyle];
                         const label = (feature.get('_label') || '').toString();
                         if (label) {
                             this.vectorStyleLabel.getText().setText(label);
+                            styles.push(this.vectorStyleLabel);
                         }
-                        return [this.vectorStyle, this.vectorStyleLabel];
+                        const selected = feature.get('_selected');
+                        if (selected) {
+                            styles.push(this.vectorStyleSelected);
+                        }
+                        return styles;
                     }.bind(this)
                 });
                 layers.push(this.drawVector);
@@ -2339,6 +2359,7 @@ var formularOptions = {
                 var id = this.createID();
                 event.feature.setProperties({
                     _id: id,
+                    _selected: false,
                     _label: ''
                 });
                 var geometry = event.feature.getGeometry();
@@ -2471,6 +2492,7 @@ var formularOptions = {
         var feature = (new ol.format.WKT()).readFeature(wkt);
         feature.setProperties({
             _id: id,
+            _selected: false,
             _label: ''
         });
         this.drawSource.addFeature(feature);
@@ -2505,7 +2527,6 @@ var formularOptions = {
                         
             var accuracyFeature = new ol.Feature(accuracyFeature);
             this.geolocation.on('change:accuracyGeometry', function () {
-                console.log('change:accuracyGeometry');
                 accuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
             }.bind(this, accuracyFeature));
             
@@ -2526,7 +2547,6 @@ var formularOptions = {
             );
             
             this.geolocation.on('change:position', function (positionFeature) {
-                console.log('change:position');
                 var coordinates = this.geolocation.getPosition();
                 positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
             }.bind(this, positionFeature));
@@ -2540,13 +2560,31 @@ var formularOptions = {
         }
         this.geolocation.setTracking(true);
         this.geolocationLayer.setVisible(true);
-        console.log('start');
     },
 
     deactivateGeolocation: function () {
         this.geolocation.setTracking(false);
         this.geolocationLayer.setVisible(false);
-        console.log('end');
+    },
+
+    selectedFeature: null,
+    selectFeature: function (id) {
+        var f = this.getFeature(id);
+        if (f) {
+            this.selectedFeature = f;
+            var props = f._feature.getProperties()
+            props._selected = true;
+            f._feature.setProperties(props);
+        }
+    },
+
+    deselectFeatures: function () {
+        if (this.selectedFeature) {
+            var props = this.selectedFeature._feature.getProperties()
+            props._selected = false;
+            this.selectedFeature._feature.setProperties(props);
+            this.selectedFeature = null;
+        }
     },
 
     activateTool: function (type) {
@@ -2880,8 +2918,8 @@ var formularOptions = {
         h.click(function (feature) {
             jQuery('.attributeswrapper').removeClass('active');
             feature.element.addClass('active');
-            this.map.deselectFeatures();
-            this.map.selectFeature(feature.id)
+            this.deselectFeatures();
+            this.selectFeature(feature.id)
         }.bind(this,event))
 
         var t = jQuery('<table class="tablecontent"><tbody></tbody></table>');

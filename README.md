@@ -397,8 +397,27 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 ```
 
 
+## Omskrivning i forbindelse udfasning af SpatialMap API
+
+SpatialMap API benyttes ikke mere i modulet fra version 4.0.0. Hvis man benytter lokale javascript filer, hvor `SpatialMap.Function.bind` benyttes, skal følgende ændring foretages:
+
+```javascript
+    SpatialMap.Function.bind(function() {
+        ...
+    },this)
+```
+
+skal ændres til
+
+```javascript
+    function() {
+        ...
+    }.bind(this)
+```
+
+
 Nyheder:
-* 2022.02.08 - Udskiftet kortkomponent.
+* 2022.02.09 - Udskiftet kortkomponent. Bemærk at der kan være breaking changes hvis man bruger lokal js-filer. SpatialMap.Function.bind findes ikke mere og skal skrives om. Se herover.
 
 * 2018.11.30 - Loading besked kan nu angives for hver page så man kan fortælle brugeren lidt mere om hvor langt man er nået.
 * 2018.11.30 - Mulighed for at sætte condition på et maptool

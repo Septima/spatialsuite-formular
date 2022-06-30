@@ -13,8 +13,8 @@
     <xsl:param name = "sessionid"/>
     <xsl:param name = "formular-css">/modules/formular/css/formular.css</xsl:param>
     <xsl:param name = "s4.version">[s4.version]</xsl:param>
-    <xsl:param name = "s4.search.script">[s4.search.script]</xsl:param>
-    <xsl:param name = "s4.search.css">[s4.search.css]</xsl:param>
+    <xsl:param name = "s4.search.script">[s4.search.version]/septimasearch.min.js</xsl:param>
+    <xsl:param name = "s4.search.css">[s4.search.version]/css/defaultView.css</xsl:param>
     <xsl:template match="/">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
         <xsl:text>&#xa;</xsl:text>

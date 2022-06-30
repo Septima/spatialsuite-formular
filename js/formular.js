@@ -2207,7 +2207,11 @@ var formularOptions = {
 
             buildControllerOptions.searchers = options.searchers;
 
-            new Septima.Search.ControllerBuilder().setOptions(buildControllerOptions).build().done(Septima.bind(function(options,calculateDistanceFunctionString,disablemapValue, controller){
+            for (var i = 0; i < buildControllerOptions.searchers.length; i++) {
+                buildControllerOptions.searchers[i]._type = buildControllerOptions.searchers[i].type
+                buildControllerOptions.searchers[i]._options = buildControllerOptions.searchers[i].options
+            }
+            (new Septima.Search.ControllerBuilder()).setOptions(buildControllerOptions).build().then(Septima.bind(function(options,calculateDistanceFunctionString,disablemapValue, controller){
 
                 var view = new Septima.Search.DefaultView({input: options.id+'_search', placeholder: options.placeholder, controller: controller});
 
@@ -2224,23 +2228,19 @@ var formularOptions = {
 
     septimaSearchSelected: function (options,cdfs,disablemapValue,view,result) {
 
-        if ((typeof result.newquery === 'undefined' && typeof result.suggestion === 'undefined') || (result.data && result.data.type && result.data.type === "vej")){
-            var message = result.target + ": " + result.title + ". ";
+        if ((typeof result.newquery === 'undefined' && typeof result.suggestion === 'undefined') || (result.data && result.data.type && result.data.type !== "vejnavnpostnummer")){
+            var message = result.typeId + ": " + result.title + ". ";
             jQuery('#' + options.id + '').val(result.title);
             if (result.geometry) {
-                var geojson = new OpenLayers.Format.GeoJSON();
-                var olGeom = geojson.read(result.geometry, 'Geometry');
-                var wkt = olGeom.toString();
+                var geojsonFormat = new ol.format.GeoJSON();
+                var wktFormat = new ol.format.WKT();
+                var olGeom = geojsonFormat.readGeometry(result.geometry);
+                var wkt = wktFormat.writeGeometry(olGeom);
                 if (this.map && disablemapValue !== 'true') {
-                    var bounds = olGeom.getBounds();
-                    var extent =
-                        {  x1: bounds.left,
-                            y1: bounds.top,
-                            x2: bounds.right,
-                            y2: bounds.bottom
-                        };
-
-                    this.zoomToExtent(extent);
+                    var extent = olGeom.getExtent();
+                    this.map.getView().fit(extent, {
+                        minResolution: 0.4
+                    });
 
                     if (options.minzoom) {
                         var mapstate = this.getMapState();

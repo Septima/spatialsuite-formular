@@ -60,7 +60,7 @@
                 </xsl:choose>
 				<script type="text/javascript" src="/modules/formular/js/jquery.ui.datepicker-[cbinfo.locale].js"></script>
 
-                <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v[module.formular.olversion]/build/ol.js"></script>
+                <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@main/dist/en/v[module.formular.olversion]/build/ol.js"></script>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v[module.formular.olversion]/css/ol.css" type="text/css"></link>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.min.js"></script>
 

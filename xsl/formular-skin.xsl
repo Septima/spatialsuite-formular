@@ -13,8 +13,8 @@
     <xsl:param name = "sessionid"/>
     <xsl:param name = "formular-css">/modules/formular/css/formular.css</xsl:param>
     <xsl:param name = "s4.version">[s4.version]</xsl:param>
-    <xsl:param name = "s4.search.script">[s4.search.script]</xsl:param>
-    <xsl:param name = "s4.search.css">[s4.search.css]</xsl:param>
+    <xsl:param name = "s4.search.script">[s4.search.version]/septimasearch.min.js</xsl:param>
+    <xsl:param name = "s4.search.css">[s4.search.version]/css/defaultView.css</xsl:param>
     <xsl:template match="/">
         <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
@@ -47,15 +47,11 @@
                 <script type="text/javascript" charset="ISO-8859-1" src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
 
                 <script type="text/javascript" src="/modules/formular/js/jquery.ui.datepicker-[cbinfo.locale].js"></script>
-                <xsl:variable name="cbinfo.spatialmap.jslib">[cbinfo.spatialmap.jslib]</xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="substring($cbinfo.spatialmap.jslib,0,2) = '['">
-                        <script type="text/javascript" src="/js/standard/spatialmap/1.3.0/api/SpatialMap.js?modules=map,events"></script>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <script type="text/javascript" src="[cbinfo.spatialmap.jslib]"></script>
-                    </xsl:otherwise>
-                </xsl:choose>
+
+                <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@main/dist/en/v[module.formular.olversion]/build/ol.js"></script>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@main/dist/en/v[module.formular.olversion]/css/ol.css" type="text/css"></link>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.min.js"></script>
+
 
                 <link href="/modules/formular/css/virk/v2.1/css/bootstrap.min.css" rel="stylesheet" media="screen" />
                 <link href="/modules/formular/css/virk/v2.1/css/designmanual.css" rel="stylesheet" media="screen, print" />
@@ -94,14 +90,12 @@
                 <script language="javascript" src="/modules/formular/js/formular.js" type="text/javascript"></script>
 
                 <xsl:if test="*//septimasearch and not($s4.version = '['+'s4.version'+']')">
-                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/septima.js"></script>
-                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/log.js"></script>
                     <xsl:element name="script">
                         <xsl:attribute name="language">javascript</xsl:attribute>
                         <xsl:attribute name="src"><xsl:value-of select="$s4.search.script"/></xsl:attribute>
                         <xsl:attribute name="type">text/javascript</xsl:attribute>
                     </xsl:element>
-                    <xsl:element name="script">
+                    <xsl:element name="link">
                         <xsl:attribute name="rel">Stylesheet</xsl:attribute>
                         <xsl:attribute name="href"><xsl:value-of select="$s4.search.css"/></xsl:attribute>
                         <xsl:attribute name="type">text/css</xsl:attribute>

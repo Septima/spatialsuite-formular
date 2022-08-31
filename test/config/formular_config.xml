@@ -22,8 +22,8 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
-                    <theme type="baselayer" image="https://septima.dk/widget/img/ortofoto.png" visible="false" displayname="Ortofoto" name="orto_foraar" host="https://services.kortforsyningen.dk/service?servicename=orto_foraar"/>
+                    <theme version="1.3.0" type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
+                    <theme version="1.3.0" type="baselayer" image="https://septima.dk/widget/img/ortofoto.png" visible="false" displayname="Ortofoto" name="orto_foraar" host="https://api.dataforsyningen.dk/orto_foraar_DAF"/>
                 </themes>
             </map>
         </content>
@@ -67,7 +67,7 @@
                 <extent>562880,6250516,577187,6262785</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme version="1.3.0" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                 </themes>
             </map>
         </content>
@@ -509,7 +509,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme version="1.3.0" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                     <theme id="besk" visible="false" displayname="Beskyttede naturtyper" name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
@@ -729,21 +729,14 @@
                     <type>Septima.Search.GeoSearch</type>
                     <title>Matrikser og stednavne</title>
                     <options>
-                        <area>muncode0101</area>
-                        <targets>matrikelnumre,stednavne_v2</targets>
+                        <kommunekode>101</kommunekode>
+                        <targets>matrikelnumre</targets>
                         <authParams></authParams>
                     </options>
                 </searcher>
                 <searcher>
                     <type>Septima.Search.PlanSearcher</type>
                     <title>Vedtagne lokalplaner</title>
-                    <options>
-                        <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
-                    </options>
-                </searcher>
-                <searcher>
-                    <type>Septima.Search.CVR_enhedSearcher</type>
-                    <title>Virksomheder</title>
                     <options>
                         <searchindexToken>septimaSEARCHDEMO-A7OLGHG2J4</searchindexToken>
                     </options>
@@ -904,7 +897,7 @@
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
                 <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://services.kortforsyningen.dk/service?servicename=topo_skaermkort"/>
+                    <theme version="1.3.0" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                     <theme displayname="Beskyttede naturtyper" name="BES_NATURTYPER" opacity=".3" host="https://arealinformation.miljoeportal.dk/gis/services/DAIdb/MapServer/WMSServer"/>
                 </themes>
             </map>
@@ -2275,9 +2268,8 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             </maptools>
             <map class="my_map_class">
                 <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
-                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
                 <themes>
-                    <theme name="theme-startkort" host="http://3gwc-kbhkort.kk.dk/tilecache/service/wms?SERVICENAME=ekstern"/>
+                    <theme version="1.3.0" type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
                 </themes>
             </map>
             <input type="input" displayname="Navn:" urlparam="name" defaultvalue=""/>
@@ -3110,5 +3102,125 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
             <input type="text" displayname="Tryk blot send"/>
         </content>
     </formular>
+
+    	<!--================================================-->
+	<!--	Vild kommune, tiltag                        -->
+	<!--================================================-->
+    <formular name="vild_kommune_tiltag">
+		<title>Vild kommune, min vilde indsats</title>
+        <header>Vild kommune, min vilde indsats</header>
+		<subheader></subheader>
+         <submitpages>
+			<page parser="setFrid">formular.create-frid</page>
+  			<page parser="setPdf">formular.send.vild_kommune_tiltag</page>
+			<page url="/jsp/modules/formular/final_json.jsp">move</page>
+		</submitpages>
+        <reportprofile>borgergis</reportprofile>
+        <reportlayers>default</reportlayers>
+        <reportxsl>kvittering_vild_kommune_tiltag</reportxsl>
+        <tabs>true</tabs>
+		<messages>
+			<message name="done">
+				<![CDATA[<div class="header">Din vilde indsats er nu registreret.</div>]]>
+			</message>
+			<message name="saving">
+				<![CDATA[<div class="header">Gemmer oplysningerne...</div>]]>
+			</message>
+			<message name="error">
+				<![CDATA[<div class="header">Der opstod en fejl i forbindelse med registreringen af din vilde indsats. Kontakt venligst GIS & Ejendomsdata, tlf. 99604000.</div>]]>
+			</message>
+		</messages>
+		
+        <content displayname="Registrering af min vilde indsats">
+			<input type="text" displayname="&lt;strong&gt;Først skal du fortælle om din vilde indsats&lt;/strong&gt;"/>
+			<input type="text" displayname=""/>
+			
+			<input type="text" id="indsats" displayname="Du skal sætte kryds i alle relevante kategorier:"/> 
+			
+		    <input type="checkbox" displayname="Giftfri drift"  urlparam="ingen_sproejtegift" defaultvalue="false" />
+	        <input type="checkbox" displayname="Ingen kunstgødning"  urlparam="ingen_kunstgoedning" defaultvalue="false" />
+	        <input type="checkbox" displayname="Beplantning med hjemmehørende arter"  urlparam="hjemmehoerende_arter" defaultvalue="false" />
+	        <input type="checkbox" displayname="Uslåede (græs)arealer"  urlparam="uslaaet_arealer" defaultvalue="false" />
+	        <input type="checkbox" displayname="Krat med buske og træer med uforstyrret jordbund"  urlparam="krat" defaultvalue="false" />
+	        <input type="checkbox" displayname="Fugtige områder eller vandhuller"  urlparam="fugtige_omraader" defaultvalue="false" />
+	        <input type="checkbox" displayname="Næringsfattig bar jord, som sand eller grus"  urlparam="naeringsfattig" defaultvalue="false" />
+	        <input type="checkbox" displayname="Stendige eller stenbunke"  urlparam="stendige" defaultvalue="false" />
+	        <input type="checkbox" displayname="Jordvold eller skrænt"  urlparam="jordvold" defaultvalue="false" />
+	        <input type="checkbox" displayname="Kvasbunker"  urlparam="kvasbunker" defaultvalue="false" />
+	        <input type="checkbox" displayname="Dødt ved, mindst 40 cm i diameter og 3 meter langt"  urlparam="doedt"  defaultvalue="false" />
+	        <input type="checkbox" displayname="Fuglekasser"  urlparam="fuglekasser" defaultvalue="false" />
+	        <input type="checkbox" displayname="Andet"  urlparam="andet" defaultvalue="false" />
+	        
+			<input type="text" displayname=""/>
+			<input type="input" displayname="Beskriv din indsats:" urlparam="andet_beskriv" required="true"/>
+			<input type="text" displayname=""/>
+			
+			<input type="text" displayname=""/>
+			<input type="input" displayname="Og så vil vi meget gerne vide, hvor stort et areal det dækker (angivet i m2)" required="false" urlparam="areal" regexp="^[0-9]+$"/>
+			<input type="text" displayname=""/>
+			
+			<input type="text" displayname="Upload billeder af dine tiltag (max 3 stk.)"/>
+			<input type="file" id="billede_1" displayname="Vedhæft billede her" required="true" urlparam="billede_1"/>
+			<input type="text" displayname=""/>
+			<input type="file" id="billede_2" displayname="Vedhæft evt. yderligere billeder her" urlparam="billede_2"/>
+			<input type="text" displayname=""/>
+			<input type="file" id="billede_3" displayname="Vedhæft evt. yderligere billeder her" urlparam="billede_3"/>
+			<input type="checkbox" id="brugerrettigeheder" displayname="Uploadede billeder vil bliver brugt i forbindelse med bedømmelsen af de indsendte tiltag. Ved upload af billeder accepterer du, at Ikast-Brande Kommune må bruge billederne i forbindelse med konkurrencen, herunder at offentliggøre billederne på www.ikast-brande.dk eller på kommunens Facebook-side." defaultvalue="false" regexp="true" validate=" !!! Skal bekræftes" urlparam="brugerrettigeheder"/>
+		</content>		
+		
+        <content displayname="Oplysninger om dig">
+			<input type="text" displayname="&lt;strong&gt;Vi har også brug for lidt oplysninger om dig&lt;/strong&gt;"/>
+			<input type="text" displayname=""/>
+			
+			<input type="input" displayname="Navn:" urlparam="navn" required="true" validate="Du skal indtaste dit navn før du kan indsende ansøgningen" />
+			<input type="text" displayname=""/>
+			
+ 	 		<input type="dropdown" id="boligtype" displayname="Vælg boligtype i listen:" urlparam="boligtype" required="true" validate="Du skal vælge en boligtype på listen før du kan indsende ansøgningen">
+				<option value="" name=""/>
+				<option value="Lejlighed" name="Lejlighed"/>
+				<option value="Hus" name="Hus"/>
+				<option value="Landbrug" name="Landbrug"/>
+				<option value="Institution" name="Institution"/>
+				<option value="Virksomhed" name="Virksomhed"/>
+			</input>
+			
+            <septimasearch urlparam="adresse" displayname="Adresse:"  disablemap="false" usegeometry="true" required="true" validate="Du skal indtaste din adresse før du kan indsende ansøgningen" placeholder="Søg adresse">
+                <searcher>
+                    <type>Septima.Search.DawaSearcher</type>
+                    <title>Adresser</title>
+                    <options>
+                        <kommunekode>756</kommunekode>
+                    </options>
+                </searcher>
+            </septimasearch>
+
+						
+			<maptools>
+				<maptool displayname="Klik for at markere punktet." name="point" default="true"/>
+				<maptool displayname="Slet " name="delete"/>
+				<maptool displayname="Flyt kortet" name="pan"/>
+			</maptools>
+            <map displayname="Markér din adresse ved at zoome ind og klikke i kortet" multiplegeometries="false" mergegeometries="false" required="true">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme version="1.3.0" type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
+                    <theme type="baselayer" image="https://kort.ikast-brande.dk/images/custom/theme-pictures/oversigtskort.png" displayname="Oversigtkort" name="theme-oversigtskort_vejnavne" host="https://tilecache.ikast-brande.dk/tilecache/service/wms"/>
+					<theme type="baselayer" image="https://kort.ikast-brande.dk/images/custom/theme-pictures/ortofoto.jpeg" visible="false" displayname="Ortofoto" name="theme-ortofoto2019" host="https://tilecache.ikast-brande.dk/tilecache/service/wms"/>
+		        </themes>
+            </map>
+			
+			<input type="text" displayname=""/>
+			<input type="input" id="email" displayname="E-mail:" urlparam="email" regexp="^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$" required="false" validate="Den indtastede email-adresse er ikke korrekt"/>
+			<input type="text" displayname=""/>
+			<input type="checkbox"  id="mailkvittering" displayname="Jeg ønsker en kvittering tilsendt pr. e-mail" urlparam="mailkvittering" defaultvalue="false"/>
+			
+		
+			<input type="text" displayname="&lt;a href=&quot;https://ikast-brande.dk/oplysningsbrev/teknik-og-miljoeafdelingen/indberetning-af-vilde-indsatser-danmarks-vildeste-kommune&quot; target=&quot;_blank&quot;&gt;Læs information om Ikast-Brande Kommunes behandling af personoplysninger ved at klikke her&lt;/&gt;"/>
+			<input type="checkbox" id="databeskyttelse" displayname="Jeg har læst informationen om og accepterer Ikast-Brande Kommunes behandling af de angivne personoplysninger samt accepterer at mit projekt bliver vist på kort eller hjemmeside og at jeg kan modtage mails med nyttig inspiration." defaultvalue="false" regexp="true" validate=" !!! Skal bekræftes" urlparam="databeskyttelse"/>
+			<input type="message" class="alert-danger" displayname="Du skal acceptere behandlingen af personoplysninger før du kan indsende ansøgningen" condition="!jQuery('#databeskyttelse').is(':checked')"/>
+	   
+		</content>
+	</formular>
 
 </config>

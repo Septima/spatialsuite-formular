@@ -26,7 +26,7 @@ var datasourceResponse = {
             type: 'POST',
             async: true,
             data : data,
-            success : SpatialMap.Function.bind( function(data, status) {
+            success : function(data, status) {
                 if (typeof data.exception !== 'undefined') {
                     this.hide();
                 } else {
@@ -36,7 +36,7 @@ var datasourceResponse = {
                         this.hide();
                     }
                 }
-            },this)
+            }.bind(this)
         });
         
     },

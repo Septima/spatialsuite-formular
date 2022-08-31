@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy>
 
-   <version>3.5.1</version>  
+   <version>4.0.0</version>  
 
    <stoponerror>true</stoponerror>
    
    <param name="module.formular.site.url" ignore="IsDefined(module.formular.site.url)">[cbinfo.site.url]</param> 
+
+   <param name="module.formular.olversion">6.14.1</param>    
 
    <param name="module.formular.upload.dir">[cbinfo.wwwroot.dir]/formular/upload</param> 
    <makedir dir="[module.formular.upload.dir]"/>

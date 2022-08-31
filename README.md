@@ -152,7 +152,6 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
                  - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
                  - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
-                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
                  -->
             <address urlparam="address" displayname="Adresse:" apikey="[module.spatialaddress.apikey]" filter="komnr0153"></address>
 
@@ -165,7 +164,6 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
                  - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
                  - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
-                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
             -->
             <geosearch urlparam="address" displayname="Adresse:" resources="Adresser" filter="muncode0101" disablemap="true" usegeometry="false"/>
 
@@ -175,7 +173,6 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                  - disablemap - OPTIONAL (default false) - skal valg ikke knyttes til kortet (skal også angives hvis der ikke er noget kort)
                  - usegeometry - OPTIONAL (default false) - skal valgte geometri markeres i kortet og anvendes som om der var klikket i kortet det pågældende sted
                  - minzoom - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Zoomlevel der mindst skal zoomes til. 0 er zoomet helt ud
-                 - minscale - OPTIONAL - Hvor langt skal der zoomes ind når der er fundet noget? Målforhold der mindst skal zoomes til.
             -->
             <septimasearch urlparam="address" displayname="Sted:" usegeometry="true" placeholder="Søg efter en masse">
                 <searcher>
@@ -297,8 +294,6 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         ratio         - Kun ved brug af singleTile. Default 1,5
                         opacity       - Skal laget være gennemsigtigt. Default 1 (ikke gennemsigtigt)
                         buffer        - Henter tiles, der ikke er synlige. Default 0)
-                        maxScale
-                        minScale
                         format        - Default image/png. Brug f.eks. image/jpeg til ortofoto
                         layername     - Hvis laget ikke hedder det samme som temaet i CBkort
                         useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
@@ -402,7 +397,28 @@ Hvis der er data, der skal registreres i DriftWeb, så tilføjes der en DriftWeb
 ```
 
 
+## Omskrivning i forbindelse udfasning af SpatialMap API
+
+SpatialMap API benyttes ikke mere i modulet fra version 4.0.0. Hvis man benytter lokale javascript filer, hvor `SpatialMap.Function.bind` benyttes, skal følgende ændring foretages:
+
+```javascript
+    SpatialMap.Function.bind(function() {
+        ...
+    },this)
+```
+
+skal ændres til
+
+```javascript
+    function() {
+        ...
+    }.bind(this)
+```
+
+
 Nyheder:
+* 2022.02.09 - Udskiftet kortkomponent. Bemærk at der kan være breaking changes hvis man bruger lokal js-filer. SpatialMap.Function.bind findes ikke mere og skal skrives om. Se herover.
+
 * 2018.11.30 - Loading besked kan nu angives for hver page så man kan fortælle brugeren lidt mere om hvor langt man er nået.
 * 2018.11.30 - Mulighed for at sætte condition på et maptool
 

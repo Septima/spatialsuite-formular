@@ -3,6 +3,24 @@ spatialsuite-formular
 
 Dette modul giver brugeren en formular, som f.eks. kan bruges til ansøgninger.
 
+## Breaking changes til version 4
+
+SpatialMap.Function.bind forsvinder og skal derfor ændres i alle custom filer. Ændringen er f.eks. :
+```js
+success : SpatialMap.Function.bind( function(data, status) {
+    ...
+},this)
+```
+ændres til 
+```js
+success : function(data, status) {
+    ...
+}.bind(this)
+```
+Så der skal søges alle de js-filer, der bruges i forskellige formularer. Søg efter `SpatialMap.Function.bind` og tilpasse dem. Denne rettelse vil virke uafhængigt af den nye version men tilsvarende er rettet i alle filer, der kommer med modulet.
+
+Derudover vil det ikke være muligt at angive `minscale` i konfigurationen af et lag. I stedet skal du anvende `minzoom`, der har en anden værdi, så prøv dig lige frem.
+
 --------------------
 VEJLEDNING TIL FORMULARMODULET
 --------------------

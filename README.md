@@ -433,9 +433,11 @@ skal ændres til
     }.bind(this)
 ```
 
+Derudover vil det ikke være muligt at angive `minscale` i konfigurationen af et lag. I stedet skal du anvende `minzoom`, der har en anden værdi, så prøv dig lige frem.
+
 
 Nyheder:
-* 2022.02.09 - Udskiftet kortkomponent. Bemærk at der kan være breaking changes hvis man bruger lokal js-filer. SpatialMap.Function.bind findes ikke mere og skal skrives om. Se herover.
+* 2022.08.31 - Udskiftet kortkomponent. Bemærk at der kan være breaking changes hvis man bruger lokal js-filer. SpatialMap.Function.bind findes ikke mere og skal skrives om. Se herover.
 
 * 2018.11.30 - Loading besked kan nu angives for hver page så man kan fortælle brugeren lidt mere om hvor langt man er nået.
 * 2018.11.30 - Mulighed for at sætte condition på et maptool

@@ -93,14 +93,12 @@
                 </xsl:if>
 
                 <xsl:if test="*//septimasearch and not($s4.version = '['+'s4.version'+']')">
-                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/septima.js"></script>
-                    <script type="text/javascript" src="//common.cdn.septima.dk/1.0.7/js/log.js"></script>
                     <xsl:element name="script">
                         <xsl:attribute name="language">javascript</xsl:attribute>
                         <xsl:attribute name="src"><xsl:value-of select="$s4.search.script"/></xsl:attribute>
                         <xsl:attribute name="type">text/javascript</xsl:attribute>
                     </xsl:element>
-                    <xsl:element name="script">
+                    <xsl:element name="link">
                         <xsl:attribute name="rel">Stylesheet</xsl:attribute>
                         <xsl:attribute name="href"><xsl:value-of select="$s4.search.css"/></xsl:attribute>
                         <xsl:attribute name="type">text/css</xsl:attribute>

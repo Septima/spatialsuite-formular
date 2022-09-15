@@ -2312,13 +2312,14 @@ var formularOptions = {
     clickEventAdded: false,
     setClickEvent: function (handler) {
         if (!this.clickEventAdded) {
+			this.clickEventAdded = true;
             this.map.on('singleclick', function (evt) {
                 if (evt.dragging) {
                     return;
                 }
                 if (this.clickHandler) {
                     var point = this.map.getEventCoordinate(evt.originalEvent);
-                    this.clickHandler('POINT('+point[0]+' '+point[0]+')');
+                    this.clickHandler('POINT('+point[0]+' '+point[1]+')');
                 }
             }.bind(this));
         }
@@ -2487,7 +2488,7 @@ var formularOptions = {
         }
     },
 
-    drawWKT: function (wkt, handler) {
+    drawWKT: function (wkt, handler, options) {
         var id = this.createID();
         var feature = (new ol.format.WKT()).readFeature(wkt);
         feature.setProperties({
@@ -2495,7 +2496,21 @@ var formularOptions = {
             _selected: false,
             _label: ''
         });
+		
+		if (options) {
+            if (options.zoomto) {
+				var extent = feature.getGeometry().getExtent();
+				this.map.getView().fit(extent, {
+					minResolution: 0.4
+				});
+			}
+			if (options.clear) {
+				this.drawSource.clear();
+			}
+		}
+
         this.drawSource.addFeature(feature);
+		
         handler({
             _feature: feature,
             id: id,

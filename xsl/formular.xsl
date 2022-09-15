@@ -100,7 +100,7 @@
                         <xsl:attribute name="src"><xsl:value-of select="$s4.search.script"/></xsl:attribute>
                         <xsl:attribute name="type">text/javascript</xsl:attribute>
                     </xsl:element>
-                    <xsl:element name="script">
+                    <xsl:element name="link">
                         <xsl:attribute name="rel">Stylesheet</xsl:attribute>
                         <xsl:attribute name="href"><xsl:value-of select="$s4.search.css"/></xsl:attribute>
                         <xsl:attribute name="type">text/css</xsl:attribute>

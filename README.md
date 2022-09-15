@@ -437,6 +437,7 @@ Derudover vil det ikke være muligt at angive `minscale` i konfigurationen af et
 
 
 Nyheder:
+* 2022.09.15 - Rettet forskellige mindre fejl
 * 2022.08.31 - Udskiftet kortkomponent. Bemærk at der kan være breaking changes hvis man bruger lokal js-filer. SpatialMap.Function.bind findes ikke mere og skal skrives om. Se herover.
 
 * 2018.11.30 - Loading besked kan nu angives for hver page så man kan fortælle brugeren lidt mere om hvor langt man er nået.

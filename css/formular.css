@@ -666,6 +666,9 @@ div.helpbutton {
     position: absolute;
     z-index: 100000;
 }
+.septimasearch .ssSearchHeader .ssSearchBackground {
+    width: 100%;
+}
 .septimasearchcontainer > .septimasearch.ssActive {
     z-index: 100001;
 }

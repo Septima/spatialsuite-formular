@@ -1091,6 +1091,14 @@ var formularOptions = {
                     if (opacity) {
                         l.opacity = opacity-0;
                     }
+                    var minResolution = jQuery(themes[j]).attr('minResolution');
+                    if (minResolution) {
+                        l.minResolution = minResolution-0;
+                    }
+                    var maxResolution = jQuery(themes[j]).attr('maxResolution');
+                    if (maxResolution) {
+                        l.maxResolution = maxResolution-0;
+                    }
                     var format = jQuery(themes[j]).attr('format');
                     if (format) {
                         l.format = format;
@@ -1131,6 +1139,8 @@ var formularOptions = {
                     if (typeof l.singleTile !== 'undefined' && l.singleTile === true) {
                         var wmssource = new ol.source.ImageWMS(sourceOptions)
                         var layeroptions = {
+							minResolution: minResolution,
+							maxResolution: maxResolution,
                             opacity: l.opacity || 1,
                             visible: visible,
                             extent: [420000, 6025000, 905000, 6450000],
@@ -1145,6 +1155,8 @@ var formularOptions = {
                         });
                         var wmssource = new ol.source.TileWMS(sourceOptions)
                         var layeroptions = {
+							minResolution: minResolution,
+							maxResolution: maxResolution,
                             opacity: l.opacity || 1,
                             visible: visible,
                             extent: [420000, 6025000, 905000, 6450000],

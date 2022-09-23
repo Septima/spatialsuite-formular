@@ -19,19 +19,19 @@ success : function(data, status) {
 ```
 Så der skal søges alle de js-filer, der bruges i forskellige formularer. Søg efter `SpatialMap.Function.bind` og tilpasse dem. Denne rettelse vil virke uafhængigt af den nye version men tilsvarende er rettet i alle filer, der kommer med modulet.
 
-Derudover vil det ikke være muligt at angive `minscale` i konfigurationen af et lag. I stedet skal du anvende `minzoom`, der har en anden værdi, så prøv dig lige frem.
+Derudover vil det ikke være muligt at angive `minscale` i konfigurationen af et lag. I stedet skal du anvende `minResolution`, der har en anden værdi, så prøv dig lige frem. Tilsvarende erstatninger for `maxscale`.
 
 --------------------
 VEJLEDNING TIL FORMULARMODULET
 --------------------
 
-En formular er en page i CBkort. Indholdet af formularen styres vha. en parameter i URL'en, der refererer til en helt specifik navngivet konfiguration. Formularen kaldes med:
+En formular er en page i SpatialMap. Indholdet af formularen styres vha. en parameter i URL'en, der refererer til en helt specifik navngivet konfiguration. Formularen kaldes med:
 
-http://sandkasse.randers.dk/cbkort?page=formular&formular=soe
+http://sandkasse.randers.dk/spatialmap?page=formular&formular=soe
 
 Dette giver en side, der kan indlejres som en Iframe i et CMS system. Stylingen er derfor gjort meget enkelt, så den vil passe ind (næsten) hvor som helst.
 
-http://sandkasse.randers.dk/cbkort?page=formular.skin&formular=soe
+http://sandkasse.randers.dk/spatialmap?page=formular.skin&formular=soe
 
 Dette giver en stand-alone side med et nyt og modernet design.
 
@@ -45,7 +45,7 @@ Konfigurationen er placeret vha. parameteren "module.formular.config", og er pt.
 <param name="module.formular.config">[module:formular.dir]/config/formular_config.xml</param>
 ```
 
-På grund af problemer i CBkort, er det nødvendigt at angive denne URL for alle sites
+På grund af problemer i SpatialMap, er det nødvendigt at angive denne URL for alle sites
 ```xml
 <param name="module.formular.site.url">http://localhost:8080</param> 
 ```
@@ -311,10 +311,12 @@ I filen er der angivet én eller flere formular konfigurationer. Hver konfigurat
                         singleTile    - true | false
                         ratio         - Kun ved brug af singleTile. Default 1,5
                         opacity       - Skal laget være gennemsigtigt. Default 1 (ikke gennemsigtigt)
+                        minResolution - Hvilke zoom niveauer skal laget vises i. Erstatning for minscale
+                        maxResolution - Hvilke zoom niveauer skal laget vises i. Erstatning for maxscale
                         buffer        - Henter tiles, der ikke er synlige. Default 0)
                         format        - Default image/png. Brug f.eks. image/jpeg til ortofoto
-                        layername     - Hvis laget ikke hedder det samme som temaet i CBkort
-                        useSessionID  - Sættes til "false" når wms IKKE hentes fra CBkort. Default er "true"
+                        layername     - Hvis laget ikke hedder det samme som temaet i SpatialMap
+                        useSessionID  - Sættes til "false" når wms IKKE hentes fra SpatialMap. Default er "true"
                         useTicket     - Sættes til "true" hvis servicen kommer fra Kortfosyningen. Default er "false"
 						displayname   - Ved at sætte displayname på et tema dukker en checkbox op under kortet, hvor laget kan tændes/slukkes
 						group		  - Hvis displayname er sat, kan flere temaer grupperes til en checkbox. Matrikelkort, baggrundskort, veje, stier mm. kan grupperes til eksempelvis "grundkort"

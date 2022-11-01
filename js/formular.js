@@ -3917,6 +3917,13 @@ var formularOptions = {
                     params = this[pages[0].parser](data, params, pages[0].urlparam);
                 }
 
+                this.log({
+                    type: 'error',
+                    name: pages[0],
+                    message: 'Error in executeFinal',
+                    obj: JSON.stringify(params).substring(0,10000)
+                });
+
                 if (pages[0].error && this.errorHandling) {
                     var go = false;
                     this.errorMessages.push(pages[0].error);
@@ -4124,6 +4131,11 @@ var formularOptions = {
             } else {
                 jQuery('#messagetext').append('<div id="message_done" class="message-info"><span class="icon-info2"></span>'+error.message+'</div>');
             }
+            this.log({
+                type: error.type,
+                name: 'showErrorInfo',
+                message: error.message
+            });
         }
 
     },
@@ -4137,6 +4149,11 @@ var formularOptions = {
             } else {
                 jQuery('#messagetext').append('<div id="message_done" class="message-warning"><span class="icon-info2"></span>'+error.message+'</div>');
             }
+            this.log({
+                type: error.type,
+                name: 'showErrorWarning',
+                message: error.message
+            });
         }
 
     },
@@ -4150,6 +4167,11 @@ var formularOptions = {
             } else {
                 jQuery('#messagetext').append('<div id="message_done" class="message-error"><span class="icon-warning"></span>'+error.message+'</div>');
             }
+            this.log({
+                type: error.type,
+                name: 'showError',
+                message: error.message
+            });
         }
         if (this.messages.error) {
             if (this.bootstrap === true) {

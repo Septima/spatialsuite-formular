@@ -3103,7 +3103,7 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
         </content>
     </formular>
 
-    	<!--================================================-->
+	<!--================================================-->
 	<!--	Vild kommune, tiltag                        -->
 	<!--================================================-->
     <formular name="vild_kommune_tiltag">
@@ -3223,4 +3223,43 @@ fritagelse for benyttelse af den kommunale ordning. Se ansøgningsskema på &lt;
 		</content>
 	</formular>
 
+    <formular name="adresse">
+		<title>Vis valgte adresse</title>
+        <header>Hvordan får jeg vist den adresse som brugeren har valgt</header>
+		<subheader></subheader>
+        <js>/modules/formular/test/js/search_test.js</js>
+        <submitpages>
+			<page parser="setFrid">formular.create-frid</page>
+		</submitpages>
+
+        <content displayname="Tidsramme" >
+            <input type="input" displayname="Andet" urlparam="time" defaultvalue="2"/>
+            <septimasearch urlparam="adresse" displayname="Adresse:"  disablemap="false" usegeometry="true" required="true" validate="Du skal indtaste din adresse før du kan indsende ansøgningen" placeholder="Søg adresse" onchange="jQuery('#valgtadresse').html(arguments[0].title)">
+                <searcher>
+                    <type>Septima.Search.DawaSearcher</type>
+                    <title>Adresser</title>
+                    <options>
+                        <kommunekode>756</kommunekode>
+                    </options>
+                </searcher>
+            </septimasearch>
+			<input type="text" id="valgtadresse" displayname=""/> 
+			<!-- <input type="input" disabled="true" id="valgtadresse"  displayname="Valgt adresse"/>  -->
+			<maptools>
+				<maptool displayname="Klik for at markere punktet." name="point" default="true"/>
+				<maptool displayname="Slet " name="delete"/>
+				<maptool displayname="Flyt kortet" name="pan"/>
+			</maptools>
+            <map displayname="Markér din adresse ved at zoome ind og klikke i kortet" multiplegeometries="false" mergegeometries="false" required="true">
+                <extent>[cbinfo.map.minx.wc],[cbinfo.map.miny.wc],[cbinfo.map.maxx.wc],[cbinfo.map.maxy.wc]</extent>
+                <resolutions>0.4,0.8,1.6,3.2,6.4,12.8,25.6,51.2,102.4</resolutions>
+                <themes>
+                    <theme version="1.3.0" type="baselayer" image="https://septima.dk/widget/img/daempet.png" displayname="Skærmkort" name="dtk_skaermkort_daempet" host="https://api.dataforsyningen.dk/topo_skaermkort_DAF"/>
+                    <theme type="baselayer" image="https://kort.ikast-brande.dk/images/custom/theme-pictures/oversigtskort.png" displayname="Oversigtkort" name="theme-oversigtskort_vejnavne" host="https://tilecache.ikast-brande.dk/tilecache/service/wms"/>
+					<theme type="baselayer" image="https://kort.ikast-brande.dk/images/custom/theme-pictures/ortofoto.jpeg" visible="false" displayname="Ortofoto" name="theme-ortofoto2019" host="https://tilecache.ikast-brande.dk/tilecache/service/wms"/>
+		        </themes>
+            </map>
+        </content>
+		
+	</formular>
 </config>

@@ -111,6 +111,14 @@
                 </xsl:for-each>
 
                 <script type="text/javascript" language="javascript">
+                <xsl:if test="$RequestId != ''">
+                var nemlogin = {
+                    ssp: '<xsl:value-of select="$SignedSignatureProof"/>',
+                    reqid: '<xsl:value-of select="$RequestId"/>',
+                    signtext: '<xsl:value-of select="$SignText"/>',
+                    url_params: '<xsl:value-of select="$string_params"/>'
+                };</xsl:if>
+
                 jQuery(function () {
                     formular = new Formular ({
                         bootstrap: true,
